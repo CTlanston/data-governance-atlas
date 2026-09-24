@@ -166,7 +166,7 @@ function renderAll(options={}) {
   document.title=`${S.mode==='topic'?topicFor(S.topic).shortTitle:S.mode==='module'?moduleFor(S.module).shortTitle:'六层学习思维导图'} · Data Atlas`;
   $('#announcer').textContent=S.mode==='topic'?`已展开${topicFor(S.topic).shortTitle}，${PARTS.find(p=>p.id===S.part).label}`:S.mode==='module'?`已展开${moduleFor(S.module).shortTitle}`:'已显示八个知识模块';
 }
-function setReader(open){$('.workspace').classList.toggle('reader-hidden',!open);$('.workspace').classList.toggle('mobile-reader',open&&isPhone());$('.map-panel').inert=open&&isPhone();$('#reader-toggle').setAttribute('aria-expanded',String(open));$('#reader-toggle').textContent=open&&!isPhone()?'收起讲解 →':'打开讲解';if(open&&isPhone()){$('#reader').tabIndex=-1;$('#reader').focus({preventScroll:true});}}
+function setReader(open){$('.workspace').classList.toggle('reader-hidden',!open);$('.workspace').classList.toggle('mobile-reader',open&&isPhone());$('.map-panel').inert=open&&isPhone();$('#reader-toggle').setAttribute('aria-expanded',String(open));$('#reader-toggle').textContent=open&&!isPhone()?'收起讲解 →':'打开讲解';if(open&&isPhone()){$('#reader').tabIndex=-1;$('#reader').focus({preventScroll:true});}if(S.ready&&!isPhone())requestAnimationFrame(()=>open?focusNode():fitGraph());}
 function closeIndex(){const panel=$('#index-panel');panel.classList.remove('open');panel.inert=isDrawer();$('#reader').inert=false;$('.map-panel').inert=isPhone()&&$('.workspace').classList.contains('mobile-reader');$('#drawer-backdrop').hidden=true;$('#mobile-index-open').setAttribute('aria-expanded','false');}
 function openIndex(){$('#index-panel').inert=false;$('#index-panel').classList.add('open');$('#reader').inert=true;$('.map-panel').inert=true;$('#drawer-backdrop').hidden=false;$('#mobile-index-open').setAttribute('aria-expanded','true');$('#search').focus();}
 function loadRoute(){let value;try{value=decodeURIComponent(location.hash.slice(1));}catch{value='overview';}const [id,part]=value.split('/');if(id==='module'&&moduleFor(part))showModule(part);else if(topicFor(id))showTopic(id,part);else overview();}
@@ -190,7 +190,7 @@ function bindUI(){
   window.addEventListener('hashchange',loadRoute);
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('#index-panel').classList.contains('open')){closeIndex();$('#mobile-index-open').focus();}else if(isPhone()&&$('.workspace').classList.contains('mobile-reader')){setReader(false);$('#reader-toggle').focus();}}if(e.target.matches('[role="tab"]')&&['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();let i=PARTS.findIndex(p=>p.id===S.part);i=e.key==='Home'?0:e.key==='End'?3:(i+(e.key==='ArrowRight'?1:3))%4;selectPart(PARTS[i].id);$(`#tab-${PARTS[i].id}`).focus();}});
   window.matchMedia('(max-width:1000px)').addEventListener('change',closeIndex);
-  window.matchMedia('(max-width:700px)').addEventListener('change',()=>{setReader(!isPhone());fitGraph();});
+  window.matchMedia('(max-width:700px)').addEventListener('change',()=>{setReader(!$('.workspace').classList.contains('reader-hidden'));S.mode==='topic'?focusNode():fitGraph();});
   bindCanvas();closeIndex();setReader(!isPhone());
 }
 let dragged=false;
