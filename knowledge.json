@@ -1,0 +1,3747 @@
+{
+  "version": 1,
+  "modules": [
+    {
+      "id": "governance",
+      "title": "治理策略与责任",
+      "subtitle": "为什么治理 · 谁决定 · 如何验收",
+      "topics": [
+        {
+          "id": "gov-boundary",
+          "title": "治理与管理：规则怎样落地",
+          "summary": "数据管理覆盖整个实践体系；治理负责决策、责任与规则，并推动执行。",
+          "keywords": [
+            "Data Governance",
+            "Data Management",
+            "政策",
+            "控制"
+          ],
+          "points": [
+            {
+              "label": "边界",
+              "text": "建仓、清洗是管理活动；治理确定质量目标、责任和决策权。"
+            },
+            {
+              "label": "衔接",
+              "text": "规则必须落实到系统控制、运营流程及可检查的结果。"
+            }
+          ],
+          "related": [
+            "gov-ownership",
+            "gov-workflow",
+            "life-stages"
+          ],
+          "sources": [
+            {
+              "label": "#3 IBM｜数据治理",
+              "url": "https://www.ibm.com/cn-zh/think/topics/data-governance"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "Data Lifecycle Governance"
+          ],
+          "compare": {
+            "headers": [
+              "概念",
+              "核心问题"
+            ],
+            "rows": [
+              [
+                "数据管理",
+                "如何建设、运行和使用数据体系？"
+              ],
+              [
+                "数据治理",
+                "谁决定、依据什么规则、谁负责？"
+              ]
+            ]
+          },
+          "confusion": {
+            "before": "治理包含所有管理工作；或治理只负责写制度。",
+            "after": "治理属于更广的数据管理，并包含规则实施与监督。"
+          },
+          "shortTitle": "治理 vs 管理"
+        },
+        {
+          "id": "gov-ownership",
+          "title": "责任体系：Owner、Steward、工程、TPM",
+          "summary": "把决策责任、日常维护、技术实施和跨团队交付分开约定。",
+          "keywords": [
+            "Ownership",
+            "Data Owner",
+            "Data Steward",
+            "RACI"
+          ],
+          "points": [
+            {
+              "label": "约定",
+              "text": "一个问题必须能找到决策人、实施者和升级路径。"
+            },
+            {
+              "label": "注意",
+              "text": "角色名称随组织变化；多人协作不等于责任无人承担。"
+            },
+            {
+              "label": "讨论视角",
+              "text": "治理推动实践建立；具体质量实现仍需与产品、管道团队划清责任。"
+            }
+          ],
+          "related": [
+            "gov-models",
+            "gov-workflow",
+            "asset-inventory"
+          ],
+          "sources": [
+            {
+              "label": "#3 IBM｜数据治理",
+              "url": "https://www.ibm.com/cn-zh/think/topics/data-governance"
+            },
+            {
+              "label": "#17 Reddit：治理与实现的边界（匿名观点）",
+              "url": "https://www.reddit.com/r/dataengineering/comments/1ph9cma/wtf_is_data_governance/"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "跨职能协作",
+            "风险与依赖管理"
+          ],
+          "compare": {
+            "headers": [
+              "常见角色",
+              "主要责任"
+            ],
+            "rows": [
+              [
+                "Data Owner",
+                "对业务域的数据决策与结果负责"
+              ],
+              [
+                "Data Steward",
+                "维护定义、质量与日常治理流程"
+              ],
+              [
+                "工程团队",
+                "实现控制、管道和运行保障"
+              ],
+              [
+                "TPM",
+                "协调范围、依赖、决策与验收"
+              ]
+            ]
+          },
+          "shortTitle": "角色与责任"
+        },
+        {
+          "id": "gov-models",
+          "title": "组织模式：集中、分布式与联合治理",
+          "summary": "选择权责分配方式时，同时考虑业务差异和共同底线。",
+          "keywords": [
+            "集中式",
+            "分布式自治",
+            "Federated",
+            "业务单元"
+          ],
+          "points": [
+            {
+              "label": "DataLeap 案例",
+              "text": "业务单元认领资产与治理结果，平台提供工具和监督。"
+            },
+            {
+              "label": "架构取舍",
+              "text": "自治要配合共同规则、责任交界和例外升级机制。"
+            }
+          ],
+          "related": [
+            "gov-ownership",
+            "gov-value",
+            "gov-evidence"
+          ],
+          "sources": [
+            {
+              "label": "#1 火山引擎｜分布式数据治理（官方全文）",
+              "url": "https://developer.volcengine.com/articles/7316454283333877798"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "Data Lifecycle Governance"
+          ],
+          "compare": {
+            "headers": [
+              "模式",
+              "优势",
+              "代价"
+            ],
+            "rows": [
+              [
+                "集中式",
+                "口径较易统一",
+                "中心团队可能成为瓶颈"
+              ],
+              [
+                "分布式自治",
+                "贴近业务、响应快",
+                "跨域协调与一致性更难"
+              ],
+              [
+                "联合治理",
+                "共同底线＋域内自治",
+                "需要明确分权与争议机制"
+              ]
+            ]
+          },
+          "confusion": {
+            "before": "分布式治理意味着所有政策都由业务自由决定。",
+            "after": "它描述责任与执行的分布，不意味着取消共同控制。"
+          },
+          "shortTitle": "集中、自治与联合"
+        },
+        {
+          "id": "gov-value",
+          "title": "价值驱动：从业务痛点选择治理切口",
+          "summary": "先说明要减少什么损失、改善什么体验，再选择治理动作。",
+          "keywords": [
+            "业务价值",
+            "稳定性",
+            "质量",
+            "安全",
+            "成本"
+          ],
+          "points": [
+            {
+              "label": "切口",
+              "text": "选择可衡量的问题：延迟、错误、冗余权限或浪费。"
+            },
+            {
+              "label": "收益",
+              "text": "同时观察业务收益与副作用，避免只提升健康分。"
+            },
+            {
+              "label": "讨论视角",
+              "text": "匿名经验建议先明确归属、从小处做起；不是统一实施标准。"
+            }
+          ],
+          "related": [
+            "gov-workflow",
+            "gov-evidence",
+            "life-tiering"
+          ],
+          "sources": [
+            {
+              "label": "#1 火山引擎｜分布式数据治理（官方全文）",
+              "url": "https://developer.volcengine.com/articles/7316454283333877798"
+            },
+            {
+              "label": "#16 Reddit：先做痛点还是先上框架（匿名经验）",
+              "url": "https://www.reddit.com/r/dataengineering/comments/1kuz9qn/how_to_build_a_data_governance_program/"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "ROI 与成功衡量",
+            "工程效率"
+          ],
+          "compare": {
+            "headers": [
+              "起点",
+              "擅长解决",
+              "常见风险"
+            ],
+            "rows": [
+              [
+                "体系规划",
+                "统一架构与长期约束",
+                "投入大、反馈较慢"
+              ],
+              [
+                "问题驱动",
+                "验证收益与获得参与",
+                "局部方案容易重复"
+              ]
+            ]
+          },
+          "confusion": {
+            "before": "学完 DataLeap 就应照搬 0987 等目标数字。",
+            "after": "历史案例的指标用于理解设计思路，目标值由业务基线决定。"
+          },
+          "shortTitle": "业务价值与治理切口"
+        },
+        {
+          "id": "gov-workflow",
+          "title": "治理闭环：目标、规则、行动、验收",
+          "summary": "让一个治理目标拥有明确范围、负责人、处理流程和验收条件。",
+          "keywords": [
+            "治理用户层",
+            "评估层",
+            "方案层",
+            "规则引擎"
+          ],
+          "points": [
+            {
+              "label": "职责",
+              "text": "管理者定目标，推动者拆方案，执行者改系统。"
+            },
+            {
+              "label": "平台",
+              "text": "元数据与规则引擎支撑诊断；任务状态与收益支撑验收。"
+            }
+          ],
+          "related": [
+            "gov-ownership",
+            "gov-evidence",
+            "asset-inventory"
+          ],
+          "sources": [
+            {
+              "label": "#2 字节数据平台｜一站式治理架构实践",
+              "url": "https://blog.csdn.net/m0_60025795/article/details/132226442"
+            }
+          ],
+          "status": "new",
+          "origin": "原文提炼",
+          "jd": [
+            "端到端项目交付",
+            "关键路径与依赖"
+          ],
+          "flow": {
+            "steps": [
+              {
+                "title": "评估",
+                "text": "圈定资产与问题"
+              },
+              {
+                "title": "方案",
+                "text": "设目标、规则与责任人"
+              },
+              {
+                "title": "执行",
+                "text": "诊断派发与整改"
+              },
+              {
+                "title": "验收",
+                "text": "核算结果、沉淀规则"
+              }
+            ],
+            "note": "架构文章的角色划分与组织职位不必一一对应。"
+          },
+          "shortTitle": "治理工作流"
+        },
+        {
+          "id": "gov-evidence",
+          "title": "验收与证据：完成了什么，如何证明",
+          "summary": "把治理活动、控制覆盖和真实结果分开看。",
+          "keywords": [
+            "覆盖率",
+            "结果指标",
+            "审计轨迹",
+            "例外"
+          ],
+          "points": [
+            {
+              "label": "指标",
+              "text": "分母写清：哪些资产应治理、哪些已覆盖、哪些有例外。"
+            },
+            {
+              "label": "证据",
+              "text": "保留规则版本、操作结果与验收记录，支持复查。"
+            }
+          ],
+          "related": [
+            "gov-value",
+            "asset-coverage",
+            "life-deletion"
+          ],
+          "sources": [
+            {
+              "label": "#2 字节数据平台｜一站式治理架构实践",
+              "url": "https://blog.csdn.net/m0_60025795/article/details/132226442"
+            },
+            {
+              "label": "#3 IBM｜数据治理",
+              "url": "https://www.ibm.com/cn-zh/think/topics/data-governance"
+            }
+          ],
+          "status": "new",
+          "origin": "新增框架",
+          "jd": [
+            "可审计解决方案",
+            "指标与成功衡量"
+          ],
+          "compare": {
+            "headers": [
+              "层次",
+              "示例",
+              "不能替代什么"
+            ],
+            "rows": [
+              [
+                "活动",
+                "派发了多少任务",
+                "不等于风险已消除"
+              ],
+              [
+                "覆盖",
+                "合规检查覆盖率",
+                "不等于控制始终有效"
+              ],
+              [
+                "结果",
+                "故障或浪费下降",
+                "需明确基线与核算范围"
+              ]
+            ]
+          },
+          "shortTitle": "活动、覆盖与结果"
+        }
+      ],
+      "question": "为什么治理，谁来负责？",
+      "shortTitle": "治理策略与责任"
+    },
+    {
+      "id": "assets",
+      "title": "资产发现与血缘",
+      "subtitle": "有什么数据 · 如何产生 · 影响哪里",
+      "topics": [
+        {
+          "id": "asset-inventory",
+          "title": "资产发现：先知道有什么、在哪里、谁负责",
+          "summary": "资产清单是找数、定责和执行治理策略的入口。",
+          "keywords": [
+            "Inventory",
+            "资产地图",
+            "标识",
+            "Owner"
+          ],
+          "points": [
+            {
+              "label": "清点",
+              "text": "记录位置、业务含义、责任人、敏感类别和更新时间。"
+            },
+            {
+              "label": "维护",
+              "text": "接入持续发现与变更更新，避免清单成为一次性快照。"
+            }
+          ],
+          "related": [
+            "gov-ownership",
+            "asset-metadata",
+            "asset-coverage"
+          ],
+          "sources": [
+            {
+              "label": "#7 字节数据平台｜十分钟读懂 DataLeap",
+              "url": "https://www.cnblogs.com/bytedata/p/17199412.html"
+            },
+            {
+              "label": "#3 IBM｜数据治理",
+              "url": "https://www.ibm.com/cn-zh/think/topics/data-governance"
+            }
+          ],
+          "status": "new",
+          "origin": "原文提炼",
+          "jd": [
+            "Data Lifecycle Governance"
+          ],
+          "shortTitle": "资产清单"
+        },
+        {
+          "id": "asset-metadata",
+          "title": "元数据、目录与血缘",
+          "summary": "同一批元数据可以支持不同问题：找资产、理解资产、追踪依赖。",
+          "keywords": [
+            "Metadata",
+            "Catalog",
+            "Lineage"
+          ],
+          "points": [
+            {
+              "label": "共同基础",
+              "text": "表结构、业务定义与运行信息都可成为元数据。"
+            },
+            {
+              "label": "分工",
+              "text": "目录让资产可发现；血缘解释资产之间的生成与流动关系。"
+            }
+          ],
+          "related": [
+            "asset-inventory",
+            "asset-provenance",
+            "asset-sql"
+          ],
+          "sources": [
+            {
+              "label": "#5 IBM｜数据血缘",
+              "url": "https://www.ibm.com/cn-zh/think/topics/data-lineage"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "Data Lifecycle Governance"
+          ],
+          "compare": {
+            "headers": [
+              "概念",
+              "回答什么"
+            ],
+            "rows": [
+              [
+                "元数据",
+                "这个资产的属性与上下文是什么？"
+              ],
+              [
+                "数据目录",
+                "有哪些资产，如何查找和理解？"
+              ],
+              [
+                "数据血缘",
+                "来自哪里，如何变化，流向哪里？"
+              ]
+            ]
+          },
+          "shortTitle": "元数据、目录与血缘"
+        },
+        {
+          "id": "asset-granularity",
+          "title": "血缘粒度：表关系不是用户记录索引",
+          "summary": "血缘越细，问题定位越精准；采集和维护成本也越高。",
+          "keywords": [
+            "表级",
+            "列级",
+            "转换表达式",
+            "记录级"
+          ],
+          "points": [
+            {
+              "label": "选择",
+              "text": "由改字段、追故障或定位个人数据等具体任务决定粒度。"
+            },
+            {
+              "label": "边界",
+              "text": "列级血缘不直接回答某个用户的每条记录存在哪些副本。"
+            }
+          ],
+          "related": [
+            "asset-sql",
+            "asset-coverage",
+            "life-deletion"
+          ],
+          "sources": [
+            {
+              "label": "#5 IBM｜数据血缘",
+              "url": "https://www.ibm.com/cn-zh/think/topics/data-lineage"
+            },
+            {
+              "label": "#8 FlinkSQL 字段血缘",
+              "url": "https://zhuanlan.zhihu.com/p/628376451"
+            }
+          ],
+          "status": "source",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "Data Lifecycle Governance"
+          ],
+          "compare": {
+            "headers": [
+              "粒度",
+              "可以看见",
+              "局限"
+            ],
+            "rows": [
+              [
+                "表级",
+                "表与任务依赖",
+                "难定位具体字段"
+              ],
+              [
+                "列级",
+                "字段来源与派生关系",
+                "不等于每行记录追踪"
+              ],
+              [
+                "转换表达式",
+                "聚合、函数等加工逻辑",
+                "依赖解析器能力"
+              ],
+              [
+                "记录级",
+                "具体记录的来源或去向",
+                "规模与关联维护更复杂"
+              ]
+            ]
+          },
+          "shortTitle": "血缘粒度"
+        },
+        {
+          "id": "asset-sql",
+          "title": "SQL 到血缘：AST 与关系计划",
+          "summary": "语法树描述代码结构，关系计划描述扫描、连接与投影等操作。",
+          "keywords": [
+            "Calcite",
+            "AST",
+            "SqlNode",
+            "RelNode",
+            "Column Origins"
+          ],
+          "points": [
+            {
+              "label": "实现",
+              "text": "知乎案例到逻辑计划后查询列来源，并扩展部分算子支持。"
+            },
+            {
+              "label": "限制",
+              "text": "解析受 SQL 方言、版本、函数及自定义逻辑影响。"
+            }
+          ],
+          "related": [
+            "asset-granularity",
+            "asset-coverage"
+          ],
+          "sources": [
+            {
+              "label": "#8 FlinkSQL 字段血缘",
+              "url": "https://zhuanlan.zhihu.com/p/628376451"
+            },
+            {
+              "label": "Apache Calcite｜关系代数",
+              "url": "https://calcite.apache.org/docs/algebra.html"
+            }
+          ],
+          "status": "source",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "Data Lifecycle Governance"
+          ],
+          "flow": {
+            "steps": [
+              {
+                "title": "Parse",
+                "text": "SQL → 语法树"
+              },
+              {
+                "title": "Validate",
+                "text": "结合目录校验"
+              },
+              {
+                "title": "Convert",
+                "text": "生成关系计划"
+              },
+              {
+                "title": "追溯",
+                "text": "查询列来源与转换"
+              }
+            ],
+            "note": "这是参考文章的实现路线；API 与支持范围按版本核对。"
+          },
+          "confusion": {
+            "before": "AST 是链表；AST 相似就代表任务语义完全相同。",
+            "after": "AST 是树；相似度只提供候选，不能证明结果等价或可直接删除。"
+          },
+          "shortTitle": "SQL → 字段血缘"
+        },
+        {
+          "id": "asset-provenance",
+          "title": "Provenance：来源也包含生成过程与责任",
+          "summary": "不同文献使用范围不同；不要把 provenance 永久限定为最初来源。",
+          "keywords": [
+            "Provenance",
+            "W3C PROV",
+            "Entity",
+            "Activity",
+            "Agent"
+          ],
+          "points": [
+            {
+              "label": "W3C 定义",
+              "text": "用实体、活动与参与者描述数据怎样生成及谁承担责任。"
+            },
+            {
+              "label": "沟通",
+              "text": "先说需要记录什么，再确认工具对术语的具体定义。"
+            }
+          ],
+          "related": [
+            "asset-metadata",
+            "asset-sql"
+          ],
+          "sources": [
+            {
+              "label": "W3C｜PROV Overview",
+              "url": "https://www.w3.org/TR/prov-overview/"
+            },
+            {
+              "label": "#5 IBM｜数据血缘",
+              "url": "https://www.ibm.com/cn-zh/think/topics/data-lineage"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "Data Lifecycle Governance"
+          ],
+          "compare": {
+            "headers": [
+              "视角",
+              "关注点"
+            ],
+            "rows": [
+              [
+                "Lineage",
+                "数据流动、转换与依赖关系"
+              ],
+              [
+                "PROV 模型",
+                "实体、活动、参与者及其关系"
+              ]
+            ]
+          },
+          "confusion": {
+            "before": "Provenance 只表示数据最初的出生地点。",
+            "after": "IBM 入门文采用较窄解释；W3C PROV 覆盖生成历史与责任关系。"
+          },
+          "shortTitle": "血缘与来源证明"
+        },
+        {
+          "id": "asset-coverage",
+          "title": "覆盖与盲区：图上没有，不代表不存在",
+          "summary": "血缘图是基于已接入系统、解析能力和运行证据得到的视图。",
+          "keywords": [
+            "覆盖率",
+            "静态解析",
+            "运行事件",
+            "UDF",
+            "盲区"
+          ],
+          "points": [
+            {
+              "label": "互补",
+              "text": "静态解析看可能依赖；运行记录补实际执行，二者范围不同。"
+            },
+            {
+              "label": "验收",
+              "text": "记录未接入系统、解析失败与更新时间，抽样核对关键链路。"
+            }
+          ],
+          "related": [
+            "asset-inventory",
+            "asset-sql",
+            "gov-evidence",
+            "life-deletion"
+          ],
+          "sources": [
+            {
+              "label": "#8 FlinkSQL 字段血缘",
+              "url": "https://zhuanlan.zhihu.com/p/628376451"
+            },
+            {
+              "label": "#2 字节数据平台｜一站式治理架构实践",
+              "url": "https://blog.csdn.net/m0_60025795/article/details/132226442"
+            }
+          ],
+          "status": "new",
+          "origin": "新增框架",
+          "jd": [
+            "风险与依赖管理",
+            "可审计解决方案"
+          ],
+          "compare": {
+            "headers": [
+              "用途",
+              "方向",
+              "需要补什么"
+            ],
+            "rows": [
+              [
+                "变更影响",
+                "上游 → 下游",
+                "消费者、使用方式与新鲜度"
+              ],
+              [
+                "故障追因",
+                "下游 → 上游",
+                "运行日志和数据质量证据"
+              ],
+              [
+                "删除范围",
+                "个人数据 → 副本与派生资产",
+                "身份映射、非 SQL 链路与存储清单"
+              ]
+            ]
+          },
+          "confusion": {
+            "before": "血缘图没找到下游，所以这张表可以直接删。",
+            "after": "还需检查访问记录、采集覆盖和业务确认，管理未知依赖。"
+          },
+          "shortTitle": "覆盖范围与盲区"
+        }
+      ],
+      "question": "有什么数据，流向哪里？",
+      "shortTitle": "资产与血缘"
+    },
+    {
+      "id": "lifecycle",
+      "title": "生命周期与存储",
+      "subtitle": "如何保存与使用 · 何时归档或删除",
+      "topics": [
+        {
+          "id": "life-stages",
+          "title": "生命周期：每一阶段都需要策略与责任",
+          "summary": "从收集到退出，持续管理数据的用途、访问、保留与处置。",
+          "keywords": [
+            "DLM",
+            "ILM",
+            "收集",
+            "使用",
+            "退出"
+          ],
+          "points": [
+            {
+              "label": "主线",
+              "text": "阶段可以重叠或循环；共享、归档后仍然需要控制。"
+            },
+            {
+              "label": "设计",
+              "text": "为每类数据约定用途、责任、保存条件与退出触发。"
+            }
+          ],
+          "related": [
+            "gov-boundary",
+            "life-tiering",
+            "life-retention"
+          ],
+          "sources": [
+            {
+              "label": "#4 IBM｜数据生命周期管理",
+              "url": "https://www.ibm.com/cn-zh/think/topics/data-lifecycle-management"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "Data Lifecycle Governance"
+          ],
+          "flow": {
+            "steps": [
+              {
+                "title": "创建",
+                "text": "需要收集哪些数据"
+              },
+              {
+                "title": "存储",
+                "text": "保存位置与保护"
+              },
+              {
+                "title": "使用／共享",
+                "text": "谁为哪些目的使用"
+              },
+              {
+                "title": "归档／删除",
+                "text": "何时退出与如何证明"
+              }
+            ],
+            "note": "阶段数量是组织方式，不是需要背诵的统一标准。"
+          },
+          "confusion": {
+            "before": "DLM 必然只管文件，ILM 必然只管记录。",
+            "after": "IBM 本文这样区分；实际项目应先明确对象与控制粒度，避免硬套术语。"
+          },
+          "shortTitle": "生命周期全景"
+        },
+        {
+          "id": "life-storage",
+          "title": "存储：块、文件、对象是访问抽象",
+          "summary": "按接口、读写方式和共享需求选型，不能只看数据是视频还是评论。",
+          "keywords": [
+            "Block",
+            "File",
+            "Object",
+            "SAN",
+            "NAS",
+            "POSIX"
+          ],
+          "points": [
+            {
+              "label": "层次",
+              "text": "SAN 常提供块访问，NAS 提供文件访问；文件系统可建在块存储上。"
+            },
+            {
+              "label": "性能",
+              "text": "延迟、一致性和局部更新能力取决于具体产品与配置。"
+            }
+          ],
+          "related": [
+            "life-tiering",
+            "asset-inventory"
+          ],
+          "sources": [
+            {
+              "label": "AWS｜块、文件与对象存储",
+              "url": "https://aws.amazon.com/compare/the-difference-between-block-file-object-storage/"
+            },
+            {
+              "label": "AWS EBS｜Multi-Attach 与并发写入",
+              "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes-multi.html"
+            },
+            {
+              "label": "Apache Hadoop｜HDFS 架构",
+              "url": "https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "Data Lifecycle Governance"
+          ],
+          "compare": {
+            "headers": [
+              "类型",
+              "访问形式",
+              "适合与取舍"
+            ],
+            "rows": [
+              [
+                "块",
+                "块地址与读写请求",
+                "数据库／文件系统；共享写需协调"
+              ],
+              [
+                "文件",
+                "目录、路径、文件操作",
+                "共享文件与兼容应用；语义依实现"
+              ],
+              [
+                "对象",
+                "对象键与 API",
+                "海量内容与数据湖；更新方式依产品"
+              ]
+            ]
+          },
+          "confusion": {
+            "before": "块存储只能单机；文件存储都完整支持 POSIX；HPC 不能用块。",
+            "after": "EBS 支持有条件的多挂载；HDFS 放宽部分 POSIX 语义；需区分底层介质与共享接口。"
+          },
+          "shortTitle": "块、文件与对象"
+        },
+        {
+          "id": "life-tiering",
+          "title": "冷热分层：降低总成本，而非只降单价",
+          "summary": "结合访问热度、业务重要性与恢复需求，决定放在哪个存储层。",
+          "keywords": [
+            "Hot／Warm／Cold",
+            "Tiering",
+            "Compaction",
+            "恢复时延"
+          ],
+          "points": [
+            {
+              "label": "输入",
+              "text": "访问频次与最近访问、对象大小、业务关键程度共同判断。"
+            },
+            {
+              "label": "总成本",
+              "text": "纳入迁移、请求、取回和最短计费期；测试查询与恢复。"
+            }
+          ],
+          "related": [
+            "life-storage",
+            "life-backup",
+            "gov-value"
+          ],
+          "sources": [
+            {
+              "label": "AWS S3｜生命周期分层与归档约束",
+              "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html"
+            },
+            {
+              "label": "#2 字节数据平台｜一站式治理架构实践",
+              "url": "https://blog.csdn.net/m0_60025795/article/details/132226442"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "Data Lifecycle Governance"
+          ],
+          "compare": {
+            "headers": [
+              "方式",
+              "优势",
+              "代价"
+            ],
+            "rows": [
+              [
+                "年龄规则",
+                "简单、易解释",
+                "可能迁走仍常用的历史数据"
+              ],
+              [
+                "热度策略",
+                "贴近访问模式",
+                "需要观测与策略维护"
+              ],
+              [
+                "深度归档",
+                "保存单价低",
+                "可能需先恢复，不能承诺即时查询"
+              ]
+            ]
+          },
+          "confusion": {
+            "before": "改了 Iceberg／Hive 元数据，所有冷归档就能透明实时查询。",
+            "after": "查询还受底层介质与取回机制约束；元数据切换不能消除解冻时间。"
+          },
+          "shortTitle": "冷热分层与归档"
+        },
+        {
+          "id": "life-backup",
+          "title": "副本、备份与归档：保护目标不同",
+          "summary": "可用性、故障恢复与长期留存是不同需求，不应相互替代。",
+          "keywords": [
+            "Replication",
+            "Backup",
+            "Archive",
+            "Restore"
+          ],
+          "points": [
+            {
+              "label": "恢复",
+              "text": "备份要验证能恢复；副本可能同步传播误删或损坏。"
+            },
+            {
+              "label": "删除",
+              "text": "活跃副本、备份与归档都应纳入范围和完成条件。"
+            }
+          ],
+          "related": [
+            "life-deletion",
+            "life-tiering",
+            "life-retention"
+          ],
+          "sources": [
+            {
+              "label": "#6 Google Cloud｜数据删除",
+              "url": "https://docs.cloud.google.com/docs/security/deletion?hl=zh-cn"
+            },
+            {
+              "label": "#4 IBM｜数据生命周期管理",
+              "url": "https://www.ibm.com/cn-zh/think/topics/data-lifecycle-management"
+            }
+          ],
+          "status": "new",
+          "origin": "新增框架",
+          "jd": [
+            "Data Lifecycle Governance"
+          ],
+          "compare": {
+            "headers": [
+              "机制",
+              "主要目的",
+              "典型注意点"
+            ],
+            "rows": [
+              [
+                "复制",
+                "服务可用与分散访问",
+                "可能同步错误"
+              ],
+              [
+                "备份",
+                "回到可恢复时间点",
+                "需恢复验证与过期策略"
+              ],
+              [
+                "归档",
+                "保留较少访问的数据",
+                "重视检索与留存要求"
+              ]
+            ]
+          },
+          "shortTitle": "复制、备份与归档"
+        },
+        {
+          "id": "life-deletion",
+          "title": "删除：请求成功不等于所有副本都完成",
+          "summary": "把删除视为跨系统过程，明确每一阶段的状态和证据。",
+          "keywords": [
+            "Soft Delete",
+            "逻辑删除",
+            "备份过期",
+            "加密清除",
+            "ACK"
+          ],
+          "points": [
+            {
+              "label": "Google 案例",
+              "text": "恢复窗口、活跃存储和备份分别处理；部分场景可用加密清除。"
+            },
+            {
+              "label": "落地延伸",
+              "text": "追踪副本范围、失败重试与完成确认；恢复流程也要核对删除状态。"
+            }
+          ],
+          "related": [
+            "asset-coverage",
+            "life-backup",
+            "life-retention",
+            "gov-evidence"
+          ],
+          "sources": [
+            {
+              "label": "#6 Google Cloud｜数据删除",
+              "url": "https://docs.cloud.google.com/docs/security/deletion?hl=zh-cn"
+            }
+          ],
+          "status": "new",
+          "origin": "原文提炼",
+          "jd": [
+            "Data Lifecycle Governance",
+            "可审计解决方案"
+          ],
+          "compare": {
+            "headers": [
+              "方式",
+              "达到什么",
+              "条件／限制"
+            ],
+            "rows": [
+              [
+                "逻辑删除",
+                "在系统语义上移除",
+                "底层数据未必已覆盖"
+              ],
+              [
+                "加密清除",
+                "使密文不可解读",
+                "密钥范围与残余副本必须匹配"
+              ],
+              [
+                "介质覆盖／销毁",
+                "处理底层存储残留",
+                "不能只凭应用 API 回执证明"
+              ]
+            ]
+          },
+          "flow": {
+            "steps": [
+              {
+                "title": "请求",
+                "text": "确认对象与范围"
+              },
+              {
+                "title": "软删除",
+                "text": "限制访问与恢复窗口"
+              },
+              {
+                "title": "活跃系统",
+                "text": "清理或使其不可读"
+              },
+              {
+                "title": "备份",
+                "text": "按机制过期或清除"
+              }
+            ],
+            "note": "该流程概括 Google 的案例；它的时限不是通用法律期限或 TikTok 目标。"
+          },
+          "shortTitle": "删除的多个阶段"
+        },
+        {
+          "id": "life-retention",
+          "title": "保留策略：TTL、保留期与暂停删除",
+          "summary": "到期触发、禁止删除和最终清除属于不同控制。",
+          "keywords": [
+            "TTL",
+            "Retention",
+            "Legal Hold",
+            "版本",
+            "例外"
+          ],
+          "points": [
+            {
+              "label": "策略",
+              "text": "明确对象、起算事件、保留规则、例外责任人与复核条件。"
+            },
+            {
+              "label": "产品边界",
+              "text": "以 S3 为例，锁作用于对象版本；删除标记不等于旧版本消失。"
+            },
+            {
+              "label": "留存期限",
+              "text": "治理策略也可规定最迟删除；不能只理解为最低保存期限。"
+            }
+          ],
+          "related": [
+            "life-stages",
+            "life-deletion",
+            "gov-ownership"
+          ],
+          "sources": [
+            {
+              "label": "AWS S3｜Object Lock、保留期与 Legal Hold",
+              "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"
+            },
+            {
+              "label": "#4 IBM｜数据生命周期管理",
+              "url": "https://www.ibm.com/cn-zh/think/topics/data-lifecycle-management"
+            }
+          ],
+          "status": "new",
+          "origin": "新增框架",
+          "jd": [
+            "Data Lifecycle Governance"
+          ],
+          "compare": {
+            "headers": [
+              "概念",
+              "作用",
+              "容易混淆处"
+            ],
+            "rows": [
+              [
+                "TTL／过期",
+                "触发过期或清理规则",
+                "到期不一定立刻物理清除"
+              ],
+              [
+                "Object Lock 保护期",
+                "在保护期内限制删除该版本",
+                "到期只代表可以删除，并不自动清除"
+              ],
+              [
+                "Legal Hold",
+                "在解除前阻止相关删除",
+                "不能仅因普通期限届满而忽略"
+              ]
+            ]
+          },
+          "shortTitle": "留存与暂停删除"
+        }
+      ],
+      "question": "如何保存，何时退出？",
+      "shortTitle": "生命周期与存储"
+    },
+    {
+      "id": "reliability",
+      "title": "质量、稳定性与工程效率",
+      "subtitle": "让数据和控制按时、正确、可持续地运行",
+      "topics": [
+        {
+          "id": "rel-sla",
+          "title": "SLA、依赖图与关键路径",
+          "summary": "先明确业务最晚需要什么，再沿依赖链协商各节点的交付承诺。",
+          "keywords": [
+            "SLA",
+            "SLI",
+            "SLO",
+            "DAG",
+            "Critical Path",
+            "Buffer",
+            "缓冲"
+          ],
+          "points": [
+            {
+              "label": "关键路径",
+              "text": "关注决定最早完工时间的依赖链，并计入排队、重试与资源约束。"
+            },
+            {
+              "label": "缓冲",
+              "text": "按时长波动、失败风险和业务容忍度协商，不套固定比例。"
+            },
+            {
+              "label": "不可行目标",
+              "text": "15 分钟压到 5 分钟，先改瓶颈或范围；改承诺不会让执行变快。"
+            }
+          ],
+          "compare": {
+            "headers": [
+              "概念",
+              "用途"
+            ],
+            "rows": [
+              [
+                "SLI：实际指标",
+                "例如指定窗口内按时且合格的产出比例"
+              ],
+              [
+                "SLO：目标",
+                "例如为该指标约定目标值与窗口"
+              ],
+              [
+                "SLA：协议",
+                "约定服务责任及未满足时的处理"
+              ]
+            ]
+          },
+          "confusion": {
+            "before": "找到关键路径后，把所有子任务耗时等比例压缩；buffer 有统一公式。",
+            "after": "先查真实约束和可优化环节，再倒推承诺；原文未给通用 buffer 公式。"
+          },
+          "related": [
+            "tpm-dependencies",
+            "rel-skew",
+            "rel-quality"
+          ],
+          "sources": [
+            {
+              "label": "#1 火山引擎：DataLeap 分布式治理",
+              "url": "https://developer.volcengine.com/articles/7316454283333877798"
+            },
+            {
+              "label": "核对补充 · Google SRE：服务等级目标",
+              "url": "https://sre.google/sre-book/service-level-objectives/"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "关键路径执行",
+            "跨团队依赖",
+            "系统稳定性"
+          ],
+          "shortTitle": "SLI、SLO、SLA"
+        },
+        {
+          "id": "rel-quality",
+          "title": "数据质量与可观测性",
+          "summary": "质量描述数据是否满足使用要求；可观测性帮助发现、解释运行状态。",
+          "keywords": [
+            "Data Quality",
+            "Observability",
+            "动态阈值",
+            "新鲜度",
+            "完整性",
+            "熔断"
+          ],
+          "points": [
+            {
+              "label": "业务规则",
+              "text": "表正常产出仍可能金额算错；质量规则必须对应业务含义。"
+            },
+            {
+              "label": "动态阈值",
+              "text": "对同一口径的行数或指标建基线，考虑季节性、节假日与业务变更。"
+            },
+            {
+              "label": "控制动作",
+              "text": "按影响选择告警、隔离或阻断；阻断也须评估下游损失。"
+            }
+          ],
+          "compare": {
+            "headers": [
+              "视角",
+              "例子",
+              "单独不足之处"
+            ],
+            "rows": [
+              [
+                "质量",
+                "空值、重复、对账、时效",
+                "规则可能漏掉未知异常"
+              ],
+              [
+                "可观测性",
+                "延迟、流量、错误、资源与日志",
+                "看到异常不等于确认业务错误"
+              ]
+            ]
+          },
+          "confusion": {
+            "before": "行数在预测区间内，就说明数据没问题。",
+            "after": "行数是一个信号；还需检查字段内容、关系约束与业务对账。"
+          },
+          "related": [
+            "rel-sla",
+            "rel-improvement",
+            "asset-coverage",
+            "gov-evidence"
+          ],
+          "sources": [
+            {
+              "label": "#1 火山引擎：DataLeap 分布式治理",
+              "url": "https://developer.volcengine.com/articles/7316454283333877798"
+            },
+            {
+              "label": "核对补充 · Google SRE：监控分布式系统",
+              "url": "https://sre.google/sre-book/monitoring-distributed-systems/"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "工程质量",
+            "可靠交付",
+            "指标洞察"
+          ],
+          "shortTitle": "质量 vs 可观测性"
+        },
+        {
+          "id": "rel-skew",
+          "title": "数据倾斜：记录数均匀也可能很慢",
+          "summary": "任务是否均衡，要看数据量和处理工作量，不能只数不同 Key 或记录条数。",
+          "keywords": [
+            "Data Skew",
+            "热点 Key",
+            "Value",
+            "Shuffle",
+            "AQE",
+            "分区"
+          ],
+          "points": [
+            {
+              "label": "先诊断",
+              "text": "比较分区行数、字节数、耗时和溢写，确认慢在哪里。"
+            },
+            {
+              "label": "再治理",
+              "text": "候选措施包括拆热点、预聚合、调整连接和适用时启用倾斜优化。"
+            },
+            {
+              "label": "语义约束",
+              "text": "过滤 NULL 或给 Key 加盐可能改变结果，必须保留业务语义。"
+            }
+          ],
+          "compare": {
+            "headers": [
+              "成因",
+              "学习例子",
+              "现象"
+            ],
+            "rows": [
+              [
+                "Key 频次不均",
+                "同一热门账号关联大量记录",
+                "少数分区接收过多数据"
+              ],
+              [
+                "Value 大小不均",
+                "记录数相同，但某类含长文本",
+                "字节、内存或计算量差异大"
+              ],
+              [
+                "计算复杂度不均",
+                "某些记录触发昂贵解析",
+                "数据量近似但耗时差异大"
+              ]
+            ]
+          },
+          "confusion": {
+            "before": "Hash 分配了 Key，负载就一定均匀。",
+            "after": "Hash 不能消除热点频次或单条处理成本差异；应按实际负载核验。"
+          },
+          "related": [
+            "rel-sla",
+            "rel-cost"
+          ],
+          "sources": [
+            {
+              "label": "核对补充 · Apache Spark：SQL 性能调优",
+              "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "系统稳定性",
+            "性能诊断",
+            "方案架构"
+          ],
+          "shortTitle": "数据倾斜"
+        },
+        {
+          "id": "rel-cost",
+          "title": "查询成本与相似任务诊断",
+          "summary": "先找高成本和重复候选，再验证业务等价与依赖，才能安全优化。",
+          "keywords": [
+            "SQL",
+            "AST",
+            "相似任务",
+            "扫描量",
+            "分区过滤",
+            "成本",
+            "查询计划"
+          ],
+          "points": [
+            {
+              "label": "成本证据",
+              "text": "结合实际扫描量、执行计划和资源耗用，不能只看 SQL 长短。"
+            },
+            {
+              "label": "AST 边界",
+              "text": "AST 是语法树；序列化和向量相似度是可选实现，并非必经步骤。"
+            },
+            {
+              "label": "验收",
+              "text": "优化前后对齐结果、延迟和成本；同时确认下游消费者。"
+            }
+          ],
+          "flow": {
+            "steps": [
+              {
+                "title": "发现候选",
+                "text": "高扫描量或相似任务"
+              },
+              {
+                "title": "检查语义",
+                "text": "来源、条件、口径、时效"
+              },
+              {
+                "title": "协商改造",
+                "text": "负责人确认复用或合并"
+              },
+              {
+                "title": "验证收益",
+                "text": "结果一致且成本下降"
+              }
+            ],
+            "note": "治理设计示意。无分区过滤不必然错误；结构相似不证明结果等价，不能自动删除任务。"
+          },
+          "confusion": {
+            "before": "SQL 变成“链表”，算出相似度后就删除重复任务。",
+            "after": "解析产生树；相似度用于筛选候选，退休任务前仍须验证用途和依赖。"
+          },
+          "related": [
+            "asset-sql",
+            "gov-value",
+            "rel-skew",
+            "tpm-dependencies"
+          ],
+          "sources": [
+            {
+              "label": "核对补充 · Apache Calcite：SQL 语法树",
+              "url": "https://calcite.apache.org/javadocAggregate/org/apache/calcite/sql/package-summary.html"
+            },
+            {
+              "label": "核对补充 · Apache Spark：SQL 性能调优",
+              "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "工程效率",
+            "ROI",
+            "变更风险"
+          ],
+          "shortTitle": "SQL 成本与查重"
+        },
+        {
+          "id": "rel-lifecycle",
+          "title": "把治理控制带进 SDLC",
+          "summary": "从需求和设计开始定义控制、验证与责任，在发布和运营中持续检查。",
+          "keywords": [
+            "SDLC",
+            "验收标准",
+            "灰度",
+            "Canary",
+            "回滚",
+            "自动化测试"
+          ],
+          "points": [
+            {
+              "label": "需求",
+              "text": "把隐私、数据质量和时效要求写成可验证的验收条件。"
+            },
+            {
+              "label": "发布",
+              "text": "小范围验证关键结果；提前定义放量、暂停和回退标准。"
+            },
+            {
+              "label": "持续运营",
+              "text": "代码上线只是节点，还需运行证据、责任交接与异常处理。"
+            }
+          ],
+          "flow": {
+            "steps": [
+              {
+                "title": "需求与设计",
+                "text": "明确范围、责任和风险"
+              },
+              {
+                "title": "构建与验证",
+                "text": "测试正常、异常与恢复路径"
+              },
+              {
+                "title": "灰度与上线",
+                "text": "监测目标及副作用"
+              },
+              {
+                "title": "运营与复盘",
+                "text": "修正规则和工程流程"
+              }
+            ],
+            "note": "按 JD 补充的组织框架。灰度应有代表性；测试通过不意味着全部生产场景已覆盖。"
+          },
+          "related": [
+            "tpm-delivery",
+            "life-stages",
+            "risk-features",
+            "rel-quality"
+          ],
+          "sources": [
+            {
+              "label": "#7 字节数据平台：DataLeap 治理实践",
+              "url": "https://www.cnblogs.com/bytedata/p/17199412.html"
+            },
+            {
+              "label": "核对补充 · Google SRE：灰度发布",
+              "url": "https://sre.google/workbook/canarying-releases/"
+            }
+          ],
+          "status": "new",
+          "origin": "新增框架",
+          "jd": [
+            "SDLC",
+            "从规划到上线",
+            "质量与合规"
+          ],
+          "shortTitle": "研发全生命周期"
+        },
+        {
+          "id": "rel-improvement",
+          "title": "告警、复盘与效率闭环",
+          "summary": "把反复救火转化为可追踪的改进，并验证用户影响和团队负担是否下降。",
+          "keywords": [
+            "告警治理",
+            "根因",
+            "复盘",
+            "Toil",
+            "改进闭环",
+            "指标",
+            "工程效率"
+          ],
+          "points": [
+            {
+              "label": "有效告警",
+              "text": "明确需要谁做什么；合并重复告警，保留对真实风险的覆盖。"
+            },
+            {
+              "label": "复盘交付",
+              "text": "记录影响、促成因素、改进负责人、期限与验证办法。"
+            },
+            {
+              "label": "收益验证",
+              "text": "对齐业务量和统计窗口，比较事故、恢复时间与人工投入。"
+            }
+          ],
+          "compare": {
+            "headers": [
+              "只看活动量",
+              "进一步看结果"
+            ],
+            "rows": [
+              [
+                "告警数量下降",
+                "漏报是否增加，人工干预是否减少"
+              ],
+              [
+                "关闭改进工单",
+                "同类问题是否复发，控制是否生效"
+              ],
+              [
+                "发布次数增加",
+                "交付更快的同时，失败和回退是否可控"
+              ]
+            ]
+          },
+          "confusion": {
+            "before": "看板建立、告警减少或工单关闭，就说明治理成功。",
+            "after": "把活动指标连接到用户影响与持续效果，再判断投入是否值得。"
+          },
+          "related": [
+            "gov-workflow",
+            "gov-value",
+            "tpm-metrics",
+            "rel-quality",
+            "rel-lifecycle"
+          ],
+          "sources": [
+            {
+              "label": "#1 火山引擎：DataLeap 分布式治理",
+              "url": "https://developer.volcengine.com/articles/7316454283333877798"
+            },
+            {
+              "label": "核对补充 · Google SRE：监控分布式系统",
+              "url": "https://sre.google/sre-book/monitoring-distributed-systems/"
+            },
+            {
+              "label": "核对补充 · Google SRE：灰度发布",
+              "url": "https://sre.google/workbook/canarying-releases/"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "持续改进",
+            "工程效率",
+            "ROI 与成功度量"
+          ],
+          "shortTitle": "持续改进"
+        }
+      ],
+      "question": "数据可靠吗，资源用得好吗？",
+      "shortTitle": "质量与效率"
+    },
+    {
+      "id": "privacy",
+      "title": "隐私工程与用户控制",
+      "subtitle": "把政策意图变成产品行为、系统控制与证据",
+      "topics": [
+        {
+          "id": "privacy-controls",
+          "title": "把隐私要求变成控制",
+          "summary": "隐私产品需要预防、检测、纠正，也需要有人对控制结果负责。",
+          "keywords": [
+            "Privacy by Design",
+            "PDPO",
+            "preventive",
+            "detective",
+            "corrective"
+          ],
+          "points": [
+            {
+              "label": "原文范围",
+              "text": "TikTok PDPO 跨法务、产品、工程、安全与 T&S 协作。"
+            },
+            {
+              "label": "落实方式",
+              "text": "下表是面试设计示例，不是 TikTok 内部架构。"
+            },
+            {
+              "label": "验收追问",
+              "text": "谁定要求、哪里执行、失败谁处理、如何证明？"
+            }
+          ],
+          "related": [
+            "privacy-threats",
+            "privacy-evidence",
+            "gov-ownership",
+            "tpm-global"
+          ],
+          "sources": [
+            {
+              "label": "#10 TikTok PDPO：职责与控制",
+              "url": "https://developers.tiktok.com/blog/How-TikTok-PDPO-Protects-User-Data"
+            }
+          ],
+          "status": "new",
+          "origin": "原文提炼",
+          "jd": [
+            "Privacy Products",
+            "跨职能协作",
+            "可审计方案"
+          ],
+          "compare": {
+            "headers": [
+              "控制",
+              "解决什么",
+              "设计示例"
+            ],
+            "rows": [
+              [
+                "预防",
+                "减少违规发生",
+                "用途限制、最小权限"
+              ],
+              [
+                "检测",
+                "发现偏离要求",
+                "异常访问或共享告警"
+              ],
+              [
+                "纠正",
+                "处理已发生偏离",
+                "撤回权限、修复与复验"
+              ]
+            ]
+          },
+          "shortTitle": "预防、检测与纠正"
+        },
+        {
+          "id": "privacy-threats",
+          "title": "LINDDUN：隐私不止泄露",
+          "summary": "沿数据流检查：能否关联、识别、察觉，以及用户是否知情、能否干预。",
+          "keywords": [
+            "LINDDUN",
+            "Linking",
+            "Identifying",
+            "Detecting",
+            "Non-repudiation"
+          ],
+          "points": [
+            {
+              "label": "使用方式",
+              "text": "先定位数据流与受影响的人，再描述伤害及控制。"
+            },
+            {
+              "label": "边界",
+              "text": "框架帮助发现风险；不直接替代法律判断或上线验收。"
+            }
+          ],
+          "related": [
+            "privacy-user-control",
+            "ai-agent",
+            "asset-provenance"
+          ],
+          "sources": [
+            {
+              "label": "#11 LINDDUN：威胁类型",
+              "url": "https://linddun.org/threat-types/"
+            },
+            {
+              "label": "LINDDUN 官方威胁树（网页备用原文）",
+              "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "隐私风险分析",
+            "跨职能协作"
+          ],
+          "compare": {
+            "headers": [
+              "类型",
+              "判断焦点"
+            ],
+            "rows": [
+              [
+                "L · Linking",
+                "拼接信息得到额外画像"
+              ],
+              [
+                "I · Identifying",
+                "确认某个人是谁"
+              ],
+              [
+                "N · Non-repudiation",
+                "留下可归属的证据，失去合理否认空间"
+              ],
+              [
+                "D · Detecting",
+                "察觉参与或记录存在"
+              ],
+              [
+                "D · Data Disclosure",
+                "过量处理、保留或暴露"
+              ],
+              [
+                "U · Unawareness / Unintervenability",
+                "不知情、缺少控制"
+              ],
+              [
+                "N · Non-compliance",
+                "相关管理与合规要求未落实"
+              ]
+            ]
+          },
+          "confusion": {
+            "before": "把病历中的身份信息泄露统称为 Detecting。",
+            "after": "存在性侧信道看 Detecting；识别身份看 Identifying；内容暴露看 Disclosure，可同时命中。"
+          },
+          "shortTitle": "LINDDUN 七类威胁"
+        },
+        {
+          "id": "privacy-dataworks",
+          "title": "分类 → 识别 → 脱敏 → 审计",
+          "summary": "配置规则、开启执行、验证结果，是三个不同的完成状态。",
+          "keywords": [
+            "DataWorks",
+            "分类分级",
+            "敏感字段",
+            "动态脱敏",
+            "静态脱敏",
+            "风险审计"
+          ],
+          "points": [
+            {
+              "label": "原文案例",
+              "text": "识别手机号后配置掩盖，并配置导出风险审计。"
+            },
+            {
+              "label": "关键依赖",
+              "text": "查询脱敏还需开启工作空间开关，配置本身不等于生效。"
+            },
+            {
+              "label": "控制边界",
+              "text": "显示星号不证明底层原值已删除，也不证明数据已匿名。"
+            }
+          ],
+          "related": [
+            "asset-metadata",
+            "privacy-controls",
+            "life-deletion"
+          ],
+          "sources": [
+            {
+              "label": "#9 DataWorks：数据保护伞入门",
+              "url": "https://help.aliyun.com/zh/dataworks/user-guide/getting-started-with-data-security-guard"
+            }
+          ],
+          "status": "new",
+          "origin": "原文提炼",
+          "jd": [
+            "Privacy Products",
+            "执行验收",
+            "技术理解"
+          ],
+          "flow": {
+            "steps": [
+              {
+                "title": "定义",
+                "text": "类别与敏感级别"
+              },
+              {
+                "title": "发现",
+                "text": "识别规则与扫描"
+              },
+              {
+                "title": "执行",
+                "text": "发布规则并启用控制"
+              },
+              {
+                "title": "复验",
+                "text": "查询结果与审计记录"
+              }
+            ],
+            "note": "来自 DataWorks 入门流程；具体扫描范围和执行点需逐项确认。"
+          },
+          "compare": {
+            "headers": [
+              "问题",
+              "对应工作"
+            ],
+            "rows": [
+              [
+                "数据是什么？",
+                "分类与识别"
+              ],
+              [
+                "保护强度多高？",
+                "分级与控制要求"
+              ],
+              [
+                "用户能看到什么？",
+                "脱敏与访问控制"
+              ],
+              [
+                "控制真的执行了吗？",
+                "复验与审计"
+              ]
+            ]
+          },
+          "shortTitle": "分类、分级与脱敏"
+        },
+        {
+          "id": "privacy-user-control",
+          "title": "用户选择怎样传到下游",
+          "summary": "把用户操作翻译成带范围、版本和结果反馈的系统任务。",
+          "keywords": [
+            "用户控制",
+            "用途限制",
+            "同意管理",
+            "撤回",
+            "access",
+            "purpose"
+          ],
+          "points": [
+            {
+              "label": "产品设计示例",
+              "text": "选择应注明目的、数据范围和生效状态，避免只有界面开关。"
+            },
+            {
+              "label": "工程设计示例",
+              "text": "偏好变更传给相关系统；失败可重试，并向用户解释状态。"
+            },
+            {
+              "label": "需求边界",
+              "text": "具体权利、例外与期限由适用场景和专业团队确认。"
+            }
+          ],
+          "related": [
+            "privacy-threats",
+            "life-retention",
+            "life-deletion",
+            "ai-lineage"
+          ],
+          "sources": [
+            {
+              "label": "#11 LINDDUN：威胁类型",
+              "url": "https://linddun.org/threat-types/"
+            },
+            {
+              "label": "LINDDUN 官方威胁树（网页备用原文）",
+              "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"
+            }
+          ],
+          "status": "new",
+          "origin": "新增框架",
+          "jd": [
+            "User Lifecycle Data Management",
+            "Privacy Products"
+          ],
+          "compare": {
+            "headers": [
+              "概念",
+              "回答的问题",
+              "不能自动推出"
+            ],
+            "rows": [
+              [
+                "访问权限",
+                "谁可以读取？",
+                "任何用途都被允许"
+              ],
+              [
+                "用途限制",
+                "为什么可以使用？",
+                "拿到数据即可转用"
+              ],
+              [
+                "用户偏好",
+                "用户选择了什么？",
+                "所有下游已同步"
+              ],
+              [
+                "执行证据",
+                "哪些系统已处理？",
+                "一次成功覆盖全部副本"
+              ]
+            ]
+          },
+          "flow": {
+            "steps": [
+              {
+                "title": "表达选择",
+                "text": "清楚描述范围"
+              },
+              {
+                "title": "记录请求",
+                "text": "身份、版本、目标"
+              },
+              {
+                "title": "分发执行",
+                "text": "下游确认与重试"
+              },
+              {
+                "title": "反馈结果",
+                "text": "完成、部分完成或异常"
+              }
+            ],
+            "note": "通用产品设计框架，不是任何公司的内部流程。"
+          },
+          "shortTitle": "用户选择与下游执行"
+        },
+        {
+          "id": "privacy-evidence",
+          "title": "证明控制有效：别只数审批",
+          "summary": "验收要连接要求、执行点、结果证据与异常闭环。",
+          "keywords": [
+            "审计证据",
+            "控制有效性",
+            "验收",
+            "coverage",
+            "exception"
+          ],
+          "points": [
+            {
+              "label": "建议验收",
+              "text": "每条要求关联责任人、系统执行点、测试证据与例外期限。"
+            },
+            {
+              "label": "建议指标",
+              "text": "控制覆盖率必须写清分母，并单独暴露未纳管系统。"
+            },
+            {
+              "label": "效果判断",
+              "text": "同时看漏控、误控与用户影响；审批通过率不是保护效果。"
+            }
+          ],
+          "related": [
+            "privacy-controls",
+            "gov-evidence",
+            "tpm-metrics",
+            "asset-coverage"
+          ],
+          "sources": [
+            {
+              "label": "#10 TikTok PDPO：职责与控制",
+              "url": "https://developers.tiktok.com/blog/How-TikTok-PDPO-Protects-User-Data"
+            },
+            {
+              "label": "#9 DataWorks：数据保护伞入门",
+              "url": "https://help.aliyun.com/zh/dataworks/user-guide/getting-started-with-data-security-guard"
+            }
+          ],
+          "status": "new",
+          "origin": "新增框架",
+          "jd": [
+            "可审计方案",
+            "Metrics",
+            "执行健康"
+          ],
+          "compare": {
+            "headers": [
+              "状态",
+              "还需什么证据"
+            ],
+            "rows": [
+              [
+                "要求已批准",
+                "能执行的控制与负责人"
+              ],
+              [
+                "控制已部署",
+                "实际命中、失败路径与回滚"
+              ],
+              [
+                "测试已通过",
+                "测试范围、盲区和版本"
+              ],
+              [
+                "项目已完成",
+                "持续监测与例外归属"
+              ]
+            ]
+          },
+          "shortTitle": "隐私验收证据"
+        }
+      ],
+      "question": "如何把隐私要求变成控制？",
+      "shortTitle": "隐私工程"
+    },
+    {
+      "id": "risk",
+      "title": "业务风控与反馈闭环",
+      "subtitle": "识别风险、选择处置，并用真实结果修正判断",
+      "topics": [
+        {
+          "id": "risk-loop",
+          "title": "信号 → 判断 → 处置 → 反馈",
+          "summary": "风险分只是输入；产品要决定采取什么动作，并验证实际效果。",
+          "keywords": [
+            "reCAPTCHA",
+            "风险评分",
+            "MFA",
+            "人工审核",
+            "反馈闭环",
+            "action"
+          ],
+          "points": [
+            {
+              "label": "先验接口",
+              "text": "先检查令牌有效性、action 与 expectedAction，再解读分数。"
+            },
+            {
+              "label": "分数方向",
+              "text": "普通 reCAPTCHA 高分代表低风险；SMS Defense 方向相反。"
+            },
+            {
+              "label": "反馈质量",
+              "text": "回传已确认结果；模型自己的处罚结果不等于真实标签。"
+            }
+          ],
+          "flow": {
+            "steps": [
+              {
+                "title": "信号",
+                "text": "内容、行为与评估结果"
+              },
+              {
+                "title": "判断",
+                "text": "结合场景、阈值和证据"
+              },
+              {
+                "title": "处置",
+                "text": "放行、验证、审核或阻断"
+              },
+              {
+                "title": "反馈",
+                "text": "审核与申诉结果用于纠错"
+              }
+            ],
+            "note": "通用设计示意。登录和评论可采用不同动作；没有适用于全部业务的封禁阈值。"
+          },
+          "related": [
+            "risk-metrics",
+            "risk-library-rescan",
+            "tpm-metrics",
+            "gov-evidence"
+          ],
+          "sources": [
+            {
+              "label": "#15 Google：解读 reCAPTCHA 评估",
+              "url": "https://docs.cloud.google.com/recaptcha/docs/interpret-assessment-website?hl=zh-cn"
+            },
+            {
+              "label": "核对补充 · Google：为评估添加注释",
+              "url": "https://docs.cloud.google.com/recaptcha/docs/annotate-assessment"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "Business Risk Control",
+            "用户体验",
+            "成功度量"
+          ],
+          "shortTitle": "信号 → 处置 → 反馈"
+        },
+        {
+          "id": "risk-library-rescan",
+          "title": "黑库与回扫：增量和存量",
+          "summary": "二者主要差在查谁、何时查；更新黑库不会自动处理历史内容。",
+          "keywords": [
+            "黑库",
+            "回扫",
+            "Rescan",
+            "增量",
+            "存量",
+            "异步",
+            "幂等"
+          ],
+          "points": [
+            {
+              "label": "样本与规则",
+              "text": "确认一条违规文本，不等于其中每个词都能独立触发封禁。"
+            },
+            {
+              "label": "工程延伸",
+              "text": "异步任务需跟踪重试、去重和完成状态，才能判断是否漏处置。"
+            }
+          ],
+          "compare": {
+            "headers": [
+              "维度",
+              "在线黑库",
+              "离线回扫"
+            ],
+            "rows": [
+              [
+                "查询方向",
+                "新文本查已知样本库",
+                "已知风险查历史内容"
+              ],
+              [
+                "主要目标",
+                "控制后续增量",
+                "发现存量漏网内容"
+              ],
+              [
+                "产出",
+                "匹配信号供策略使用",
+                "候选内容供批量复核处置"
+              ]
+            ]
+          },
+          "confusion": {
+            "before": "把“点击主页”直接加黑，或认为黑库更新后历史内容也会消失。",
+            "after": "验证组合特征的误伤风险；单独触发存量检索，并核验处置结果。"
+          },
+          "related": [
+            "risk-match",
+            "risk-loop",
+            "tpm-dependencies"
+          ],
+          "sources": [
+            {
+              "label": "#14 字节技术团队：文本风控（2022）",
+              "url": "https://blog.csdn.net/ByteDanceTech/article/details/125775731"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "Business Risk Control",
+            "跨系统依赖",
+            "执行完整性"
+          ],
+          "shortTitle": "黑库 vs 回扫"
+        },
+        {
+          "id": "risk-match",
+          "title": "字面 / 语义与在线 / 离线是两条轴",
+          "summary": "匹配方式回答“怎样找相似”；运行场景回答“何时、对什么数据执行”。",
+          "keywords": [
+            "字面相似",
+            "语义相似",
+            "Embedding",
+            "在线",
+            "离线",
+            "阈值"
+          ],
+          "points": [
+            {
+              "label": "正交关系",
+              "text": "黑库支持语义检索；回扫也支持关键词检索。"
+            },
+            {
+              "label": "取舍",
+              "text": "字面方法易解释但易漏改写；语义方法更灵活但需防误伤。"
+            },
+            {
+              "label": "决策边界",
+              "text": "相似度不是违规概率，也不是直接处罚的充分依据。"
+            }
+          ],
+          "compare": {
+            "headers": [
+              "",
+              "在线：处理新请求",
+              "离线：处理存量"
+            ],
+            "rows": [
+              [
+                "字面 / 规则",
+                "识别已知模式",
+                "回查已知词或组合"
+              ],
+              [
+                "语义 / 向量",
+                "满足延迟要求后可使用",
+                "扩大候选召回，再验证"
+              ]
+            ]
+          },
+          "confusion": {
+            "before": "回扫成本高，所以只查语义；黑库只能字符匹配。",
+            "after": "数据范围与检索方法分别选择，按误伤、召回、延迟和成本评估组合。"
+          },
+          "related": [
+            "risk-library-rescan",
+            "risk-patterns",
+            "risk-metrics"
+          ],
+          "sources": [
+            {
+              "label": "#14 字节技术团队：文本风控（2022）",
+              "url": "https://blog.csdn.net/ByteDanceTech/article/details/125775731"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "技术判断",
+            "方案权衡",
+            "Business Risk Control"
+          ],
+          "shortTitle": "字面 vs 语义"
+        },
+        {
+          "id": "risk-patterns",
+          "title": "FP-Growth 与 Embedding",
+          "summary": "频繁项集挖掘找共同出现的离散项；向量表示用于比较语义等特征。",
+          "keywords": [
+            "FP-Growth",
+            "FP-Tree",
+            "频繁项集",
+            "Support",
+            "Embedding",
+            "语义"
+          ],
+          "points": [
+            {
+              "label": "示例",
+              "text": "“点击主页＋联系方式”可作为候选组合，仍须检验正常文本。"
+            },
+            {
+              "label": "前置表示",
+              "text": "分词、过滤和归一化影响“项”的定义，也会影响挖掘结果。"
+            },
+            {
+              "label": "边界",
+              "text": "高频不等于高风险；频繁项集本身不负责理解句义。"
+            }
+          ],
+          "compare": {
+            "headers": [
+              "维度",
+              "FP-Growth",
+              "Embedding"
+            ],
+            "rows": [
+              [
+                "输入 / 输出",
+                "项集合 → 频繁组合",
+                "文本等输入 → 数值向量"
+              ],
+              [
+                "看什么",
+                "共同出现的频次",
+                "所学表示中的相近关系"
+              ],
+              [
+                "适合",
+                "发掘重复搭配",
+                "语义检索、分类等下游任务"
+              ]
+            ]
+          },
+          "confusion": {
+            "before": "FP-Growth 读取 embedding，判断文本语义。",
+            "after": "本例的 FP-Growth 统计离散项共现；语义表示属于另一层能力。"
+          },
+          "related": [
+            "risk-match",
+            "risk-features",
+            "rel-quality"
+          ],
+          "sources": [
+            {
+              "label": "核对补充 · Apache Spark：频繁模式挖掘",
+              "url": "https://spark.apache.org/docs/latest/ml-frequent-pattern-mining.html"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "技术判断",
+            "规则质量",
+            "Business Risk Control"
+          ],
+          "shortTitle": "频繁项集 vs 向量"
+        },
+        {
+          "id": "risk-features",
+          "title": "多通道模型与变体归一化",
+          "summary": "一种融合不同特征判断文本，另一种识别并还原变体；可以协作，但并非等价。",
+          "keywords": [
+            "RiskText",
+            "多 Channel",
+            "拼音",
+            "字形",
+            "Normalization",
+            "主动学习"
+          ],
+          "points": [
+            {
+              "label": "职责",
+              "text": "RiskText 是风险标签体系；多通道是文中采用的建模手段。"
+            },
+            {
+              "label": "训练环节",
+              "text": "一致性训练约束扰动前后输出；主动学习选择待标注样本。"
+            },
+            {
+              "label": "验证",
+              "text": "归一化更新可复用到下游，但仍需验证语境、误伤与效果漂移。"
+            }
+          ],
+          "compare": {
+            "headers": [
+              "维度",
+              "多通道模型",
+              "变体挖掘 / 映射"
+            ],
+            "rows": [
+              [
+                "问题",
+                "这段文本如何分类",
+                "新表达对应什么标准表达"
+              ],
+              [
+                "输入",
+                "字面、读音、字形等特征",
+                "候选词、上下文与校验信息"
+              ],
+              [
+                "输出",
+                "标签 / 分类分数",
+                "映射关系 / 归一结果"
+              ]
+            ]
+          },
+          "confusion": {
+            "before": "映射表更新，就能保证所有模型永久无需重训。",
+            "after": "解耦降低重复建设；并不保证所有语境正确或模型永不失效。"
+          },
+          "related": [
+            "risk-patterns",
+            "risk-loop",
+            "rel-lifecycle"
+          ],
+          "sources": [
+            {
+              "label": "#14 字节技术团队：文本风控（2022）",
+              "url": "https://blog.csdn.net/ByteDanceTech/article/details/125775731"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "技术判断",
+            "工程效率",
+            "模型与规则协作"
+          ],
+          "shortTitle": "多通道 vs 归一映射"
+        },
+        {
+          "id": "risk-metrics",
+          "title": "查准率、召回率与处置代价",
+          "summary": "同时衡量抓住多少风险、伤害多少正常用户，以及每种处置的成本。",
+          "keywords": [
+            "Precision",
+            "Recall",
+            "误伤",
+            "漏检",
+            "阈值",
+            "申诉",
+            "校准"
+          ],
+          "points": [
+            {
+              "label": "样本偏差",
+              "text": "只评估已拦截样本会漏掉放行区的风险，需抽样核验。"
+            },
+            {
+              "label": "按场景评估",
+              "text": "分地区、语言和业务动作看效果，避免平均数掩盖差异。"
+            },
+            {
+              "label": "上线",
+              "text": "先观察真实流量再定阈值；七天不是达到稳定的保证。"
+            }
+          ],
+          "compare": {
+            "headers": [
+              "指标",
+              "回答的问题"
+            ],
+            "rows": [
+              [
+                "查准率 Precision",
+                "判为风险的样本中，真正风险占多少？"
+              ],
+              [
+                "召回率 Recall",
+                "所有真实风险中，识别出了多少？"
+              ],
+              [
+                "误伤率 FPR",
+                "真实正常样本中，有多少被误判？"
+              ],
+              [
+                "业务代价",
+                "正常用户受阻、审核成本与风险损失如何变化？"
+              ]
+            ]
+          },
+          "confusion": {
+            "before": "降低阈值必然更好；1−查准率就是误伤率。",
+            "after": "先确认分数方向与正类定义；不同指标分母不同，阈值需用标注数据评估。"
+          },
+          "related": [
+            "risk-loop",
+            "tpm-metrics",
+            "tpm-global"
+          ],
+          "sources": [
+            {
+              "label": "核对补充 · scikit-learn：Precision / Recall",
+              "url": "https://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html"
+            },
+            {
+              "label": "#15 Google：解读 reCAPTCHA 评估",
+              "url": "https://docs.cloud.google.com/recaptcha/docs/interpret-assessment-website?hl=zh-cn"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "风险缓解",
+            "成功度量",
+            "用户体验"
+          ],
+          "shortTitle": "查准、召回与误伤"
+        }
+      ],
+      "question": "如何判断并处置业务风险？",
+      "shortTitle": "业务风控"
+    },
+    {
+      "id": "ai",
+      "title": "AI 与跨系统隐私",
+      "subtitle": "当数据进入模型、服务链路与 Agent 上下文",
+      "topics": [
+        {
+          "id": "ai-classification",
+          "title": "Meta：规则优先，LLM 处理模糊资产",
+          "summary": "分类依赖上下文，稳定结论再转为可版本化规则。",
+          "keywords": [
+            "PAI",
+            "资产分类",
+            "context",
+            "evidence brief",
+            "distillation",
+            "LLM"
+          ],
+          "points": [
+            {
+              "label": "语义",
+              "text": "同名 age 可是年龄或缓存 TTL。"
+            },
+            {
+              "label": "在线",
+              "text": "规则未覆盖时，LLM 提供候选分类。"
+            },
+            {
+              "label": "离线",
+              "text": "候选规则经验证后晋升；不是每次请求现场蒸馏。"
+            }
+          ],
+          "related": [
+            "asset-granularity",
+            "ai-evaluation",
+            "ai-rollout"
+          ],
+          "sources": [
+            {
+              "label": "#13 Meta：资产分类（2026-06-25，仅博客）",
+              "url": "https://engineering.fb.com/2026/06/25/security/privacy-aware-infrastructure-in-the-ai-native-era-an-asset-classification-case-study/"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "方案架构",
+            "工程效率"
+          ],
+          "flow": {
+            "title": "在线决策与离线迭代",
+            "lanes": [
+              {
+                "title": "在线：当前请求",
+                "steps": [
+                  "构建证据",
+                  "先匹配规则",
+                  "命中即返回；未命中交 LLM"
+                ]
+              },
+              {
+                "title": "离线：改进后续请求",
+                "steps": [
+                  "评估历史决策",
+                  "产生候选规则",
+                  "Holdout / Shadow 验证",
+                  "必要人工批准后晋升"
+                ]
+              }
+            ],
+            "note": "在线返回不等待离线晋升；晋升后更新在线规则版本。博客允许 LLM 辅助生成候选规则。"
+          },
+          "confusion": {
+            "before": "蒸馏器一定不能使用 LLM。",
+            "after": "原文允许可选的 LLM 辅助规则生成；最终规则执行可无 LLM。"
+          },
+          "shortTitle": "规则与 LLM 分工"
+        },
+        {
+          "id": "ai-evaluation",
+          "title": "标签、置信度与独立评估",
+          "summary": "模型建议不能自动成为评估自己的真值。",
+          "keywords": [
+            "target leakage",
+            "masking",
+            "confidence",
+            "calibration",
+            "holdout",
+            "judge",
+            "Cohen Kappa",
+            "一致性",
+            "准确率",
+            "support",
+            "coverage"
+          ],
+          "points": [
+            {
+              "label": "遮蔽",
+              "text": "隐藏循环目标标签，约束同时覆盖模型和规则蒸馏。"
+            },
+            {
+              "label": "校准",
+              "text": "自报分数需对照人工审核标签；高分不保证正确。"
+            },
+            {
+              "label": "裁判",
+              "text": "同一较大模型用三种提示评估，不是三个模型家族。"
+            },
+            {
+              "label": "Kappa",
+              "text": "κ 校正偶然一致性，可以为负；它不直接证明分类正确。"
+            }
+          ],
+          "related": [
+            "ai-classification",
+            "privacy-dataworks",
+            "tpm-metrics"
+          ],
+          "sources": [
+            {
+              "label": "#13 Meta：资产分类（2026-06-25，仅博客）",
+              "url": "https://engineering.fb.com/2026/06/25/security/privacy-aware-infrastructure-in-the-ai-native-era-an-asset-classification-case-study/"
+            },
+            {
+              "label": "scikit-learn：Cohen’s kappa（补充核验）",
+              "url": "https://scikit-learn.org/stable/modules/generated/sklearn.metrics.cohen_kappa_score.html"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "质量指标",
+            "可审计方案"
+          ],
+          "confusion": {
+            "before": "Masking 就是匿名化；高一致性等于正确。",
+            "after": "这里防标签泄漏；一致性还需对照独立真值。"
+          },
+          "compare": {
+            "headers": [
+              "概念",
+              "看什么",
+              "不能等同于"
+            ],
+            "rows": [
+              [
+                "置信度",
+                "模型给某结论的可信分数",
+                "已经正确；需校准"
+              ],
+              [
+                "一致性 / Kappa",
+                "不同判断是否相符；κ 校正偶然一致",
+                "与独立真值一致"
+              ],
+              [
+                "准确率",
+                "评估集上正确的比例",
+                "所有地区和新数据都有效"
+              ],
+              [
+                "规则覆盖",
+                "有多少资产可走已知规则",
+                "高覆盖就低风险"
+              ]
+            ]
+          },
+          "shortTitle": "标签、置信度与评估"
+        },
+        {
+          "id": "ai-rollout",
+          "title": "Shadow、Canary、Sandbox",
+          "summary": "它们分别回答：旁路表现如何、真实放量如何、环境怎样隔离。",
+          "keywords": [
+            "shadow mode",
+            "canary",
+            "sandbox",
+            "灰度",
+            "影子模式"
+          ],
+          "points": [
+            {
+              "label": "影子比例",
+              "text": "Shadow 可抽样；不要求复制 100% 流量。"
+            },
+            {
+              "label": "设计注意",
+              "text": "旁路也要隔离写入副作用，不能只忽略响应。"
+            },
+            {
+              "label": "评估建议",
+              "text": "偏差触发调查；旧系统或 LLM 输出不自动是真值。"
+            }
+          ],
+          "related": [
+            "ai-classification",
+            "ai-evaluation",
+            "tpm-delivery"
+          ],
+          "sources": [
+            {
+              "label": "Istio：流量镜像与比例",
+              "url": "https://istio.io/latest/docs/tasks/traffic-management/mirroring/"
+            },
+            {
+              "label": "Google SRE：Canary 发布",
+              "url": "https://sre.google/workbook/canarying-releases/"
+            },
+            {
+              "label": "Microsoft：Sandbox 隔离示例",
+              "url": "https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-sandbox/windows-sandbox-overview"
+            }
+          ],
+          "status": "synthesis",
+          "origin": "核对后的学习延伸",
+          "jd": [
+            "安全发布",
+            "工程质量"
+          ],
+          "compare": {
+            "headers": [
+              "方法",
+              "影响真实结果？",
+              "优势与限制"
+            ],
+            "rows": [
+              [
+                "Shadow 影子",
+                "不参与主链路决策",
+                "贴近实际输入；需控制副作用"
+              ],
+              [
+                "Canary 灰度",
+                "部分流量真实使用新版",
+                "检验实际影响；仍有用户风险"
+              ],
+              [
+                "Sandbox 沙箱",
+                "隔离环境内执行",
+                "限制影响范围；未必代表生产"
+              ]
+            ]
+          },
+          "confusion": {
+            "before": "Shadow 是小部分 Sandbox / 灰度，或必须吃满全部流量。",
+            "after": "旁路验证、逐步放量、环境隔离是三个维度，可组合使用。"
+          },
+          "shortTitle": "影子、灰度与沙箱"
+        },
+        {
+          "id": "ai-lineage",
+          "title": "跨栈血缘：把训练与推理接回来",
+          "summary": "SQL 依赖只是部分路径；还要连接服务、日志、训练任务与模型产物。",
+          "keywords": [
+            "cross-stack lineage",
+            "RPC",
+            "training manifest",
+            "checkpoint",
+            "Policy Zones"
+          ],
+          "points": [
+            {
+              "label": "原文范围",
+              "text": "Meta 追踪 Web、日志、数仓、推理调用和训练产物间的关系。"
+            },
+            {
+              "label": "执行位置",
+              "text": "控制贯穿存储、处理与访问边界；训练前核对输入用途。"
+            },
+            {
+              "label": "设计追问",
+              "text": "缺少采集探针的链路是什么？如何证明覆盖范围？"
+            }
+          ],
+          "related": [
+            "asset-sql",
+            "asset-coverage",
+            "privacy-user-control",
+            "ai-unlearning"
+          ],
+          "sources": [
+            {
+              "label": "#12 Meta：GenAI 隐私基础设施（2025-10-23）",
+              "url": "https://engineering.fb.com/2025/10/23/security/scaling-privacy-infrastructure-for-genai-product-innovation/"
+            }
+          ],
+          "status": "new",
+          "origin": "原文提炼",
+          "jd": [
+            "Data Lifecycle Governance",
+            "方案架构"
+          ],
+          "flow": {
+            "title": "多条数据路径与贯穿的控制",
+            "lanes": [
+              {
+                "title": "持久化路径",
+                "steps": [
+                  "Web / 服务",
+                  "日志",
+                  "数仓"
+                ]
+              },
+              {
+                "title": "在线推理路径",
+                "steps": [
+                  "Web / 服务",
+                  "推理请求与响应"
+                ]
+              },
+              {
+                "title": "训练路径",
+                "steps": [
+                  "数仓输入",
+                  "训练任务",
+                  "模型产物"
+                ]
+              }
+            ],
+            "note": "路径分支示意：控制贯穿相关存储、处理、访问与用途边界，不只在终点执行。"
+          },
+          "compare": {
+            "headers": [
+              "能力",
+              "能回答",
+              "不能单独保证"
+            ],
+            "rows": [
+              [
+                "血缘",
+                "数据从哪里来、到哪里去",
+                "处理用途被允许"
+              ],
+              [
+                "策略执行",
+                "这个用途是否放行",
+                "所有真实链路都已被发现"
+              ],
+              [
+                "证据与验证",
+                "哪些检查何时通过",
+                "未来新增链路自动无风险"
+              ]
+            ]
+          },
+          "shortTitle": "训练与推理血缘"
+        },
+        {
+          "id": "ai-agent",
+          "title": "Agent / MCP：多轮组合产生新风险",
+          "summary": "单个工具按权限返回数据，仍可能在多轮上下文中重建敏感关系。",
+          "keywords": [
+            "MCP",
+            "Agent",
+            "context",
+            "PII reconstruction",
+            "跨服务器",
+            "用途检查"
+          ],
+          "points": [
+            {
+              "label": "实验发现",
+              "text": "敏感字段未出现在回复，不代表已从上下文移除。"
+            },
+            {
+              "label": "组合风险",
+              "text": "标识符跨服务器关联，可能重新连接行为和个人身份。"
+            },
+            {
+              "label": "通用设计建议",
+              "text": "逐跳检查用途、最少字段与接收方，并评估完整会话。"
+            }
+          ],
+          "related": [
+            "privacy-threats",
+            "privacy-user-control",
+            "ai-lineage"
+          ],
+          "sources": [
+            {
+              "label": "#18 TikTok：多轮 MCP 研究",
+              "url": "https://developers.tiktok.com/blog/when-tools-become-prompts"
+            }
+          ],
+          "status": "new",
+          "origin": "原文提炼",
+          "jd": [
+            "Privacy Products",
+            "Business Risk Control",
+            "风险识别"
+          ],
+          "flow": {
+            "steps": [
+              {
+                "title": "授权读取",
+                "text": "工具 A 返回有限字段"
+              },
+              {
+                "title": "上下文保留",
+                "text": "后续步骤复用信息"
+              },
+              {
+                "title": "跨源关联",
+                "text": "工具 B 补充身份"
+              },
+              {
+                "title": "流程评估",
+                "text": "检查新推断和转发用途"
+              }
+            ],
+            "note": "TikTok 受控研究揭示的风险模式，不代表所有 MCP 系统必然失败。"
+          },
+          "compare": {
+            "headers": [
+              "检查粒度",
+              "关注点"
+            ],
+            "rows": [
+              [
+                "单次权限",
+                "此时能否调用与读取"
+              ],
+              [
+                "端到端用途",
+                "累计信息将被用于什么"
+              ],
+              [
+                "信息流",
+                "谁接收、保留及重新关联"
+              ]
+            ]
+          },
+          "shortTitle": "多轮 Agent / MCP"
+        },
+        {
+          "id": "ai-unlearning",
+          "title": "删除数据 ≠ 消除模型影响",
+          "summary": "数据库、检索索引和训练后模型是不同的治理对象。",
+          "keywords": [
+            "machine unlearning",
+            "forget set",
+            "retain set",
+            "retraining",
+            "成员推断"
+          ],
+          "points": [
+            {
+              "label": "研究目标",
+              "text": "机器遗忘试图移除指定训练样本对模型的影响。"
+            },
+            {
+              "label": "三方取舍",
+              "text": "同时评估遗忘效果、保留任务能力与计算成本。"
+            },
+            {
+              "label": "边界",
+              "text": "这是 2023 年基础研究材料，不是通用删除接口或法律完成标准。"
+            }
+          ],
+          "related": [
+            "life-deletion",
+            "ai-lineage",
+            "tpm-delete-case"
+          ],
+          "sources": [
+            {
+              "label": "#19 Google：机器遗忘挑战（2023-06-29）",
+              "url": "https://research.google/blog/announcing-the-first-machine-unlearning-challenge/"
+            }
+          ],
+          "status": "new",
+          "origin": "原文提炼",
+          "jd": [
+            "User Lifecycle Data Management",
+            "技术风险"
+          ],
+          "compare": {
+            "headers": [
+              "动作",
+              "作用对象",
+              "边界与成本"
+            ],
+            "rows": [
+              [
+                "删除记录 / 索引",
+                "可存取的数据",
+                "不自动改变已训练权重"
+              ],
+              [
+                "排除样本后重训",
+                "训练数据与新模型",
+                "比较基线清晰；成本较高"
+              ],
+              [
+                "机器遗忘",
+                "已训练模型中的样本影响",
+                "效率可能较好；需验证效果与能力"
+              ]
+            ]
+          },
+          "shortTitle": "删除 vs 机器遗忘"
+        }
+      ],
+      "question": "模型与跨系统处理带来什么变化？",
+      "shortTitle": "AI 与跨系统隐私"
+    },
+    {
+      "id": "tpm",
+      "title": "项目落地与度量",
+      "subtitle": "把治理目标变成跨团队可交付、可验收的结果",
+      "topics": [
+        {
+          "id": "tpm-scope",
+          "title": "目标 → 范围 → 验收",
+          "summary": "先说清解决什么问题，再定义涉及哪些数据、系统和用户，以及怎样判断完成。",
+          "keywords": [
+            "Scope",
+            "验收标准",
+            "风险优先级"
+          ],
+          "points": [
+            {
+              "label": "目标",
+              "text": "把“加强隐私”改写为一个可观察的问题及预期结果。"
+            },
+            {
+              "label": "范围",
+              "text": "列出数据、处理用途、系统、地区、例外和明确不做的部分。"
+            },
+            {
+              "label": "验收",
+              "text": "事先约定证据、指标口径、批准人和剩余风险。"
+            }
+          ],
+          "compare": {
+            "headers": [
+              "容易混淆",
+              "区别"
+            ],
+            "rows": [
+              [
+                "交付物 vs 结果",
+                "上线删除接口是交付物；范围内副本按策略完成处理才是结果。"
+              ],
+              [
+                "覆盖率 vs 完成率",
+                "覆盖率看哪些对象已纳管；完成率看已受理任务的处理结果。"
+              ],
+              [
+                "优先级 vs 顺序",
+                "高价值不等于马上可做；顺序还受依赖和风险约束。"
+              ]
+            ]
+          },
+          "related": [
+            "gov-value",
+            "tpm-metrics",
+            "tpm-delete-case"
+          ],
+          "sources": [
+            {
+              "label": "岗位 JD：范围、优先级与成功度量",
+              "url": "#role-context"
+            }
+          ],
+          "status": "new",
+          "origin": "新增框架",
+          "jd": [
+            "范围与优先级",
+            "成功度量"
+          ],
+          "shortTitle": "目标、范围与验收"
+        },
+        {
+          "id": "tpm-dependencies",
+          "title": "负责人、依赖与关键路径",
+          "summary": "TPM 让承诺、接口和决策可见；每个交付物仍需具体负责团队。",
+          "keywords": [
+            "Owner",
+            "Dependency",
+            "Critical Path"
+          ],
+          "points": [
+            {
+              "label": "责任",
+              "text": "每项验收结果明确一位最终责任人和实际执行团队。"
+            },
+            {
+              "label": "依赖",
+              "text": "记录输入、输出、承诺日期、接口及延误影响。"
+            },
+            {
+              "label": "升级",
+              "text": "卡点带着可选方案、代价与决策截止时间升级。"
+            }
+          ],
+          "compare": {
+            "headers": [
+              "概念",
+              "识别方式",
+              "处理"
+            ],
+            "rows": [
+              [
+                "风险",
+                "未来可能发生",
+                "预防、缓解与预案"
+              ],
+              [
+                "问题",
+                "已经发生",
+                "解决、止损与恢复"
+              ],
+              [
+                "依赖",
+                "需要另一项交付",
+                "对齐接口、负责人和时点"
+              ],
+              [
+                "关键路径",
+                "决定最早完成的依赖链",
+                "优先消除该链上的瓶颈"
+              ]
+            ]
+          },
+          "related": [
+            "gov-ownership",
+            "rel-sla",
+            "tpm-global"
+          ],
+          "sources": [
+            {
+              "label": "岗位 JD：风险、依赖、阻塞与跨团队协作",
+              "url": "#role-context"
+            }
+          ],
+          "status": "new",
+          "origin": "新增框架",
+          "jd": [
+            "跨团队依赖",
+            "风险管理",
+            "关键路径"
+          ],
+          "shortTitle": "负责人、依赖与风险"
+        },
+        {
+          "id": "tpm-delivery",
+          "title": "从设计评审到上线运营",
+          "summary": "控制应进入开发与运行流程；上线前有证据，上线后有责任人和回退路径。",
+          "keywords": [
+            "SDLC",
+            "发布门槛",
+            "运营交接"
+          ],
+          "points": [
+            {
+              "label": "设计阶段",
+              "text": "明确数据流、威胁、控制点和失败处理。"
+            },
+            {
+              "label": "验证阶段",
+              "text": "测试正常、拒绝、异常、重试和恢复路径。"
+            },
+            {
+              "label": "运营阶段",
+              "text": "监控回归、处理例外、复盘问题并更新规则。"
+            }
+          ],
+          "flow": {
+            "steps": [
+              {
+                "title": "需求",
+                "text": "目标与验收"
+              },
+              {
+                "title": "设计",
+                "text": "数据流与控制"
+              },
+              {
+                "title": "实现",
+                "text": "接口与测试"
+              },
+              {
+                "title": "发布",
+                "text": "验证与回退"
+              },
+              {
+                "title": "运营",
+                "text": "监控与交接"
+              }
+            ],
+            "note": "跨来源综合的交付流程示意，不是 TikTok 内部发布制度。"
+          },
+          "related": [
+            "privacy-controls",
+            "ai-rollout",
+            "rel-lifecycle"
+          ],
+          "sources": [
+            {
+              "label": "岗位 JD：Planning through launch、SDLC",
+              "url": "#role-context"
+            },
+            {
+              "label": "TikTok PDPO：产品生命周期中的隐私",
+              "url": "https://developers.tiktok.com/blog/How-TikTok-PDPO-Protects-User-Data"
+            }
+          ],
+          "status": "new",
+          "origin": "新增框架",
+          "jd": [
+            "端到端交付",
+            "工程质量"
+          ],
+          "shortTitle": "从设计到运营"
+        },
+        {
+          "id": "tpm-metrics",
+          "title": "交付健康、治理效果与收益",
+          "summary": "同时看是否按计划交付、控制是否有效，以及收益是否值得投入。",
+          "keywords": [
+            "Baseline",
+            "Outcome",
+            "Guardrail",
+            "ROI"
+          ],
+          "points": [
+            {
+              "label": "可比",
+              "text": "先定分母、时间窗、基线和分群，再比较变化。"
+            },
+            {
+              "label": "护栏",
+              "text": "节省成本时同步观察故障、误伤和用户摩擦。"
+            },
+            {
+              "label": "归因",
+              "text": "区分实际节省、估算避免损失和未经验证的收益。"
+            }
+          ],
+          "compare": {
+            "headers": [
+              "维度",
+              "示例",
+              "不能替代"
+            ],
+            "rows": [
+              [
+                "交付健康",
+                "阻塞时长、依赖按期率",
+                "实际控制效果"
+              ],
+              [
+                "治理效果",
+                "覆盖率、超期率、违规率",
+                "用户影响评估"
+              ],
+              [
+                "工程效率",
+                "变更交付时间、失败与恢复",
+                "个人绩效排名"
+              ],
+              [
+                "收益与代价",
+                "成本变化、人工工时、风险下降",
+                "同口径基线和归因"
+              ]
+            ]
+          },
+          "related": [
+            "gov-value",
+            "risk-metrics",
+            "rel-improvement"
+          ],
+          "sources": [
+            {
+              "label": "岗位 JD：项目指标、ROI、工程效率",
+              "url": "#role-context"
+            },
+            {
+              "label": "DORA：软件交付表现指标",
+              "url": "https://dora.dev/guides/dora-metrics/"
+            }
+          ],
+          "status": "new",
+          "origin": "新增框架",
+          "jd": [
+            "指标与 ROI",
+            "持续改进"
+          ],
+          "shortTitle": "指标与收益"
+        },
+        {
+          "id": "tpm-global",
+          "title": "全球协作与例外管理",
+          "summary": "统一可验证的核心要求，同时显式管理地区、产品和历史系统差异。",
+          "keywords": [
+            "全球协作",
+            "决策记录",
+            "例外台账"
+          ],
+          "points": [
+            {
+              "label": "接口",
+              "text": "产品、工程、运营、法务、隐私与安全分别确认职责。"
+            },
+            {
+              "label": "例外",
+              "text": "记录理由、范围、风险、批准人、有效期和补偿控制。"
+            },
+            {
+              "label": "沟通",
+              "text": "状态更新说明变化、影响、决策需求及下一检查点。"
+            }
+          ],
+          "compare": {
+            "headers": [
+              "做法",
+              "价值",
+              "代价"
+            ],
+            "rows": [
+              [
+                "统一基础能力",
+                "复用、审计一致",
+                "需要维护差异配置"
+              ],
+              [
+                "各地区独立实现",
+                "适应本地约束",
+                "重复投入、容易偏离"
+              ],
+              [
+                "核心要求＋受控例外",
+                "兼顾一致性与差异",
+                "必须持续复核例外"
+              ]
+            ]
+          },
+          "related": [
+            "gov-models",
+            "privacy-user-control",
+            "gov-evidence"
+          ],
+          "sources": [
+            {
+              "label": "岗位 JD：全球跨时区协作与合规",
+              "url": "#role-context"
+            },
+            {
+              "label": "TikTok PDPO：跨部门协作与地区差异",
+              "url": "https://developers.tiktok.com/blog/How-TikTok-PDPO-Protects-User-Data"
+            }
+          ],
+          "status": "new",
+          "origin": "新增框架",
+          "jd": [
+            "全球协作",
+            "清晰沟通",
+            "合规交付"
+          ],
+          "shortTitle": "全球协作与例外"
+        },
+        {
+          "id": "tpm-delete-case",
+          "title": "贯穿案例：用户删除请求",
+          "summary": "用一条删除请求串起责任、资产、生命周期、隐私控制与项目验收。",
+          "keywords": [
+            "删除编排",
+            "副本范围",
+            "证据",
+            "例外"
+          ],
+          "points": [
+            {
+              "label": "范围",
+              "text": "核实请求身份与处理范围，再查系统、副本及派生数据。"
+            },
+            {
+              "label": "执行",
+              "text": "各系统返回状态；失败重试、例外转交、恢复防回流。"
+            },
+            {
+              "label": "验收",
+              "text": "依据约定范围和适用策略汇总证据，明确未完成项。"
+            }
+          ],
+          "flow": {
+            "steps": [
+              {
+                "title": "受理",
+                "text": "身份与范围"
+              },
+              {
+                "title": "定位",
+                "text": "资产与数据流"
+              },
+              {
+                "title": "决策",
+                "text": "策略、保留与例外"
+              },
+              {
+                "title": "执行",
+                "text": "系统处理与重试"
+              },
+              {
+                "title": "验证",
+                "text": "证据汇总与反馈"
+              }
+            ],
+            "note": "综合案例：保留、拒绝或例外分支不一定执行删除，仍需记录和反馈；时间目标按适用要求制定。"
+          },
+          "compare": {
+            "headers": [
+              "观察到的状态",
+              "尚不能推出"
+            ],
+            "rows": [
+              [
+                "请求已受理",
+                "所有处理已完成"
+              ],
+              [
+                "主库执行 DELETE",
+                "缓存、索引、备份和派生物均已处理"
+              ],
+              [
+                "删除训练样本",
+                "模型中的样本影响已消除"
+              ]
+            ]
+          },
+          "related": [
+            "asset-coverage",
+            "life-deletion",
+            "ai-unlearning",
+            "privacy-user-control"
+          ],
+          "sources": [
+            {
+              "label": "Google Cloud：数据删除机制（厂商案例）",
+              "url": "https://docs.cloud.google.com/docs/security/deletion?hl=zh-cn"
+            },
+            {
+              "label": "岗位 JD：Data Lifecycle Governance",
+              "url": "#role-context"
+            }
+          ],
+          "status": "new",
+          "origin": "新增框架",
+          "jd": [
+            "生命周期治理",
+            "可审计交付"
+          ],
+          "shortTitle": "删除请求贯穿案例"
+        }
+      ],
+      "question": "如何跨团队交付并证明价值？",
+      "shortTitle": "项目落地与度量"
+    }
+  ],
+  "sourceIndex": [
+    {
+      "number": 1,
+      "label": "DataLeap：揭秘字节跳动业务背后的分布式数据治理思路",
+      "url": "https://developer.volcengine.com/articles/7316454283333877798",
+      "note": "字节跳动 / DataLeap 的分布式治理案例。历史实践不代表当前 TikTok 架构。",
+      "aliases": [
+        "https://blog.csdn.net/ByteDanceTech/article/details/129512290"
+      ],
+      "topicIds": [
+        "gov-models",
+        "gov-value",
+        "rel-sla",
+        "rel-quality",
+        "rel-improvement"
+      ]
+    },
+    {
+      "number": 2,
+      "label": "DataLeap 一站式数据治理架构实践",
+      "url": "https://blog.csdn.net/m0_60025795/article/details/132226442",
+      "note": "DataLeap 一站式治理架构案例；关注角色、评估、方案与流程。",
+      "aliases": [],
+      "topicIds": [
+        "gov-workflow",
+        "gov-evidence",
+        "asset-coverage",
+        "life-tiering"
+      ]
+    },
+    {
+      "number": 3,
+      "label": "IBM：什么是数据治理",
+      "url": "https://www.ibm.com/cn-zh/think/topics/data-governance",
+      "note": "IBM 官方概念介绍；区分治理责任与管理实践。",
+      "aliases": [],
+      "topicIds": [
+        "gov-boundary",
+        "gov-ownership",
+        "gov-evidence",
+        "asset-inventory"
+      ]
+    },
+    {
+      "number": 4,
+      "label": "IBM：数据生命周期管理",
+      "url": "https://www.ibm.com/cn-zh/think/topics/data-lifecycle-management",
+      "note": "IBM 官方概念介绍；阶段划分用于组织思考，不是统一标准。",
+      "aliases": [],
+      "topicIds": [
+        "life-stages",
+        "life-backup",
+        "life-retention"
+      ]
+    },
+    {
+      "number": 5,
+      "label": "IBM：数据血缘",
+      "url": "https://www.ibm.com/cn-zh/think/topics/data-lineage",
+      "note": "IBM 官方概念介绍；关注数据来源、转换与下游影响。",
+      "aliases": [],
+      "topicIds": [
+        "asset-metadata",
+        "asset-granularity",
+        "asset-provenance"
+      ]
+    },
+    {
+      "number": 6,
+      "label": "Google Cloud：数据删除",
+      "url": "https://docs.cloud.google.com/docs/security/deletion?hl=zh-cn",
+      "note": "Google Cloud 的产品设计与承诺；其时限不是通用法律期限或 TikTok 目标。",
+      "aliases": [],
+      "topicIds": [
+        "life-backup",
+        "life-deletion",
+        "tpm-delete-case"
+      ]
+    },
+    {
+      "number": 7,
+      "label": "十分钟读懂 DataLeap 数据治理实践",
+      "url": "https://www.cnblogs.com/bytedata/p/17199412.html",
+      "note": "字节跳动数据平台的治理实践介绍，发布于 2023 年。",
+      "aliases": [],
+      "topicIds": [
+        "asset-inventory",
+        "rel-lifecycle"
+      ]
+    },
+    {
+      "number": 8,
+      "label": "FlinkSQL 的字段血缘解决方案（知乎）",
+      "url": "https://zhuanlan.zhihu.com/p/628376451",
+      "note": "FlinkSQL 字段血缘实现案例；API 与覆盖范围需按版本核对。",
+      "aliases": [],
+      "topicIds": [
+        "asset-granularity",
+        "asset-sql",
+        "asset-coverage"
+      ]
+    },
+    {
+      "number": 9,
+      "label": "DataWorks：数据保护伞入门",
+      "url": "https://help.aliyun.com/zh/dataworks/user-guide/getting-started-with-data-security-guard",
+      "note": "DataWorks 官方产品入门；实际功能和执行点需按产品配置核对。",
+      "aliases": [],
+      "topicIds": [
+        "privacy-dataworks",
+        "privacy-evidence"
+      ]
+    },
+    {
+      "number": 10,
+      "label": "TikTok PDPO 如何保护用户数据",
+      "url": "https://developers.tiktok.com/blog/How-TikTok-PDPO-Protects-User-Data",
+      "note": "TikTok 官方 PDPO 职能介绍，用于理解隐私产品与协作语境。",
+      "aliases": [],
+      "topicIds": [
+        "privacy-controls",
+        "privacy-evidence",
+        "tpm-delivery",
+        "tpm-global"
+      ]
+    },
+    {
+      "number": 11,
+      "label": "LINDDUN：隐私威胁类型",
+      "url": "https://linddun.org/threat-types/",
+      "note": "LINDDUN 官方隐私威胁分类，作为系统分析的检查框架。",
+      "aliases": [],
+      "topicIds": [
+        "privacy-threats",
+        "privacy-user-control"
+      ]
+    },
+    {
+      "number": 12,
+      "label": "Meta：为 GenAI 扩展隐私基础设施（2025）",
+      "url": "https://engineering.fb.com/2025/10/23/security/scaling-privacy-infrastructure-for-genai-product-innovation/",
+      "note": "Meta Engineering 2025 年隐私基础设施案例；关注跨栈数据流和控制。",
+      "aliases": [],
+      "topicIds": [
+        "ai-lineage"
+      ]
+    },
+    {
+      "number": 13,
+      "label": "Meta：隐私感知基础设施——资产分类案例（2026）",
+      "url": "https://engineering.fb.com/2026/06/25/security/privacy-aware-infrastructure-in-the-ai-native-era-an-asset-classification-case-study/",
+      "note": "Meta Engineering 2026 年数据资产分类案例；区分在线决策与离线规则演进。",
+      "aliases": [],
+      "topicIds": [
+        "ai-classification",
+        "ai-evaluation"
+      ]
+    },
+    {
+      "number": 14,
+      "label": "文本理解算法在抖音风控上的应用",
+      "url": "https://blog.csdn.net/ByteDanceTech/article/details/125775731",
+      "note": "2022 年抖音文本风控历史案例，不代表当前 TikTok BRIC 架构。",
+      "aliases": [],
+      "topicIds": [
+        "risk-library-rescan",
+        "risk-match",
+        "risk-features"
+      ]
+    },
+    {
+      "number": 15,
+      "label": "Google reCAPTCHA：解读网站的评估",
+      "url": "https://docs.cloud.google.com/recaptcha/docs/interpret-assessment-website?hl=zh-cn",
+      "note": "Google reCAPTCHA 官方文档；风险评分需结合具体场景选择处置。",
+      "aliases": [],
+      "topicIds": [
+        "risk-loop",
+        "risk-metrics"
+      ]
+    },
+    {
+      "number": 16,
+      "label": "Reddit：How to Build a Data Governance Program?",
+      "url": "https://www.reddit.com/r/dataengineering/comments/1kuz9qn/how_to_build_a_data_governance_program/",
+      "note": "Reddit 匿名经验与分歧，用于讨论，不作为行业标准。",
+      "aliases": [],
+      "topicIds": [
+        "gov-value"
+      ]
+    },
+    {
+      "number": 17,
+      "label": "Reddit：Wtf is data governance",
+      "url": "https://www.reddit.com/r/dataengineering/comments/1ph9cma/wtf_is_data_governance/",
+      "note": "Reddit 匿名经验与分歧，用于讨论，不作为行业标准。",
+      "aliases": [],
+      "topicIds": [
+        "gov-ownership"
+      ]
+    },
+    {
+      "number": 18,
+      "label": "TikTok：When Tools Become Prompts",
+      "url": "https://developers.tiktok.com/blog/when-tools-become-prompts",
+      "note": "TikTok Privacy Innovation Lab 的受控研究；不代表所有 MCP 系统必然出现同类问题。",
+      "aliases": [],
+      "topicIds": [
+        "ai-agent"
+      ]
+    },
+    {
+      "number": 19,
+      "label": "Google Research：Machine Unlearning Challenge",
+      "url": "https://research.google/blog/announcing-the-first-machine-unlearning-challenge/",
+      "note": "Google Research 2023 年基础研究介绍，不是最新机器遗忘综述。",
+      "aliases": [],
+      "topicIds": [
+        "ai-unlearning"
+      ]
+    }
+  ]
+}
