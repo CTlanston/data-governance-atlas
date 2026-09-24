@@ -1,0 +1,4918 @@
+{
+  "version": 2,
+  "topics": [
+    {
+      "id": "rel-sla",
+      "focus": "先算依赖链的真实耗时，再区分承诺、内部目标与缓冲；改截止时间不会让计算自动变快。",
+      "sections": [
+        {
+          "id": "service-levels",
+          "title": "SLI、SLO 与 SLA 各管什么",
+          "en": "SLI / SLO / SLA",
+          "kind": "comparison",
+          "summary": "测量值、目标和服务约定是三个不同对象。",
+          "sourceIds": [
+            1,
+            7
+          ],
+          "extraSources": [
+            {
+              "label": "Google SRE：服务水平目标",
+              "url": "https://sre.google/sre-book/service-level-objectives/"
+            }
+          ],
+          "items": [
+            {
+              "id": "three-objects",
+              "title": "报表准时，究竟是在看什么？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "同一条数据链的三种表达",
+                  "headers": [
+                    "对象",
+                    "通俗理解",
+                    "教学例子"
+                  ],
+                  "rows": [
+                    [
+                      "SLI · Service Level Indicator",
+                      "实际测到了什么",
+                      "本月 100 次报表中，98 次在约定时刻前可用"
+                    ],
+                    [
+                      "SLO · Service Level Objective",
+                      "团队希望达到的表现",
+                      "约定统计周期内准时率达到内部目标"
+                    ],
+                    [
+                      "SLA · Service Level Agreement",
+                      "双方约定的服务及未达成后果",
+                      "服务范围、可用时点、例外和违约处理"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "为什么不能互换",
+                  "text": "实际准时率是测量结果，内部目标是管理选择，服务协议还包含适用范围与责任。工程团队有时把任务的截止时间简称为 SLA；学习时应追问它指任务时效约束，还是完整协议。只说“满足 SLA”，没有口径、时间窗和例外，仍无法验收。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "critical-path",
+          "title": "依赖图怎样决定最早完成时间",
+          "en": "Critical Path",
+          "kind": "architecture",
+          "summary": "串行时间相加，并行路径取最晚汇合的一条。",
+          "sourceIds": [
+            1,
+            7
+          ],
+          "extraSources": [
+            {
+              "label": "岗位职责：交付、风险与工程效率",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "path-calculation",
+              "title": "为什么不是把所有任务时间加起来？",
+              "blocks": [
+                {
+                  "type": "diagram",
+                  "title": "三段依赖的教学计算",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "读取",
+                        "nodes": [
+                          {
+                            "id": "extract",
+                            "title": "A · 读取 2 分钟",
+                            "text": "完成后同时触发清洗和维表准备"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "并行准备",
+                        "nodes": [
+                          {
+                            "id": "clean",
+                            "title": "B · 清洗 8 分钟",
+                            "text": "依赖 A，较长的分支"
+                          },
+                          {
+                            "id": "dimension",
+                            "title": "C · 维表 3 分钟",
+                            "text": "依赖 A，可以与 B 并行"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "汇合",
+                        "nodes": [
+                          {
+                            "id": "join",
+                            "title": "D · 汇合 3 分钟",
+                            "text": "必须等 B 和 C 都完成"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "产出",
+                        "nodes": [
+                          {
+                            "id": "publish",
+                            "title": "E · 发布 2 分钟",
+                            "text": "依赖 D，产出用户可用结果"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "extract",
+                        "to": "clean",
+                        "label": "依赖",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "extract",
+                        "to": "dimension",
+                        "label": "依赖",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "clean",
+                        "to": "join",
+                        "label": "等待 B",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "dimension",
+                        "to": "join",
+                        "label": "等待 C",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "join",
+                        "to": "publish",
+                        "label": "依赖",
+                        "kind": "flow"
+                      }
+                    ],
+                    "note": "教学假设：资源足够、耗时固定、不计排队与重试。A→B→D→E 为 15 分钟；A→C→D→E 为 10 分钟。"
+                  }
+                },
+                {
+                  "type": "explain",
+                  "title": "怎样读这个图",
+                  "text": "项目最早完成时间是 15 分钟，而不是 2+8+3+3+2=18 分钟，因为 B 与 C 同时运行。C 有 5 分钟余量：在这个简化模型里，C 晚一点完成不一定推迟 E。但共享算力、排队和重试会改变真实耗时，因此关键路径是需要更新的判断。"
+                }
+              ]
+            },
+            {
+              "id": "target-compression",
+              "title": "从 15 分钟改为 5 分钟，怎样才算真的优化？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "承诺不是加速器",
+                  "text": "不能把每个任务机械除以 3，也不能假设加机器就线性变快。先找长路径上能减少的工作，例如提前准备数据、改全量为增量、优化查询或消除不必要依赖。每次改动后重新测量并重算；B 缩短后，C 所在分支可能成为新瓶颈。"
+                },
+                {
+                  "type": "example",
+                  "title": "一个能看出边界的例子",
+                  "text": "若只把 B 从 8 分钟降到 3 分钟，总时间变成 2+3+3+2=10 分钟，仍达不到 5 分钟。此时要重新讨论计算方式、产出范围、资源和目标可行性，不能把尚未证明的目标包装成已完成方案。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "backward-buffer",
+          "title": "倒排、浮动时间与缓冲怎样区分",
+          "en": "Backward Planning & Buffer",
+          "kind": "comparison",
+          "summary": "依赖决定最晚开工点，不确定性决定需要多少保护空间。",
+          "sourceIds": [
+            1,
+            7
+          ],
+          "extraSources": [
+            {
+              "label": "岗位职责：交付、风险与工程效率",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "three-time-budgets",
+              "title": "同样是“留时间”，其实有三种含义",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "不要套一个万能比例",
+                  "headers": [
+                    "概念",
+                    "回答的问题",
+                    "容易错在哪里"
+                  ],
+                  "rows": [
+                    [
+                      "倒排 Backward Planning",
+                      "为了赶上产出时刻，前序最迟什么时候开始？",
+                      "只按任务数量平均分配时间"
+                    ],
+                    [
+                      "浮动时间 Float",
+                      "某任务延迟多少仍不影响目标完成？",
+                      "把非关键路径的余量当作全局可花预算"
+                    ],
+                    [
+                      "缓冲 Buffer",
+                      "怎样吸收波动、排队、重试等不确定性？",
+                      "用关键路径时长÷所有任务时长作为通用公式"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "缓冲从哪里来",
+                  "text": "先看历史耗时分布、依赖可靠性、失败恢复成本和业务容忍度，再选择保护方式。可以在链路末端留空间，也可以对高波动依赖设提前检查点；具体方法应与调度系统一致。缓冲帮助管理不确定性，本身不减少处理量，也不证明五分钟目标可实现。"
+                }
+              ]
+            },
+            {
+              "id": "check-understanding",
+              "title": "非关键任务优化很多，为什么总耗时没变？",
+              "blocks": [
+                {
+                  "type": "example",
+                  "title": "用最长路径检查答案",
+                  "text": "在前面的图中，C 从 3 分钟降到 1 分钟，D 仍要等运行 8 分钟的 B。因此总耗时仍是 15 分钟。它可能节省资源或提升容错空间，但“省了计算量”和“缩短了端到端时长”是两种收益，验收应分别记录。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rel-quality",
+      "focus": "质量规则检查业务要求，可观测信号帮助定位异常；动态阈值必须先说清测量对象。",
+      "sections": [
+        {
+          "id": "rules-observability",
+          "title": "质量规则与可观测信号有什么不同",
+          "en": "Data Quality & Observability",
+          "kind": "comparison",
+          "summary": "规则判断某项要求是否满足，信号帮助解释哪里发生了变化。",
+          "sourceIds": [
+            1,
+            7
+          ],
+          "extraSources": [
+            {
+              "label": "OpenTelemetry：可观测性",
+              "url": "https://opentelemetry.io/docs/concepts/observability-primer/"
+            }
+          ],
+          "items": [
+            {
+              "id": "rules-versus-signals",
+              "title": "行数正常，为什么数据仍可能错？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "同一批订单的不同检查",
+                  "headers": [
+                    "检查",
+                    "能发现",
+                    "不能单独证明"
+                  ],
+                  "rows": [
+                    [
+                      "完整性 Completeness",
+                      "应有字段缺失、批次未到",
+                      "字段值符合业务事实"
+                    ],
+                    [
+                      "唯一性 Uniqueness",
+                      "订单号重复",
+                      "订单金额正确"
+                    ],
+                    [
+                      "有效性 Validity",
+                      "金额格式错误或超出规则范围",
+                      "合法范围内的金额就真实"
+                    ],
+                    [
+                      "及时性 Timeliness",
+                      "约定时刻仍无新分区",
+                      "分区内容已经正确"
+                    ],
+                    [
+                      "行数、日志与链路信号",
+                      "数量变化、报错位置、处理耗时",
+                      "所有业务质量规则都满足"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "选择检查要有业务语义",
+                  "text": "昨天和今天各有一万行，不代表今天没有把价格币种写错。质量控制应从使用场景倒推：账务报表需要对账，用户删除需要核实处理范围，推荐特征需要检查新鲜度。观测数据让异常可见，业务规则与责任人决定什么算错误、由谁处置。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "dynamic-threshold",
+          "title": "动态阈值到底在预测哪批行数",
+          "en": "Dynamic Threshold",
+          "kind": "concept",
+          "summary": "先固定统计单位，再用可比历史估计正常范围。",
+          "sourceIds": [
+            1,
+            7
+          ],
+          "extraSources": [
+            {
+              "label": "Amazon CloudWatch：异常检测模型",
+              "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Anomaly_Detection.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "measured-object",
+              "title": "“预测行数”不是预测每一行的内容",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "先说清指标的主语",
+                  "text": "可以监控“订单清洗任务每天输出到当日分区的行数”。测量值是该批次结束后的记录数量；历史序列由每天的同口径数量组成。模型或统计规则估计今天应落在哪个区间，再对实际值报警。它不是预测某个用户会产生哪条记录，也不等同于数据库执行计划估计行数。"
+                },
+                {
+                  "type": "example",
+                  "title": "工作日与周末",
+                  "text": "假设平日约一万行、周末约六千行，统一设八千行下限会每周误报。考虑周期后，周末六千行可能正常，而周一六千行可能需要调查。这里只演示口径与季节性；区间宽度、训练窗口和报警规则都应按业务验证。"
+                }
+              ]
+            },
+            {
+              "id": "drift-and-control",
+              "title": "动态基线会不会把真正错误学成正常？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "会，因此仍要保留硬规则",
+                  "text": "长期漏数若不断进入历史，自动基线可能跟着下降；促销或产品改版又可能让真实增长被判异常。因此应标注已知事件、复核训练窗口，保留必须满足的业务约束，并让负责人确认异常原因。动态阈值减少固定阈值的僵硬，不会自动理解所有业务变化。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "quality-gates",
+          "title": "质量门禁如何阻断并恢复下游",
+          "en": "Quality Gates & Recovery",
+          "kind": "workflow",
+          "summary": "发现异常之后，还需要明确继续、隔离、回补与解除门禁的条件。",
+          "sourceIds": [
+            1,
+            7
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "response-path",
+              "title": "一条报警怎样变成可靠动作？",
+              "blocks": [
+                {
+                  "type": "diagram",
+                  "title": "批次质量处理的教学流程",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "检查",
+                        "nodes": [
+                          {
+                            "id": "batch",
+                            "title": "产出待发布分区",
+                            "text": "批次完成后执行数量和业务规则"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "判断",
+                        "nodes": [
+                          {
+                            "id": "gate",
+                            "title": "质量门禁",
+                            "text": "按异常严重程度决定放行或隔离"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "处置",
+                        "nodes": [
+                          {
+                            "id": "investigate",
+                            "title": "负责人排查",
+                            "text": "核对上游变化、规则和实际数据"
+                          },
+                          {
+                            "id": "hold",
+                            "title": "隔离待确认批次",
+                            "text": "避免错误扩散到依赖结果"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "恢复",
+                        "nodes": [
+                          {
+                            "id": "repair",
+                            "title": "修复与回补",
+                            "text": "重跑受影响范围并验证结果"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "确认",
+                        "nodes": [
+                          {
+                            "id": "release",
+                            "title": "解除门禁",
+                            "text": "通知下游刷新并保留处理记录"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "batch",
+                        "to": "gate",
+                        "label": "验证",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "gate",
+                        "to": "investigate",
+                        "label": "异常",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "gate",
+                        "to": "hold",
+                        "label": "高影响",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "investigate",
+                        "to": "repair",
+                        "label": "确认原因",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "repair",
+                        "to": "release",
+                        "label": "验收通过",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "release",
+                        "to": "batch",
+                        "label": "改进检查",
+                        "kind": "feedback"
+                      }
+                    ],
+                    "note": "教学流程；哪些异常必须阻断取决于产品风险和约定，不主张所有告警一律阻断。"
+                  }
+                },
+                {
+                  "type": "explain",
+                  "title": "恢复不是关掉报警",
+                  "text": "如果上游后来补齐数据，还要判断下游是否已消费错误版本、缓存是否需要刷新、报表是否需要重算。把报警静音只能减少提示，不会修复数据。验收应说明受影响批次、修复证据及仍未恢复的下游。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rel-skew",
+      "focus": "分区慢可能因为记录太多、每条太大或计算太重；Hash 分区不会自动消除这些差异。",
+      "sections": [
+        {
+          "id": "key-routing",
+          "title": "同一个 Key 为什么挤到同一份工作",
+          "en": "Key Skew & Partitioning",
+          "kind": "architecture",
+          "summary": "按键聚合或连接时，相同键的记录通常需要汇到同一处理位置。",
+          "sourceIds": [
+            1,
+            7
+          ],
+          "extraSources": [
+            {
+              "label": "Apache Spark：SQL 性能调优",
+              "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "hot-key",
+              "title": "机器很多，为什么还有一台忙不过来？",
+              "blocks": [
+                {
+                  "type": "diagram",
+                  "title": "按 Key 分组的教学模型",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "输入",
+                        "nodes": [
+                          {
+                            "id": "records",
+                            "title": "用户事件记录",
+                            "text": "少量普通用户、一个热点用户的大量事件"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "路由",
+                        "nodes": [
+                          {
+                            "id": "hash",
+                            "title": "Hash(Key) % N",
+                            "text": "用键决定去哪个逻辑分区"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "分区",
+                        "nodes": [
+                          {
+                            "id": "hot",
+                            "title": "热点分区",
+                            "text": "热点 Key 的记录仍集中到这里"
+                          },
+                          {
+                            "id": "ordinary",
+                            "title": "其他分区",
+                            "text": "处理较少的普通 Key"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "汇合",
+                        "nodes": [
+                          {
+                            "id": "finish",
+                            "title": "等待所有分区",
+                            "text": "一个长尾任务拖慢整体完成"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "records",
+                        "to": "hash",
+                        "label": "按 Key 分配",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "hash",
+                        "to": "hot",
+                        "label": "同键同分区",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "hash",
+                        "to": "ordinary",
+                        "label": "其他键",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "hot",
+                        "to": "finish",
+                        "label": "长尾",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "ordinary",
+                        "to": "finish",
+                        "label": "先完成等待",
+                        "kind": "flow"
+                      }
+                    ],
+                    "note": "示意按键分组后的数据分发；实际引擎可有自适应拆分和多阶段聚合，不能把本图当作所有算子的固定实现。"
+                  }
+                },
+                {
+                  "type": "explain",
+                  "title": "数一数每个 Key 的记录",
+                  "text": "假设一个活动账户贡献一百万条事件，其他账户各有十条。即使账户数量分得均匀，热点账户仍使一个分区特别大。增加分区数可以分散不同 Key，却不一定拆开这个 Key；需要先确认算子的业务语义，再选择预聚合、热点拆分或连接优化。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "value-cost",
+          "title": "Value 大小与计算成本怎样制造倾斜",
+          "en": "Payload & Compute Skew",
+          "kind": "comparison",
+          "summary": "同样数量的记录，也可能需要不同的网络、内存和计算时间。",
+          "sourceIds": [
+            1,
+            7
+          ],
+          "extraSources": [
+            {
+              "label": "Apache Spark：SQL 性能调优",
+              "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "three-loads",
+              "title": "先区分“条数多”“每条大”“每条难算”",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "三种长尾来源",
+                  "headers": [
+                    "类型",
+                    "假设例子",
+                    "优先观察"
+                  ],
+                  "rows": [
+                    [
+                      "Key 频率倾斜",
+                      "一个用户一百万条事件，其他用户各十条",
+                      "每个 Key 频次、各分区记录数"
+                    ],
+                    [
+                      "Value / 载荷大小差异",
+                      "两分区各一万条；一边短文本，一边长文档",
+                      "各分区字节量、网络传输、内存溢写"
+                    ],
+                    [
+                      "计算复杂度差异",
+                      "字节量近似，但一边触发昂贵解析或复杂匹配",
+                      "CPU 时间、算子耗时、异常输入特征"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "Value 不负责路由，也会影响负载",
+                  "text": "在 Hash(Key) 分区的例子里，Value 通常不决定去哪台机器，却决定到了那里需要搬运和处理多少内容。所以“Key 分布均匀”只能说明某一维度，不能证明任务均衡。真实问题也可能叠加：热点 Key 同时带着超长内容，记录数和字节量都会集中。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hash-modulo",
+          "title": "Hash 取模只决定去哪，不保证均匀",
+          "en": "Hash & Modulo",
+          "kind": "concept",
+          "summary": "把运算符认清，才能理解分区逻辑与它的局限。",
+          "sourceIds": [
+            1,
+            7
+          ],
+          "extraSources": [
+            {
+              "label": "Python：算术运算符",
+              "url": "https://docs.python.org/3/reference/expressions.html#binary-arithmetic-operations"
+            }
+          ],
+          "items": [
+            {
+              "id": "operators",
+              "title": "/、//、% 分别做什么？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "Python 正整数教学例子",
+                  "headers": [
+                    "表达式",
+                    "结果",
+                    "意思"
+                  ],
+                  "rows": [
+                    [
+                      "5 / 2",
+                      "2.5",
+                      "普通除法"
+                    ],
+                    [
+                      "5 // 2",
+                      "2",
+                      "向下取整的除法"
+                    ],
+                    [
+                      "5 % 2",
+                      "1",
+                      "余数 / 取模"
+                    ],
+                    [
+                      "Hash(Key)=5，N=4；5 % 4",
+                      "1",
+                      "路由到编号 1 的分区"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "别把玩具数字当成真实 Hash 值",
+                  "text": "真实系统先计算键的哈希，再映射到分区；这里的 5 只是方便手算。Python 的 // 向下取整，负数和其他语言或 SQL 方言的运算规则须查相应文档，不能直接推广。无论实现怎样，只要相同键仍归到同一组，取模就不会凭空把一个超大热点键均匀拆开。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "skew-remedies",
+          "title": "怎样优化而不改坏业务结果",
+          "en": "Skew Diagnosis & Remedies",
+          "kind": "reasoning",
+          "summary": "优化先看慢在哪里，再确认拆分是否保留计算语义。",
+          "sourceIds": [
+            1,
+            7
+          ],
+          "extraSources": [
+            {
+              "label": "Apache Spark：SQL 性能调优",
+              "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "semantic-safety",
+              "title": "加盐、预聚合、过滤空值分别有什么代价？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "候选方案需要条件",
+                  "headers": [
+                    "方案",
+                    "可能收益",
+                    "必须确认"
+                  ],
+                  "rows": [
+                    [
+                      "预聚合 Partial Aggregation",
+                      "先在局部合并，减少传输",
+                      "聚合能否正确拆分再合并，如平均值需同时保留和与计数"
+                    ],
+                    [
+                      "加盐 Salting",
+                      "把热点键拆成多个子键",
+                      "后续能否合并回原结果；连接可能需要复制另一侧数据"
+                    ],
+                    [
+                      "自适应倾斜连接",
+                      "识别并拆分过大分区",
+                      "引擎版本、算子类型与配置是否支持"
+                    ],
+                    [
+                      "过滤 NULL 键",
+                      "某些无意义记录可减少处理",
+                      "业务是否需要保留空键；外连接不能随意过滤"
+                    ],
+                    [
+                      "广播小表 Broadcast Join",
+                      "避免部分大表 Shuffle",
+                      "小表是否真能装进执行器内存"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "验证优化的两个答案",
+                  "text": "先比较输出行数、关键字段和聚合结果是否保持预期，再比较耗时、Shuffle 字节、溢写和资源费用。某个任务快了但结果漏行，不是合格优化；总耗时相同但资源下降，则是另一类可以明确计量的收益。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rel-cost",
+      "focus": "成本诊断给出候选问题，结构相似给出候选任务；真正修改和合并仍要验证业务语义。",
+      "sections": [
+        {
+          "id": "scan-diagnosis",
+          "title": "全表扫描为什么贵，何时却合理",
+          "en": "Full Scan & Partition Pruning",
+          "kind": "reasoning",
+          "summary": "先看读取了多少无关数据，再判断能否减少而不漏结果。",
+          "sourceIds": [
+            1,
+            7
+          ],
+          "extraSources": [
+            {
+              "label": "Apache Spark：SQL 性能调优",
+              "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "scan-output",
+              "title": "扫描诊断最终要输出什么？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "可行动的诊断记录",
+                  "text": "一条有用的诊断应关联查询或任务负责人，说明读取字节、使用分区、执行频次、计划中的大开销及下游用途。随后提出可验证建议，例如补时间过滤、修正分区条件、改增量读取或评估索引。诊断只是候选问题，不能因为出现 Full Scan 就自动拦截所有查询。"
+                },
+                {
+                  "type": "example",
+                  "title": "同样扫全表，判断可能相反",
+                  "text": "每日只算昨天订单，却读取所有历史分区，可能浪费明显；首次生成全量基线，扫描所有必要历史可能合理。优化的关键是“读了不需要的数据吗”，不是“SQL 里有没有某个看起来更快的词”。"
+                }
+              ]
+            },
+            {
+              "id": "partition-pruning",
+              "title": "分区裁剪到底少做了什么？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "从不读无关分区开始",
+                  "text": "假设数据按日期存放，查询只需要某一天，且引擎能识别过滤条件，就可能只读取该日期分区。减少的是存储读取和后续处理量。若过滤写法、分区布局或数据条件使裁剪无法生效，语句里有日期也不保证省扫描；应看执行计划和实际读取指标。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sql-structure",
+          "title": "SQL 查重怎样从 AST 走到候选任务",
+          "en": "SQL Parsing & Structural Similarity",
+          "kind": "architecture",
+          "summary": "先解析结构，再选择表示与比较方式；向量化不是每个方案的必经步骤。",
+          "sourceIds": [
+            1,
+            7,
+            8
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "ast-order",
+              "title": "SQL、AST、序列化、向量是什么顺序？",
+              "blocks": [
+                {
+                  "type": "diagram",
+                  "title": "任务查重的一种教学流程",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "原始表达",
+                        "nodes": [
+                          {
+                            "id": "sql",
+                            "title": "SQL 文本",
+                            "text": "输入包含表、字段、过滤和计算表达式"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "结构理解",
+                        "nodes": [
+                          {
+                            "id": "ast",
+                            "title": "解析器 → AST",
+                            "text": "得到树形结构，不是把字符串成链表"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "可选表示",
+                        "nodes": [
+                          {
+                            "id": "normalize",
+                            "title": "规范化 / 特征提取",
+                            "text": "选择结构、序列化表示或其他特征"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "候选发现",
+                        "nodes": [
+                          {
+                            "id": "candidate",
+                            "title": "相似性比较",
+                            "text": "可用结构规则或向量等方法找候选"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "确认",
+                        "nodes": [
+                          {
+                            "id": "verify",
+                            "title": "语义与业务确认",
+                            "text": "检查输出、范围、时效、权限与下游"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "sql",
+                        "to": "ast",
+                        "label": "解析",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "ast",
+                        "to": "normalize",
+                        "label": "提取结构",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "normalize",
+                        "to": "candidate",
+                        "label": "比较表示",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "candidate",
+                        "to": "verify",
+                        "label": "人工或自动验证",
+                        "kind": "flow"
+                      }
+                    ],
+                    "note": "跨材料的教学拆解；不宣称所有 SQL 查重系统都必须序列化后做 Embedding，也不把 AST 等同于完整执行计划。"
+                  }
+                },
+                {
+                  "type": "explain",
+                  "title": "AST 是什么样的结构",
+                  "text": "在简化查询“选择订单号，条件为金额大于 100”中，选择项、来源表与过滤条件是不同子结构，过滤条件又包含比较符、字段和常量。因此它能表达层次关系。序列化只是把结构存成可传输的表示；是否生成向量、采用什么相似度，是下一步方案选择。"
+                }
+              ]
+            },
+            {
+              "id": "similar-not-equivalent",
+              "title": "结构相似，为什么不能直接删任务？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "相似 SQL 仍可能不同",
+                  "headers": [
+                    "看起来很像",
+                    "真正差异",
+                    "确认什么"
+                  ],
+                  "rows": [
+                    [
+                      "查询结构一致",
+                      "地区或用户范围不同",
+                      "业务范围是否相同"
+                    ],
+                    [
+                      "都计算收入",
+                      "退款、税费口径不同",
+                      "指标定义与结果"
+                    ],
+                    [
+                      "输出字段相同",
+                      "新鲜度或权限不同",
+                      "消费方承诺与授权"
+                    ],
+                    [
+                      "同一结果可复用",
+                      "上下游依赖与失败隔离不同",
+                      "复用后故障影响与负责人"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "候选不是下线许可",
+                  "text": "查重负责缩小人工检查范围，不负责证明业务等价。即使样本结果一致，也要检查边界数据和时间窗口。不能把高相似度直接解释为“多余任务”，更不能让匹配算法未经业务确认就删除生产依赖。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "consolidation",
+          "title": "任务合并怎样证明真的省了成本",
+          "en": "Workload Consolidation",
+          "kind": "workflow",
+          "summary": "合并后既要保存语义，也要控制新产生的共享依赖。",
+          "sourceIds": [
+            1,
+            7
+          ],
+          "extraSources": [
+            {
+              "label": "岗位职责：交付、风险与工程效率",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "merge-gates",
+              "title": "从建议到下线，至少经过哪些确认？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "先并行验证，再迁移依赖",
+                  "text": "可先确认共同口径和负责人，让新方案与原任务在代表性窗口内并行运行，比对结果、产出时效和故障表现。下游迁移后观察一段适当窗口，确认无剩余消费者再停旧任务。期限应依据业务周期与风险制定，不套一个通用天数。"
+                },
+                {
+                  "type": "table",
+                  "title": "收益与代价一起验收",
+                  "headers": [
+                    "收益",
+                    "配套护栏"
+                  ],
+                  "rows": [
+                    [
+                      "扫描量和计算费下降",
+                      "新鲜度、质量和失败率不能超出约定"
+                    ],
+                    [
+                      "维护任务减少",
+                      "共享任务要有明确负责人和支持能力"
+                    ],
+                    [
+                      "逻辑集中复用",
+                      "一个故障影响更多业务，需隔离与恢复设计"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "compute-responsibilities",
+          "title": "Hive、Flink、Spark 在计算层做什么",
+          "en": "Query & Processing Engines",
+          "kind": "comparison",
+          "summary": "产品能力有交集，不能用“只翻译、只流、只批”固定划分。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "Apache Hive：项目说明",
+              "url": "https://hive.apache.org/"
+            },
+            {
+              "label": "Apache Flink：架构",
+              "url": "https://flink.apache.org/what-is-flink/flink-architecture/"
+            },
+            {
+              "label": "Apache Spark：能力概览",
+              "url": "https://spark.apache.org/"
+            }
+          ],
+          "items": [
+            {
+              "id": "engine-boundaries",
+              "title": "怎样从系统职责理解，而不是背三个绰号？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "相互重叠的能力",
+                  "headers": [
+                    "系统",
+                    "职责概括",
+                    "需要纠正"
+                  ],
+                  "rows": [
+                    [
+                      "Hive",
+                      "基于 SQL 的分布式数据仓库系统，涉及查询、元数据与数据管理",
+                      "解析翻译只是其中一部分，不能说“仅是翻译器”"
+                    ],
+                    [
+                      "Flink",
+                      "面向有界与无界数据的有状态分布式处理",
+                      "可以处理流，也可以处理有界批数据"
+                    ],
+                    [
+                      "Spark",
+                      "统一的大规模分析引擎，支持批处理、流处理和 SQL 等",
+                      "不能说“仅支持批处理”"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "治理关心实际数据流与责任边界",
+                  "text": "存储保存数据，计算引擎负责处理，元数据服务提供结构信息，调度系统管理任务触发和依赖；现实产品可能跨多个角色。定位成本或删除问题时，要追踪真实读写、缓存与下游，不是只看引擎名称。选择具体实现还需比较状态语义、时延、连接器、运维能力和现有生态。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rel-lifecycle",
+      "focus": "把隐私与质量要求放进开发每个阶段，并用正常、拒绝和故障路径证明它们真的执行。",
+      "sections": [
+        {
+          "id": "requirements-controls",
+          "title": "一句需求怎样变成可测试的控制",
+          "en": "Requirements → Controls",
+          "kind": "workflow",
+          "summary": "从业务目的推导系统行为、责任与证据。",
+          "sourceIds": [
+            7,
+            10
+          ],
+          "extraSources": [
+            {
+              "label": "岗位职责：交付、风险与工程效率",
+              "url": "./index.html#role-context"
+            },
+            {
+              "label": "AWS：软件开发生命周期",
+              "url": "https://aws.amazon.com/what-is/sdlc/"
+            }
+          ],
+          "items": [
+            {
+              "id": "traceable-control",
+              "title": "“未经授权不能导出”还缺少什么？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "把抽象要求落成四个问题",
+                  "headers": [
+                    "问题",
+                    "教学实现要求"
+                  ],
+                  "rows": [
+                    [
+                      "谁可以做？",
+                      "身份、角色、用途、资源范围及批准状态"
+                    ],
+                    [
+                      "在哪里阻止？",
+                      "服务端导出入口检查，而不只隐藏按钮"
+                    ],
+                    [
+                      "失败时怎样？",
+                      "拒绝返回不含敏感数据，并记录必要审计信息"
+                    ],
+                    [
+                      "怎样证明？",
+                      "授权/未授权/越权/策略不可用等测试及日志证据"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "为什么需求要追到控制点",
+                  "text": "只有审批表，系统可能仍保留绕过入口；只有界面限制，脚本可能直接调用接口。设计评审应把要求映射到真实数据流和服务边界，再把测试与运行监控接上。TPM 负责让这些依赖与验收可见，不替代工程和隐私专家作专业判断。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "failure-paths",
+          "title": "正常、拒绝与故障路径分别验证什么",
+          "en": "Positive / Negative / Failure Tests",
+          "kind": "comparison",
+          "summary": "功能成功只是一个路径，控制有效还要经得住误用与故障。",
+          "sourceIds": [
+            10
+          ],
+          "extraSources": [
+            {
+              "label": "岗位职责：交付、风险与工程效率",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "test-matrix",
+              "title": "重试和恢复为什么必须进入测试？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "以删除任务为教学例子",
+                  "headers": [
+                    "路径",
+                    "验证重点"
+                  ],
+                  "rows": [
+                    [
+                      "正常请求",
+                      "范围正确，目标系统返回可核实结果"
+                    ],
+                    [
+                      "身份或范围不满足",
+                      "拒绝正确且不泄露他人数据"
+                    ],
+                    [
+                      "下游超时",
+                      "不会把未知状态误写成成功"
+                    ],
+                    [
+                      "重复投递",
+                      "同一操作不重复产生副作用"
+                    ],
+                    [
+                      "进程重启",
+                      "已完成步骤有记录，未完成步骤可继续"
+                    ],
+                    [
+                      "备份恢复",
+                      "适用删除控制能防止数据未经处理重新可用"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "控制故障本身也是需求",
+                  "text": "依赖不可用时选择暂停、限流还是有条件继续，不能等事故发生再临时决定。应根据风险和用户影响约定处理策略，并明确恢复后补偿与核对方式；“失败”既可能是工程错误，也可能是正确的策略拒绝，状态应区分。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "release-operation",
+          "title": "发布完成后，谁继续守住控制",
+          "en": "Rollout & Operational Ownership",
+          "kind": "reasoning",
+          "summary": "灰度降低暴露面，运营责任让控制在变化中持续有效。",
+          "sourceIds": [
+            7,
+            10
+          ],
+          "extraSources": [
+            {
+              "label": "Google SRE：灰度发布",
+              "url": "https://sre.google/workbook/canarying-releases/"
+            },
+            {
+              "label": "岗位职责：交付、风险与工程效率",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "canary-and-handoff",
+              "title": "上线门槛与运营交接要交接哪些能力？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "交接能工作的系统",
+                  "text": "发布前准备可观测指标、异常处置、回退或暂停方式、值守责任及升级渠道。先在受控范围观察关键指标，再按门槛扩大；触发护栏时停止扩展并调查。交接不是发一份文档，而是接手团队能识别异常、查状态、执行恢复并解释结果。"
+                },
+                {
+                  "type": "takeaway",
+                  "title": "回滚有边界",
+                  "text": "回滚代码可以恢复旧逻辑，却未必撤回已发出的通知、已执行的处罚或已物理删除的数据。因此变更设计应分别说明“停止后续影响”“恢复服务”和“补偿已有影响”，避免把一个回滚按钮当作通用撤销键。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rel-improvement",
+      "focus": "持续改进把信号变成行动，把事故变成可验证的系统变化，而不是追求更多告警和更多报表。",
+      "sections": [
+        {
+          "id": "actionable-alerts",
+          "title": "怎样把监控信号变成可行动告警",
+          "en": "Actionable Alerting",
+          "kind": "concept",
+          "summary": "告警需要指向用户影响、处理人和可执行动作。",
+          "sourceIds": [
+            1,
+            7
+          ],
+          "extraSources": [
+            {
+              "label": "Google SRE：监控分布式系统",
+              "url": "https://sre.google/sre-book/monitoring-distributed-systems/"
+            }
+          ],
+          "items": [
+            {
+              "id": "symptom-versus-cause",
+              "title": "CPU 高就一定应该叫醒人吗？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "先连接到服务后果",
+                  "text": "CPU 高可能是预期批处理，也可能意味着排队即将超时；单个技术数值不能替代服务影响。可以结合结果新鲜度、错误率、端到端时延和剩余处理窗口判断严重度。适合立即响应的告警应让负责人知道出了什么影响、该看哪里和下一步能做什么。"
+                },
+                {
+                  "type": "table",
+                  "title": "不同信号对应不同动作",
+                  "headers": [
+                    "信号",
+                    "可能动作"
+                  ],
+                  "rows": [
+                    [
+                      "用户结果超期或持续失败",
+                      "触发响应、明确恢复负责人"
+                    ],
+                    [
+                      "容量逐渐接近上限",
+                      "规划扩容或优化，不必都作为紧急事故"
+                    ],
+                    [
+                      "重复无行动告警",
+                      "调整规则或补自动诊断"
+                    ],
+                    [
+                      "长期效率趋势变差",
+                      "纳入有基线和收益目标的改进项目"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "incident-learning",
+          "title": "事故复盘怎样变成工程改进",
+          "en": "Postmortem & Follow-up",
+          "kind": "workflow",
+          "summary": "解释条件和机制，再选择能降低复发与影响的改动。",
+          "sourceIds": [
+            1,
+            7
+          ],
+          "extraSources": [
+            {
+              "label": "Google SRE：复盘文化",
+              "url": "https://sre.google/sre-book/postmortem-culture/"
+            }
+          ],
+          "items": [
+            {
+              "id": "beyond-human-error",
+              "title": "“某人忘了操作”为什么不够？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "把原因往系统条件推进",
+                  "text": "继续问：为什么关键操作依赖记忆？检查是否有明确提示、自动校验、权限保护或发布门禁，失败又为什么没有及时被发现。复盘应保留时间线、用户影响、触发条件、检测和恢复差距，再为行动项指定负责人、期限与验证方式。把原因只写成个人疏忽，通常无法说明怎样预防下一次。"
+                },
+                {
+                  "type": "example",
+                  "title": "行动项要能验收",
+                  "text": "“提高意识”很难检查；“在关键变更前自动检查依赖兼容性，并验证它能阻断已知错误案例”更具体。也不是每次事故都必须增加流程，可能通过删掉脆弱步骤、改默认值或缩小故障范围获得更好结果。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "toil-value",
+          "title": "消除重复劳动，怎样判断值不值得",
+          "en": "Toil Reduction & Value",
+          "kind": "reasoning",
+          "summary": "自动化的价值取决于长期减少了什么工作，以及新增维护成本。",
+          "sourceIds": [
+            1,
+            7
+          ],
+          "extraSources": [
+            {
+              "label": "Google SRE：消除重复劳动",
+              "url": "https://sre.google/sre-book/eliminating-toil/"
+            }
+          ],
+          "items": [
+            {
+              "id": "automation-tradeoff",
+              "title": "不是所有人工工作都值得自动化",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "先认识 Toil",
+                  "text": "运维里的 Toil 通常指重复、可自动化、偏被动响应且随规模增长的劳动；一次有价值的分析或设计讨论不因为手工完成就属于浪费。评估自动化时，比较执行频次、单次工时、错误代价、开发维护成本和异常覆盖。自动化把问题转移到长期维护，也应有负责人。"
+                },
+                {
+                  "type": "example",
+                  "title": "一条可验证的改善链",
+                  "text": "例如每周人工重试大量同类失败任务：先按原因分类，消除可避免失败，再对适合重试的错误自动退避重试，复杂异常转人工。验收同时看人工工时、重复失败率、处理时长和错误副作用，避免只统计“自动运行了多少次”。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "risk-loop",
+      "focus": "先验证评估可信且对应这次操作，再把分数转成适当动作，最后用可靠反馈改进判断。",
+      "sections": [
+        {
+          "id": "assessment-validation",
+          "title": "先验证评估属于这次操作",
+          "en": "Assessment Validation",
+          "kind": "workflow",
+          "summary": "无效或操作不匹配的评估，不能直接拿分数作正常业务决策。",
+          "sourceIds": [
+            15
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "token-action",
+              "title": "拿到 score 前先看什么？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "校验有效性与业务操作",
+                  "text": "在 reCAPTCHA 场景，服务端应先检查 token 的有效性，再确认返回的 action 与当前预期操作一致。比如用户正在登录，返回的评估却对应注册，不能把这个分数当作登录评估照单全收。具体无效原因与处置按接口文档和业务策略设计；关键是评分并不替代请求上下文校验。"
+                },
+                {
+                  "type": "diagram",
+                  "title": "从评估到反馈的教学链路",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "请求",
+                        "nodes": [
+                          {
+                            "id": "request",
+                            "title": "业务服务",
+                            "text": "提交与当前动作关联的评估请求"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "校验",
+                        "nodes": [
+                          {
+                            "id": "validate",
+                            "title": "有效性 + Action",
+                            "text": "先检查 token 和预期动作是否匹配"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "评估",
+                        "nodes": [
+                          {
+                            "id": "score",
+                            "title": "分数与原因",
+                            "text": "确认分数方向，结合场景解释"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "策略",
+                        "nodes": [
+                          {
+                            "id": "decision",
+                            "title": "分级动作",
+                            "text": "允许、验证、限流、审核或阻断"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "反馈",
+                        "nodes": [
+                          {
+                            "id": "labels",
+                            "title": "确认结果",
+                            "text": "依据核实证据回传合适反馈"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "request",
+                        "to": "validate",
+                        "label": "创建评估",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "validate",
+                        "to": "score",
+                        "label": "校验通过",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "score",
+                        "to": "decision",
+                        "label": "作为信号",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "decision",
+                        "to": "labels",
+                        "label": "收集结果",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "labels",
+                        "to": "score",
+                        "label": "改进评估",
+                        "kind": "feedback"
+                      }
+                    ],
+                    "note": "业务教学图；校验失败走单独策略分支，不默认等于低分，也不声明所有处置都是 reCAPTCHA 内置动作。"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "score-actions",
+          "title": "同一分数为什么可以有不同处置",
+          "en": "Risk Score & Actions",
+          "kind": "reasoning",
+          "summary": "分数是证据的一部分，动作还取决于场景、风险损失和正常用户代价。",
+          "sourceIds": [
+            15
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "score-direction",
+              "title": "先辨方向，再讨论阈值",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "高分不总是高风险",
+                  "text": "一般 reCAPTCHA 风险评分中，高分表示更可能是正常交互；SMS defense 的分数方向不同。因此“低于阈值就拦截”不能脱离具体评分类型。还要分别观察登录、评论等动作的真实流量：同一个数字不自动意味着相同业务风险，也不构成统一封禁规则。"
+                }
+              ]
+            },
+            {
+              "id": "graduated-response",
+              "title": "为什么不把所有可疑行为直接封禁？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "教学场景与可选动作",
+                  "headers": [
+                    "场景",
+                    "可能动作",
+                    "要权衡"
+                  ],
+                  "rows": [
+                    [
+                      "可疑登录",
+                      "增加验证或限制尝试",
+                      "账号接管风险与真实用户登录摩擦"
+                    ],
+                    [
+                      "可疑评论",
+                      "排队审核、限制频率",
+                      "有害内容扩散与正常讨论延迟"
+                    ],
+                    [
+                      "证据充分的高危请求",
+                      "按策略阻断",
+                      "证据可靠性、错误恢复与申诉路径"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "补充信号也有边界",
+                  "text": "账户历史、设备变化、交互节奏等可以作为候选上下文，但不是每个系统都应收集所有信号。应确认用途、必要性、权限和保留策略；某个属性或群体标签也不能单独证明恶意。策略通过可验证证据组合降低不确定性，而不是给某种用户身份预设结论。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "feedback-governance",
+          "title": "评分、处置与数据反馈各管什么",
+          "en": "Risk Control & Data Governance",
+          "kind": "comparison",
+          "summary": "业务风控决定怎么响应风险，数据治理保证这些输入、标签和记录可以信赖与审计。",
+          "sourceIds": [
+            15,
+            3
+          ],
+          "extraSources": [
+            {
+              "label": "Google reCAPTCHA：标注评估",
+              "url": "https://docs.cloud.google.com/recaptcha/docs/annotate-assessment"
+            }
+          ],
+          "items": [
+            {
+              "id": "two-loops",
+              "title": "为什么同一系统同时涉及治理与风控？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "按对象分工，不按系统名称分家",
+                  "headers": [
+                    "工作",
+                    "主要问题",
+                    "示例"
+                  ],
+                  "rows": [
+                    [
+                      "风险判断",
+                      "这次交互是否值得进一步干预？",
+                      "结合评分和上下文评估登录"
+                    ],
+                    [
+                      "策略处置",
+                      "采用哪种动作？",
+                      "验证、限流、审核或阻断"
+                    ],
+                    [
+                      "数据治理",
+                      "信号和标签是否定义清楚、可追踪、可使用？",
+                      "字段语义、权限、标签来源和保留"
+                    ],
+                    [
+                      "反馈学习",
+                      "新证据怎样改变后续判断？",
+                      "按支持的接口提交核实后的评估标注"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "未申诉不能自动标成正常",
+                  "text": "没有用户反馈，可能是用户放弃、看不到申诉入口，或者风险尚未暴露。反馈应区分已确认结果、推测和未知，避免把系统自己的旧决策当作绝对真值反复训练。这样做既是模型效果问题，也是标签质量与责任可追溯问题。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "risk-library-rescan",
+      "focus": "在线样本库防新增，回扫补历史；队列只传递工作，完成状态、重试与幂等要另行设计。",
+      "sections": [
+        {
+          "id": "lookup-direction",
+          "title": "谁拿什么去查谁：两条检索方向",
+          "en": "Online Sample Library & Historical Rescan",
+          "kind": "comparison",
+          "summary": "区别首先在于待检查的人群和查询方向，而不是字面算法与语义算法。",
+          "sourceIds": [
+            14
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "two-indexes",
+              "title": "在线黑库与离线回扫分别保存和检索什么？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "两条线路的角色",
+                  "headers": [
+                    "维度",
+                    "在线样本库匹配",
+                    "历史内容回扫"
+                  ],
+                  "rows": [
+                    [
+                      "拿什么查询",
+                      "刚进入系统的新文本",
+                      "已确认风险样本、规则或检索条件"
+                    ],
+                    [
+                      "主要查询对象",
+                      "已收录的风险样本索引",
+                      "已发布或已存储内容的索引/数据范围"
+                    ],
+                    [
+                      "目的",
+                      "尽早发现新的相似内容",
+                      "查找旧规则没识别到的存量内容"
+                    ],
+                    [
+                      "可用方法",
+                      "字面、语义或组合",
+                      "字面、语义或组合"
+                    ],
+                    [
+                      "完成标志",
+                      "当前输入的检测结果",
+                      "指定历史范围被处理并记录结果"
+                    ]
+                  ]
+                },
+                {
+                  "type": "example",
+                  "title": "为什么两条线路都要有",
+                  "text": "周一发布的内容当时尚未被识别，周三审核确认了同类风险并更新样本库。新内容从周三开始能被匹配，不等于周一的内容会被重新访问；要处理过去，需要显式创建历史回扫任务。这里的英文是职责描述，不是某个固定 API 名称。"
+                }
+              ]
+            },
+            {
+              "id": "sample-to-policy",
+              "title": "一条违规样本，能否直接拆成几个禁词？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "确认样本和制定规则是两步",
+                  "text": "样本违规可能依赖上下文、账号行为、联系方式或诱导目的。把“点击主页”这类通用表达单独变成拦截条件，可能误伤大量正常内容。应把提取结果作为候选模式，用正常样本与风险样本评估，再决定用于召回、审核还是更强处置；不能把样本标签无条件传播给其中每个词。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "queue-workers",
+          "title": "消息、队列与工作进程",
+          "en": "Messages, Queue & Workers",
+          "kind": "architecture",
+          "summary": "生产者发任务说明，队列等待投递，消费者执行工作；消息本身不是一个进程。",
+          "sourceIds": [
+            14
+          ],
+          "extraSources": [
+            {
+              "label": "RabbitMQ：工作队列与确认机制",
+              "url": "https://www.rabbitmq.com/tutorials/tutorial-two-python"
+            }
+          ],
+          "items": [
+            {
+              "id": "actors",
+              "title": "审核系统和回扫 Worker 谁生产、谁消费？",
+              "blocks": [
+                {
+                  "type": "diagram",
+                  "title": "可恢复回扫的一种教学架构",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "触发方",
+                        "nodes": [
+                          {
+                            "id": "review",
+                            "title": "审核 / 策略服务",
+                            "text": "确认样本或规则，并提出回扫范围"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "持久化与派发",
+                        "nodes": [
+                          {
+                            "id": "job",
+                            "title": "任务记录",
+                            "text": "保存 jobId、范围、版本和处理状态"
+                          },
+                          {
+                            "id": "dispatch",
+                            "title": "派发器",
+                            "text": "把待执行工作写入任务队列"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "分发",
+                        "nodes": [
+                          {
+                            "id": "queue",
+                            "title": "任务队列",
+                            "text": "保存并投递工作描述，不执行检索"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "执行",
+                        "nodes": [
+                          {
+                            "id": "worker",
+                            "title": "回扫 Worker",
+                            "text": "读取历史范围，检索并保存候选结果"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "业务结果",
+                        "nodes": [
+                          {
+                            "id": "policy",
+                            "title": "策略 / 审核服务",
+                            "text": "核查候选并发出处置决定"
+                          },
+                          {
+                            "id": "evidence",
+                            "title": "状态与证据",
+                            "text": "记录扫描范围、候选与动作结果"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "review",
+                        "to": "job",
+                        "label": "创建任务",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "job",
+                        "to": "dispatch",
+                        "label": "待派发",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "dispatch",
+                        "to": "queue",
+                        "label": "消息",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "queue",
+                        "to": "worker",
+                        "label": "分配工作",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "worker",
+                        "to": "policy",
+                        "label": "候选",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "worker",
+                        "to": "evidence",
+                        "label": "扫描进度",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "policy",
+                        "to": "evidence",
+                        "label": "处置结果",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "worker",
+                        "to": "queue",
+                        "label": "本阶段完成后 ack",
+                        "kind": "feedback"
+                      }
+                    ],
+                    "note": "教学设计，原文没有指定队列产品或这些服务边界。若 Worker 只负责生成候选，其 ack 只确认该阶段，不表示所有处罚已完成。"
+                  }
+                },
+                {
+                  "type": "explain",
+                  "title": "生产者与消费者是角色",
+                  "text": "本图的生产者可以是审核服务或派发器，消费者是已经运行、等待任务的回扫 Worker；两者不必都叫“回扫程序”。消息通常带 jobId、样本或规则版本及数据范围，也可以带索引引用；并非一定把完整 Embedding 放进队列。扩容可以增加 Worker，但收到一条消息不等于必然新建一个进程。"
+                }
+              ]
+            },
+            {
+              "id": "async-meaning",
+              "title": "异步解决等待问题，不自动解决正确性",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "把两个时间点分开",
+                  "text": "前台确认“任务已受理”以后，后台可以稍后检索历史，避免让审核人员等待整批处理。代价是中间存在未完成状态，因此必须有任务查询、超时监控和结果汇总。“最终会一致”还依赖任务没有永久丢失、失败能恢复、冲突能解决；它不是固定时限内自动成功的承诺。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "reliability-boundaries",
+          "title": "任务不丢、结果不重复怎样做到",
+          "en": "Outbox, Acknowledgment & Idempotency",
+          "kind": "workflow",
+          "summary": "分别处理派发缺口、执行中断和重复副作用，不能只加一个重试按钮。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "RabbitMQ：工作队列与确认机制",
+              "url": "https://www.rabbitmq.com/tutorials/tutorial-two-python"
+            },
+            {
+              "label": "AWS：Transactional Outbox",
+              "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html"
+            },
+            {
+              "label": "AWS：安全重试与幂等 API",
+              "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/"
+            }
+          ],
+          "items": [
+            {
+              "id": "durable-dispatch",
+              "title": "任务写入成功，消息没发出去怎么办？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "持久化与发消息之间有缺口",
+                  "text": "若先写任务再发消息，程序可能在两步之间崩溃，留下无人执行的任务。Transactional Outbox 是一种选择：把业务记录和待发送事件放在同一个本地事务里提交，再由派发器发送，失败继续重试；也可以用可核对的派发状态和对账补发。它解决双写缺口，并不消灭重复投递。"
+                }
+              ]
+            },
+            {
+              "id": "ack-crash",
+              "title": "什么时候确认消息，Worker 崩溃后会怎样？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "故障位置决定恢复方式",
+                  "headers": [
+                    "故障",
+                    "风险",
+                    "教学处理"
+                  ],
+                  "rows": [
+                    [
+                      "未完成工作就 ack",
+                      "队列不再投递，工作却缺失",
+                      "在约定阶段结果可靠保存后再确认"
+                    ],
+                    [
+                      "工作完成但 ack 丢失",
+                      "同一消息可能再次被投递",
+                      "用稳定操作标识识别已完成工作"
+                    ],
+                    [
+                      "一直失败却无限重试",
+                      "形成重复负载并掩盖卡点",
+                      "有限重试、错误分类与人工接管"
+                    ],
+                    [
+                      "一个大范围任务半途失败",
+                      "整批从头重复成本高",
+                      "保存分片或检查点，再补未完成范围"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "ack 的边界必须写清",
+                  "text": "ack 是消费者对消息处理的确认，不等于数据库事务，也不证明后续所有系统完成。消息持久性、派发确认、消费确认和业务进度分别覆盖不同故障。设计时需要说明确认前哪些结果已保存，确认后哪些步骤仍在继续。"
+                }
+              ]
+            },
+            {
+              "id": "idempotent-action",
+              "title": "已处罚成功却没有收到响应，重试会重复处罚吗？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "重复请求，保持同一业务效果",
+                  "text": "为同一次业务意图设置稳定操作键，例如某任务、内容与动作的组合，让执行方原子地识别已处理操作并返回已有结果。不能只“先查未处理，再执行”，两个并发 Worker 可能同时通过检查。若动作跨外部系统，还需该系统支持幂等键或用可核实状态做对账；本地写一条去重日志不自动保证外部副作用只发生一次。"
+                },
+                {
+                  "type": "takeaway",
+                  "title": "幂等不是恰好投递一次",
+                  "text": "队列可以重复投递，而业务通过幂等执行避免重复扣减、通知或处罚；这是两层不同保证。每次重试都生成新操作键，反而会让执行方把它当作新请求。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "completion-evidence",
+          "title": "在线生效、扫完历史与处置完成",
+          "en": "Completion States & Evidence",
+          "kind": "reasoning",
+          "summary": "一个“成功”标签不足以表示全链路完成，必须说清完成的是哪一段。",
+          "sourceIds": [
+            14
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "separate-states",
+              "title": "黑库已经更新，为什么回扫还不算结束？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "至少区分四个状态",
+                  "headers": [
+                    "状态",
+                    "能说明",
+                    "尚不能说明"
+                  ],
+                  "rows": [
+                    [
+                      "样本索引生效",
+                      "新的检查可使用该版本",
+                      "旧内容已经被重新检查"
+                    ],
+                    [
+                      "历史范围扫描完",
+                      "指定范围检索已执行",
+                      "所有候选都已确认风险"
+                    ],
+                    [
+                      "候选审核完成",
+                      "候选已有决定",
+                      "所有处置接口执行成功"
+                    ],
+                    [
+                      "处置结果确认",
+                      "约定动作有执行证据",
+                      "范围之外的数据也已覆盖"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "完成要有分母",
+                  "text": "比如任务声明处理某日期窗口内、某类内容的十个分片，就应记录分片完成情况、失败项和使用版本。不能用队列暂时为空当作完成证明：任务可能仍在执行、进入失败队列，或从未派发。一个可审计结果应能回答“扫了什么、没扫什么、做了什么”。"
+                }
+              ]
+            },
+            {
+              "id": "bounded-rescan",
+              "title": "为什么回扫不一定要把历史全部重算？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "覆盖与成本需要显式取舍",
+                  "text": "可根据风险范围、时间窗口、索引和优先级缩小待处理集合，也可以分批推进。关键是把限定条件写进任务范围及残余风险，而不是把部分回扫叫作全量完成。历史检索既可以使用精确字面条件，也可以使用语义检索；选择取决于目标和成本，不由“离线”二字决定。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "risk-match",
+      "focus": "匹配方式回答“怎样算相似”，执行时机回答“检查哪些内容”；相似结果还需要风险判断。",
+      "sections": [
+        {
+          "id": "lexical-semantic",
+          "title": "字面相似与语义相似怎样区分",
+          "en": "Lexical vs Semantic Similarity",
+          "kind": "comparison",
+          "summary": "一个看表达形式，一个尝试捕捉含义；两者都有盲区。",
+          "sourceIds": [
+            14
+          ],
+          "extraSources": [
+            {
+              "label": "NIST：编辑距离",
+              "url": "https://xlinux.nist.gov/dads/HTML/Levenshtein.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "representations",
+              "title": "两个句子“像”，可以是哪种像？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "相同维度比较",
+                  "headers": [
+                    "维度",
+                    "字面相似 Lexical",
+                    "语义相似 Semantic"
+                  ],
+                  "rows": [
+                    [
+                      "关注",
+                      "字符、词、词序或编辑变化",
+                      "在所选表示中的含义接近程度"
+                    ],
+                    [
+                      "教学方法",
+                      "关键词、n-gram、编辑距离",
+                      "句向量、向量距离或相似度"
+                    ],
+                    [
+                      "优势",
+                      "对已知写法、局部变体较直接",
+                      "可能召回不同说法的近义表达"
+                    ],
+                    [
+                      "盲区",
+                      "改写或跨语言可能漏掉",
+                      "可能把正常讨论和危险意图拉近"
+                    ],
+                    [
+                      "输出",
+                      "匹配项或相似值",
+                      "近邻或相似值"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "距离不是违规概率",
+                  "text": "“如何举报诈骗”和诈骗引流内容可能共享很多词；语义模型也可能因主题相近把它们放得很近。检索阶段找的是值得进一步判断的候选，后续仍需结合上下文、标签和策略。某个相似度数字不能脱离模型、任务与校准直接称为违规概率。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "timing-axis",
+          "title": "在线 / 离线与字面 / 语义是两条轴",
+          "en": "Timing × Matching Method",
+          "kind": "comparison",
+          "summary": "四种组合都可能成立，不能把在线等同于字符匹配。",
+          "sourceIds": [
+            14
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "four-combinations",
+              "title": "为什么历史回扫也可以只查一个精确词？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "四种教学组合",
+                  "headers": [
+                    "执行位置",
+                    "字面方法",
+                    "语义方法"
+                  ],
+                  "rows": [
+                    [
+                      "新增内容在线检查",
+                      "新文本匹配已知表达或编辑变体",
+                      "新文本查风险向量索引"
+                    ],
+                    [
+                      "存量内容离线回扫",
+                      "对指定历史范围查新确认的表达",
+                      "用新风险样本召回含义近似的历史内容"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "成本不由一个标签决定",
+                  "text": "历史检索可能数据范围大，但精确索引查询也可能很便宜；在线语义检索可借助预计算索引和受控候选规模满足时延。要比较的是数据量、索引、模型计算、召回范围与时效要求，而不是断言“字符便宜所以只能在线”或“离线昂贵所以必须语义”。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "matching-decisions",
+          "title": "匹配信号怎样走到处置结论",
+          "en": "Retrieval vs Enforcement",
+          "kind": "reasoning",
+          "summary": "召回候选与决定处罚的证据标准可以不同。",
+          "sourceIds": [
+            14,
+            15
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "false-positive-example",
+              "title": "为什么“点击主页”不能单独证明违规？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "通用表达需要语境",
+                  "text": "博主邀请读者看公开作品也会使用“点击主页”；风险行为可能另外包含诱导转账、违规产品或重复引流证据。可以让通用表达参与候选召回，再由更多证据判断，但若直接封禁，就把一个低区分度信号变成高代价动作。多条件组合仍需验证，不能假设条件越多准确率必然成倍提高。"
+                },
+                {
+                  "type": "takeaway",
+                  "title": "分开设置目标",
+                  "text": "召回阶段希望少遗漏候选，复核阶段要控制误判，执行阶段还要匹配动作强度与恢复路径。三个阶段可以各用不同门槛，并分别统计覆盖、精度、时延和用户影响。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "retrieval-tradeoffs",
+          "title": "怎样选择检索成本和阈值",
+          "en": "Retrieval Cost & Thresholds",
+          "kind": "reasoning",
+          "summary": "先定义漏检与误判成本，再用有标注的代表性数据比较方案。",
+          "sourceIds": [
+            14,
+            15
+          ],
+          "extraSources": [
+            {
+              "label": "Google ML：分类阈值",
+              "url": "https://developers.google.com/machine-learning/crash-course/classification/thresholding"
+            }
+          ],
+          "items": [
+            {
+              "id": "candidate-budget",
+              "title": "候选多一点一定更好吗？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "更宽的召回也会增加下游负担",
+                  "text": "放宽相似阈值可能找出更多变体，也可能把大量正常内容送给模型或人工审核。应观察候选数量、真实风险召回、审核负载、尾部时延和误伤，再决定阈值或分层检索。若改变索引、模型或数据分布，原阈值未必仍代表同样质量，需要重新验证。"
+                },
+                {
+                  "type": "table",
+                  "title": "评估条件要写明",
+                  "headers": [
+                    "条件",
+                    "为什么影响结论"
+                  ],
+                  "rows": [
+                    [
+                      "正类定义与分数方向",
+                      "决定阈值变化的意义"
+                    ],
+                    [
+                      "语言、场景与时间窗口",
+                      "平均效果可能掩盖局部失败"
+                    ],
+                    [
+                      "标注质量与抽样范围",
+                      "只评估被召回内容会漏看漏检"
+                    ],
+                    [
+                      "最终动作",
+                      "进入审核与直接阻断的代价不同"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "risk-patterns",
+      "focus": "FP-Growth 从离散事务中找经常共同出现的项；它不读取语义向量，也不自动认定风险。",
+      "sections": [
+        {
+          "id": "discrete-vectors",
+          "title": "离散项集与向量相似不是一种计算",
+          "en": "Itemsets vs Embeddings",
+          "kind": "comparison",
+          "summary": "先看输入输出，就不会把两种方法混为一谈。",
+          "sourceIds": [
+            14
+          ],
+          "extraSources": [
+            {
+              "label": "Apache Spark：频繁模式挖掘",
+              "url": "https://spark.apache.org/docs/latest/ml-frequent-pattern-mining.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "io-boundary",
+              "title": "FP-Growth 到底吃什么、吐什么？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "同一批文本的两条不同处理路",
+                  "headers": [
+                    "维度",
+                    "频繁项集 FP-Growth",
+                    "向量检索 Embedding Retrieval"
+                  ],
+                  "rows": [
+                    [
+                      "输入",
+                      "每条事务包含哪些离散项，如 {A,B}",
+                      "每个对象的数值向量"
+                    ],
+                    [
+                      "操作",
+                      "计数并挖掘达到支持度的共现集合",
+                      "用距离/相似度寻找邻近表示"
+                    ],
+                    [
+                      "输出",
+                      "频繁项集与出现次数等",
+                      "近邻对象及相似度"
+                    ],
+                    [
+                      "主要回答",
+                      "哪些项经常一起出现？",
+                      "哪些对象在该表示中接近？"
+                    ],
+                    [
+                      "不会自动证明",
+                      "这些项具有相同语义或违法",
+                      "相似对象一定有同样风险标签"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "字形拆解属于谁的工作",
+                  "text": "如果你先把文字拆成部件，并把部件编码成离散项，再交给 FP-Growth，它可以统计这些项。可“拆字形”来自前处理方案，并不是 FP-Growth 自带的语义理解能力。同样，向量聚类后得到的类别标识可以作为离散项，但算法处理的仍是标识，不是原始向量。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "transaction-input",
+          "title": "先把文本变成离散事务",
+          "en": "Text → Transactions",
+          "kind": "workflow",
+          "summary": "定义一条事务及其项，才知道“经常一起出现”具体是什么意思。",
+          "sourceIds": [
+            14
+          ],
+          "extraSources": [
+            {
+              "label": "Apache Spark：频繁模式挖掘",
+              "url": "https://spark.apache.org/docs/latest/ml-frequent-pattern-mining.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "transaction-definition",
+              "title": "一条事务是一句文本、一个账号还是一天？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "统计单位会改变结论",
+                  "text": "可以把一条文本视为一条事务，把词、短语或某些离散特征视为项；也可为不同任务定义其他窗口。必须先固定规则，否则“同现”可能指同一句、同一账号一周内，或者全站一天内，业务含义完全不同。一般项集只关心项是否共同出现，不保留原句的连续顺序，也不自动挖掘连续短语。"
+                },
+                {
+                  "type": "example",
+                  "title": "一个可检查的前处理例子",
+                  "text": "三条内容被转为 T1={A,B}、T2={A,B,C}、T3={A,C}。A、B、C 可以是经过定义的表达或离散信号，每条事务中重复出现 A 通常仍作为同一个项。先核对这些集合是否保留了任务需要的区别，再做挖掘。"
+                }
+              ]
+            },
+            {
+              "id": "normalization-masking",
+              "title": "去停用词、占位符和脱敏有什么边界？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "减少无关变化，也可能丢掉关键差异",
+                  "text": "可按任务把不同联系方式替换为类型占位符，减少每个号码都形成独立项的问题；也可以筛掉缺乏区分力的通用项。但过度清洗可能抹去风险差别，应该用样本验证。这里的 masking 是建模前处理，不自动等于隐私匿名化；原文、映射表和可关联上下文仍可能含敏感信息。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "support-tree",
+          "title": "Support 与 FP-Tree 怎样一步步计算",
+          "en": "Support & FP-Tree",
+          "kind": "architecture",
+          "summary": "先数出现频次，再共享前缀压缩，最后挖掘达到门槛的组合。",
+          "sourceIds": [
+            14
+          ],
+          "extraSources": [
+            {
+              "label": "Apache Spark：频繁模式挖掘",
+              "url": "https://spark.apache.org/docs/latest/ml-frequent-pattern-mining.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "support-example",
+              "title": "支持度的分母是什么？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "三条事务的手算",
+                  "headers": [
+                    "项集",
+                    "出现的事务",
+                    "支持度"
+                  ],
+                  "rows": [
+                    [
+                      "{A}",
+                      "T1、T2、T3",
+                      "3/3 = 100%"
+                    ],
+                    [
+                      "{B}",
+                      "T1、T2",
+                      "2/3"
+                    ],
+                    [
+                      "{C}",
+                      "T2、T3",
+                      "2/3"
+                    ],
+                    [
+                      "{A,B}",
+                      "T1、T2",
+                      "2/3"
+                    ],
+                    [
+                      "{A,C}",
+                      "T2、T3",
+                      "2/3"
+                    ],
+                    [
+                      "{B,C}",
+                      "仅 T2",
+                      "1/3"
+                    ],
+                    [
+                      "{A,B,C}",
+                      "仅 T2",
+                      "1/3"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "门槛改变保留哪些模式",
+                  "text": "若最低支持度设为 2/3，就保留出现至少两次的项集；{B,C} 和 {A,B,C} 被过滤。门槛可以用比例或出现次数表达，必须说明事务集合和时间窗口。高支持度只意味着在这批事务里常见；“你好”很常见，却不因此成为风险证据。"
+                }
+              ]
+            },
+            {
+              "id": "prefix-compression",
+              "title": "FP-Tree 压缩的是什么？",
+              "blocks": [
+                {
+                  "type": "diagram",
+                  "title": "从离散事务到受控候选模式",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "事务",
+                        "nodes": [
+                          {
+                            "id": "transactions",
+                            "title": "T1、T2、T3",
+                            "text": "{A,B}；{A,B,C}；{A,C}"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "准备",
+                        "nodes": [
+                          {
+                            "id": "frequency",
+                            "title": "计数并排序",
+                            "text": "按一致顺序 A→B→C 整理事务"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "压缩",
+                        "nodes": [
+                          {
+                            "id": "tree",
+                            "title": "共享前缀树",
+                            "text": "根→A:3；A 下有 B:2、C:1；B 下 C:1"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "挖掘",
+                        "nodes": [
+                          {
+                            "id": "sets",
+                            "title": "频繁项集",
+                            "text": "取门槛 2/3，得到 A、B、C、AB、AC"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "评估",
+                        "nodes": [
+                          {
+                            "id": "validate",
+                            "title": "风险与正常样本验证",
+                            "text": "把统计模式转成候选特征或规则"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "transactions",
+                        "to": "frequency",
+                        "label": "定义项",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "frequency",
+                        "to": "tree",
+                        "label": "累加路径计数",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "tree",
+                        "to": "sets",
+                        "label": "条件模式挖掘",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "sets",
+                        "to": "validate",
+                        "label": "验证区分力",
+                        "kind": "flow"
+                      }
+                    ],
+                    "note": "三事务教学模型；树中 B:2 表示共享该前缀的事务数量。树压缩不是向量压缩，也不是自动理解词义。"
+                  }
+                },
+                {
+                  "type": "explain",
+                  "title": "树和项集不是同一个东西",
+                  "text": "树把排序后相同的前缀合起来，避免每条事务完整重复存一遍；挖掘时围绕项的条件路径递归找满足支持度的组合。输出的 {A,C} 可以频繁，即使某条输入经过排序时 A 和 C 中间还有 B。因此不要把树的一条路径直接解释为原文里必须连续出现的短语。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "patterns-to-rules",
+          "title": "共现模式怎样变成可验证规则",
+          "en": "Patterns → Validated Rules",
+          "kind": "reasoning",
+          "summary": "模式是候选证据，布尔规则是执行条件；两者之间还需要验证与发布。",
+          "sourceIds": [
+            14
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "boolean-rule",
+              "title": "AND、OR、NOT 能怎样组合信号？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "先把每个条件定义清楚",
+                  "text": "一个教学规则可以是：（表达 A OR 表达 B）AND 可疑联系方式信号 C AND NOT 已确认的合规语境。只有组合条件成立才触发下一步，例如送审核。各条件都要有明确来源与边界；尤其 NOT 条件识别不可靠时，可能制造绕过。它不要求一定来自 FP-Growth，专家也可以依据证据设计规则。"
+                },
+                {
+                  "type": "table",
+                  "title": "统计模式到控制的门槛",
+                  "headers": [
+                    "阶段",
+                    "需要回答"
+                  ],
+                  "rows": [
+                    [
+                      "频繁项集",
+                      "共现是否达到指定支持度？"
+                    ],
+                    [
+                      "候选特征",
+                      "在风险与正常数据中是否有区分力？"
+                    ],
+                    [
+                      "规则验证",
+                      "误判、漏检、覆盖范围和语言差异怎样？"
+                    ],
+                    [
+                      "受控发布",
+                      "版本、负责人、灰度、暂停和申诉如何处理？"
+                    ]
+                  ]
+                },
+                {
+                  "type": "takeaway",
+                  "title": "不要把同现当因果",
+                  "text": "即使某组合常见于已处罚内容，也可能只是热门话题或抽样偏差。还要看未处罚和正常样本，并区分进入审核与直接处罚。统计关联提供调查方向，不能凭空升级成确定违规结论。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "risk-features",
+      "focus": "RiskText 定义要判什么；多通道模型负责分类，变体映射和实体提取提供可复用信号，最后由策略决定动作。",
+      "sections": [
+        {
+          "id": "taxonomy-channels",
+          "title": "RiskText 与多通道模型分别是什么",
+          "en": "Label Taxonomy & Multi-channel Inputs",
+          "kind": "comparison",
+          "summary": "标签体系定义分类目标，输入通道描述模型如何看文本。",
+          "sourceIds": [
+            14
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "taxonomy-model",
+              "title": "RiskText 是不是一种固定神经网络？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "不要把标签、特征与模型混为一层",
+                  "headers": [
+                    "对象",
+                    "它定义什么",
+                    "教学例子"
+                  ],
+                  "rows": [
+                    [
+                      "风险标签体系 Taxonomy",
+                      "有哪些风险类别、如何解释",
+                      "某类诱导、违规产品或风险意图"
+                    ],
+                    [
+                      "输入通道 Input Channel",
+                      "模型读取哪种表示",
+                      "原文字词、读音、字形"
+                    ],
+                    [
+                      "模型 Model",
+                      "怎样把输入映射为输出",
+                      "编码并融合特征后预测标签"
+                    ],
+                    [
+                      "策略 Policy",
+                      "怎样把证据转成动作",
+                      "审核、限制或其他分级处置"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "RiskText 在原文中的角色",
+                  "text": "原文以 RiskText 组织文本风险标签，并介绍多通道等建模方法。不能把 RiskText 简化为“拼音+字形模型”的别名。标签定义变更与模型结构变更是不同工作：前者需要业务标注语义一致，后者需要验证预测能力与成本。"
+                }
+              ]
+            },
+            {
+              "id": "channel-model-options",
+              "title": "文字、读音、字形各看见什么？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "输入表示与模型选择的教学举例",
+                  "headers": [
+                    "通道",
+                    "输入示例与作用",
+                    "可选编码方式",
+                    "局限"
+                  ],
+                  "rows": [
+                    [
+                      "文字 / 语境",
+                      "词或子词序列；理解上下文",
+                      "Transformer、TextCNN 等",
+                      "新变体和语言漂移仍可能误判"
+                    ],
+                    [
+                      "读音 Phonetic",
+                      "音节或拼音序列；识别谐音变化",
+                      "序列编码器，如 CNN/RNN",
+                      "多音字、英语混写和非同音变体"
+                    ],
+                    [
+                      "字形 Glyph",
+                      "字形图像或部件；识别形近变化",
+                      "图像 CNN 或部件编码器",
+                      "同形异义、字体变化、跨语言差异"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "通道是表示选择，不是模型名单",
+                  "text": "表中网络家族用于理解设计空间，并非原文确认的部署清单。可根据语言增加字符、跨语言语境或其他表示，但通道越多也带来计算、标注和融合复杂度；应通过消融比较看增加了什么能力，而不是机械追求数量。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "training-feedback",
+          "title": "训练数据怎样变得更有用",
+          "en": "Augmentation, Consistency & Active Learning",
+          "kind": "comparison",
+          "summary": "扩充、约束、复核和选样是四种不同动作。",
+          "sourceIds": [
+            14
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "four-training-tools",
+              "title": "一致性训练与主动学习到底改了什么？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "同一维度看四种策略",
+                  "headers": [
+                    "策略",
+                    "做什么",
+                    "教学例子",
+                    "边界"
+                  ],
+                  "rows": [
+                    [
+                      "数据增强 Augmentation",
+                      "产生训练样本的合理变化",
+                      "保留含义的同音或格式变化",
+                      "变化可能改变真实标签"
+                    ],
+                    [
+                      "一致性训练 Consistency Training",
+                      "约束合理扰动前后预测一致",
+                      "原句和等义变体输出接近",
+                      "若扰动改变含义，不该强制一致"
+                    ],
+                    [
+                      "噪声处理 Label Noise Handling",
+                      "识别或降低错误标签影响",
+                      "复核模型与人工强烈不一致样本",
+                      "不等于模型永远比人工正确"
+                    ],
+                    [
+                      "主动学习 Active Learning",
+                      "优先挑有信息价值的样本去标注",
+                      "选边界、不确定或代表性新样本",
+                      "不只是固定挑 0.5 附近，也非自动产生真值"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "训练与在线推理的时间不同",
+                  "text": "主动学习通常把需要了解的新样本交给标注与训练流程，再通过评估和发布更新模型；不是每一次线上请求都立即重新训练。一致性约束则发生在训练目标设计中，帮助模型对允许的变化更稳健，但不能保证所有对抗表达都被正确识别。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "variant-normalization",
+          "title": "变体发现与映射是另一条流水线",
+          "en": "Variant Mining & Normalization",
+          "kind": "workflow",
+          "summary": "发现“新写法对应谁”，与判断“这一整段是什么风险”可以协作。",
+          "sourceIds": [
+            14
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "discovery-application",
+              "title": "映射表怎么产生，又怎样影响下游？",
+              "blocks": [
+                {
+                  "type": "diagram",
+                  "title": "变体映射的教学闭环",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "发现",
+                        "nodes": [
+                          {
+                            "id": "candidates",
+                            "title": "候选新表达",
+                            "text": "从新词、异常增长或已知风险样本发现"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "验证",
+                        "nodes": [
+                          {
+                            "id": "evidence",
+                            "title": "多种对应证据",
+                            "text": "结合读音、字形、上下文和使用分布"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "确认",
+                        "nodes": [
+                          {
+                            "id": "review",
+                            "title": "审核与回归验证",
+                            "text": "检查是否确为同义变体及正常语境影响"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "发布",
+                        "nodes": [
+                          {
+                            "id": "mapping",
+                            "title": "版本化映射",
+                            "text": "保存适用条件，把变体关联标准表达"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "使用",
+                        "nodes": [
+                          {
+                            "id": "downstream",
+                            "title": "检索 / 分类 / 规则",
+                            "text": "按需要使用归一化结果与原文"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "candidates",
+                        "to": "evidence",
+                        "label": "候选",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "evidence",
+                        "to": "review",
+                        "label": "对应假设",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "review",
+                        "to": "mapping",
+                        "label": "确认并发布",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "mapping",
+                        "to": "downstream",
+                        "label": "归一信息",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "downstream",
+                        "to": "candidates",
+                        "label": "新失败样本",
+                        "kind": "feedback"
+                      }
+                    ],
+                    "note": "教学流水线；候选发现与验证可采用不同算法，原文不保证所有全局统计只在离线使用。"
+                  }
+                },
+                {
+                  "type": "explain",
+                  "title": "映射不应该抹掉原文证据",
+                  "text": "保留原始表达与映射版本，才能解释某条内容为什么触发检测，并在误映射时回放和纠正。一个新映射可能帮助多个下游复用，但它是否适用于每种语言、上下文和模型都要验证；更新映射并不保证所有模型永久无需重训。"
+                }
+              ]
+            },
+            {
+              "id": "channels-versus-pipeline",
+              "title": "同样用拼音和字形，为什么不是同一个模块？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "看最终产物和使用方式",
+                  "headers": [
+                    "维度",
+                    "多通道分类",
+                    "变体发现 / 映射"
+                  ],
+                  "rows": [
+                    [
+                      "主要问题",
+                      "当前文本属于什么风险类别？",
+                      "新表达对应哪个标准表达？"
+                    ],
+                    [
+                      "输入",
+                      "一段文本的多种表示",
+                      "候选表达、上下文与对应证据"
+                    ],
+                    [
+                      "输出",
+                      "标签或分类分数",
+                      "映射关系及适用条件"
+                    ],
+                    [
+                      "典型使用",
+                      "为当前内容提供判断信号",
+                      "服务多个下游的归一化"
+                    ],
+                    [
+                      "共享部分",
+                      "可用读音、字形和语境",
+                      "也可用相同特征，但目的不同"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "不要把在线和离线当硬边界",
+                  "text": "分类可以离线批量运行，映射也可以在在线请求中应用；全局统计若经过预计算，也可能作为在线特征。这里真正的区别是任务目标与产物，不是某个特征“只准在哪个模块出现”。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "contact-extraction",
+          "title": "联系方式：有没有、在哪里、风险多大、关联到谁",
+          "en": "Contact Detection & Extraction",
+          "kind": "workflow",
+          "summary": "检测、抽取、风险判断与关系分析各有自己的输入输出。",
+          "sourceIds": [
+            14
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "four-contact-stages",
+              "title": "发现一个号码为什么还没有完成风控？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "四步产物要分清",
+                  "headers": [
+                    "步骤",
+                    "问题",
+                    "产物与边界"
+                  ],
+                  "rows": [
+                    [
+                      "有无检测 Detection",
+                      "文本里是否可能含联系方式？",
+                      "候选文本；不直接证明违规"
+                    ],
+                    [
+                      "抽取与归一 Extraction / Normalization",
+                      "联系方式在哪里、标准形式是什么？",
+                      "实体片段与归一结果"
+                    ],
+                    [
+                      "风险识别 Risk Assessment",
+                      "这条联系方式在当前用途下有何风险？",
+                      "标签或风险信号；结合证据"
+                    ],
+                    [
+                      "打标与关系分析 Labeling / Graph",
+                      "哪些账号或内容与它相关？",
+                      "关联关系；邻居不自动继承有罪结论"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "NER 与 CRF 为什么不是两个同级阶段",
+                  "text": "Named Entity Recognition 是识别实体片段的任务；Conditional Random Field 是可用于序列标注的一类模型。抽取阶段可有多种实现，不能说“做完 NER 再做 CRF”就是通用流程。抽取准确也不代表风险判断准确，两个步骤应分别评估。"
+                }
+              ]
+            },
+            {
+              "id": "graph-boundary",
+              "title": "二部图能带来什么，不能证明什么？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "关联帮助追踪，不代替核实",
+                  "text": "可以用两类节点表达账号与联系方式，出现关系作为边；这样便于发现多个账号共享一个联系方式等结构。共享客服号码、家庭共用号码或错误抽取也会产生连接，所以图上相邻不自动表示同一操作者或共同违规。强处置还需要来源质量、使用语境及其他证据支持。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "system-intersection",
+          "title": "分类、归一化与抽取怎样汇到策略",
+          "en": "Signals → Policy → Action",
+          "kind": "architecture",
+          "summary": "各模块提供不同证据，策略层负责组合，反馈分别改进模型、映射和规则。",
+          "sourceIds": [
+            14,
+            15
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "full-text-system",
+              "title": "把几个模块放进同一张图",
+              "blocks": [
+                {
+                  "type": "diagram",
+                  "title": "文本风控能力组合的教学图",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "输入",
+                        "nodes": [
+                          {
+                            "id": "text",
+                            "title": "原始文本与必要上下文",
+                            "text": "保留来源、语言、场景和版本信息"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "共享处理",
+                        "nodes": [
+                          {
+                            "id": "normalization",
+                            "title": "归一化与表示",
+                            "text": "按条件映射变体，同时保留原文"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "并行能力",
+                        "nodes": [
+                          {
+                            "id": "retrieval",
+                            "title": "字面 / 语义检索",
+                            "text": "寻找已知风险相关候选"
+                          },
+                          {
+                            "id": "classification",
+                            "title": "多通道分类",
+                            "text": "输出标签与分数"
+                          },
+                          {
+                            "id": "extraction",
+                            "title": "实体抽取与关系信号",
+                            "text": "输出联系方式等实体及相关证据"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "决策",
+                        "nodes": [
+                          {
+                            "id": "policy",
+                            "title": "策略与复核",
+                            "text": "按场景组合证据，决定动作强度"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "结果与学习",
+                        "nodes": [
+                          {
+                            "id": "action",
+                            "title": "执行与用户恢复",
+                            "text": "执行决定并提供适当审核/申诉渠道"
+                          },
+                          {
+                            "id": "feedback",
+                            "title": "确认反馈",
+                            "text": "分别进入规则、映射或模型改进"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "text",
+                        "to": "normalization",
+                        "label": "前处理",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "normalization",
+                        "to": "retrieval",
+                        "label": "可用表示",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "normalization",
+                        "to": "classification",
+                        "label": "多通道输入",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "normalization",
+                        "to": "extraction",
+                        "label": "实体候选",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "retrieval",
+                        "to": "policy",
+                        "label": "相似信号",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "classification",
+                        "to": "policy",
+                        "label": "分类信号",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "extraction",
+                        "to": "policy",
+                        "label": "关系信号",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "policy",
+                        "to": "action",
+                        "label": "决定",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "action",
+                        "to": "feedback",
+                        "label": "核实结果",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "feedback",
+                        "to": "normalization",
+                        "label": "改进映射",
+                        "kind": "feedback"
+                      },
+                      {
+                        "from": "feedback",
+                        "to": "classification",
+                        "label": "评估后更新模型",
+                        "kind": "feedback"
+                      }
+                    ],
+                    "note": "综合教学架构，并非当前 TikTok 或历史抖音系统的完整部署图；不同场景不一定启用所有能力。"
+                  }
+                },
+                {
+                  "type": "example",
+                  "title": "一道检查理解的小问题",
+                  "text": "若新增谐音映射，首先变化的是归一化产物；它可能影响检索、分类和抽取，但并不等于分类器权重已经更新。若新增人工标注并重训模型，变化的是预测能力，也不意味着所有规则和映射自动改写。沿着图中产物与版本追踪，才能判断影响范围。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "risk-metrics",
+      "focus": "先固定“风险”为正类，再看每个指标的分母；模型错判与用户遭到错误处置也要分开衡量。",
+      "sections": [
+        {
+          "id": "confusion-matrix",
+          "title": "TP、FP、FN、TN 是哪四格",
+          "en": "Confusion Matrix",
+          "kind": "concept",
+          "summary": "把模型判断和已核实的真实结果交叉起来。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "Google ML：准确率、查准率与召回率",
+              "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall"
+            }
+          ],
+          "items": [
+            {
+              "id": "four-cells",
+              "title": "先把正类定义成“违规内容”",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "教学样本：共 1,000 条",
+                  "headers": [
+                    "模型判断",
+                    "真实违规",
+                    "真实正常"
+                  ],
+                  "rows": [
+                    [
+                      "判为违规",
+                      "TP 真阳性 = 80",
+                      "FP 假阳性 = 20"
+                    ],
+                    [
+                      "判为正常",
+                      "FN 假阴性 = 20",
+                      "TN 真阴性 = 880"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "把错判与处置分开",
+                  "text": "FP 是正常内容被模型判成违规；如果后续只是送审核且被纠正，它不一定已经造成错误封禁。FN 是风险未被模型识别，是否最终放行还取决于其他控制。评估模型要看四格，评估产品还要看错误动作、审核等待、申诉和恢复成本。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "metric-denominators",
+          "title": "查准、召回、准确率和 FPR 分母不同",
+          "en": "Precision / Recall / Accuracy / FPR",
+          "kind": "comparison",
+          "summary": "1−查准率与正常样本误判率不是同一个比例。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "Google ML：准确率、查准率与召回率",
+              "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall"
+            },
+            {
+              "label": "scikit-learn：分类指标",
+              "url": "https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics"
+            }
+          ],
+          "items": [
+            {
+              "id": "calculate-all",
+              "title": "用同一张表算五个指标",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "沿用 1,000 条教学样本",
+                  "headers": [
+                    "指标",
+                    "公式",
+                    "结果",
+                    "问的是什么"
+                  ],
+                  "rows": [
+                    [
+                      "Precision 查准率",
+                      "TP/(TP+FP)",
+                      "80/100=80%",
+                      "判为违规的内容中，多少确实违规？"
+                    ],
+                    [
+                      "Recall 召回率",
+                      "TP/(TP+FN)",
+                      "80/100=80%",
+                      "所有真实违规中，抓到了多少？"
+                    ],
+                    [
+                      "Accuracy 准确率",
+                      "(TP+TN)/全部",
+                      "960/1000=96%",
+                      "全部判断中，多少正确？"
+                    ],
+                    [
+                      "FPR 假阳性率",
+                      "FP/(FP+TN)",
+                      "20/900≈2.22%",
+                      "真实正常内容中，多少被误判？"
+                    ],
+                    [
+                      "样本 FDR 错误发现比例",
+                      "FP/(TP+FP)",
+                      "20/100=20%",
+                      "被判为违规的内容中，多少是误报？"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "为什么“误伤率”这个词要补定义",
+                  "text": "团队口语中的误伤率可能指 FPR、错误处罚占全部处罚的比例，或受影响用户比例；它们的分母完全不同。汇报时应写公式和统计对象。样本 FDR 在分母非零时等于 1−Precision，但并不等于 FPR；若涉及多重检验，FDR 还有更严格的统计定义。"
+                }
+              ]
+            },
+            {
+              "id": "class-imbalance",
+              "title": "96% 准确率为什么仍可能不够？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "多数类会掩盖少数类问题",
+                  "text": "若真实风险很少，一个几乎全判正常的模型也可能有很高 Accuracy，却漏掉大部分风险。上例 Accuracy 为 96%，仍有 20 个真实风险漏检，20 条正常内容误判。应按业务损失看 Precision、Recall、FPR 和不同处置代价，不能用一个平均百分比替代完整判断。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "threshold-action-cost",
+          "title": "阈值变化怎样影响风险和用户",
+          "en": "Threshold & Decision Cost",
+          "kind": "reasoning",
+          "summary": "先固定分数方向，再观察候选与错误类型如何变化。",
+          "sourceIds": [
+            15
+          ],
+          "extraSources": [
+            {
+              "label": "Google ML：分类阈值",
+              "url": "https://developers.google.com/machine-learning/crash-course/classification/thresholding"
+            }
+          ],
+          "items": [
+            {
+              "id": "direction-and-tradeoff",
+              "title": "降低阈值是更严还是更松？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "答案依赖分数含义",
+                  "text": "若高分代表风险、规则为 score≥阈值就判风险，降低阈值会扩大阳性集合，通常增加召回，同时可能增加 FP；Precision 如何变化要看数据。若高分代表更可信，则不能照搬这个说法。还需区分模型阈值与动作阈值：相同信号可以触发验证或审核，而非直接封禁。"
+                },
+                {
+                  "type": "table",
+                  "title": "动作越强，越要核查代价",
+                  "headers": [
+                    "动作",
+                    "正常用户可能损失",
+                    "风险侧可能收益"
+                  ],
+                  "rows": [
+                    [
+                      "追加验证",
+                      "操作摩擦、流失",
+                      "减少未经证实的高危交互"
+                    ],
+                    [
+                      "人工审核",
+                      "延迟和审核成本",
+                      "增加语境核验"
+                    ],
+                    [
+                      "限制或阻断",
+                      "使用受限、误处罚影响",
+                      "及时减少已确认或高风险损害"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "feedback-bias",
+          "title": "审核样本为什么不能代表全站",
+          "en": "Selection Bias & Segmented Evaluation",
+          "kind": "reasoning",
+          "summary": "只看已拦截部分，既估不出全部漏检，也可能高估效果。",
+          "sourceIds": [
+            14,
+            15
+          ],
+          "extraSources": [
+            {
+              "label": "Google ML：准确率、查准率与召回率",
+              "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall"
+            }
+          ],
+          "items": [
+            {
+              "id": "sampling-bias",
+              "title": "没有查看放行区，Recall 从哪里来？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "需要覆盖未被选中的内容",
+                  "text": "如果只有被模型标记的内容得到人工标签，就能观察这部分误报，却不知道放行内容中还有多少真实风险。可通过合适的抽样核验补足，并记录抽样概率、场景和时间窗口；全体比例估计还需考虑样本权重。反馈是测量设计的一部分，不是自动从处罚日志里长出来的真值。"
+                },
+                {
+                  "type": "takeaway",
+                  "title": "分群后才知道谁被平均数遮住",
+                  "text": "分别看语言、地区、内容类型与业务动作的效果及样本量，并考虑标签质量和不确定性。reCAPTCHA 文档提醒新环境与早期数据可能不同，不应把固定观察天数解释为必然稳定；在变化后继续监测和重新评估。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tpm-scope",
+      "focus": "把愿望变成明确问题、处理范围和完成证据，才能判断项目究竟交付了什么。",
+      "sections": [
+        {
+          "id": "goal-scope-acceptance",
+          "title": "目标、范围、交付物与验收",
+          "en": "Objective, Scope & Acceptance",
+          "kind": "comparison",
+          "summary": "这四者相互连接，但不能用“上线了”代替“问题解决了”。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "岗位职责：技术项目规划、交付与度量",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "four-definitions",
+              "title": "怎样把“加强数据隐私”改成项目语言？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "用户删除项目的教学写法",
+                  "headers": [
+                    "层次",
+                    "要回答",
+                    "示例"
+                  ],
+                  "rows": [
+                    [
+                      "目标 Objective",
+                      "希望改变什么结果？",
+                      "范围内删除请求可追踪、可验证地处理"
+                    ],
+                    [
+                      "范围 Scope",
+                      "涉及哪些对象和边界？",
+                      "指定产品、用户数据类型、系统、地区和例外"
+                    ],
+                    [
+                      "交付物 Deliverable",
+                      "具体建设什么？",
+                      "请求入口、编排接口、系统适配器、监控"
+                    ],
+                    [
+                      "验收 Acceptance",
+                      "什么证据足以宣布达到约定？",
+                      "各类路径通过验证，目标范围状态可汇总，剩余问题有明确处置"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "让目标可以反驳",
+                  "text": "好的验收允许别人指出“这里还没完成”。例如主库删除成功，但范围内搜索索引没有反馈，项目就不能仅凭接口上线宣布端到端成功。具体时限和保留决策由适用要求与专业责任人确定，TPM 把它们转成可实现的接口、计划和证据。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "coverage-phasing",
+          "title": "覆盖分母与分期如何定义",
+          "en": "Coverage & Phased Scope",
+          "kind": "reasoning",
+          "summary": "处理得快和覆盖得全是两件事；分期要说清剩下什么。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "岗位职责：技术项目规划、交付与度量",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "coverage-completion",
+              "title": "覆盖率很高，为什么仍可能有盲区？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "两种比例不能互换",
+                  "headers": [
+                    "指标",
+                    "分子 / 分母示例",
+                    "需要说明"
+                  ],
+                  "rows": [
+                    [
+                      "系统覆盖率",
+                      "已纳管目标系统 / 已识别且应纳管系统",
+                      "尚未发现的系统可能不在分母内"
+                    ],
+                    [
+                      "请求完成率",
+                      "达到约定终态的请求 / 同口径已受理请求",
+                      "时间窗口、仍在处理与策略例外如何计算"
+                    ],
+                    [
+                      "数据类型覆盖率",
+                      "已验证处理的数据类型 / 已识别应处理类型",
+                      "日志、派生数据、索引等是否列入"
+                    ],
+                    [
+                      "验收通过率",
+                      "通过的必要验收项 / 全部必要验收项",
+                      "不能用大量简单项目稀释关键失败"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "分期不是把困难部分藏起来",
+                  "text": "可以先完成高风险且依赖清晰的范围，再扩展遗留系统，但要同时记录排除范围、风险、过渡控制和下一阶段负责人。第一期的百分之百只能指第一期约定分母；对外汇报应保留这一限定，不能混称企业全量覆盖。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "scope-change",
+          "title": "新增需求怎样进入优先级决策",
+          "en": "Change Control & Prioritization",
+          "kind": "workflow",
+          "summary": "优先级由价值与风险决定，执行顺序还受依赖和能力约束。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "岗位职责：技术项目规划、交付与度量",
+              "url": "./index.html#role-context"
+            },
+            {
+              "label": "PMI：项目管理术语",
+              "url": "https://www.pmi.org/standards/lexicon"
+            }
+          ],
+          "items": [
+            {
+              "id": "decision-package",
+              "title": "面对“顺便再加一个系统”，TPM 要带什么信息？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "把变化转成可比较选项",
+                  "text": "说明新增目标、影响范围、依赖、工程成本、风险和截止要求，再给出可选方案：替换本期较低优先级工作、增加资源、拆阶段，或调整目标日期。让有权承担取舍的人决策并记录理由。只把需求加进待办表，却维持所有旧承诺不变，会让关键路径变成无法解释的承诺堆积。"
+                },
+                {
+                  "type": "example",
+                  "title": "高优先级也可能先做前置工作",
+                  "text": "风险最高的系统可能依赖统一用户标识或删除接口。先交付这些前置能力并不意味着忽略高优先级目标；它是在按依赖顺序推进。状态沟通应说清“为什么先做这一步，它解锁什么”。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tpm-dependencies",
+      "focus": "把团队之间的依赖写成可验证交付接口，明确责任和决策时点，比反复催进度更有效。",
+      "sections": [
+        {
+          "id": "ownership-raci",
+          "title": "负责人、执行者与 RACI 怎样落到交付物",
+          "en": "Ownership & RACI",
+          "kind": "comparison",
+          "summary": "TPM 协调承诺，不意味着所有系统和决策都由 TPM 负责实现。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "岗位职责：技术项目规划、交付与度量",
+              "url": "./index.html#role-context"
+            },
+            {
+              "label": "PMI：责任分配与 RACI",
+              "url": "https://www.pmi.org/learning/library/best-practices-managing-people-quality-management-7012"
+            }
+          ],
+          "items": [
+            {
+              "id": "raci-output",
+              "title": "给团队贴 RACI 标签之前先定义哪件事？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "围绕具体交付物分工",
+                  "headers": [
+                    "角色",
+                    "含义",
+                    "删除适配器教学例子"
+                  ],
+                  "rows": [
+                    [
+                      "Responsible",
+                      "实际执行工作的人或团队",
+                      "存储工程团队实现接口"
+                    ],
+                    [
+                      "Accountable",
+                      "对该项结果承担最终责任",
+                      "该适配器约定的交付负责人"
+                    ],
+                    [
+                      "Consulted",
+                      "需要征询专业判断",
+                      "安全、隐私、数据所有者"
+                    ],
+                    [
+                      "Informed",
+                      "需要获知进展或结果",
+                      "受影响产品、支持与运营团队"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "矩阵不能替代决策权",
+                  "text": "“所有人负责”往往意味着无人能最终决定。可以为每项交付物明确一位最终负责人，同时识别跨组织的批准规则与升级人。RACI 是沟通工具，不会自动改变组织授权；TPM 需要确认谁能承诺资源、接受风险、批准范围和宣布验收。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "dependency-contract",
+          "title": "依赖要写成输入、输出、接口和时点",
+          "en": "Dependency Contract",
+          "kind": "concept",
+          "summary": "“等对方支持”太模糊，双方必须能判断依赖何时满足。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "岗位职责：技术项目规划、交付与度量",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "handoff-definition",
+              "title": "一个可执行的依赖记录长什么样？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "统一用户标识依赖的教学记录",
+                  "headers": [
+                    "字段",
+                    "具体写法"
+                  ],
+                  "rows": [
+                    [
+                      "提供方与接收方",
+                      "身份团队 → 删除编排团队"
+                    ],
+                    [
+                      "输出物",
+                      "用户标识映射接口、字段语义、错误码和测试环境"
+                    ],
+                    [
+                      "完成条件",
+                      "兼容性测试通过，可定位约定产品的身份范围"
+                    ],
+                    [
+                      "承诺时点",
+                      "联调前可用，版本变更须提前通知"
+                    ],
+                    [
+                      "延误影响",
+                      "适配器无法可靠定位数据，端到端验收受阻"
+                    ],
+                    [
+                      "备选方案",
+                      "缩小试点范围或临时人工映射，并列出代价"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "日期之外还要对齐质量",
+                  "text": "一个接口按时开放，但缺少重试语义、错误分类或身份范围说明，可能仍不能支持集成。依赖完成应由接收方根据约定证据确认，而不是提供方单方面说“代码已合并”。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "risk-issue-escalation",
+          "title": "风险、问题、依赖与升级决策",
+          "en": "Risk, Issue & Escalation",
+          "kind": "comparison",
+          "summary": "区分未来可能、已经发生和必须等到的交付，再选择处理方式。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "岗位职责：技术项目规划、交付与度量",
+              "url": "./index.html#role-context"
+            },
+            {
+              "label": "PMI：项目管理术语",
+              "url": "https://www.pmi.org/standards/lexicon"
+            }
+          ],
+          "items": [
+            {
+              "id": "four-concepts",
+              "title": "同一个阻塞怎样准确描述？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "描述决定下一步",
+                  "headers": [
+                    "概念",
+                    "判断",
+                    "动作"
+                  ],
+                  "rows": [
+                    [
+                      "Risk 风险",
+                      "供应方可能晚于联调时间",
+                      "评估概率/影响，准备缓解和触发条件"
+                    ],
+                    [
+                      "Issue 问题",
+                      "测试环境已不可用",
+                      "安排恢复、替代与止损"
+                    ],
+                    [
+                      "Dependency 依赖",
+                      "必须拿到标识接口才能联调",
+                      "管理接口、承诺与验收"
+                    ],
+                    [
+                      "Critical Path 关键路径",
+                      "该依赖的延误会推迟整体完成",
+                      "优先评估解阻与重排"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "升级不是把压力向上转发",
+                  "text": "有效升级包括事实、影响、已尝试方案、可选决策及最晚决策时点。例如说明保持目标需缩小哪些范围，延期会增加哪些风险，额外资源是否真正能解瓶颈。收到决策后记录负责人和下一检查点，使全体团队按同一选择执行。"
+                }
+              ]
+            },
+            {
+              "id": "critical-path-resource",
+              "title": "人力冲突为什么也会改变关键路径？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "依赖图之外还要看共享资源",
+                  "text": "两项工作在逻辑上可并行，却都需要同一位工程师或同一个测试环境，现实中就可能排队。规划时应把资源约束和跨时区等待纳入，而不是只画箭头。缩短某个非瓶颈环节不一定提前上线；改动后需要重新检查剩余路径和新的限制。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tpm-delivery",
+      "focus": "端到端交付是把需求、架构、系统验证和运营责任接起来，并在每个转折点用证据做决定。",
+      "sections": [
+        {
+          "id": "delivery-gates",
+          "title": "从设计到运营有哪些实质门禁",
+          "en": "Program Delivery Gates",
+          "kind": "architecture",
+          "summary": "每一阶段产出下一阶段需要的证据，而不只是把状态改成绿色。",
+          "sourceIds": [
+            10
+          ],
+          "extraSources": [
+            {
+              "label": "岗位职责：技术项目规划、交付与度量",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "full-project-flow",
+              "title": "一个跨团队项目怎样跑到上线之后？",
+              "blocks": [
+                {
+                  "type": "diagram",
+                  "title": "技术项目工作流的教学框架",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "定义",
+                        "nodes": [
+                          {
+                            "id": "requirements",
+                            "title": "范围与验收",
+                            "text": "约定目标、数据流边界与结果口径"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "设计",
+                        "nodes": [
+                          {
+                            "id": "design",
+                            "title": "架构与控制评审",
+                            "text": "确认接口、威胁、依赖和失败策略"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "建设",
+                        "nodes": [
+                          {
+                            "id": "build",
+                            "title": "分工实现与集成",
+                            "text": "实现适配器，验证正常及异常路径"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "发布",
+                        "nodes": [
+                          {
+                            "id": "rollout",
+                            "title": "受控试点与扩大",
+                            "text": "根据门槛、护栏和未解决风险决策"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "运营",
+                        "nodes": [
+                          {
+                            "id": "operate",
+                            "title": "值守与持续验证",
+                            "text": "监控控制、处理例外并复盘改进"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "requirements",
+                        "to": "design",
+                        "label": "可测试需求",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "design",
+                        "to": "build",
+                        "label": "接口与决策",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "build",
+                        "to": "rollout",
+                        "label": "验证证据",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "rollout",
+                        "to": "operate",
+                        "label": "交接能力",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "operate",
+                        "to": "requirements",
+                        "label": "新问题与变化",
+                        "kind": "feedback"
+                      }
+                    ],
+                    "note": "按所给 JD 综合的教学流程，不是 TikTok 内部发布制度；实际门禁和批准人由组织确定。"
+                  }
+                },
+                {
+                  "type": "table",
+                  "title": "每道门需要看什么",
+                  "headers": [
+                    "门禁",
+                    "证据示例"
+                  ],
+                  "rows": [
+                    [
+                      "可进入实现",
+                      "数据流、负责人、接口契约、未决问题及处理时点"
+                    ],
+                    [
+                      "可进入试点",
+                      "端到端测试、故障注入、状态可观测及恢复演练"
+                    ],
+                    [
+                      "可扩大范围",
+                      "试点指标达标、护栏稳定、关键风险有处理决定"
+                    ],
+                    [
+                      "可交给运营",
+                      "值守、告警、工具权限、运行手册与支持路径可用"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "integration-failures",
+          "title": "端到端测试为什么要跨过团队边界",
+          "en": "Integration & Failure Validation",
+          "kind": "reasoning",
+          "summary": "单个接口测试通过，不代表组合后的控制和状态都正确。",
+          "sourceIds": [
+            10
+          ],
+          "extraSources": [
+            {
+              "label": "岗位职责：技术项目规划、交付与度量",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "scenario-matrix",
+              "title": "怎样覆盖最容易漏掉的路径？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "跨系统验收场景",
+                  "headers": [
+                    "场景",
+                    "系统应证明"
+                  ],
+                  "rows": [
+                    [
+                      "正常完成",
+                      "数据范围、动作和最终状态一致"
+                    ],
+                    [
+                      "无权限 / 错身份",
+                      "拒绝正确，不暴露他人数据"
+                    ],
+                    [
+                      "某系统超时",
+                      "保留未知或失败状态，避免误报成功"
+                    ],
+                    [
+                      "重复消息 / 重试",
+                      "同一意图不产生重复副作用"
+                    ],
+                    [
+                      "部分成功再重启",
+                      "能恢复剩余步骤，保留已完成证据"
+                    ],
+                    [
+                      "策略版本变化",
+                      "明确在途任务使用哪个版本、是否需要重评估"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "故障演练检验的不是勇气",
+                  "text": "可以在隔离测试环境或受控范围模拟失败，观察报警、重试、人工接管和最终结果是否符合设计。测试重点是现实故障边界：接口返回成功但结果尚未持久化、回执丢失、消费者重启等。TPM 确保跨团队共同验收这些接口之间的缝隙。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "rollout-handoff",
+          "title": "灰度、回滚与运营交接怎样协作",
+          "en": "Canary, Rollback & Handoff",
+          "kind": "comparison",
+          "summary": "灰度管理暴露范围，回滚处理变更，交接保证持续负责。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "岗位职责：技术项目规划、交付与度量",
+              "url": "./index.html#role-context"
+            },
+            {
+              "label": "Google SRE：灰度发布",
+              "url": "https://sre.google/workbook/canarying-releases/"
+            }
+          ],
+          "items": [
+            {
+              "id": "different-safeguards",
+              "title": "三个词不是同一个保险开关",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "分别解决不同问题",
+                  "headers": [
+                    "机制",
+                    "作用",
+                    "局限"
+                  ],
+                  "rows": [
+                    [
+                      "灰度 Canary",
+                      "先对受控样本或范围观察变化",
+                      "试点必须具有代表性，也未必暴露所有慢性问题"
+                    ],
+                    [
+                      "回滚 Rollback",
+                      "恢复代码或配置到已知版本",
+                      "不能自动撤销删除、通知或处罚等副作用"
+                    ],
+                    [
+                      "暂停 / 降级",
+                      "停止扩大影响或临时缩小能力",
+                      "需要明确用户影响和恢复条件"
+                    ],
+                    [
+                      "运营交接",
+                      "让接手团队持续诊断、处置与维护",
+                      "文档存在不等于人员和工具已准备好"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "发布决策要连接到用户结果",
+                  "text": "除了错误率和耗时，还应看正常用户受阻、控制漏执行、未完成任务堆积等业务信号。扩大范围前判断异常是否被解释、恢复手段是否可用；上线后仍须关注分布变化，避免把发布当天通过等同于永久可靠。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tpm-metrics",
+      "focus": "执行健康、控制效果与业务收益要分开衡量，再用可比基线和护栏判断项目是否值得。",
+      "sections": [
+        {
+          "id": "metric-layers",
+          "title": "交付健康、治理效果与收益各看什么",
+          "en": "Execution, Outcomes & Value",
+          "kind": "comparison",
+          "summary": "按时交付是必要信息，但不能替代控制有效和投入产出。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "岗位职责：技术项目规划、交付与度量",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "three-questions",
+              "title": "为什么任务完成率不能单独证明项目成功？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "同一删除项目的不同层次",
+                  "headers": [
+                    "层次",
+                    "回答的问题",
+                    "指标示例"
+                  ],
+                  "rows": [
+                    [
+                      "执行健康",
+                      "项目能否按计划推进？",
+                      "依赖按期率、阻塞时长、关键里程碑"
+                    ],
+                    [
+                      "控制效果",
+                      "系统是否实现预期要求？",
+                      "范围覆盖、超期请求、未完成系统状态"
+                    ],
+                    [
+                      "用户与风险结果",
+                      "问题减少了多少？",
+                      "未处理风险、正常用户损失、投诉恢复"
+                    ],
+                    [
+                      "投入产出",
+                      "效果是否值得成本？",
+                      "运维工时、运行费用、可核实风险改善"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "活动量不是结果",
+                  "text": "开了多少会、写了多少规则、接入多少工具，主要描述活动或产出。只有这些动作改变了预期结果，并且没有制造不可接受代价，才构成成功证据。不同层次可以一起汇报，但不能相互冒充。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "baseline-guardrails",
+          "title": "基线、分母与护栏怎样保持可比",
+          "en": "Baseline & Guardrails",
+          "kind": "reasoning",
+          "summary": "定义口径再比较，避免把流量变化和范围变化误当项目贡献。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "岗位职责：技术项目规划、交付与度量",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "comparable-metrics",
+              "title": "成本下降 30%，先追问什么？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "分母变了，结论可能变",
+                  "text": "确认时间窗、业务量、数据规模、覆盖范围、单价和系统版本。若同期请求量下降一半，总费用减少可能并不代表单位效率变好；可同时报告总量和单位处理成本，并说明归因限制。收益估计应保留原始基线和计算方式，让别人能够复算。"
+                },
+                {
+                  "type": "table",
+                  "title": "一项优化配一组护栏",
+                  "headers": [
+                    "优化目标",
+                    "同时观察"
+                  ],
+                  "rows": [
+                    [
+                      "删除处理更快",
+                      "失败率、范围遗漏与错误删除"
+                    ],
+                    [
+                      "风险拦截更多",
+                      "正常用户受阻、审核负载和恢复"
+                    ],
+                    [
+                      "查询成本更低",
+                      "结果正确性、新鲜度、可靠性"
+                    ],
+                    [
+                      "发布频率更高",
+                      "变更失败、恢复时间和返工"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "dora-metrics",
+          "title": "DORA 五项指标怎样看交付能力",
+          "en": "DORA Software Delivery Metrics",
+          "kind": "concept",
+          "summary": "观察软件交付系统的速度和不稳定性，避免拿来简单排名个人。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "DORA：软件交付表现指标",
+              "url": "https://dora.dev/guides/dora-metrics/"
+            }
+          ],
+          "items": [
+            {
+              "id": "five-current-metrics",
+              "title": "为什么不能只背旧版“四大指标”？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "按已核实的 DORA 指南",
+                  "headers": [
+                    "指标",
+                    "通俗理解"
+                  ],
+                  "rows": [
+                    [
+                      "Change lead time",
+                      "从代码提交到生产部署的交付时间"
+                    ],
+                    [
+                      "Deployment frequency",
+                      "向生产部署的频率"
+                    ],
+                    [
+                      "Failed deployment recovery time",
+                      "发生需要立即干预的部署失败后恢复所需时间"
+                    ],
+                    [
+                      "Change fail rate",
+                      "导致生产问题并需要干预的部署占比"
+                    ],
+                    [
+                      "Deployment rework rate",
+                      "为处理生产问题而进行的非计划部署占比"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "指标要结合工作环境解释",
+                  "text": "这组指标评价交付系统如何流动以及变化造成多少不稳定，不能自动解释项目是否创造用户价值，也不适合脱离上下文用来排个人名次。先固定服务、部署定义与统计窗口，再看趋势及瓶颈；高发布频率如果伴随大量失败与返工，不能直接称为效率提升。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "roi-attribution",
+          "title": "ROI 怎样算，哪些收益只能估计",
+          "en": "ROI & Attribution",
+          "kind": "reasoning",
+          "summary": "把真实节省、释放能力和避免损失的估计分开列出。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "岗位职责：技术项目规划、交付与度量",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "roi-assumptions",
+              "title": "节省工时是否等于现金收益？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "同一周期内比较净收益与投入",
+                  "text": "常见表达为 ROI=(可归因收益−总投入)/总投入，前提是投入非零、周期与计量口径明确。总投入应包含建设、运行、维护与迁移成本。节省工时可能释放团队能力，却不一定减少现金支出；风险下降也常是模型估计，应该注明假设与不确定性，不包装成已经到账的收入。"
+                },
+                {
+                  "type": "table",
+                  "title": "分开汇报更诚实",
+                  "headers": [
+                    "收益类型",
+                    "证据与限制"
+                  ],
+                  "rows": [
+                    [
+                      "账单减少",
+                      "相同范围和业务量下的可核实费用变化"
+                    ],
+                    [
+                      "工时减少",
+                      "工时基线、变化后测量、释放能力去向"
+                    ],
+                    [
+                      "避免未来成本",
+                      "规模增长与单位成本假设，尚未实际发生"
+                    ],
+                    [
+                      "减少风险损失",
+                      "发生概率、影响估计和控制效果，避免重复计入"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tpm-global",
+      "focus": "全球项目要明确共同要求、地区差异和例外责任，并让跨时区团队能够依据同一份决策继续工作。",
+      "sections": [
+        {
+          "id": "common-local",
+          "title": "共同要求与本地实现怎样分开",
+          "en": "Common Requirements & Local Implementation",
+          "kind": "comparison",
+          "summary": "统一要实现的结果，不必把所有地区的实现硬做成完全相同。",
+          "sourceIds": [
+            10
+          ],
+          "extraSources": [
+            {
+              "label": "岗位职责：技术项目规划、交付与度量",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "configuration-boundaries",
+              "title": "什么应统一，什么可以差异化？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "教学分工示例",
+                  "headers": [
+                    "层次",
+                    "可统一的部分",
+                    "需要明确的差异"
+                  ],
+                  "rows": [
+                    [
+                      "请求与状态",
+                      "请求标识、状态语义、审计结构",
+                      "本地接入方式与支持语言"
+                    ],
+                    [
+                      "策略控制",
+                      "要求有明确负责人和可追溯决策",
+                      "适用要求、保留条件与例外"
+                    ],
+                    [
+                      "执行能力",
+                      "接口契约、幂等、失败反馈",
+                      "遗留系统实现与基础设施"
+                    ],
+                    [
+                      "度量",
+                      "分母、窗口和成功状态定义",
+                      "地区流量、风险分布与目标适用范围"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "治理模式的关键边界",
+                  "text": "业务团队可以负责本地实现、日常执行和改进，但需要在共同约束下交付可验证结果。分布式治理描述责任与执行分布，不自动意味着每个业务都可自行取消隐私、质量或审计要求。哪些约束共用、谁能批准差异，应在组织中明确。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "exception-lifecycle",
+          "title": "例外怎样申请、到期和关闭",
+          "en": "Exception Management",
+          "kind": "workflow",
+          "summary": "例外是有边界的决策记录，不能成为永久绕开要求的后门。",
+          "sourceIds": [
+            10
+          ],
+          "extraSources": [
+            {
+              "label": "岗位职责：技术项目规划、交付与度量",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "exception-record",
+              "title": "旧系统暂时做不到，不能只写“已知问题”",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "一个可管理的例外记录",
+                  "headers": [
+                    "字段",
+                    "要讲清楚"
+                  ],
+                  "rows": [
+                    [
+                      "范围与理由",
+                      "哪个要求、哪些系统和用户受影响，为什么暂时不满足"
+                    ],
+                    [
+                      "风险与补偿控制",
+                      "剩余风险、临时限制和监测办法"
+                    ],
+                    [
+                      "责任与批准",
+                      "谁整改、谁有权接受或决定该例外"
+                    ],
+                    [
+                      "期限与检查点",
+                      "何时复核、何种变化触发提前复核"
+                    ],
+                    [
+                      "关闭证据",
+                      "达到何种能力后结束例外，如何验证"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "过期不等于自动合规",
+                  "text": "到期时应确认整改证据，或者重新决策延长及其条件；不能让系统默默沿用旧批准。某些要求是否允许例外本身就需要专业确认，TPM 不应通过给它命名为例外而自行创造豁免。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "async-decisions",
+          "title": "跨时区沟通怎样减少重复等待",
+          "en": "Asynchronous Decisions",
+          "kind": "workflow",
+          "summary": "把状态、影响与待决策内容写完整，使下一时区能继续行动。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "岗位职责：技术项目规划、交付与度量",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "handoff-message",
+              "title": "一条有用的状态更新包含什么？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "让接棒人知道下一步",
+                  "text": "更新应写清自上次以来的变化、里程碑影响、当前风险、需要谁做什么决定以及最晚时点，同时链接可复核证据。区分已决定、建议和仍待确认，保存决定的理由与适用范围。这样即使大家不同时在线，也不会把上一次会议里的口头推测当成正式要求。"
+                },
+                {
+                  "type": "table",
+                  "title": "模糊表述与可行动表述",
+                  "headers": [
+                    "模糊",
+                    "更可行动"
+                  ],
+                  "rows": [
+                    [
+                      "接口有风险",
+                      "错误码尚未确认，阻塞失败重试验收；接口负责人需在联调前确认"
+                    ],
+                    [
+                      "项目正常",
+                      "关键路径无延误；两个非阻塞问题有负责人和期限"
+                    ],
+                    [
+                      "需要尽快帮忙",
+                      "需要选择缩范围或改日期，并说明两者用户影响与决策时点"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tpm-delete-case",
+      "focus": "把一条用户请求变成有范围、有策略分支、可恢复执行和可验证终态的跨系统项目。",
+      "sections": [
+        {
+          "id": "request-policy",
+          "title": "受理、身份、范围与策略分支",
+          "en": "Intake, Identity & Policy",
+          "kind": "workflow",
+          "summary": "请求进入系统只是开始；先确定处理谁的数据、哪些数据、按什么规则处理。",
+          "sourceIds": [
+            4,
+            6
+          ],
+          "extraSources": [
+            {
+              "label": "岗位职责：技术项目规划、交付与度量",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "identity-scope",
+              "title": "收到“删除我的数据”，编排器先知道什么？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "把自然语言请求转成确定对象",
+                  "text": "入口应核实请求人的身份与授权，生成可追踪请求标识，并确认产品、账号、数据类型和所请求的处理范围。随后依据资产目录、身份映射与数据流寻找目标系统及副本。资产目录不等于天然完整：新服务、日志、派生数据和未纳管链路需要专门检查，不能把“查不到”直接解释为“不存在”。"
+                },
+                {
+                  "type": "table",
+                  "title": "三个容易混淆的边界",
+                  "headers": [
+                    "边界",
+                    "要区分"
+                  ],
+                  "rows": [
+                    [
+                      "账号身份与数据定位",
+                      "能登录账户，不代表所有系统使用相同用户键"
+                    ],
+                    [
+                      "请求范围与物理副本",
+                      "用户请求某类数据，仍可能涉及缓存、索引和派生物"
+                    ],
+                    [
+                      "已知资产与真实全量",
+                      "清单覆盖需要验证，血缘也可能有盲区"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "policy-branches",
+              "title": "是不是找到的所有数据都立即删除？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "先评估适用策略，不假定单一路径",
+                  "text": "可能需要删除、限制使用、按合法适用条件保留、请求补充信息或转交专门处理。策略由相应隐私、法务和业务责任人确认，工程负责可执行的条件与状态。每个分支都应记录依据、范围与后续动作；拒绝或保留不是“删除成功”，也不应从台账里消失。这里不设通用法律期限。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "orchestration-architecture",
+          "title": "一条请求怎样穿过主库、副本与派生数据",
+          "en": "Deletion Orchestration",
+          "kind": "architecture",
+          "summary": "中心编排保存全局进度，各系统负责其本地处理与结果证据。",
+          "sourceIds": [
+            4,
+            5,
+            6
+          ],
+          "extraSources": [
+            {
+              "label": "岗位职责：技术项目规划、交付与度量",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "end-to-end",
+              "title": "删除编排器到底编排什么？",
+              "blocks": [
+                {
+                  "type": "diagram",
+                  "title": "用户删除请求的端到端教学架构",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "接收定位",
+                        "nodes": [
+                          {
+                            "id": "intake",
+                            "title": "身份与请求入口",
+                            "text": "确认身份、范围并分配 requestId"
+                          },
+                          {
+                            "id": "inventory",
+                            "title": "资产与数据流",
+                            "text": "查用户映射、副本、索引和派生链"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "策略决策",
+                        "nodes": [
+                          {
+                            "id": "policy",
+                            "title": "策略与例外",
+                            "text": "生成需要执行、保留或转交的目标计划"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "全局编排",
+                        "nodes": [
+                          {
+                            "id": "orchestrator",
+                            "title": "任务编排器",
+                            "text": "按系统拆任务、追踪进度、处理超时"
+                          },
+                          {
+                            "id": "ledger",
+                            "title": "最小必要证据台账",
+                            "text": "保存版本、目标状态及未完成原因"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "系统执行",
+                        "nodes": [
+                          {
+                            "id": "active",
+                            "title": "主库 / 缓存 / 索引",
+                            "text": "按本地机制处理并返回可核实状态"
+                          },
+                          {
+                            "id": "derived",
+                            "title": "数仓 / 派生数据",
+                            "text": "处理关联产物与后续生成路径"
+                          },
+                          {
+                            "id": "backup",
+                            "title": "备份处理策略",
+                            "text": "记录过期或其他适用机制及恢复限制"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "确认反馈",
+                        "nodes": [
+                          {
+                            "id": "verify",
+                            "title": "结果核对",
+                            "text": "汇总各分支，检查遗漏和恢复防回流"
+                          },
+                          {
+                            "id": "response",
+                            "title": "请求反馈",
+                            "text": "准确说明完成范围和剩余处理状态"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "intake",
+                        "to": "inventory",
+                        "label": "定位",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "inventory",
+                        "to": "policy",
+                        "label": "目标候选",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "policy",
+                        "to": "orchestrator",
+                        "label": "执行计划",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "policy",
+                        "to": "ledger",
+                        "label": "保留/例外决定",
+                        "kind": "control"
+                      },
+                      {
+                        "from": "orchestrator",
+                        "to": "active",
+                        "label": "分派",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "orchestrator",
+                        "to": "derived",
+                        "label": "分派",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "orchestrator",
+                        "to": "backup",
+                        "label": "分派",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "active",
+                        "to": "ledger",
+                        "label": "结果",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "derived",
+                        "to": "ledger",
+                        "label": "结果",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "backup",
+                        "to": "ledger",
+                        "label": "计划与状态",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "ledger",
+                        "to": "verify",
+                        "label": "证据核对",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "verify",
+                        "to": "response",
+                        "label": "约定终态",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "verify",
+                        "to": "orchestrator",
+                        "label": "补未完成项",
+                        "kind": "feedback"
+                      }
+                    ],
+                    "note": "跨来源教学架构，不是 Google Cloud 或 TikTok 的完整实现。副本与保留策略依系统而异；Google 文档中的时间数字不能直接作为本项目目标。"
+                  }
+                },
+                {
+                  "type": "explain",
+                  "title": "中心掌握状态，不替所有系统删数据",
+                  "text": "各存储系统删除机制不同，适配器把目标、操作结果、失败原因和必要证据返回统一编排层。请求级状态由约定范围内的子任务和策略分支汇总；主库先完成时，可以显示部分完成，不能用一个数据库成功响应覆盖其他系统未知状态。"
+                }
+              ]
+            },
+            {
+              "id": "durable-retry",
+              "title": "一个系统超时，要不要把整个请求重做？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "按子任务恢复，并核对未知结果",
+                  "text": "持久保存各系统任务状态和稳定操作标识，只补需要继续的步骤。超时可能意味着没执行，也可能已完成但回执丢失，所以先通过幂等接口或可核实结果避免重复副作用。反复失败的任务应进入有负责人的异常处理，不能靠无限重试制造“系统正在努力”的假象。"
+                },
+                {
+                  "type": "table",
+                  "title": "明确几个状态",
+                  "headers": [
+                    "状态",
+                    "含义"
+                  ],
+                  "rows": [
+                    [
+                      "Accepted 已受理",
+                      "请求有效并进入流程"
+                    ],
+                    [
+                      "In progress 处理中",
+                      "仍有必需步骤未达终态"
+                    ],
+                    [
+                      "Failed / Unknown 失败或未知",
+                      "需要重试、核对或人工处理"
+                    ],
+                    [
+                      "Policy decision 策略决定",
+                      "保留、拒绝或限制等有明确依据"
+                    ],
+                    [
+                      "Verified outcome 已核实结果",
+                      "按约定范围与政策汇总，且证据可追踪"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "completion-restoration",
+          "title": "删除完成怎样验证，恢复时怎样防回流",
+          "en": "Verification & Restore Controls",
+          "kind": "reasoning",
+          "summary": "可审计完成来自覆盖和证据；恢复能力不能让已处理数据未经控制重新可用。",
+          "sourceIds": [
+            6,
+            19
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "copies-proof",
+              "title": "为什么主库 DELETE 成功仍不够？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "不同数据位置的验收问题",
+                  "headers": [
+                    "位置",
+                    "应核实"
+                  ],
+                  "rows": [
+                    [
+                      "活跃存储",
+                      "目标数据是否按本地机制删除或不可访问？"
+                    ],
+                    [
+                      "缓存与搜索索引",
+                      "过期/清理是否生效，是否会从上游重建？"
+                    ],
+                    [
+                      "数仓与派生产物",
+                      "范围内的副本和转换结果如何处理？"
+                    ],
+                    [
+                      "备份",
+                      "按什么机制和周期处理，是否有受控保留与恢复限制？"
+                    ],
+                    [
+                      "训练数据与模型",
+                      "样本记录删除和模型影响消除是否是不同范围？"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "证据也要遵循最小必要",
+                  "text": "记录请求、目标、策略版本、执行状态和核对结果，足以解释处理过程；不应为了证明删除而永久复制一份完整个人数据进审计日志。证据的访问和保留也应受控。技术无法简单证明整个世界没有任何副本，实务应明确覆盖边界、验证方法和剩余盲区。"
+                }
+              ]
+            },
+            {
+              "id": "restore-and-unlearning",
+              "title": "恢复了旧备份，已删除数据怎么办？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "title": "把防回流接进恢复流程",
+                  "text": "恢复方案需要识别备份时间点之后的适用删除或限制要求，并在恢复数据重新进入正常使用前重新应用相应控制，或采用经验证的替代机制。否则主库曾经删掉的数据可能重新出现。备份过期和加密清除是不同机制，具体可行性依赖系统设计与密钥范围，不能只写一个“恢复后再看”。"
+                },
+                {
+                  "type": "takeaway",
+                  "title": "模型影响是另一层问题",
+                  "text": "删除训练集中的某条记录，不自动改变已经训练好的模型。是否需要重训、遗忘或其他处理，要另行定义目标、效果验证与成本；不能承诺调用一个通用删除接口就消除所有模型影响。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "program-workstreams",
+          "title": "把删除架构拆成跨团队项目与验收",
+          "en": "Workstreams & Acceptance",
+          "kind": "workflow",
+          "summary": "架构说明系统怎样运行，项目流程说明谁把它建成并证明有效。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "岗位职责：技术项目规划、交付与度量",
+              "url": "./index.html#role-context"
+            }
+          ],
+          "items": [
+            {
+              "id": "workstream-plan",
+              "title": "TPM 怎样组织这类大项目？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "可并行但互有依赖的工作流",
+                  "headers": [
+                    "工作流",
+                    "典型参与者",
+                    "产出与依赖"
+                  ],
+                  "rows": [
+                    [
+                      "范围与规则",
+                      "产品、隐私、法务、数据负责人",
+                      "明确对象、适用策略、时限与例外"
+                    ],
+                    [
+                      "资产与标识",
+                      "数据平台、各业务系统",
+                      "定位清单、身份映射、血缘盲区"
+                    ],
+                    [
+                      "编排与接口",
+                      "平台工程、存储服务团队",
+                      "任务状态、适配器契约、重试与幂等"
+                    ],
+                    [
+                      "验证与审计",
+                      "质量、安全、运营、工程",
+                      "故障场景、覆盖证据、访问与留存"
+                    ],
+                    [
+                      "试点与运营",
+                      "产品、支持、运营、值守团队",
+                      "用户反馈、监控、升级路径、持续维护"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "title": "怎样排关键路径",
+                  "text": "策略与范围先支撑接口语义；身份映射决定各系统能否定位数据；适配器与编排共同支撑端到端测试。可以并行盘点与原型开发，但不能在范围和状态含义未定时宣布集成完成。将依赖交付、负责人和最晚时点画清楚，才知道哪里需要优先解阻。"
+                }
+              ]
+            },
+            {
+              "id": "launch-acceptance",
+              "title": "什么证据支持从试点扩大到更多系统？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "验收应覆盖结果与运营",
+                  "headers": [
+                    "方面",
+                    "证据示例"
+                  ],
+                  "rows": [
+                    [
+                      "范围",
+                      "目标系统与数据类型清单、已验证覆盖和明确遗漏"
+                    ],
+                    [
+                      "正确性",
+                      "身份与策略分支测试、目标数据核对"
+                    ],
+                    [
+                      "可靠性",
+                      "超时、重复、重启、部分完成和恢复演练"
+                    ],
+                    [
+                      "时效",
+                      "同口径请求耗时分布、超期和积压原因"
+                    ],
+                    [
+                      "可审计",
+                      "能从 requestId 追到子任务、版本和处理依据"
+                    ],
+                    [
+                      "可运营",
+                      "负责人能诊断异常、重试或升级，并准确回复用户"
+                    ]
+                  ]
+                },
+                {
+                  "type": "takeaway",
+                  "title": "不要把测试通过率替代关键门槛",
+                  "text": "大量简单场景通过，也不能抵消一次错删他人数据或一个完全未接入的关键系统。关键门槛应独立显示，剩余风险由相应决策人明确处理；阶段性完成要说出阶段范围。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

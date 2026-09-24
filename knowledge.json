@@ -863,7 +863,7 @@
         },
         {
           "id": "life-storage",
-          "title": "存储：块、文件、对象是访问抽象",
+          "title": "存储架构：数据湖、文件系统与访问接口",
           "summary": "按接口、读写方式和共享需求选型，不能只看数据是视频还是评论。",
           "keywords": [
             "Block",
@@ -871,7 +871,11 @@
             "Object",
             "SAN",
             "NAS",
-            "POSIX"
+            "POSIX",
+            "HDFS",
+            "Data Lake",
+            "HTTP REST",
+            "WebHDFS"
           ],
           "points": [
             {
@@ -934,7 +938,7 @@
             "before": "块存储只能单机；文件存储都完整支持 POSIX；HPC 不能用块。",
             "after": "EBS 支持有条件的多挂载；HDFS 放宽部分 POSIX 语义；需区分底层介质与共享接口。"
           },
-          "shortTitle": "块、文件与对象"
+          "shortTitle": "存储架构与访问接口"
         },
         {
           "id": "life-tiering",
@@ -2415,7 +2419,7 @@
         },
         {
           "id": "risk-features",
-          "title": "多通道模型与变体归一化",
+          "title": "文本风险识别：多通道、变体与实体提取",
           "summary": "一种融合不同特征判断文本，另一种识别并还原变体；可以协作，但并非等价。",
           "keywords": [
             "RiskText",
@@ -2485,7 +2489,7 @@
             "工程效率",
             "模型与规则协作"
           ],
-          "shortTitle": "多通道 vs 归一映射"
+          "shortTitle": "文本特征与风险识别"
         },
         {
           "id": "risk-metrics",

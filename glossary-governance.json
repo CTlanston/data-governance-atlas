@@ -18,7 +18,7 @@
     "asset-provenance": "Data Provenance & W3C PROV",
     "asset-coverage": "Lineage Coverage & Blind Spots",
     "life-stages": "Data Lifecycle Management: DLM & ILM",
-    "life-storage": "Block, File & Object Storage",
+    "life-storage": "Storage Architecture & Access Interfaces",
     "life-tiering": "Storage Tiering & Archiving",
     "life-backup": "Replication, Backup & Restore",
     "life-deletion": "Data Deletion & Cryptographic Erasure",

@@ -28,14 +28,22 @@ window.AtlasDiagrams = (() => {
     const paths=d.edges.map((e,index)=>{
       const a=positions.get(e.from),b=positions.get(e.to);if(!a||!b)return '';
       let path,lx,ly;
-      if(b.col===a.col+1){
+      if(b.col===a.col&&b.y>a.y){
+        const x=a.x+a.w/2,y=a.y+a.h,ty=b.y;
+        path=`M ${x} ${y} V ${ty}`;lx=x+45;ly=(y+ty)/2+4;
+      }else if(b.col===a.col){
+        const x=a.x+a.w,y=a.y+a.h/2,tx=b.x+b.w,ty=b.y+b.h/2,side=x+33;
+        path=`M ${x} ${y} H ${side} V ${ty} H ${tx}`;lx=side;ly=(y+ty)/2-8;
+      }else if(b.col===a.col+1){
         const x=a.x+a.w,y=a.y+a.h/2,tx=b.x,ty=b.y+b.h/2;
         path=`M ${x} ${y} C ${x+gap/2} ${y}, ${tx-gap/2} ${ty}, ${tx} ${ty}`;
         lx=(x+tx)/2;ly=(y+ty)/2-11;
       }else{
-        const y=top+tallest+45+(routed++)*37,ax=a.x+a.w/2,bx=b.x+b.w/2;
-        path=`M ${ax} ${a.y+a.h} V ${y-10} Q ${ax} ${y} ${ax+(bx>ax?10:-10)} ${y} H ${bx+(bx>ax?-10:10)} Q ${bx} ${y} ${bx} ${y-10} V ${b.y+b.h}`;
-        lx=(ax+bx)/2;ly=y-8;
+        const y=top+tallest+45+(routed++)*37,forward=b.col>a.col;
+        const ax=forward?a.x+a.w:a.x,bx=forward?b.x:b.x+b.w,ay=a.y+a.h/2,by=b.y+b.h/2;
+        const laneA=ax+(forward?30:-30),laneB=bx+(forward?-30:30);
+        path=`M ${ax} ${ay} H ${laneA} V ${y} H ${laneB} V ${by} H ${bx}`;
+        lx=(laneA+laneB)/2;ly=y-8;
       }
       return `<g class="edge-${esc(e.kind||'flow')}"><path d="${path}" marker-end="url(#${surface.dataset.arrow})"/><text x="${lx}" y="${ly}" text-anchor="middle">${esc(e.label||'')}</text></g>`;
     }).join('');
@@ -46,10 +54,11 @@ window.AtlasDiagrams = (() => {
     applyScale(figure,host.classList.contains('full-diagram')?zoom:Math.min(1,Math.max(.1,host.clientWidth/width)));
   }
   function applyScale(figure,scale){const surface=figure.querySelector('.diagram-surface'),sized=figure.querySelector('.diagram-scaled');surface.style.transform=`scale(${scale})`;sized.style.width=`${Number(surface.dataset.width)*scale}px`;sized.style.height=`${Number(surface.dataset.height)*scale}px`;}
-  function layoutAll(root=document){root.querySelectorAll('.architecture-figure').forEach(layout);}
+  function layoutAll(root=document){root?.querySelectorAll('.architecture-figure').forEach(layout);}
   function fit(){
     const fig=dialog.querySelector('.architecture-figure'),host=dialog.querySelector('.full-diagram'),surface=fig.querySelector('.diagram-surface');
-    zoom=Math.min(1,Math.max(.2,(host.clientWidth-12)/Number(surface.dataset.width)));applyScale(fig,zoom);updateZoom();host.scrollLeft=0;
+    const heightLimit=parseFloat(getComputedStyle(host).maxHeight)||host.clientHeight;
+    zoom=Math.min(1,Math.max(.2,Math.min((host.clientWidth-12)/Number(surface.dataset.width),(heightLimit-12)/Number(surface.dataset.height))));applyScale(fig,zoom);updateZoom();host.scrollLeft=0;host.scrollTop=0;
   }
   function updateZoom(){dialog.querySelector('output').textContent=`${Math.round(zoom*100)}%`;}
   function open(key){

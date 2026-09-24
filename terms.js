@@ -9,7 +9,7 @@ window.AtlasTerms = (() => {
     'federated-governance':['联邦式治理','联邦治理'],'column-level-lineage':['字段血缘','字段级血缘','列级数据血缘'],
     'table-level-lineage':['表级数据血缘'],'record-level-lineage':['行级血缘'],
     'physical-plan':['物理计划'],'logical-plan':['逻辑查询计划'],
-    'data-warehouse':['数仓'],'storage-tiering':['冷热分层','冷热数据分层'],
+    'data-warehouse':['数仓'],'data-lakehouse':['数据湖仓'],'storage-tiering':['冷热分层','冷热数据分层'],
     'data-compaction':['小文件合并'],'cryptographic-erasure':['加密擦除'],
     'privacy-by-design':['隐私内建'],'preventive-control':['预防控制'],'detective-control':['检测控制'],'corrective-control':['纠正控制'],
     'dynamic-data-masking':['动态脱敏'],'static-data-masking':['静态脱敏'],
@@ -27,7 +27,7 @@ window.AtlasTerms = (() => {
   };
   async function load(base){
     const files=['glossary-governance.json','glossary-privacy.json','glossary-delivery.json'];
-    const parts=await Promise.all(files.map(async f=>{const r=await fetch(`./${f}?v=terms-1`);if(!r.ok)throw new Error(`术语读取失败：${f}`);return r.json();}));
+    const parts=await Promise.all(files.map(async f=>{const r=await fetch(`./${f}?v=concept-2`);if(!r.ok)throw new Error(`术语读取失败：${f}`);return r.json();}));
     const topicModules=new Map(base.modules.flatMap(m=>m.topics.map(t=>[t.id,m.id])));
     for(const part of parts){
       Object.assign(data.moduleEnglish,part.moduleEnglish);Object.assign(data.topicEnglish,part.topicEnglish);
@@ -58,7 +58,9 @@ window.AtlasTerms = (() => {
       const found=matchers.find(({alias})=>text.startsWith(alias,i));
       if(!found){let j=i+1;while(j<text.length&&!matchers.some(({alias})=>text.startsWith(alias,j)))j++;result+=esc(text.slice(i,j));i=j;continue;}
       const {alias,term}=found;const tail=text.slice(i+alias.length).replace(/^[\s（(]+/,'').toLowerCase();
-      const already=term.en.split(/\s*\/\s*/).some(en=>tail.startsWith(en.toLowerCase()))||(term.abbr&&tail.startsWith(term.abbr.toLowerCase()));
+      const head=text.slice(0,i).replace(/[\s（(:：]+$/,'').toLowerCase();
+      const names=[...term.en.split(/\s*\/\s*/),term.abbr].filter(Boolean).map(en=>en.toLowerCase());
+      const already=names.some(en=>tail.startsWith(en)||head.endsWith(en));
       result+=esc(alias);
       if(!seen.has(term.id)&&!already)result+=`<span class="inline-english">（${esc(term.en)}${term.abbr&&!term.en.includes(term.abbr)?` · ${esc(term.abbr)}`:''}）</span>`;
       seen.add(term.id);i+=alias.length;

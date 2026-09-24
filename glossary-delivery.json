@@ -15,7 +15,7 @@
     "risk-library-rescan": "Online Sample Library & Historical Rescan",
     "risk-match": "Lexical & Semantic Similarity",
     "risk-patterns": "FP-Growth & Embeddings",
-    "risk-features": "Multi-channel Models & Variant Normalization",
+    "risk-features": "Text Features & Risk Detection",
     "risk-metrics": "Precision, Recall & Decision Costs",
     "tpm-scope": "Objectives, Scope & Acceptance",
     "tpm-dependencies": "Ownership, Dependencies & Critical Path",

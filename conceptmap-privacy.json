@@ -1,0 +1,406 @@
+{
+  "version": 2,
+  "topics": [
+    {
+      "id": "privacy-controls",
+      "focus": "一条隐私要求，要落到具体的操作边界、控制动作和负责结果的人。",
+      "sections": [
+        {
+          "id": "policy-to-control", "title": "政策怎样变成可执行的判断", "en": "Policy to Control", "kind": "concept",
+          "summary": "把抽象要求写成谁、为何、对哪些数据、在什么条件下可以做什么。", "sourceIds": [10], "extraSources": [],
+          "items": [{"id": "control-contract", "title": "“保护隐私”还缺哪些可执行条件？", "blocks": [
+            {"type": "explain", "title": "从口号变成操作条件", "text": "“保护用户隐私”无法直接写成一次系统判断。团队需要明确数据对象、操作者、用途、允许条件和失败行为。例如，客服是否有查看手机号的权限，还要结合其处理的工单是否与该用户有关。政策确定边界，工程把条件放到实际读取入口，运营负责处理异常；这些工作相互依赖。"},
+            {"type": "table", "title": "同一条要求如何分解", "headers": ["需要说清", "教学例子", "如果没说清"], "rows": [["数据与用途", "为处理当前工单查看联系方式", "有权限就被误当成任何用途都允许"], ["执行点", "号码读取接口检查角色与工单", "页面有限制，接口却能绕过"], ["失败行为", "条件不满足返回遮蔽结果", "检查服务故障时默认放行"], ["责任与证据", "有人处理告警并保存复验结果", "控制出错后无人跟进"]]}
+          ]}]
+        },
+        {
+          "id": "three-controls", "title": "预防、检测、纠正怎样接力", "en": "Prevent · Detect · Correct", "kind": "workflow",
+          "summary": "三类控制处理不同行为阶段，需要组成闭环。", "sourceIds": [9, 10], "extraSources": [],
+          "items": [{"id": "one-access-incident", "title": "一次异常访问里，三类控制各做什么？", "blocks": [
+            {"type": "diagram", "title": "教学模型：客服访问的保护链", "diagram": {"columns": [{"title": "操作前", "nodes": [{"id": "request", "title": "读取请求", "en": "Access Request", "text": "携带角色、工单和目标用户等必要上下文"}, {"id": "prevent", "title": "预防检查", "en": "Preventive Control", "text": "不满足条件时限制读取或返回遮蔽结果"}]}, {"title": "操作中与之后", "nodes": [{"id": "detect", "title": "行为监测", "en": "Detective Control", "text": "发现异常访问模式，提供调查线索"}, {"id": "review", "title": "调查与归因", "en": "Investigation", "text": "确认是合理业务、规则误报还是权限缺陷"}]}, {"title": "处理与复验", "nodes": [{"id": "correct", "title": "纠正问题", "en": "Corrective Control", "text": "修复配置、收回多余权限并评估既有影响"}, {"id": "verify", "title": "验证修复", "en": "Verification", "text": "复测正常及失败路径，更新控制版本"}]}], "edges": [{"from": "request", "to": "prevent", "label": "先检查", "kind": "flow"}, {"from": "prevent", "to": "detect", "label": "记录执行行为", "kind": "flow"}, {"from": "detect", "to": "review", "label": "异常线索", "kind": "flow"}, {"from": "review", "to": "correct", "label": "确认问题", "kind": "flow"}, {"from": "correct", "to": "verify", "label": "复验", "kind": "flow"}, {"from": "verify", "to": "prevent", "label": "改进控制", "kind": "feedback"}], "note": "通用教学流程，不代表 TikTok 的内部实现；检测也可并行持续运行。"}},
+            {"type": "takeaway", "title": "发出告警还不是纠正完成", "text": "检测控制告诉团队“这里可能有问题”，但需要调查才能确认。纠正控制必须实际改变错误状态，并验证修复。另一个容易混淆的英文是 LINDDUN 的 Detecting：它描述外人察觉用户参与某项活动的威胁；Detective Control 则是企业发现违规的保护手段，二者不能互换。"}
+          ]}]
+        },
+        {
+          "id": "shared-responsibility", "title": "谁定要求，谁实现，谁证明有效", "en": "Shared Responsibility", "kind": "comparison",
+          "summary": "隐私办公室协调专业判断，业务与工程仍要承担自己的执行责任。", "sourceIds": [10], "extraSources": [],
+          "items": [{"id": "ownership-table", "title": "有隐私团队，其他团队就不用负责了吗？", "blocks": [
+            {"type": "table", "title": "教学分工：责任可以分布，接口必须清楚", "headers": ["角色", "主要贡献", "需交给下一方的结果"], "rows": [["法务与隐私专家", "确认适用要求、范围与例外", "可解释的要求与判断依据"], ["产品与业务", "明确用户场景及业务用途", "入口、流程和用户状态含义"], ["工程与平台", "实现执行点、监测和失败处理", "控制行为、版本与验证证据"], ["运营与项目负责人", "处理异常、协调依赖及持续跟踪", "问题归属、整改进度和关闭依据"]]},
+            {"type": "explain", "title": "分工之后还要连接结果", "text": "这张表是通用协作设计，不是固定组织制度。关键是避免每方都只交付自己的文档：要求已批准、页面已上线、接口已部署，三者仍可能没有接通。项目负责人需要沿同一条用户场景检查交付之间的依赖，并确认控制失败时由谁响应、谁有权决定例外。"}
+          ]}]
+        }
+      ]
+    },
+    {
+      "id": "privacy-threats", "focus": "先说清别人多知道了什么、用户失去了什么，再选择 LINDDUN 类别。",
+      "sections": [
+        {
+          "id": "seven-questions", "title": "七类威胁各在问什么", "en": "Seven Privacy Questions", "kind": "concept",
+          "summary": "威胁类别是检查角度；同一场景可以同时命中多类。", "sourceIds": [11], "extraSources": [{"label": "LINDDUN 官方威胁树", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}],
+          "items": [{"id": "questions-not-labels", "title": "用问题理解缩写，不急着给场景贴唯一标签", "blocks": [
+            {"type": "table", "title": "LINDDUN 七个检查问题", "headers": ["类别", "先问的问题", "教学线索"], "rows": [["L · Linking 关联", "能否把分开的行为连成新的画像？", "购物记录与浏览记录被拼接"], ["I · Identifying 识别", "能否确定化名或记录背后是谁？", "年龄、地区、职位组合指向唯一的人"], ["N · Non-repudiation 不可否认性", "是否留下可归属于个人的行为证据？", "匿名附件中仍保存作者信息"], ["D · Detecting 察觉", "能否知道某人参与或某记录存在？", "账号已注册与账号不存在的响应不同"], ["D · Data Disclosure 数据披露", "是否不必要地收集、处理、保留或暴露？", "城市级功能持续保存精确轨迹"], ["U · Unawareness and Unintervenability", "用户知情吗，能有效管理吗？", "用户看不到用途，也无法改变选择"], ["N · Non-compliance 不合规", "相关管理、安全及适用要求落实了吗？", "有保留要求，却没有负责人和执行机制"]]},
+            {"type": "takeaway", "title": "类别不能替代场景描述", "text": "“存在 Linking 风险”还不够具体。完整表述应说明谁能拿到哪两份信息、依据什么把它们联系起来、因此多知道了什么，以及可能影响谁。最后再选类别。Non-compliance 也不只是其他六类威胁发生后的法律后果；职责、数据管理和安全控制的缺口同样需要检查。"}
+          ]}]
+        },
+        {
+          "id": "linking-identifying", "title": "关联画像与确认身份的分界", "en": "Linking vs. Identifying", "kind": "comparison",
+          "summary": "知道多条记录属于同一人，与知道这个人的现实身份，是两个不同进展。", "sourceIds": [11], "extraSources": [],
+          "items": [{"id": "anonymous-profile", "title": "没有姓名，为什么仍然可能伤害隐私？", "blocks": [
+            {"type": "example", "title": "从匿名浏览到敏感画像", "text": "教学例子：网站把同一设备的搜索、购物和访问时段连在一起，形成“可能关注某类健康问题”的画像。此时即使不知道姓名，也已经增加了对该用户的推断，这属于关联问题。如果再与一份有姓名的客户表连接，确定了现实身份，则进一步出现识别问题。画像推断可能有误，不能把它当作医学事实。"},
+            {"type": "table", "title": "几个字段如何逐步缩小范围", "headers": ["观察到的信息", "能合理说明什么", "不能直接推出"], "rows": [["同一标识符出现多次", "行为可能可以连接", "必然是同一个自然人"], ["年龄、地区、职业组合", "候选人范围可能缩小", "任何场景下都能唯一识别"], ["结合额外可靠资料只剩一人", "有身份识别风险", "删掉姓名就已匿名"], ["分组人数较大", "可降低某些直接定位风险", "所有属性推断和关联都被阻止"]]}
+          ]}]
+        },
+        {
+          "id": "detecting-identifying-disclosure", "title": "存在、身份、内容：三种不同泄露", "en": "Existence · Identity · Content", "kind": "comparison",
+          "summary": "从“有这份记录”到“它属于谁”再到“记录写了什么”，分析焦点不同。", "sourceIds": [11], "extraSources": [],
+          "items": [{"id": "record-boundaries", "title": "看到病历身份元数据，为什么不能只叫 Detecting？", "blocks": [
+            {"type": "table", "title": "用同一医疗场景比较", "headers": ["场景", "主要检查角度", "理由"], "rows": [["找回密码时提示此号码已注册", "Detecting 察觉", "知道某人使用过该服务，无需看到病历"], ["匿名报告的元数据出现真实姓名", "Identifying 识别，也可能有披露", "现实身份已经暴露，不只是知道记录存在"], ["未经允许看到了病历详情", "Data Disclosure 披露", "内容跨越了允许的访问边界"], ["精确时间与候诊屏状态结合", "Detecting，可能同时 Linking", "物理观察与系统状态结合，暴露参与情况"]]},
+            {"type": "explain", "title": "防护也要对应泄露路径", "text": "教学例子：把候诊屏上的全名改成姓加星号，只处理了姓名显示。若科室只有一个候诊者，外人结合进入诊室的时间仍可能察觉其就诊。类似地，账号错误提示虽然不展示病历，也可能暴露是否注册。要检查整个可观察信号，而不是只检查一个被遮住的字段。"}
+          ]}]
+        },
+        {
+          "id": "attributable-evidence-and-flow", "title": "可归属证据与医疗数据全流程", "en": "Attributable Evidence & Data Flow", "kind": "reasoning",
+          "summary": "留下证据有业务价值，也可能扩大暴露；需要按目的检查每个阶段。", "sourceIds": [11], "extraSources": [],
+          "items": [{"id": "evidence-tradeoff", "title": "日志、UID 与报告为什么会形成不可否认性？", "blocks": [
+            {"type": "explain", "title": "关键是证据能够归属到个人", "text": "UID、咨询标签或报告并不是一出现就必然不当。Non-repudiation 关注的是：记录是否能作为某个人参与某次行为的证据，以及这种可归属性会带来什么影响。医疗记录与安全审计可能有正当保留需求，匿名反馈则可能需要更少的身份痕迹。要判断必要性、可访问者、保留范围和使用目的，不能统一要求全部不留日志。"},
+            {"type": "table", "title": "教学场景：三条医疗数据路径", "headers": ["路径", "容易漏看的问题", "可讨论的控制与边界"], "rows": [["签到 → 候诊屏", "状态与现场观察组合暴露到访", "限制显示粒度；检查时序等侧信道"], ["病历 → AI 当前问诊", "是否需要一次读入全部历史", "按任务取必要记录；限制上下文与日志"], ["病历 → 外部科研", "去姓名后仍保留独特属性组合", "评估用途、准标识符、接收方和重识别风险"]]}
+          ]}]
+        }
+      ]
+    },
+    {
+      "id": "privacy-dataworks", "focus": "找到敏感数据、启用保护和证明保护有效，是三个必须分别完成的工作。",
+      "sections": [
+        {
+          "id": "classification-to-enforcement", "title": "分类、分级、识别、执行分别解决什么", "en": "Classify · Discover · Enforce", "kind": "workflow",
+          "summary": "先确认数据含义与保护要求，再把规则连接到实际入口。", "sourceIds": [9], "extraSources": [],
+          "items": [{"id": "four-jobs", "title": "为什么“识别出手机号”还不算保护完成？", "blocks": [
+            {"type": "table", "title": "四份不同交付物", "headers": ["工作", "输出", "下一步还缺什么"], "rows": [["分类 Data Classification", "它属于联系方式等哪类信息", "确认该类别需要的保护要求"], ["分级 Sensitivity Level", "在该场景需要多强保护", "可执行规则及适用角色"], ["识别 Sensitive Data Discovery", "哪些具体字段符合规则", "复核误识别、漏识别和扫描范围"], ["执行与验证 Enforcement", "在入口应用保护并观察行为", "检查旁路、失败和新增入口"]]},
+            {"type": "example", "title": "DataWorks 的开关说明了什么", "text": "DataWorks 入门流程先识别手机号，再配置脱敏，并确认工作空间启用了查询内容脱敏。这个例子说明保存规则、发布规则和执行入口启用不是同一状态。最后还要实际查询检查结果。把这个思路迁移到别的平台时，应寻找它自己的执行开关和作用范围，不能照搬产品菜单。"}
+          ]}]
+        },
+        {
+          "id": "anonymity-boundary", "title": "动态脱敏、静态脱敏、假名化与匿名化", "en": "Masking & Identifiability", "kind": "comparison",
+          "summary": "处理方法、原值保存位置和最终能否识别个人，需要分开判断。", "sourceIds": [9, 11], "extraSources": [{"label": "ICO：匿名化有效性", "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/anonymisation/how-do-we-ensure-anonymisation-is-effective/"}, {"label": "ICO：假名化", "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/anonymisation/pseudonymisation/"}],
+          "items": [{"id": "four-outcomes", "title": "打星号或换编号，究竟改变了什么？", "blocks": [
+            {"type": "table", "title": "保护结果不由名称自动保证", "headers": ["概念", "主要变化", "仍要检查"], "rows": [["动态脱敏 Dynamic Masking", "查询或展示时改变返回值", "原值与其他读取路径是否受控"], ["静态脱敏 Static Masking", "生成并保存处理后的副本", "源数据、复制数据和残留字段"], ["假名化 Pseudonymisation", "身份与代号的对应信息分开保护", "持有额外信息时仍可能关联回个人"], ["匿名化 Anonymisation", "目标是在相关情境下无法合理识别个人", "额外资料、组合线索和重识别风险"]]},
+            {"type": "example", "title": "删除姓名后仍能认出人的例子", "text": "教学例子：科研表去掉姓名和身份证，却保留精确就诊时间、罕见病、年龄和科室。接收方若掌握额外资料，仍可能把记录对应到个人。可以讨论降低粒度、减少不必要字段、分组或其他隐私技术，但每种方法都有适用条件；“已经脱敏”不是风险分析结束的理由。"}
+          ]}]
+        },
+        {
+          "id": "three-maskings", "title": "三个 Masking：隐藏的对象不同", "en": "Three Meanings of Masking", "kind": "comparison",
+          "summary": "同一个英文动作词，在隐私保护、风控预处理和模型评估里有不同目的。", "sourceIds": [9, 13, 14], "extraSources": [{"label": "Presidio：实体替换与掩盖", "url": "https://presidio.dataprivacystack.org/anonymizer/"}],
+          "items": [{"id": "masking-object", "title": "把手机号替换掉，与把分类标签藏起来是一回事吗？", "blocks": [
+            {"type": "table", "title": "看目的，不只看动作", "headers": ["语境", "隐藏或替换什么", "为何这样做"], "rows": [["Data Masking 数据脱敏", "敏感原值", "减少不必要的直接暴露"], ["Entity Masking 实体掩码", "文本中的具体号码、链接等实体", "用占位符概括共同结构；这是风控学习延伸"], ["Masking Invariant 标签遮蔽不变量", "泄露待预测答案的旧标签等字段", "阻止模型和规则学习抄答案"]]},
+            {"type": "takeaway", "title": "三个操作都不能替其他操作作证明", "text": "“请联系 123456”变成“请联系 <NUMBER>”，可能只是为了挖掘重复话术，并不证明其他内容不会识别人。把 is_pii 旧标签从分类输入中隐藏，则是为了避免目标泄漏，也不表示电话号码已被遮蔽。设计或面试中应说出被处理的对象、预期效果和剩余风险，避免只说一句“我们做了 masking”。"}
+          ]}]
+        }
+      ]
+    },
+    {
+      "id": "privacy-user-control", "focus": "用户选择需要有范围、有版本、有下游执行结果，界面状态才能可信。",
+      "sections": [
+        {
+          "id": "purpose-access-consent", "title": "读得到、用得了、用户同意了", "en": "Access · Purpose · Consent", "kind": "comparison",
+          "summary": "三个条件有关联，但任何一个都不能单独代表其他两个。", "sourceIds": [11, 12, 18], "extraSources": [],
+          "items": [{"id": "three-questions", "title": "服务有权限，为什么还要检查用途？", "blocks": [
+            {"type": "table", "title": "三个判断维度", "headers": ["问题", "含义", "不能自动推出"], "rows": [["谁能读 Access", "这个身份是否能取得数据", "取得后任何用途都允许"], ["为何使用 Purpose", "处理是否符合允许的目的", "所有身份都可以访问"], ["作了何种选择 Consent / Preference", "用户针对具体范围表达了什么", "一次选择适用所有用途与未来处理"]]},
+            {"type": "example", "title": "客服数据用于训练的情景", "text": "教学例子：客服服务有权限读取一条工单，以解决当前问题。这只说明它能为该场景取得数据。若另一个团队希望把工单用于训练，需要另行检查允许用途、适用要求和用户选择；不能把原来的读取权限当作新的用途许可。是否依赖同意，也要按具体场景确定，不能假设所有处理都只有同意这一种依据。"}
+          ]}]
+        },
+        {
+          "id": "interface-to-enforcement", "title": "一个隐私开关怎样传到所有下游", "en": "Preference Propagation", "kind": "architecture",
+          "summary": "表达选择、记录状态、执行变更和反馈结果需要串起来。", "sourceIds": [11], "extraSources": [],
+          "items": [{"id": "preference-flow", "title": "为什么点击成功不等于全部生效？", "blocks": [
+            {"type": "diagram", "title": "教学模型：用户偏好向下游落实", "diagram": {"columns": [{"title": "表达与记录", "nodes": [{"id": "ui", "title": "用户选择", "en": "User Choice", "text": "明确该选择涉及的数据、用途与生效含义"}, {"id": "record", "title": "偏好记录", "en": "Preference Record", "text": "保存身份、范围、版本及请求标识"}]}, {"title": "分发与执行", "nodes": [{"id": "dispatch", "title": "执行协调", "en": "Orchestration", "text": "向相关下游分发变更并追踪完成情况"}, {"id": "systems", "title": "下游系统", "en": "Downstream Systems", "text": "应用新状态，区分重复请求和过期版本"}]}, {"title": "确认与反馈", "nodes": [{"id": "evidence", "title": "回执与复验", "en": "Evidence", "text": "确认实际执行结果，记录失败和待处理范围"}, {"id": "status", "title": "用户可见状态", "en": "User Status", "text": "准确表达已完成、处理中及适用的例外"}]}], "edges": [{"from": "ui", "to": "record", "label": "记录选择", "kind": "flow"}, {"from": "record", "to": "dispatch", "label": "带版本分发", "kind": "flow"}, {"from": "dispatch", "to": "systems", "label": "执行变更", "kind": "flow"}, {"from": "systems", "to": "evidence", "label": "结果回执", "kind": "flow"}, {"from": "evidence", "to": "status", "label": "汇总状态", "kind": "flow"}, {"from": "evidence", "to": "dispatch", "label": "失败重试或升级", "kind": "feedback"}], "note": "通用产品与工程设计模型，不是某家公司的内部流程。"}},
+            {"type": "explain", "title": "版本解决旧消息覆盖新选择", "text": "教学例子：用户先打开某项用途，随后又关闭。两条消息如果乱序到达，下游可能最后收到旧的“打开”事件。设计时可以用可比较的版本或其他一致性机制，防止过期消息覆盖最新状态，同时处理重复通知。具体方案依系统而定；关键验收是下游最终执行用户当前有效的选择。"}
+          ]}]
+        },
+        {
+          "id": "partial-completion", "title": "部分完成、例外与用户反馈", "en": "Partial Completion & Exceptions", "kind": "reasoning",
+          "summary": "请求已接收、任务已发送与控制已生效是不同完成状态。", "sourceIds": [11], "extraSources": [],
+          "items": [{"id": "completion-levels", "title": "有一个下游还没完成，界面应该怎么表达？", "blocks": [
+            {"type": "explain", "title": "把真实范围放进状态", "text": "教学例子：偏好服务已更新，但离线分析系统仍待执行。若界面立即宣称全部完成，就把接收成功误当成生效成功。项目需要提前定义完成条件、允许的过渡行为、重试和升级责任。涉及合法保留或其他例外时，应由相关专业团队确认范围，再决定用户提示和控制方式，不能用统一的“已删除”覆盖不同结果。"},
+            {"type": "table", "title": "可核查的完成层次", "headers": ["状态", "可证明的事实", "还不能证明"], "rows": [["已接收", "请求有效并被记录", "下游开始执行"], ["已分发", "任务已发送或入队", "实际行为已改变"], ["已执行", "某个系统应用了状态", "所有相关路径都生效"], ["范围内完成", "声明范围内有对应执行证据", "范围之外没有例外或盲区"]]}
+          ]}]
+        }
+      ]
+    },
+    {
+      "id": "privacy-evidence", "focus": "证明控制有效，要把要求、实际执行、检查范围和异常处理连接成证据链。",
+      "sections": [
+        {
+          "id": "requirement-control-evidence", "title": "要求—控制—证据的对应关系", "en": "Requirement · Control · Evidence", "kind": "concept",
+          "summary": "审计者应能够沿一条要求找到执行点及其验证结果。", "sourceIds": [9, 10], "extraSources": [],
+          "items": [{"id": "one-requirement", "title": "一份审批截图为什么不能证明保护已经有效？", "blocks": [
+            {"type": "table", "title": "教学例子：导出需要授权", "headers": ["证据层", "应能回答", "可用证据示例"], "rows": [["要求", "哪些数据、谁、什么用途能导出", "已确认的范围及例外"], ["实现", "在哪个入口执行检查", "接口、规则版本与部署范围"], ["行为", "允许和拒绝是否按要求发生", "不同角色的结果及失败路径测试"], ["持续运行", "新入口、变更和异常谁负责", "监测记录、整改责任与复验结果"]]},
+            {"type": "explain", "title": "日志要能证明一个具体命题", "text": "日志数量多，并不自动代表证据充分。要先说明想证明什么，例如“未授权用户不能从这一批导出入口取得明文号码”，再确认记录是否能对应到入口、操作者、控制版本和结果。日志本身也可能缺失或记录了敏感内容，因此还要设计记录范围、访问和保留；不能为审计无边界地复制原始数据。"}
+          ]}]
+        },
+        {
+          "id": "effectiveness-coverage-exceptions", "title": "有效性、覆盖分母与例外闭环", "en": "Effectiveness, Coverage & Exceptions", "kind": "comparison",
+          "summary": "某条路径有效，不等于全部路径都纳管；缺口需要明确归属。", "sourceIds": [9, 10], "extraSources": [],
+          "items": [{"id": "coverage-denominator", "title": "“控制覆盖率 100%”可能隐藏什么？", "blocks": [
+            {"type": "example", "title": "分母漏掉系统，指标仍会很好看", "text": "教学例子：团队统计已登记的十个导出入口都接入控制，报告覆盖率为百分之百。但另一个临时接口没有被登记，仍可导出原值。指标在它自己的分母上可能算对了，业务结论却不完整。应该同时展示资产盘点范围、纳管覆盖、未知或未验证入口，以及例外的负责人和到期复查方式。"},
+            {"type": "table", "title": "四种状态分别需要什么证据", "headers": ["状态", "证据含义", "需要继续追问"], "rows": [["批准", "方案被认可", "是否实现并接通"], ["部署", "代码或规则进入环境", "是否启用、是否有旁路"], ["验证", "给定条件与范围下行为正确", "测试是否覆盖失败与新版本"], ["持续有效", "运行与变更中继续满足要求", "异常是否关闭、例外是否仍有必要"]]}
+          ]}]
+        }
+      ]
+    },
+    {
+      "id": "ai-classification", "focus": "当前资产先得到判断，后台再把可靠经验变成未来可复用的规则；这是两个时间尺度。",
+      "sections": [
+        {
+          "id": "online-offline-loop", "title": "在线分类与离线蒸馏如何连接", "en": "Online Serving & Offline Distillation", "kind": "architecture",
+          "summary": "在线决定这一笔怎样分类，离线改进以后相似请求的处理方式。", "sourceIds": [12, 13], "extraSources": [],
+          "items": [
+            {"id": "three-components", "title": "规则、LLM、蒸馏：谁处理请求，谁产生新规则？", "blocks": [
+              {"type": "table", "title": "输入、输出和时间尺度", "headers": ["组件", "输入 → 输出", "何时使用"], "rows": [["规则引擎 Rule Engine", "当前资产证据 + 已发布规则 → 分类结果", "在线优先尝试；命中即可返回"], ["分类器 LLM Classifier", "当前证据 → 候选类别、信心与依据", "规则未覆盖或含义模糊时进入后备路径"], ["规则蒸馏 Distillation", "多份经检查的标签与证据 → 候选规则", "后台改进；不让当前请求等待规则获批"]]},
+              {"type": "explain", "title": "一个结论 A，不等于一条规则 R", "text": "教学例子：模型说“这个 age 是缓存时长”，是针对当前资产的一次分类结果。规则则要表达“在什么条件下，其他资产也可以这样判断”，例如经过验证的语义与来源组合。蒸馏不是把结果 A 再保存一次，而是提出可复用的条件，并检查它对不同资产是否成立。平台可以统一管理这几个组件，但不能把它们画成每次请求都完整跑完的一条链。"}
+            ]},
+            {"id": "two-time-scales", "title": "一笔请求可以结束，改进循环仍在继续", "blocks": [
+              {"type": "diagram", "title": "教学重构：在线分流与离线反馈", "diagram": {"columns": [{"title": "共同判断材料", "nodes": [{"id": "evidence", "title": "合格证据", "en": "Evidence Brief", "text": "筛选上下文并落实目标标签遮蔽约束"}]}, {"title": "当前请求", "nodes": [{"id": "rules", "title": "已发布规则", "en": "Rules First", "text": "先检查稳定条件，命中直接形成结果"}, {"id": "llm", "title": "LLM 后备", "en": "LLM Fallback", "text": "处理规则未覆盖的资产，输出候选判断"}]}, {"title": "记录与复核", "nodes": [{"id": "result", "title": "结果与决策记录", "en": "Decision Trace", "text": "按处理策略返回，并保留依据与版本"}, {"id": "reviewed", "title": "经检查的参考材料", "en": "Reviewed Evidence", "text": "澄清争议标签，形成独立评估依据"}]}, {"title": "后台改进", "nodes": [{"id": "candidate", "title": "生成候选规则", "en": "Candidate Rules", "text": "从稳定模式提出可复用的条件"}, {"id": "gates", "title": "验证与批准", "en": "Promotion Gates", "text": "留出评估、影子检验及适用人工审核"}]}, {"title": "后续请求", "nodes": [{"id": "version", "title": "新规则版本", "en": "Published Version", "text": "晋升合格规则，供以后的请求使用"}]}], "edges": [{"from": "evidence", "to": "rules", "label": "先匹配", "kind": "flow"}, {"from": "rules", "to": "result", "label": "命中", "kind": "flow"}, {"from": "rules", "to": "llm", "label": "未覆盖", "kind": "flow"}, {"from": "llm", "to": "result", "label": "候选判断", "kind": "flow"}, {"from": "result", "to": "reviewed", "label": "抽查与裁决", "kind": "flow"}, {"from": "reviewed", "to": "candidate", "label": "稳定经验", "kind": "flow"}, {"from": "candidate", "to": "gates", "label": "不能直接上线", "kind": "flow"}, {"from": "reviewed", "to": "gates", "label": "独立参考", "kind": "control"}, {"from": "gates", "to": "version", "label": "满足晋升条件", "kind": "flow"}, {"from": "version", "to": "rules", "label": "影响后续请求", "kind": "feedback"}], "note": "依据文章机制绘制的教学模型，不是精确服务拓扑。高风险或低置信判断可能转人工；后台周期不必是每天夜间。"}},
+              {"type": "takeaway", "title": "分类在 PAI 里处于什么位置", "text": "理解资产 Understand，帮助判断数据是什么；发现流向 Discover，说明它去了哪里；执行 Enforce，把用途等要求落实到边界；证明 Demonstrate，提供可核查的行为证据。这些能力相互支撑。分类正确不能单独证明控制已生效，而分类错误也可能让后续控制选错对象。"}
+            ]}
+          ]
+        },
+        {
+          "id": "context-prompt-evidence", "title": "Context、Prompt 与证据简报", "en": "Context · Prompt · Evidence Brief", "kind": "concept",
+          "summary": "指令告诉模型怎样做，证据让模型有材料判断当前资产。", "sourceIds": [13], "extraSources": [],
+          "items": [
+            {"id": "instruction-versus-facts", "title": "Prompt 不变，为什么补上下文仍能改善结果？", "blocks": [
+              {"type": "explain", "title": "任务说明与事实材料各有作用", "text": "Prompt 可以要求“按既定类别判断，并说明依据”，但它不能凭空知道字段在哪里使用。Context 提供代码、来源、所有者、语义注释和血缘等当前事实。Evidence Brief 再从中挑出最相关的正反证据。给模型补上它原本看不到的事实，可能改变可作出的判断；单纯重复“认真分类”则不一定有用。"},
+              {"type": "table", "title": "四种信息不要混在一起", "headers": ["信息", "角色", "示例"], "rows": [["Prompt", "规定任务与判断标准", "判断是否属于人的年龄并给依据"], ["Context", "当前对象的事实材料", "代码把此字段用于缓存到期计算"], ["Candidate Label", "待检查的预测结果", "模型建议归为系统运行数据"], ["Reviewed Reference", "独立评估的参照", "审核者按分类标准确认后的标签"]]}
+            ]},
+            {"id": "age-evidence-brief", "title": "age：正向信号和反向信号长什么样？", "blocks": [
+              {"type": "table", "title": "教学证据简报：判断是否为个人年龄", "headers": ["线索", "支持哪种解释", "应如何使用"], "rows": [["字段名是 age", "可能是人的年龄", "弱线索，词义存在歧义"], ["血缘来自用户资料表", "支持个人年龄解释", "核查来源是否真的对应当前字段"], ["代码参与缓存到期计算", "支持缓存时长解释", "直接使用上下文，比孤立字段名更有力"], ["由基础设施团队维护", "可能是系统数据", "团队归属不能单独排除个人信息"], ["历史标签 is_pii=false", "看似直接给出答案", "检查循环标签泄漏，不能据此自我证明"]]},
+              {"type": "takeaway", "title": "证据简报不是预先替模型贴答案", "text": "正向和反向都是相对于当前待判断命题而言，不等于好数据与坏数据。简报保留证据来源、冲突和不确定性，让模型或审核者看出为何会有不同解释。权重也是对线索可靠性的表达，需要验证；不能看到一个高权重数字，就认为它已构成客观概率。"}
+            ]}
+          ]
+        },
+        {
+          "id": "rules-regex-heuristics", "title": "规则匹配、正则与启发式的层次", "en": "Rules, Regex & Heuristics", "kind": "comparison",
+          "summary": "它们不是三套互斥架构，而是功能、工具与判断思路的不同层次。", "sourceIds": [13], "extraSources": [{"label": "MDN：Regular Expressions", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions"}],
+          "items": [{"id": "implementation-levels", "title": "两种方法都能写成规则，但不只做字符匹配", "blocks": [
+            {"type": "table", "title": "从判断目标到执行条件", "headers": ["概念", "所在层次", "教学例子与边界"], "rows": [["规则匹配 Rule Matching", "用已定义条件判断是否命中", "条件可涉及名称、来源、语义与范围"], ["正则 Regex", "描述字符串模式的工具", "匹配以 _email 结尾的字段名；不理解业务含义"], ["启发式 Heuristic", "利用经验线索的近似判断思路", "名称与所属系统结合产生候选；需要检验例外"], ["确定性 Deterministic", "执行行为可重复的特征", "固定输入和版本按同一逻辑返回；不保证规则正确"]]},
+            {"type": "example", "title": "为什么快而确定，仍可能判断错", "text": "教学例子：规则规定“字段名含 age 就判为个人年龄”。它每次都做出一样的判断，执行也很快，但对 cache_age 仍可能错误。确定性解决的是复现和检查，不自动解决语义正确性。可以加入经验证的代码与来源条件，再评估漏判和误判；规则多了一项条件也不意味着自然达到上线质量。"}
+          ]}]
+        },
+        {
+          "id": "candidate-to-version", "title": "蒸馏引擎如何产出可上线规则", "en": "Candidate Rule to Published Version", "kind": "workflow",
+          "summary": "产生规则、执行规则与批准规则，属于不同工作。", "sourceIds": [13], "extraSources": [],
+          "items": [
+            {"id": "generation-versus-execution", "title": "蒸馏可以使用另一个 LLM 吗？", "blocks": [
+              {"type": "explain", "title": "生成方式不决定上线执行方式", "text": "可以。Meta 文章描述了从单字段模式、组合条件到可选 LLM 辅助候选生成的阶段。即使候选规则由 LLM 提出，只要最终被表达为可检查的确定逻辑，正式执行也可以不调用 LLM。反过来，候选由普通脚本生成也不保证正确。核心是它经过什么验证、依赖什么证据、谁批准改变保护行为。"},
+              {"type": "table", "title": "谁做什么不能靠“全自动”三个字概括", "headers": ["阶段", "适合自动化的工作", "仍需要判断的边界"], "rows": [["候选提取", "收集证据、寻找模式、生成条件", "输入标签是否可靠、有没有泄漏答案"], ["质量检查", "运行留出集、影子和回归评估", "指标是否覆盖稀有敏感类和真实风险"], ["参考裁决", "聚合分歧、组织审核材料", "语义模糊、政策解释和标签争议"], ["规则晋升", "版本记录与受控发布", "会改变敏感数据保护的规则需人工审查批准"]]}
+            ]},
+            {"id": "rule-lifecycle", "title": "规则库为什么不一定每天都变成 A+B？", "blocks": [
+              {"type": "explain", "title": "反馈循环有拒绝、修改与退出", "text": "后台可能找到候选，也可能发现没有足够证据；候选可能通过，也可能在留出样本或影子验证中失败。已发布规则还可能因为业务变化而过时，需要修订或退役。所以“旧规则加新规则”只是一个成功迭代的例子，不是每天必然发生的事实。高覆盖必须与质量一起追踪，不能为了减少 LLM 调用而接受过宽规则。"},
+              {"type": "table", "title": "规则每次转变都需要依据", "headers": ["状态", "可做什么", "不能跳过什么"], "rows": [["候选 Candidate", "离线测试和旁路观察", "未经验证不能直接改变生产决策"], ["验证通过 Validated", "进入适用审核与发布流程", "不能仅凭与旧系统一致就宣布正确"], ["已发布 Published", "在声明范围内服务请求", "持续质量和版本追踪"], ["退役或修订 Retired / Revised", "停止或调整过时逻辑", "调查影响并保留追踪依据"]]}
+            ]}
+          ]
+        },
+        {
+          "id": "improve-versus-replace", "title": "优化 LLM 与减少 LLM 调用的两个循环", "en": "Improve the Model vs. Reduce Calls", "kind": "comparison",
+          "summary": "一个循环让难题判断更可靠，另一个让稳定问题更少需要模型。", "sourceIds": [13], "extraSources": [],
+          "items": [{"id": "two-improvements", "title": "“用 LLM 淘汰 LLM”到底淘汰哪一部分？", "blocks": [
+            {"type": "table", "title": "两个不同的改进目标", "headers": ["循环", "改变什么", "如何衡量"], "rows": [["分类器优化", "证据质量、提示词、路由和判断方法", "独立参考集上的质量、校准与稀有类表现"], ["规则蒸馏", "把稳定判断转为后续可执行条件", "质量不下降时的规则覆盖、成本与延迟"], ["人工审核反馈", "澄清标签和政策模糊之处", "争议是否减少、参考依据是否更可靠"]]},
+            {"type": "example", "title": "同一类问题的前后两次请求", "text": "教学例子：第一次遇到新资产，现有规则无法覆盖，LLM 利用证据提出候选分类。经过后续审核和多项验证，团队形成一条适用范围清楚的规则。第二次遇到满足条件的资产，可以直接走规则路径。减少的是这类已经稳定的问题对在线 LLM 的依赖；新的模糊资产仍可能需要模型，调用比例也不会保证持续下降。"}
+          ]}]
+        }
+      ]
+    },
+    {
+      "id": "ai-evaluation", "focus": "把看起来可信、彼此一致和真正正确分开，并让每个评估门槛使用合适的证据。",
+      "sections": [
+        {
+          "id": "masking-across-paths", "title": "标签遮蔽必须跨越哪些路径", "en": "Masking Across Decision Paths", "kind": "architecture",
+          "summary": "只在 LLM 提示里删答案，其他读原始数据的路径仍可能学到捷径。", "sourceIds": [13], "extraSources": [],
+          "items": [
+            {"id": "shortcut-rule", "title": "LLM 没看到旧标签，蒸馏为什么还能抄答案？", "blocks": [
+              {"type": "example", "title": "两次读取，造成不同证据边界", "text": "教学例子：分类器的输入删除了 old_label，但后台规则生成任务又从原始资产表读入所有字段。它同时看到分类结果 A 和 old_label=A，很容易提出“旧标签等于 A 就输出 A”的捷径。这不表示分类器本身偷看了答案，而是另一条路径重新引入了答案字段。新资产没有旧标签时，捷径就失去作用。"},
+              {"type": "table", "title": "输入约束必须覆盖谁", "headers": ["路径", "应检查", "只限制 LLM 时的缺口"], "rows": [["当前 LLM 分类", "是否把目标标签放入上下文", "这一处正确仍不保证其他路径正确"], ["候选规则生成", "允许使用哪些字段作为条件", "从原始表重新读到被禁字段"], ["规则评估与执行", "高风险字段使用是否经过明确审查", "学习与部署用到不同证据边界"], ["独立评估", "参照答案与预测输入是否分开", "用模型自己的答案验证自己"]]}
+            ]},
+            {"id": "shared-invariant", "title": "系统级不变量不一定是一个物理服务", "blocks": [
+              {"type": "diagram", "title": "教学模型：共同约束，多个消费者", "diagram": {"columns": [{"title": "原始材料", "nodes": [{"id": "raw", "title": "资产上下文", "en": "Raw Context", "text": "代码、血缘、语义等事实可能混有旧目标标签"}]}, {"title": "共享证据约束", "nodes": [{"id": "contract", "title": "允许字段与遮蔽规则", "en": "Masking Contract", "text": "明确哪些信息不能作为预测或学习依据"}]}, {"title": "执行与学习路径", "nodes": [{"id": "classifier", "title": "LLM 分类", "en": "Classifier", "text": "按合格证据提出候选结果并记录版本"}, {"id": "induction", "title": "候选规则生成", "en": "Rule Induction", "text": "只从允许的证据条件提炼规则"}, {"id": "evaluation", "title": "验证与规则执行", "en": "Validation & Rules", "text": "检查同一约束在评估和应用时仍然成立"}]}, {"title": "追踪", "nodes": [{"id": "trace", "title": "版本与依据记录", "en": "Decision Trace", "text": "能够复核某次判断用了哪些证据和规则"}]}], "edges": [{"from": "raw", "to": "contract", "label": "识别循环字段", "kind": "flow"}, {"from": "contract", "to": "classifier", "label": "约束输入", "kind": "control"}, {"from": "contract", "to": "induction", "label": "约束学习字段", "kind": "control"}, {"from": "contract", "to": "evaluation", "label": "约束验证与应用", "kind": "control"}, {"from": "classifier", "to": "trace", "label": "留存依据", "kind": "flow"}, {"from": "induction", "to": "evaluation", "label": "验证候选", "kind": "flow"}, {"from": "evaluation", "to": "trace", "label": "记录版本", "kind": "flow"}], "note": "展示必须共同遵守的逻辑约束，不宣称原系统只有一个前置脱敏服务。目标标签遮蔽也不等于个人信息匿名化。"}}
+            ]}
+          ]
+        },
+        {
+          "id": "confidence-agreement-truth", "title": "置信度、校准、一致性与正确性", "en": "Confidence, Calibration & Truth", "kind": "comparison",
+          "summary": "模型有把握、模型们同意和答案正确，是三个不同命题。", "sourceIds": [13], "extraSources": [{"label": "scikit-learn：概率校准", "url": "https://scikit-learn.org/stable/modules/calibration.html"}, {"label": "scikit-learn：Cohen’s kappa", "url": "https://scikit-learn.org/stable/modules/generated/sklearn.metrics.cohen_kappa_score.html"}],
+          "items": [
+            {"id": "black-box-confidence", "title": "LLM 是黑盒，为什么仍能校准置信度？", "blocks": [
+              {"type": "explain", "title": "校准观察输出与结果，不要求看懂每个参数", "text": "模型可以按要求输出一个自评分数，但这只是一个待验证信号。教学例子：收集一百个自报约九成把握的判断，与独立审核标签比较，发现只有七十个正确，就知道原始分数过度自信。校准利用这样的经验关系评估或调整分数。它不要求解释每个神经元，也不保证单次高分判断必然正确。"},
+              {"type": "table", "title": "几种看似相近的信号", "headers": ["信号", "能直接说明什么", "不能直接说明"], "rows": [["模型自评 Raw Confidence", "模型报告的把握程度", "实际正确概率"], ["Token 概率 Logprobs", "模型生成某些词的倾向", "整项事实或分类正确；不是本案例已确认的实现"], ["多次输出一致 Self-consistency", "在这些采样条件下结论稳定", "稳定的共同错误不存在"], ["经验校准 Calibration", "分数组与观察正确率的关系", "新分布下仍保持相同关系"]]}
+            ]},
+            {"id": "kappa-numeric", "title": "Kappa 扣除偶然一致，到底扣了什么？", "blocks": [
+              {"type": "example", "title": "教学数字：九成一致不一定特别可靠", "text": "假设两位判断者各把一百项中的九十项判为非敏感、十项判为敏感，彼此实际一致九十次。仅按这种类别比例，偶然一致的期望已是 0.9×0.9+0.1×0.1=0.82。Cohen’s κ=(0.90−0.82)/(1−0.82)≈0.44。它让我们看到九成一致中有多少超过类别偏斜带来的偶然一致。"},
+              {"type": "takeaway", "title": "先说明比较的是哪两组标签", "text": "如果比较两个模型，κ 说明它们的机会校正后一致性；如果一组是可靠参考标签，才进一步帮助评价与参考的一致程度。κ 可以为负，也不是 Accuracy 的替代词。Cohen’s κ 针对两组标签；三种裁判提示的结果需要明确使用成对比较、共识对参考等方式，不能直接把“三个模型的 κ”当成无需说明的指标。"}
+            ]}
+          ]
+        },
+        {
+          "id": "disagreement-adjudication", "title": "Holdout、模型裁判与人工参考怎样分工", "en": "Holdout, Judges & Human References", "kind": "reasoning",
+          "summary": "机器可以批量算分，但判断对错仍需要有来源的参照。", "sourceIds": [13], "extraSources": [{"label": "Google：划分数据集", "url": "https://developers.google.com/machine-learning/crash-course/overfitting/dividing-datasets"}],
+          "items": [
+            {"id": "independent-reference", "title": "规则和 LLM 相差 15%，应该先认定谁错？", "blocks": [
+              {"type": "explain", "title": "分歧是调查入口，不是裁决结果", "text": "不能仅凭分歧比例认定规则错，也不能因为 LLM 会幻觉就认定 LLM 错。先按类别和风险拆分差异，检查输入、证据版本、规则适用范围及参考标签。旧系统可能错误，新规则可能过宽，标签也可能模糊。百分之十五只是教学情景，没有通用的自动拒绝阈值；敏感类漏判的代价也可能远大于普通类差异。"},
+              {"type": "table", "title": "每个评估参与者负责什么", "headers": ["参与者或材料", "作用", "关键限制"], "rows": [["Holdout 留出样本", "用未参加当前提炼的数据检查泛化", "不是所有留出样本都自动有正确标签"], ["自动评估程序", "按定义计算质量与分歧", "计算正确不代表评估标准正确"], ["模型裁判 Judge", "按多个视角批量提供复核信号", "多数意见仍可能共同出错"], ["人工审核参考", "澄清高风险或模糊案例并确认依据", "人也可能有误，需要标准、版本和复核"]]}
+            ]},
+            {"id": "judge-and-leakage", "title": "三个裁判视角，为什么还不能当成三个独立真值？", "blocks": [
+              {"type": "explain", "title": "多视角增加检查，不自动消除共同偏差", "text": "Meta 案例使用同一个较大的裁判模型，以直接分类、先批判再分类、只看元数据三种提示进行评估。它与被评估分类器不同，但三个视角不是三个独立模型家族。它们共享模型能力和部分偏差。模型生成标签只有经过适当审核，才能进入参考集；不能让优化器用自己的预测作为评分答案，再宣布自己越来越准确。"},
+              {"type": "table", "title": "两种常见评估污染", "headers": ["问题", "污染位置", "教学例子"], "rows": [["目标标签泄漏", "答案进入预测输入或规则特征", "输入已经包含待预测的隐私标签"], ["留出集被反复调参", "测试数据逐渐参与优化选择", "每次根据同一考试集改提示词"], ["自生成标签自我评估", "被测模型同时提供参考答案", "与自己的旧预测更一致就算进步"]]}
+            ]}
+          ]
+        },
+        {
+          "id": "promotion-evidence", "title": "候选规则晋升需要哪些质量门槛", "en": "Rule Promotion Evidence", "kind": "architecture",
+          "summary": "候选挖掘门槛、独立质量检验、影子结果和保护变化审批不能互相替代。", "sourceIds": [13], "extraSources": [],
+          "items": [
+            {"id": "evaluation-release-flow", "title": "机器自动通过到哪里，人工在哪里承担判断？", "blocks": [
+              {"type": "diagram", "title": "教学重构：从候选到版本发布", "diagram": {"columns": [{"title": "输入与参照", "nodes": [{"id": "rule", "title": "候选规则", "en": "Candidate Rule", "text": "明确条件、目标类别及适用范围"}, {"id": "reference", "title": "审核参考集", "en": "Reviewed Reference", "text": "与当前优化保持独立的标签依据"}]}, {"title": "自动质量检查", "nodes": [{"id": "holdout", "title": "留出评估", "en": "Holdout Evaluation", "text": "按类别检查正确性、漏判与稳健性"}, {"id": "shadow", "title": "影子与回归", "en": "Shadow & Regression", "text": "观察贴近生产的输入，检查质量退化"}]}, {"title": "分歧与决定", "nodes": [{"id": "investigate", "title": "调查或修订", "en": "Investigate", "text": "失败、分歧或脆弱证据触发复核"}, {"id": "human", "title": "保护变化审核", "en": "Human Approval", "text": "会改变敏感数据保护的规则由人审查批准"}]}, {"title": "受控应用", "nodes": [{"id": "publish", "title": "发布版本", "en": "Versioned Rules", "text": "记录批准依据及版本，持续观察效果"}]}], "edges": [{"from": "rule", "to": "holdout", "label": "测试", "kind": "flow"}, {"from": "reference", "to": "holdout", "label": "提供参照", "kind": "control"}, {"from": "holdout", "to": "shadow", "label": "质量满足条件", "kind": "flow"}, {"from": "holdout", "to": "investigate", "label": "未达标或不确定", "kind": "flow"}, {"from": "shadow", "to": "investigate", "label": "退化或风险分歧", "kind": "flow"}, {"from": "shadow", "to": "human", "label": "适用保护变化审核", "kind": "flow"}, {"from": "human", "to": "publish", "label": "批准后晋升", "kind": "flow"}, {"from": "human", "to": "investigate", "label": "不能批准", "kind": "flow"}, {"from": "investigate", "to": "rule", "label": "修订后重新验证", "kind": "feedback"}, {"from": "publish", "to": "investigate", "label": "后续质量下降", "kind": "feedback"}], "note": "强调保护相关规则的审查边界；不是把所有分类请求都交给人工。具体阈值和发布节奏按场景确定。"}},
+              {"type": "explain", "title": "人工不只在末尾盖章", "text": "人工判断也出现在政策歧义、参考标签、低校准置信度、稀有高代价类别、裁判分歧和脆弱证据等位置。机器可以执行大量测试并拦下明显不合格候选，但自动算分不能替代对保护变化的责任判断。尤其不能因为新规则与旧 LLM 高度一致，就自动认为它不会降低隐私保护。"}
+            ]},
+            {"id": "judge-reference-loop", "title": "分类器、裁判团与人工标签怎样保持不同角色？", "blocks": [
+              {"type": "diagram", "title": "教学重构：评估信号与参考答案的分离", "diagram": {"columns": [{"title": "同等证据边界", "nodes": [{"id": "brief", "title": "已遮蔽证据", "en": "Masked Evidence", "text": "保留判断事实，隐藏会泄露目标答案的字段"}]}, {"title": "两个模型角色", "nodes": [{"id": "classifier", "title": "被评估分类器", "en": "Classifier", "text": "产生候选标签与原始置信分数"}, {"id": "judges", "title": "裁判模型的三种视角", "en": "Judge Panel", "text": "同一较大模型采用三种提示独立给出评估"}]}, {"title": "聚合与独立参照", "nodes": [{"id": "consensus", "title": "裁判共识与分歧", "en": "Consensus", "text": "提供复核信号，不能自动成为标准答案"}, {"id": "reference", "title": "经审核的参考标签", "en": "Reviewed Labels", "text": "提供有依据和版本的外部评价参照"}]}, {"title": "比较、校准与裁决", "nodes": [{"id": "compare", "title": "质量与校准检查", "en": "Evaluation", "text": "比较标签和正确率，解释置信及一致性"}, {"id": "human", "title": "人工澄清争议", "en": "Human Adjudication", "text": "复核模糊、高风险和基础标签问题"}]}], "edges": [{"from": "brief", "to": "classifier", "label": "同等输入约束", "kind": "control"}, {"from": "brief", "to": "judges", "label": "同等输入约束", "kind": "control"}, {"from": "judges", "to": "consensus", "label": "聚合多个视角", "kind": "flow"}, {"from": "classifier", "to": "compare", "label": "待检标签与分数", "kind": "flow"}, {"from": "consensus", "to": "compare", "label": "辅助评估信号", "kind": "flow"}, {"from": "reference", "to": "compare", "label": "独立参照", "kind": "control"}, {"from": "compare", "to": "human", "label": "争议或高风险", "kind": "flow"}, {"from": "human", "to": "reference", "label": "经审核更新版本", "kind": "feedback"}], "note": "三种裁判视角不等于三个模型家族；人工修改参考集需有依据与版本，不能为了给优化结果加分而随意改答案。"}}
+            ]},
+            {"id": "metric-meaning", "title": "Accuracy、Precision、Support、Coverage 不在量同一件事", "blocks": [
+              {"type": "table", "title": "先问分母与目标，再看数值", "headers": ["指标", "主要问题", "容易造成的错觉"], "rows": [["Accuracy 准确率", "全部评估样本中判对多少", "多数类很多时，稀有敏感类全漏仍可能很高"], ["Precision 精确率", "判成某类的样本中多少真的属于该类", "不能单独说明还漏掉了多少该类样本"], ["Recall 召回率", "实际某类样本中找回多少", "提高召回可能同时增加误报"], ["Support 支持数量/支持度", "有多少样本支撑候选模式", "数量够不表示证据正确或可推广"], ["Coverage 覆盖率", "声明范围内多少资产可由规则处理", "覆盖更多不保证保护质量更好"]]},
+              {"type": "takeaway", "title": "发现候选的门槛，不是上线保证", "text": "挖掘阶段可以用支持数量、模式纯度等条件筛出值得评估的候选，但这些条件只决定哪些规则进入后续检查。正式晋升还需要独立样本、类别质量、回归、影子和适用审核。把一个挖掘阈值直接当成上线质量标准，会把“值得调查的相关性”误当成“可以执行的控制”。"}
+            ]}
+          ]
+        },
+        {
+          "id": "optimization-brakes", "title": "Prompt 震荡为何发生，何时停止优化", "en": "Optimization Oscillation & Brakes", "kind": "reasoning",
+          "summary": "反复修改而没有可靠增益时，先诊断数据、标签、上下文和评价标准。", "sourceIds": [13], "extraSources": [],
+          "items": [{"id": "oscillation-diagnosis", "title": "A、B 来回切换，一定是过拟合吗？", "blocks": [
+            {"type": "table", "title": "相似现象，可能有不同原因", "headers": ["情况", "观察到什么", "应检查什么"], "rows": [["修好一类又破坏另一类", "不同版本在案例之间交换错误", "分类标准是否冲突、条件是否过宽"], ["参考标签有噪声", "同类证据得到互相矛盾的答案", "标签依据、审核一致性和分类体系"], ["证据不足", "改提示仍无法区分含义", "代码解析、血缘和语义材料"], ["过度适配评估集", "熟悉样本变好，独立样本未改善", "是否反复据同一留出集调优"], ["模型或方法能力有限", "证据完整仍存在稳定错误", "更换方法、缩小自动化范围或转人工"]]},
+            {"type": "explain", "title": "停止策略由多项证据决定", "text": "教学例子：连续多个候选提示只是交换错误，没有在独立质量指标上取得可靠改进，就应降低迭代强度、扩大审核，或暂停排查基础问题。Meta 案例把这种调整做成控制器状态，而非无限重试。Kappa 可提供一致性信号，但不能独自告诉我们“已经过拟合”；也不能据一次波动就发明一个通用熔断阈值。"}
+          ]}]
+        }
+      ]
+    },
+    {
+      "id": "ai-rollout", "focus": "影子看旁路表现，灰度看真实影响，沙箱限定运行边界；三者可以组合。",
+      "sections": [
+        {
+          "id": "three-axes", "title": "Shadow、Canary、Sandbox 的三个维度", "en": "Decision, Exposure & Isolation", "kind": "comparison",
+          "summary": "“小范围试试”不足以说明新逻辑有没有真正改变用户结果。", "sourceIds": [13], "extraSources": [{"label": "Istio：Mirroring", "url": "https://istio.io/latest/docs/tasks/traffic-management/mirroring/"}, {"label": "Google SRE：Canarying Releases", "url": "https://sre.google/workbook/canarying-releases/"}, {"label": "Microsoft：Windows Sandbox", "url": "https://learn.microsoft.com/en-us/windows/security/application-security/application-isolation/windows-sandbox/"}],
+          "items": [{"id": "three-questions", "title": "结果是否生效、影响多少人、运行在哪里", "blocks": [
+            {"type": "table", "title": "三个词回答不同问题", "headers": ["方法", "关键问题", "教学例子", "限制"], "rows": [["Shadow 影子", "新结果参与主决策吗？", "只记录新规则会怎样分类", "仍要隔离写库和通知等副作用"], ["Canary 灰度", "哪些真实请求使用新版？", "先给一个受控业务范围使用", "这些用户确实会受到新版影响"], ["Sandbox 沙箱", "程序能接触什么环境和资源？", "限制文件、网络和状态修改", "隔离本身不保证输入代表生产"]]},
+            {"type": "example", "title": "可以组合，不能混称", "text": "教学例子：先在隔离环境中复制一部分生产输入，让新规则旁路计算，这同时用了沙箱隔离和影子观察。之后让受控的一部分真实请求采用新规则，是灰度。复制百分之多少不是 Shadow 的定义，固定的百分之五也不是 Canary 的定义。要把数据范围、真实生效范围和副作用边界分别说明。"}
+          ]}]
+        },
+        {
+          "id": "request-split", "title": "主路径与影子路径到底比较什么", "en": "Primary Path vs. Shadow Path", "kind": "architecture",
+          "summary": "两条路径看可比较的输入，但只有主路径决定正式结果。", "sourceIds": [13], "extraSources": [{"label": "Istio：流量镜像", "url": "https://istio.io/latest/docs/tasks/traffic-management/mirroring/"}],
+          "items": [{"id": "side-by-side-routing", "title": "新规则加入影子路径，并不等于已加入生产规则库", "blocks": [
+            {"type": "diagram", "title": "教学模型：同一输入的两条决策路径", "diagram": {"columns": [{"title": "输入", "nodes": [{"id": "input", "title": "已选请求样本", "en": "Sampled Input", "text": "按设计选取可比较输入，不必复制全部流量"}]}, {"title": "并行计算", "nodes": [{"id": "primary", "title": "现有主路径", "en": "Primary", "text": "已有规则与适用后备逻辑决定正式结果"}, {"id": "shadow", "title": "新规则影子路径", "en": "Shadow", "text": "计算候选结果，只记录且控制外部副作用"}]}, {"title": "分别输出", "nodes": [{"id": "serve", "title": "真实处理", "en": "Serving Result", "text": "用户与下游继续接受主路径结果"}, {"id": "diff", "title": "差异分析", "en": "Difference Analysis", "text": "按类别、证据和风险比较两条路径"}]}, {"title": "判断与决策", "nodes": [{"id": "reference", "title": "独立核查", "en": "Reference Review", "text": "用参考标签和审核确定差异原因"}, {"id": "decision", "title": "继续、修订或晋升", "en": "Rollout Decision", "text": "根据质量门槛和保护变化决定下一步"}]}], "edges": [{"from": "input", "to": "primary", "label": "正常请求", "kind": "flow"}, {"from": "input", "to": "shadow", "label": "复制输入", "kind": "flow"}, {"from": "primary", "to": "serve", "label": "真正生效", "kind": "flow"}, {"from": "primary", "to": "diff", "label": "主路结果", "kind": "flow"}, {"from": "shadow", "to": "diff", "label": "只供比较", "kind": "flow"}, {"from": "diff", "to": "reference", "label": "调查分歧", "kind": "flow"}, {"from": "reference", "to": "decision", "label": "质量证据", "kind": "flow"}], "note": "旧结果不是自动真值；影子路径没有指向真实处理的边，强调它不参与本次主决策。"}},
+            {"type": "takeaway", "title": "相同也值得抽查，不同也不立即判错", "text": "两条路径一致，可能是新规则正确，也可能是共同沿用了错误假设。两条路径不一致，可能是新规则修复了旧系统的问题，也可能是它引入退化。影子结果首先告诉团队哪里需要检查；最后是否晋升，要结合独立参考、类别风险、覆盖和回归，不能只追求与旧 LLM 一模一样。"}
+          ]}]
+        },
+        {
+          "id": "holdout-to-rollout", "title": "留出评估与安全放量的前后关系", "en": "Holdout to Controlled Rollout", "kind": "workflow",
+          "summary": "样本独立性和真实环境代表性分别解决不同不确定性。", "sourceIds": [13], "extraSources": [{"label": "Google SRE：Canarying Releases", "url": "https://sre.google/workbook/canarying-releases/"}],
+          "items": [{"id": "complementary-evidence", "title": "已经通过 Holdout，为何还要 Shadow？", "blocks": [
+            {"type": "table", "title": "每一步增加什么证据", "headers": ["阶段", "主要获得", "仍然看不到什么"], "rows": [["Holdout", "未参加当前提炼的样本表现", "新流量、真实依赖和运行异常"], ["Shadow", "生产或近生产输入上的差异与开销", "新版真正生效后全部用户影响"], ["适用审核", "保护变化和风险可接受性的决定", "未来所有环境变化"], ["Canary", "受控范围内真实生效的指标", "尚未放量范围的全部表现"], ["持续监测", "扩大范围后的质量与退化", "无法弥补未定义的成功标准"]]},
+            {"type": "explain", "title": "发布前约定停止条件", "text": "教学例子：新分类规则即使整体指标改善，某个稀有敏感类漏判却可能增加。团队应提前确定关注的类别、用户影响、监测窗口、调查责任以及何时停止扩大或回退。这里的回退是恢复受控版本，不意味着已经自动撤销新版造成的所有数据处理；既有影响仍需单独检查。"}
+          ]}]
+        }
+      ]
+    },
+    {
+      "id": "ai-lineage", "focus": "把数据流、模型调用和训练产物接成可追踪关系，再在相应边界执行用途检查。",
+      "sections": [
+        {
+          "id": "parallel-data-routes", "title": "日志、推理、训练是不同数据路径", "en": "Logging, Inference & Training Paths", "kind": "architecture",
+          "summary": "数据可能分支与回流，不应强行画成 Web→日志→推理→训练的一条链。", "sourceIds": [12], "extraSources": [],
+          "items": [{"id": "cross-stack-graph", "title": "一次用户交互可能走过哪些技术边界？", "blocks": [
+            {"type": "diagram", "title": "教学重构：跨技术栈的数据关系", "diagram": {"columns": [{"title": "交互与服务", "nodes": [{"id": "web", "title": "Web / 应用服务", "en": "Application Service", "text": "接收交互数据并发起后续处理"}]}, {"title": "不同分支", "nodes": [{"id": "logger", "title": "日志写入", "en": "Logger", "text": "按配置记录需要保留的交互信息"}, {"id": "inference", "title": "模型推理", "en": "Inference", "text": "使用已有模型处理请求并返回结果"}]}, {"title": "持久化与模型版本", "nodes": [{"id": "warehouse", "title": "数据仓库", "en": "Warehouse", "text": "保存与加工适用的数据资产"}, {"id": "servedmodel", "title": "被调用的模型版本", "en": "Served Checkpoint", "text": "标识本次推理用了哪个模型产物"}]}, {"title": "训练与产物", "nodes": [{"id": "training", "title": "训练任务", "en": "Training Job", "text": "按允许用途读取已确认的输入资产"}, {"id": "checkpoint", "title": "新模型检查点", "en": "Model Checkpoint", "text": "关联训练任务产生的模型状态与版本"}]}], "edges": [{"from": "web", "to": "logger", "label": "持久化分支", "kind": "flow"}, {"from": "logger", "to": "warehouse", "label": "日志到表", "kind": "flow"}, {"from": "web", "to": "inference", "label": "推理请求", "kind": "flow"}, {"from": "inference", "to": "web", "label": "返回结果", "kind": "feedback"}, {"from": "servedmodel", "to": "inference", "label": "调用版本", "kind": "control"}, {"from": "warehouse", "to": "training", "label": "获准训练输入", "kind": "flow"}, {"from": "training", "to": "checkpoint", "label": "生成产物", "kind": "flow"}], "note": "分支表示可能存在的关系，不表示每条交互必然被记录或训练；新检查点也不会未经发布自动进入推理服务。"}},
+            {"type": "explain", "title": "推理和训练的区别决定处理范围", "text": "推理用已有模型处理当前输入，通常不会因为这一请求就更新模型参数。训练使用数据调整参数并形成新的模型产物。但推理输入仍可能被写入日志、缓存或后续数据集，因此需要继续追踪实际流向。不能从“只是推理”推导出无须保留控制，也不能从“模型读过”直接推导出必须做机器遗忘。"}
+          ]}]
+        },
+        {
+          "id": "identifiers-and-artifacts", "title": "资产标识、RPC、训练清单与检查点", "en": "Identifiers, Manifests & Checkpoints", "kind": "concept",
+          "summary": "不同技术系统需要用可关联的记录，把输入、处理和产物连接起来。", "sourceIds": [12], "extraSources": [{"label": "TensorFlow：训练检查点", "url": "https://www.tensorflow.org/guide/checkpoint"}],
+          "items": [{"id": "what-to-connect", "title": "只知道数据集名字，为什么还不足以追查训练？", "blocks": [
+            {"type": "table", "title": "几种记录各负责一段关系", "headers": ["记录", "解决什么问题", "缺失后的困难"], "rows": [["资产标识与版本", "具体是哪份表、字段或快照", "同名数据不同版本被混为一谈"], ["RPC / 调用关联", "哪个请求跨服务发送了哪些输入", "服务间的处理关系断开"], ["Training Manifest 训练清单", "某次任务实际选了哪些输入", "只知道大数据集名，不知道实际样本范围"], ["Job / Checkpoint 任务与产物", "哪个训练任务产生哪个模型版本", "无法定位受某批数据影响的产物"]]},
+            {"type": "example", "title": "从一个检查点反查输入", "text": "教学例子：审查一个线上模型版本时，先找到对应检查点及训练任务，再查看该任务的输入快照和筛选条件，沿上游血缘定位来源。清单的字段设计随平台不同，但必须足以回答实际使用范围。仅展示“模型来自用户数据集”这种粗粒度关系，不足以回答某个受限制字段是否进入过训练。"}
+          ]}]
+        },
+        {
+          "id": "lineage-enforcement-proof", "title": "从血缘可见到用途控制与证明", "en": "Lineage to Enforcement & Proof", "kind": "reasoning",
+          "summary": "血缘告诉我们路径，策略决定允许条件，执行记录说明控制是否发生。", "sourceIds": [12], "extraSources": [],
+          "items": [{"id": "three-distinct-capabilities", "title": "有完整血缘图，为什么还不能宣布隐私合规？", "blocks": [
+            {"type": "table", "title": "三项能力需要同时连接", "headers": ["能力", "回答的问题", "不能替代"], "rows": [["发现 Discover", "数据实际流到哪里", "哪些用途被允许"], ["执行 Enforce", "边界是否按策略放行或阻断", "所有真实路径都已被发现"], ["证明 Demonstrate", "能否核对某版本的控制结果", "未来变更仍然自动正确"]]},
+            {"type": "explain", "title": "Policy Zones 关注受控数据边界", "text": "Meta 案例用 Policy Zones 配合血缘检查允许用途，并持续观察新增或变化的数据处理关系。教学迁移时，可把它理解为在数据使用边界安排可执行的策略检查，不能简单理解成一个存储文件夹。还要单独暴露未接入的服务和未知路径：图上没有某条边，可能是数据没流过，也可能是没有观察到。"}
+          ]}]
+        }
+      ]
+    },
+    {
+      "id": "ai-agent", "focus": "多轮工具调用会积累信息与用途变化，隐私检查必须覆盖完整任务。",
+      "sections": [
+        {
+          "id": "context-persistence", "title": "回复没显示，为什么上下文仍有数据", "en": "Output Redaction vs. Context Persistence", "kind": "concept",
+          "summary": "一次输出遮蔽不会自动删除之前读入的上下文和其他副本。", "sourceIds": [18], "extraSources": [],
+          "items": [{"id": "four-turns", "title": "读入、整理、摘要、转发分别改变了什么？", "blocks": [
+            {"type": "table", "title": "教学重构：敏感信息跨轮留存", "headers": ["步骤", "表面看到", "需要额外检查"], "rows": [["读取资料", "工具按权限返回字段", "是否一次取得了不需要的数据"], ["整理资料", "模型把数据改成结构化记录", "原字段是否仍在上下文或中间产物"], ["摘要并隐藏某字段", "这次回复没有显示敏感值", "后续模型是否仍能访问之前内容"], ["转给另一服务", "摘要看起来适合下游", "实际传送的载荷和允许用途是什么"]]},
+            {"type": "explain", "title": "上下文最小化要改变后续能接触的材料", "text": "教学例子：任务只需要统计失败次数，却先读取了完整客户资料。最终回复不显示身份证号，并不能证明后面的模型或工具拿不到它。设计上应减少最初读取的字段，并在转换和转交边界检查实际保留内容。具体系统如何清理上下文、日志和缓存需要分别验证，不能把“请不要说出来”当成删除机制。"}
+          ]}]
+        },
+        {
+          "id": "cross-server-composition", "title": "两个工具各自守规矩，组合后为何越界", "en": "Cross-Server Composition Boundaries", "kind": "architecture",
+          "summary": "标识符把分散数据接起来，最终任务的含义可能超出单次读取。", "sourceIds": [18], "extraSources": [],
+          "items": [{"id": "account-to-person", "title": "从故障统计走向具体个人的重构路径", "blocks": [
+            {"type": "diagram", "title": "教学重构：单次权限之外的组合检查", "diagram": {"columns": [{"title": "任务与第一来源", "nodes": [{"id": "task", "title": "统计故障的目的", "en": "Task Purpose", "text": "确认是否真的需要识别具体客户"}, {"id": "tool-a", "title": "交易工具 A", "en": "Transaction Tool", "text": "按权限返回账户编号、失败次数和时间"}]}, {"title": "累计上下文", "nodes": [{"id": "context", "title": "账户级汇总", "en": "Accumulated Context", "text": "编号及行为模式被保留供下一轮使用"}]}, {"title": "第二来源与关联", "nodes": [{"id": "tool-b", "title": "客户工具 B", "en": "Customer Tool", "text": "按权限把编号对应到姓名或联系方式"}, {"id": "join", "title": "组合重构", "en": "PII Reconstruction", "text": "失败行为与现实身份被连接到一起"}]}, {"title": "用途与去向", "nodes": [{"id": "check", "title": "端到端用途检查", "en": "Purpose Check", "text": "判断关联和转交是否必要且获允许"}, {"id": "output", "title": "最小必要结果", "en": "Minimal Output", "text": "只向允许的接收方提供适当范围的信息"}]}], "edges": [{"from": "task", "to": "tool-a", "label": "限定取数", "kind": "control"}, {"from": "tool-a", "to": "context", "label": "形成上下文", "kind": "flow"}, {"from": "context", "to": "tool-b", "label": "请求编号映射", "kind": "flow"}, {"from": "context", "to": "join", "label": "行为模式", "kind": "flow"}, {"from": "tool-b", "to": "join", "label": "身份映射", "kind": "flow"}, {"from": "join", "to": "check", "label": "新增敏感含义", "kind": "flow"}, {"from": "task", "to": "check", "label": "始终对照目的", "kind": "control"}, {"from": "check", "to": "output", "label": "符合范围才转交", "kind": "flow"}], "note": "演示风险形成与控制位置；实际系统宜在发起不必要关联前检查，不能只在最终输出补救。来自受控实验的启发，不表示所有 MCP 系统必然如此。"}},
+            {"type": "takeaway", "title": "MCP 连接能力，Agent 决定行动", "text": "MCP 是工具和资源的接口协议，Agent 是根据任务进行多步行动的系统。服务各自验证访问权限仍然必要，但单个服务可能不知道另一个服务返回了什么，也不知道最终用途已经改变。因此要在整体任务层检查字段组合、后续接收方和授权范围，不能把一次成功调用当作未来所有操作的许可。"}
+          ]}]
+        },
+        {
+          "id": "context-versus-training", "title": "上下文泄露、训练记忆与提示注入分开看", "en": "Context, Training & Injection", "kind": "comparison",
+          "summary": "模型说出了信息，可能涉及不同数据路径，必须先定位来源。", "sourceIds": [18, 19], "extraSources": [{"label": "OWASP：Prompt Injection", "url": "https://genai.owasp.org/llmrisk/llm01-prompt-injection/"}],
+          "items": [{"id": "different-failures", "title": "AI 读过病历，就等于学进模型参数了吗？", "blocks": [
+            {"type": "table", "title": "从现象回到数据路径", "headers": ["机制", "发生在哪里", "主要检查"], "rows": [["检索 / 上下文暴露", "当前请求读入外部记录", "读取权限、最小化、上下文和转发"], ["训练影响", "样本参与参数学习", "训练清单、模型版本和遗忘范围"], ["Prompt Injection 提示注入", "不可信内容试图改变模型指令", "内容与指令边界、工具权限和后续动作"], ["Membership Inference 成员推断", "尝试判断样本是否参加训练", "针对模型的攻击与遗忘评估"], ["身份重识别", "外部资料与记录组合", "准标识符、关联能力和可用辅助信息"]]},
+            {"type": "explain", "title": "诊断决定应该改哪一层", "text": "教学例子：问诊助手回答出一条旧病历信息。如果它刚通过检索工具读到这条记录，优先检查当前读取与披露路径；不能直接据此认定模型记住了训练样本。如果确实来自训练影响，则需要进一步检查训练范围和模型产物。提示注入可能触发不当读取，但不当披露也可能在没有恶意指令时由正常流程设计缺口造成。"}
+          ]}]
+        }
+      ]
+    },
+    {
+      "id": "ai-unlearning", "focus": "先确定信息在哪些对象中存在，再区分删除可读取副本与消除训练影响。",
+      "sections": [
+        {
+          "id": "locate-the-copy", "title": "原始记录、索引、上下文与模型参数", "en": "Records, Indexes, Context & Parameters", "kind": "concept",
+          "summary": "同一信息的不同去处，需要不同处理和验证方式。", "sourceIds": [6, 12, 18, 19], "extraSources": [],
+          "items": [{"id": "deletion-scope", "title": "为什么删掉数据库和向量，还可能没处理完？", "blocks": [
+            {"type": "table", "title": "按对象检查，不按一句 DELETE 判断完成", "headers": ["对象", "可能存在的影响", "应讨论的处理"], "rows": [["原始记录与副本", "仍可从存储读取", "覆盖相关存储、复制、备份和适用例外"], ["检索索引 / Embedding", "仍可被搜索或关联", "删除或更新索引，并验证来源对应"], ["上下文、缓存和日志", "后续处理仍能接触内容", "限制携带、清理副本及验证保留策略"], ["训练后的模型参数", "样本已影响模型行为", "确定受影响产物，评估重训或遗忘"], ["输出过滤规则", "改变可展示内容", "只能证明规定输出被限制，不能证明内部影响已消除"]]},
+            {"type": "example", "title": "先查使用路径，再选方案", "text": "教学例子：某份材料只存入检索库，尚未用于训练。处理重点可能是原文、向量索引、缓存和相关日志，不应无依据地宣布需要重训所有模型。另一份材料确实进入了训练任务，则要沿训练清单定位检查点和后续版本。相同的用户请求，在不同数据路径下会产生不同工程范围。"}
+          ]}]
+        },
+        {
+          "id": "sets-and-methods", "title": "遗忘集、保留集与三种处理方法", "en": "Forget Set, Retain Set & Methods", "kind": "comparison",
+          "summary": "遗忘目标、保留能力和评估样本是不同集合维度。", "sourceIds": [19], "extraSources": [],
+          "items": [
+            {"id": "three-sets", "title": "Retain Set 是 Holdout Set 吗？", "blocks": [
+              {"type": "table", "title": "根据什么来划分", "headers": ["集合", "划分依据", "用途"], "rows": [["Forget Set 遗忘集", "原训练集中本次要去除影响的样本", "定义需要处理的目标范围"], ["Retain Set 保留集", "原训练集中希望继续保留学习价值的其余样本", "检查其他能力是否被过度破坏"], ["Holdout Set 留出集", "未参与当前学习或调优的样本", "检查泛化和独立表现"]]},
+              {"type": "explain", "title": "集合名称表达的是不同问题", "text": "Forget 与 Retain 关注这次遗忘要移除什么、保留什么；Holdout 关注样本是否参与过当前学习或优化。不能因为中文都带“保留”，就把 Retain Set 当作从未训练过的数据。项目还需要明确样本身份、重复记录和派生样本的范围，避免只从一个表中找出几行，就认为遗忘集已经完整。"}
+            ]},
+            {"id": "methods-not-equivalent", "title": "重训、遗忘和输出过滤改变哪里？", "blocks": [
+              {"type": "table", "title": "方法与目标对应", "headers": ["方法", "核心操作", "优点与限制"], "rows": [["排除样本后从头重训", "用调整后的数据重新生成模型", "重要比较基准；大型模型成本可能很高"], ["Machine Unlearning", "调整已训练模型，尝试移除指定影响", "可能减少计算；效果与保留能力需验证"], ["Output Filtering", "限制某些内容被输出", "可改变可见行为；不等于去除训练影响"], ["继续微调", "在旧模型基础上继续更新参数", "不能单凭继续训练就证明原样本影响消失"]]}
+            ]}
+          ]
+        },
+        {
+          "id": "forgetting-utility-cost", "title": "遗忘效果、保留能力与计算成本", "en": "Forgetting, Utility & Cost", "kind": "workflow",
+          "summary": "一次回答没复述原文，只是有限观察，不能单独证明机器遗忘完成。", "sourceIds": [19], "extraSources": [],
+          "items": [{"id": "evaluation-contract", "title": "怎样把“忘掉了”变成可检查目标？", "blocks": [
+            {"type": "table", "title": "需要同时检查的三个方向", "headers": ["方向", "可讨论的验证", "常见误判"], "rows": [["指定样本影响", "与排除样本后重训的基准比较，采用适合的遗忘评估", "一次问答不出现内容就算成功"], ["保留能力 Utility", "保留数据及独立样本上的任务表现", "让模型整体失效也算遗忘成功"], ["计算与交付 Cost", "处理时间、资源和产物替换范围", "算法快就代表全链路工程已完成"]]},
+            {"type": "explain", "title": "成员推断是证据之一，不是万能证明", "text": "Membership Inference Attack 尝试判断某个样本是否参加过训练，因而可为遗忘评估提供信息。但特定攻击失败，只说明在该攻击与评估条件下没有成功推断，不等于所有影响都已消失。完成标准应说明适用模型、目标集合、基准与评估局限，还要处理旧检查点及使用旧产物的服务，避免只验证一个新文件。"}
+          ]}]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,3032 @@
+{
+  "version": 2,
+  "topics": [
+    {
+      "id": "gov-boundary",
+      "focus": "治理安排“谁按什么规则决定”，数据管理把这些决定变成可运行的数据体系。",
+      "sections": [
+        {
+          "id": "management-governance",
+          "title": "Data Management 与 Governance：包含关系",
+          "en": "Management & Governance",
+          "kind": "comparison",
+          "summary": "数据治理属于更广的数据管理体系；它既要定规则，也要推动规则执行。",
+          "sourceIds": [
+            3
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "scope",
+              "title": "为什么治理属于管理，却不能被清洗数据替代？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "把数据管理（Data Management）想成企业经营数据的整套工作：收集、存储、集成、使用、保护、退出。数据治理（Data Governance）在其中安排决策权、责任、定义和要求，并监督执行。清洗一个脏字段是管理动作；决定谁定义“正确”、谁修复、多久修好及如何验收，才补齐了治理责任。"
+                },
+                {
+                  "type": "table",
+                  "title": "同一问题，两个观察角度",
+                  "headers": [
+                    "问题",
+                    "治理要明确",
+                    "管理要实现"
+                  ],
+                  "rows": [
+                    [
+                      "客户手机号错误",
+                      "质量定义、责任人、修复优先级",
+                      "校验、修复管道、监控异常"
+                    ],
+                    [
+                      "员工访问敏感表",
+                      "允许目的、审批责任、复核条件",
+                      "鉴权、权限回收、访问日志"
+                    ],
+                    [
+                      "历史日志保留多久",
+                      "适用范围、起算点、例外审批",
+                      "到期识别、清理、删除证据"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "policy-control",
+          "title": "政策、控制、证据：把一句要求接到系统",
+          "en": "Policy → Control → Evidence",
+          "kind": "workflow",
+          "summary": "一份政策只有被落实并验证，才能支撑实际治理结果。",
+          "sourceIds": [
+            2,
+            3
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "three-links",
+              "title": "“只能为批准用途访问”怎样落地？",
+              "blocks": [
+                {
+                  "type": "diagram",
+                  "title": "从要求到可检查结果",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "决定规则",
+                        "nodes": [
+                          {
+                            "id": "policy",
+                            "title": "用途政策",
+                            "en": "Policy",
+                            "text": "说明哪些角色可因何目的使用哪些数据"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "实施控制",
+                        "nodes": [
+                          {
+                            "id": "control",
+                            "title": "权限与流程",
+                            "en": "Control",
+                            "text": "把用途检查接入访问入口及例外审批"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "验证结果",
+                        "nodes": [
+                          {
+                            "id": "evidence",
+                            "title": "运行证据",
+                            "en": "Evidence",
+                            "text": "抽样访问、复核日志，检查例外和遗漏"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "policy",
+                        "to": "control",
+                        "label": "转成条件",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "control",
+                        "to": "evidence",
+                        "label": "输出记录",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "evidence",
+                        "to": "policy",
+                        "label": "发现缺口后修订",
+                        "kind": "feedback"
+                      }
+                    ],
+                    "note": "这是教学闭环；不同系统的控制点不同，日志存在本身不证明策略正确。"
+                  }
+                },
+                {
+                  "type": "example",
+                  "text": "例如产品团队需要分析地区使用量。治理先确认目的、粒度和负责人；工程提供只含所需字段的受控数据集；运营检查到期权限；审查时再核对实际访问是否越界。单独建一张审批表、一个权限按钮或一个仪表盘，都没有覆盖这一整条链。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gov-ownership",
+      "focus": "数据责任不是“大家都参与”，而是每类决定、实现和升级都有明确承接者。",
+      "sections": [
+        {
+          "id": "roles",
+          "title": "Owner、Steward、Engineer、TPM：分别承接什么",
+          "en": "Accountability & Responsibilities",
+          "kind": "comparison",
+          "summary": "角色可以由同一人兼任，但职责不能因多人协作而消失。",
+          "sourceIds": [
+            2,
+            3,
+            17
+          ],
+          "extraSources": [
+            {
+              "label": "IBM｜Data Stewardship",
+              "url": "https://www.ibm.com/think/topics/data-stewardship"
+            }
+          ],
+          "items": [
+            {
+              "id": "division",
+              "title": "数据质量失败时，应该找谁？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "按责任找人，而不是背职位名称",
+                  "headers": [
+                    "角色",
+                    "典型责任",
+                    "不应默认承担"
+                  ],
+                  "rows": [
+                    [
+                      "Data Owner 数据所有者",
+                      "对业务含义、使用决策和结果负责",
+                      "亲手修改所有管道"
+                    ],
+                    [
+                      "Data Steward 数据管理员",
+                      "维护定义、规则、问题台账并协调修复",
+                      "单方面决定所有业务例外"
+                    ],
+                    [
+                      "Engineering 工程团队",
+                      "实现校验、数据管道和运行保障",
+                      "独自决定业务容忍的损失"
+                    ],
+                    [
+                      "TPM 技术项目经理",
+                      "推动范围、依赖、决策与验收闭环",
+                      "替代 Owner 或专业审批人做全部决定"
+                    ]
+                  ]
+                },
+                {
+                  "type": "example",
+                  "text": "“订单金额”突然为空：Steward 核实口径和影响；管道工程师修复转换；Owner 决定报表是否延迟发布；TPM 协调上游依赖、通知节奏和验收。如果只说“数据团队负责”，这些不同决定仍然可能无人承接。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cross-domain",
+          "title": "跨业务共享资产：主责和消费者如何协商",
+          "en": "Cross-domain Ownership",
+          "kind": "reasoning",
+          "summary": "共享使用不会自动转移生产者责任，也不会让消费者失去使用责任。",
+          "sourceIds": [
+            1,
+            3,
+            17
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "shared-table",
+              "title": "两个业务都使用同一张表，谁能删除或改字段？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "先分清资产主责、消费者责任和变更决策。主责团队维护资产定义与生产承诺；消费者说明用途、下游依赖和所需通知期。影响多个团队的破坏性变更，需要约定兼容方式、迁移期限与争议升级人。所谓“共同负责”必须被拆成这些可执行决定，不能只在清单中填两个部门名。"
+                },
+                {
+                  "type": "example",
+                  "text": "增长团队要删除 user_region，风控仍用它判断异常登录。增长团队不能仅因自己不用就删除；风控也不能无限期阻止整理。双方可约定替代字段、双写验证、迁移窗口和最终退役条件，再把责任与日期记录下来。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gov-models",
+      "focus": "治理模式决定权责分布；业务自治、共享约束和平台能力应分别讨论。",
+      "sections": [
+        {
+          "id": "three-models",
+          "title": "集中式、分布式、联合式：权力怎样分配",
+          "en": "Centralized / Distributed / Federated",
+          "kind": "comparison",
+          "summary": "这些是组织设计视角，不是每家公司都严格对应的三种产品。",
+          "sourceIds": [
+            1
+          ],
+          "extraSources": [
+            {
+              "label": "IBM｜Data Mesh 与 Federated Governance",
+              "url": "https://www.ibm.com/think/topics/data-mesh"
+            }
+          ],
+          "items": [
+            {
+              "id": "decision-rights",
+              "title": "“分布式”为什么不等于所有政策随便定？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "分布式治理（Distributed Governance）强调多个业务域承担治理责任，具体授权范围仍由组织设计决定。它本身既不保证中央统一规则，也不意味着业务可以忽略共同义务。联合治理（Federated Governance）更明确地讨论域内自治与跨域约定怎样并存，例如共享身份、资产互通标准和共同的安全约束。"
+                },
+                {
+                  "type": "table",
+                  "title": "不要只比较“中心强不强”",
+                  "headers": [
+                    "模式",
+                    "通常把决定放在哪里",
+                    "优势与代价"
+                  ],
+                  "rows": [
+                    [
+                      "集中式",
+                      "中心团队统一更多决策",
+                      "口径较一致；可能排队、离业务远"
+                    ],
+                    [
+                      "分布式自治",
+                      "业务域承担更多决策和执行",
+                      "贴近业务；交界冲突需协调"
+                    ],
+                    [
+                      "联合治理",
+                      "域内决定与共享约束明确分层",
+                      "兼顾自治和互通；规则协商有成本"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "dataleap-autonomy",
+          "title": "DataLeap 历史案例：业务自治与平台支撑",
+          "en": "DataLeap Case Boundaries",
+          "kind": "concept",
+          "summary": "文章呈现的是具体历史组织条件，不能改写为中央委员会统一所有政策。",
+          "sourceIds": [
+            1,
+            7
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "actual-case",
+              "title": "文章里的平台究竟负责什么？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "DataLeap 历史案例强调业务单元认领资产、设定治理目标与规则，并承担改善结果；平台提供发现、评估、工具、流程和监督能力。案例还讨论无人认领资产和跨业务交界如何处理。它不是“中央先定齐所有标准再下发”的简单模型，也不是把共享平台和协调机制全部撤掉。"
+                },
+                {
+                  "type": "example",
+                  "text": "教学类比：各门店最了解自己的商品周转，可以认领库存并调整行动；总部提供统一盘点工具和可比较记录。门店之间共用库存时仍要协商归属。类比只帮助理解责任分布，不能据此推断 DataLeap 原文已经规定了某套中央隐私政策。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "shared-boundaries",
+          "title": "同一条政策，哪些部分可自治？",
+          "en": "Autonomy & Shared Constraints",
+          "kind": "reasoning",
+          "summary": "先拆政策中的义务、参数和实施方法，再决定授权范围。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "IBM｜Data Mesh",
+              "url": "https://www.ibm.com/think/topics/data-mesh"
+            }
+          ],
+          "items": [
+            {
+              "id": "retention-example",
+              "title": "业务自定留存期，会不会违反共同要求？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "以教学设计为例，企业可以规定敏感数据必须有明确用途、负责人和经核准的留存依据；业务域在这个约束内提出具体期限和实施方案。某域需要例外时，走记录、评审、到期复核流程。共同约束管住“什么不能随意改变”，自治保留“怎样在业务场景实现”，二者不是只能选一个。"
+                },
+                {
+                  "type": "takeaway",
+                  "text": "先问三个问题：谁有权定要求？谁实现？跨域冲突谁裁决？只听到“分布式”四个字，无法推断某项具体政策归谁决定。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gov-value",
+      "focus": "从可解释的业务损失切入，再把有效实践沉淀成共同能力。",
+      "sections": [
+        {
+          "id": "planning-value",
+          "title": "体系规划与问题驱动：不同起点如何接上",
+          "en": "Architecture-driven & Value-driven",
+          "kind": "comparison",
+          "summary": "长期框架提供方向，具体问题帮助验证价值和获取参与。",
+          "sourceIds": [
+            1,
+            16
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "starting-point",
+              "title": "没有直接管理权，如何让业务愿意治理？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "先用业务语言说明痛点：每天晚出报表、同一指标口径冲突、重复计算浪费，或敏感资产无人负责。和业务共同界定损失、可改范围和投入，再用小范围结果换取持续参与。框架仍然有用：它帮助把一次修复变成可复用的责任、规则与工具，避免每个团队反复造轮子。"
+                },
+                {
+                  "type": "table",
+                  "title": "两种起点可以互相补充",
+                  "headers": [
+                    "起点",
+                    "先做什么",
+                    "常见偏差"
+                  ],
+                  "rows": [
+                    [
+                      "整体规划",
+                      "定义目标架构、标准和责任体系",
+                      "制度完整，但业务短期感受不到收益"
+                    ],
+                    [
+                      "问题驱动",
+                      "选痛点、做基线、改一段可控范围",
+                      "局部奏效，但形成新的孤岛"
+                    ],
+                    [
+                      "结合使用",
+                      "用痛点验证方案，再沉淀成通用能力",
+                      "需要定期回看整体约束与依赖"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "value-guardrails",
+          "title": "健康分、节省额与真实业务价值",
+          "en": "Value & Guardrails",
+          "kind": "reasoning",
+          "summary": "单个分数提高，不能自动证明业务变好。",
+          "sourceIds": [
+            1,
+            2
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "cost-example",
+              "title": "删掉重复任务，为什么不只算省了多少资源？",
+              "blocks": [
+                {
+                  "type": "example",
+                  "text": "假设停用一个看似重复的日报任务能减少计算费用，但它还服务一个海外时区。若不先确认消费者与时效，省下资源可能换来更大业务损失。治理评估要同时观察节省、迁移成本、故障和使用体验；“健康分高了”只能说明评分规则下的状态改善。"
+                },
+                {
+                  "type": "explain",
+                  "text": "DataLeap 文章中的历史目标和“0987”等数字体现当时的价值选择，不能直接当成所有企业的标准。自己的指标应从当前基线、业务优先级和约束推导，并写清观察窗口。不同维度之间常有取舍，例如恢复更快可能需要保留更贵的存储层。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gov-workflow",
+      "focus": "把问题、资产、负责人、方案和验收连接起来，治理才成为可持续执行的流程。",
+      "sections": [
+        {
+          "id": "platform-layers",
+          "title": "治理架构：角色、评估、方案与执行",
+          "en": "Governance Operating Layers",
+          "kind": "architecture",
+          "summary": "平台帮助不同角色基于同一批事实协作，不只是展示问题排行榜。",
+          "sourceIds": [
+            2
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "operating-model",
+              "title": "管理者和执行者为什么看到不同视图？",
+              "blocks": [
+                {
+                  "type": "diagram",
+                  "title": "同一治理问题的不同职责",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "治理用户",
+                        "nodes": [
+                          {
+                            "id": "manager",
+                            "title": "管理者",
+                            "en": "Manager",
+                            "text": "明确治理目标、业务损失和处理优先级"
+                          },
+                          {
+                            "id": "driver",
+                            "title": "推动者",
+                            "en": "Coordinator",
+                            "text": "把治理目标拆成资产范围、责任和处理方案"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "共同事实",
+                        "nodes": [
+                          {
+                            "id": "assessment",
+                            "title": "评估与诊断",
+                            "en": "Assessment",
+                            "text": "用元数据、规则和运行记录定位问题"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "落地行动",
+                        "nodes": [
+                          {
+                            "id": "executor",
+                            "title": "执行者",
+                            "en": "Executor",
+                            "text": "确认业务影响，实施系统或配置的具体修改"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "结果回流",
+                        "nodes": [
+                          {
+                            "id": "result",
+                            "title": "验收与收益",
+                            "en": "Verification",
+                            "text": "验证改善及副作用，反馈后续策略"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "manager",
+                        "to": "assessment",
+                        "label": "明确目标",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "driver",
+                        "to": "assessment",
+                        "label": "圈定范围",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "assessment",
+                        "to": "executor",
+                        "label": "派发可执行任务",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "executor",
+                        "to": "result",
+                        "label": "提交结果",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "result",
+                        "to": "manager",
+                        "label": "更新优先级",
+                        "kind": "feedback"
+                      }
+                    ],
+                    "note": "根据一站式治理文章整理的教学结构；角色不必与公司职位一一对应。"
+                  }
+                },
+                {
+                  "type": "explain",
+                  "text": "管理者需要知道总体风险、投入和改善；推动者需要把资产、规则与责任连成方案；执行者需要明确改哪里、怎么验证、何时完成。只把一串异常发送给所有人，仍然缺少处理顺序、负责人和闭环条件。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "actionable-rules",
+          "title": "诊断规则不等于整改指令",
+          "en": "Detection & Remediation",
+          "kind": "workflow",
+          "summary": "规则发现候选问题，整改仍要结合业务影响与安全条件。",
+          "sourceIds": [
+            1,
+            2
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "unused-table",
+              "title": "“90 天没访问”能否自动删除？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "规则只能证明在已观测范围内满足某个条件。“90 天没有查询记录”可能意味着资产闲置，也可能是日志未接入、季度业务尚未开始或存在外部消费者。可执行流程应包含候选识别、归属确认、影响检查、处置方式和验证证据，并为例外设置负责人及复核时间。"
+                },
+                {
+                  "type": "table",
+                  "title": "让一条规则成为可执行任务",
+                  "headers": [
+                    "字段",
+                    "示例意义"
+                  ],
+                  "rows": [
+                    [
+                      "对象与触发",
+                      "哪些表、什么时间窗、依据什么日志"
+                    ],
+                    [
+                      "行动与责任",
+                      "建议降层还是删除，谁确认消费者"
+                    ],
+                    [
+                      "前置约束",
+                      "留存要求、恢复能力、未采集的系统"
+                    ],
+                    [
+                      "验收与例外",
+                      "节省如何核算，失败怎样恢复，例外何时再看"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gov-evidence",
+      "focus": "分别记录做了什么、覆盖了什么以及改善了什么，才能可靠验收。",
+      "sections": [
+        {
+          "id": "metric-levels",
+          "title": "活动、覆盖、结果：三个不同层次",
+          "en": "Activity / Coverage / Outcome",
+          "kind": "comparison",
+          "summary": "任务数量衡量动作，覆盖率衡量范围，结果指标衡量改变。",
+          "sourceIds": [
+            2,
+            3
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "denominator",
+              "title": "“治理覆盖率 95%”还缺哪些信息？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "同一项目的三组指标",
+                  "headers": [
+                    "层次",
+                    "例子",
+                    "必须追问"
+                  ],
+                  "rows": [
+                    [
+                      "活动",
+                      "完成 100 个整改任务",
+                      "完成标准是什么，有无重复任务"
+                    ],
+                    [
+                      "覆盖",
+                      "95% 目标资产启用检查",
+                      "分母来自哪里，重要资产是否漏掉"
+                    ],
+                    [
+                      "结果",
+                      "数据事故和无效成本下降",
+                      "相对什么基线，是否转移了成本或风险"
+                    ]
+                  ]
+                },
+                {
+                  "type": "example",
+                  "text": "若只接入 100 张表，95 张启用检查，覆盖率可以是 95%；但企业可能还有 900 张未盘点的表。报告应同时给已知范围、未接入范围、排除理由和关键资产情况。这个例子说明分母决定指标含义，不能用漂亮比例掩盖未知范围。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "evidence-chain",
+          "title": "规则版本、执行记录与验收证据",
+          "en": "Audit Evidence Chain",
+          "kind": "architecture",
+          "summary": "能追溯一次决定和实际结果，比只有“已完成”状态更可复查。",
+          "sourceIds": [
+            2,
+            3
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "traceable-result",
+              "title": "审计时如何解释一张表为什么被归档？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "保留当时使用的规则版本、热度观察窗口、资产身份、批准者、执行结果和验证信息。这样复查者才能重建“基于什么事实作出什么决定”。记录还应标明失败、重试和例外，避免只保留成功事件。证据本身也需要权限、留存和完整性保护，不能无限收集敏感日志。"
+                },
+                {
+                  "type": "example",
+                  "text": "例如归档后用户投诉查询变慢，团队可以查出：哪个规则把它判为冷数据、是否命中保护名单、迁移完成时测试了哪些查询、谁接受了恢复时延。若只有一个绿色勾选，就无法判断是规则、实施还是验收遗漏出了问题。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "asset-inventory",
+      "focus": "先持续盘清资产和责任，再让目录帮助人找到、理解并使用这些资产。",
+      "sections": [
+        {
+          "id": "inventory-catalog",
+          "title": "Data Inventory 与 Data Catalog：清单和目录",
+          "en": "Inventory vs Catalog",
+          "kind": "comparison",
+          "summary": "“资产清单”更准确对应 Data Inventory；Data Catalog 是组织、发现和理解资产的目录能力。",
+          "sourceIds": [
+            3,
+            7
+          ],
+          "extraSources": [
+            {
+              "label": "IBM｜Data Catalog",
+              "url": "https://www.ibm.com/think/topics/data-catalog"
+            }
+          ],
+          "items": [
+            {
+              "id": "two-questions",
+              "title": "都是一份数据列表，为什么仍要区分？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "先看它主要解决什么问题",
+                  "headers": [
+                    "概念",
+                    "主要问题",
+                    "典型内容"
+                  ],
+                  "rows": [
+                    [
+                      "Data Inventory 数据资产清单",
+                      "我们实际有哪些数据资产？",
+                      "资产标识、位置、Owner、类型、状态"
+                    ],
+                    [
+                      "Data Catalog 数据目录",
+                      "我怎样找到并理解适用的数据？",
+                      "搜索、业务说明、结构、质量、血缘、申请入口"
+                    ],
+                    [
+                      "关系",
+                      "清单可以成为目录的基础",
+                      "一个目录产品也可以维护清单，二者会重叠"
+                    ]
+                  ]
+                },
+                {
+                  "type": "example",
+                  "text": "你要确认所有含邮箱的存储位置是否被盘点，重点是 Inventory 的完整性；分析师要找“可信的活跃用户表”，重点是 Catalog 的可发现性与说明质量。把两者都叫 Catalog 容易漏掉前一种责任，也不能因为买了目录产品就宣布资产已经盘全。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "continuous-discovery",
+          "title": "资产发现不是一次性登记",
+          "en": "Continuous Asset Discovery",
+          "kind": "workflow",
+          "summary": "资产会新增、迁移、改名和退役，清单需要持续更新。",
+          "sourceIds": [
+            3,
+            7
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "asset-identity",
+              "title": "表改名以后，如何避免把它当成全新资产？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "为资产记录可追踪身份，并保留位置、版本或改名关系；同时接入系统扫描、创建事件和责任人维护流程。名称是方便人识别的标签，不总是稳定身份。盘点还要记录扫描时间、覆盖系统及失败原因，否则一张看似完整的清单可能只是几个月前的快照。"
+                },
+                {
+                  "type": "table",
+                  "title": "最小但有用的资产记录",
+                  "headers": [
+                    "信息",
+                    "为什么需要"
+                  ],
+                  "rows": [
+                    [
+                      "标识与位置",
+                      "定位真实对象，追踪迁移或改名"
+                    ],
+                    [
+                      "业务含义与 Owner",
+                      "知道它做什么、由谁解释"
+                    ],
+                    [
+                      "敏感性与使用目的",
+                      "决定保护与使用约束"
+                    ],
+                    [
+                      "更新时间与覆盖状态",
+                      "区分确认不存在、尚未扫描和扫描失败"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "asset-metadata",
+      "focus": "元数据提供事实，目录组织发现，血缘连接来源与去向；它们解决不同问题。",
+      "sections": [
+        {
+          "id": "three-tools",
+          "title": "Metadata、Catalog、Lineage：同一资产的三种视图",
+          "en": "Metadata / Catalog / Lineage",
+          "kind": "comparison",
+          "summary": "血缘是一类关系信息，目录可以展示血缘，但目录不等于血缘。",
+          "sourceIds": [
+            5
+          ],
+          "extraSources": [
+            {
+              "label": "IBM｜Metadata",
+              "url": "https://www.ibm.com/think/topics/metadata"
+            },
+            {
+              "label": "IBM｜Data Catalog",
+              "url": "https://www.ibm.com/think/topics/data-catalog"
+            }
+          ],
+          "items": [
+            {
+              "id": "customer-table",
+              "title": "一张 customers 表如何同时出现在三种视图里？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "用同一张表理解分工",
+                  "headers": [
+                    "视图",
+                    "看到的内容",
+                    "它帮你回答"
+                  ],
+                  "rows": [
+                    [
+                      "Metadata 元数据",
+                      "email 是字符串、负责人是客户团队、昨晚更新",
+                      "这个资产有什么属性和背景？"
+                    ],
+                    [
+                      "Catalog 数据目录",
+                      "搜索“客户邮箱”并查看说明、质量和申请方式",
+                      "去哪里找到适合的数据？"
+                    ],
+                    [
+                      "Lineage 数据血缘",
+                      "注册服务→customers.email→营销名单",
+                      "这个字段从哪里来，又流向哪里？"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "text": "元数据不只指数据库的列名和类型。业务定义、敏感标签、责任人、更新频率、运行记录也能成为元数据。不同系统管理的元数据范围不一样，所以选型时要问能采集什么、谁维护、多久更新，而不是只问“有没有一个 Catalog”。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "dictionary-glossary",
+          "title": "数据字典与业务术语表：字段名不是业务定义",
+          "en": "Data Dictionary & Business Glossary",
+          "kind": "comparison",
+          "summary": "技术结构和业务口径必须连接，才能减少同名不同义。",
+          "sourceIds": [
+            3,
+            5
+          ],
+          "extraSources": [
+            {
+              "label": "IBM｜Data Catalog",
+              "url": "https://www.ibm.com/think/topics/data-catalog"
+            }
+          ],
+          "items": [
+            {
+              "id": "active-user",
+              "title": "“活跃用户”应该写在字段备注还是统一术语中？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "数据字典（Data Dictionary）常描述具体表和字段，例如 active_user_count 的类型、约束与说明。业务术语表（Business Glossary）维护跨团队的概念和口径，例如“活跃”包含哪些行为、时间窗和排除条件。两者建立映射后，读者才能从技术字段找到业务依据；但一个术语也可能有多个明确命名的业务版本。"
+                },
+                {
+                  "type": "example",
+                  "text": "广告团队按“当天有广告曝光”计算活跃，社区团队按“当天有有效互动”计算活跃。问题不一定是谁算错，而是同一个词隐藏了不同定义。应说明口径和用途，再决定统一、映射或保留命名清楚的变体。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "asset-granularity",
+      "focus": "血缘粒度由要回答的问题决定；更细的信息通常也需要更高采集成本。",
+      "sections": [
+        {
+          "id": "table-column-record",
+          "title": "表级、列级、记录级：分别能定位什么",
+          "en": "Table / Column / Record Lineage",
+          "kind": "comparison",
+          "summary": "知道字段从哪来，并不意味着已经知道某个用户的所有记录在哪里。",
+          "sourceIds": [
+            5,
+            8
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "granularity-choice",
+              "title": "改字段、查故障和删个人记录，需要同一种图吗？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "问题决定粒度",
+                  "headers": [
+                    "粒度",
+                    "能回答",
+                    "不能单独回答"
+                  ],
+                  "rows": [
+                    [
+                      "表级 Table-level",
+                      "订单表依赖哪些上游、影响哪些报表",
+                      "金额字段具体由哪些列组成"
+                    ],
+                    [
+                      "列级 Column-level",
+                      "净额来自收入列减退款列",
+                      "用户 123 的每条副本位置"
+                    ],
+                    [
+                      "记录级 Record-level",
+                      "特定记录来自何处、如何产生",
+                      "未接入系统中的未知副本"
+                    ],
+                    [
+                      "转换表达式 Transformation",
+                      "列经过聚合、拼接或函数处理",
+                      "黑盒函数内部行为是否完全正确"
+                    ]
+                  ]
+                },
+                {
+                  "type": "example",
+                  "text": "删除用户资料时，列级图可以提示 email 进入了营销名单；接下来仍需要身份映射、存储查询和副本清单定位该用户对应的记录。不能把“一条列血缘边”当作逐行删除索引。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "origin-transformation",
+          "title": "来源字段与转换表达式：只画箭头会丢什么",
+          "en": "Column Origins & Transformations",
+          "kind": "concept",
+          "summary": "同一来源可以经过保留原值、聚合或脱敏等不同加工。",
+          "sourceIds": [
+            8
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "concat-example",
+              "title": "知道 display_name 来自 name，就足够了吗？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "假设 display_name = CONCAT(users.name, company.name)。来源集合至少涉及两列，表达式还说明它们被拼接。若改成只输出姓名首字母，来源可能相同，但输出含义和隐私风险已变。血缘只记录“来自哪列”时，不能自行补推“做过脱敏”或“原值仍保留”；这些需要表达式、函数说明或运行验证。"
+                },
+                {
+                  "type": "table",
+                  "title": "同一来源，不同加工",
+                  "headers": [
+                    "输出",
+                    "可能记录的来源",
+                    "还应理解"
+                  ],
+                  "rows": [
+                    [
+                      "name_copy = name",
+                      "name",
+                      "原值传递"
+                    ],
+                    [
+                      "initial = 姓名首字母函数(name)",
+                      "name",
+                      "函数规则、语言边界、可识别性"
+                    ],
+                    [
+                      "count = COUNT(*)",
+                      "输入行集合",
+                      "行数依赖与聚合语义不一定是简单列来源"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "asset-sql",
+      "focus": "SQL 解析建立结构，关系计划解释运算，血缘提取和相似任务检测是两个不同用途。",
+      "sections": [
+        {
+          "id": "ast-representation",
+          "title": "SQL、AST、序列化、特征向量：四种表达",
+          "en": "SQL / AST / Serialization / Features",
+          "kind": "comparison",
+          "summary": "Parsing 以 SQL 为输入生成语法树；树不是链表，序列化也不是语义向量。",
+          "sourceIds": [
+            8
+          ],
+          "extraSources": [
+            {
+              "label": "Apache Calcite｜SqlNode",
+              "url": "https://calcite.apache.org/javadocAggregate/org/apache/calcite/sql/SqlNode.html"
+            },
+            {
+              "label": "Java｜对象序列化",
+              "url": "https://docs.oracle.com/en/java/javase/25/docs/specs/serialization/serial-arch.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "tree-example",
+              "title": "SELECT name FROM users WHERE age > 18 怎样变成树？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "解析（Parsing）识别 SQL 的语法关系：SELECT 节点连接选取的列、来源表和 WHERE 条件；条件节点再连接 age、比较运算符和常量 18。这种父子结构是抽象语法树（Abstract Syntax Tree, AST）。它不是沿着一个 next 指针串起来的链表，尽管程序可以按某种顺序把树写成一串文本。"
+                },
+                {
+                  "type": "table",
+                  "title": "不要把不同表示混在一起",
+                  "headers": [
+                    "表示",
+                    "教学示意",
+                    "用途"
+                  ],
+                  "rows": [
+                    [
+                      "SQL 文本",
+                      "SELECT name FROM users WHERE age > 18",
+                      "供人编写和交给解析器"
+                    ],
+                    [
+                      "AST 树结构",
+                      "Select → [name, users, GreaterThan(age,18)]",
+                      "表达语法节点及父子关系"
+                    ],
+                    [
+                      "序列化 Serialization",
+                      "把树的节点和层次编码为 JSON 或字节",
+                      "保存、传输、缓存或交换结构"
+                    ],
+                    [
+                      "特征向量 Feature Vector",
+                      "[表数量, JOIN 数量, 聚合数量, …]",
+                      "按设计选取特征用于统计或比较"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "serialization-purpose",
+              "title": "为什么有时序列化？能不能直接从树取特征？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "可以直接遍历树取特征。序列化解决“怎样保存或传送结构”，向量化解决“怎样把选定特征表示成数字”，它们不是同一件事。分布式处理可能先把结构编码后传给另一服务，也可以在当前进程直接计算特征。把原始字节当数字比较，不会自动获得 SQL 的业务语义。"
+                },
+                {
+                  "type": "example",
+                  "title": "同一棵树的两种输出",
+                  "text": "教学编码可写成 {kind:Select, from:users, where:{op:大于, field:age, value:18}}，保留嵌套关系供程序还原。另一种输出是特征：[表数量=1, JOIN数量=0, 过滤条件数=1]，只保留比较任务需要的数字。它们都来自同一棵树，但向量已丢掉许多细节。这不是 Calcite 的实际序列化格式，也不是完整的 SQL 特征设计。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sql-lineage",
+          "title": "SQL 到列血缘：每一步新增什么信息",
+          "en": "SQL-to-Lineage Pipeline",
+          "kind": "architecture",
+          "summary": "语法正确只是开始，还要知道表字段是什么，以及输出列由哪些操作产生。",
+          "sourceIds": [
+            8
+          ],
+          "extraSources": [
+            {
+              "label": "Apache Calcite｜Relational Algebra",
+              "url": "https://calcite.apache.org/docs/algebra.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "pipeline",
+              "title": "Parse、Validate、Convert、追溯分别做什么？",
+              "blocks": [
+                {
+                  "type": "diagram",
+                  "title": "教学版字段血缘链路",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "解析代码",
+                        "nodes": [
+                          {
+                            "id": "sql",
+                            "title": "SQL 文本",
+                            "en": "SQL",
+                            "text": "声明要读取什么以及如何产生输出"
+                          },
+                          {
+                            "id": "ast",
+                            "title": "语法树",
+                            "en": "AST / SqlNode",
+                            "text": "保留 SELECT、JOIN、函数等语法结构"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "理解引用",
+                        "nodes": [
+                          {
+                            "id": "validate",
+                            "title": "语义校验",
+                            "en": "Validation",
+                            "text": "结合目录核对表、列、类型与函数"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "组织运算",
+                        "nodes": [
+                          {
+                            "id": "rel",
+                            "title": "关系计划",
+                            "en": "RelNode",
+                            "text": "表示扫描、过滤、连接、投影和聚合"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "按列回溯",
+                        "nodes": [
+                          {
+                            "id": "origins",
+                            "title": "来源与表达式",
+                            "en": "Column Origins",
+                            "text": "从输出列追到输入字段及已支持的变换"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "sql",
+                        "to": "ast",
+                        "label": "Parse",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "ast",
+                        "to": "validate",
+                        "label": "查目录与类型",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "validate",
+                        "to": "rel",
+                        "label": "Convert / Optimize",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "rel",
+                        "to": "origins",
+                        "label": "按输出列追溯",
+                        "kind": "flow"
+                      }
+                    ],
+                    "note": "参考历史 Flink/Calcite 实现的教学路线；具体 API、方言与算子支持依版本核对。"
+                  }
+                },
+                {
+                  "type": "explain",
+                  "text": "例如两个表都有 id，只有语法树还不够确认 id 属于谁。语义校验结合目录与作用域解析引用；关系计划再表达 Join 和 Project 的输入输出。案例使用列来源元数据沿计划回溯，但复杂函数、窗口和自定义算子可能需要专门规则，并不会因为 SQL 可执行就自动全部支持。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "plan-layers",
+          "title": "逻辑计划与物理计划：算什么和怎么跑",
+          "en": "Logical vs Physical Plan",
+          "kind": "comparison",
+          "summary": "静态血缘可在逻辑计划阶段提取，无需为了画图执行整条查询。",
+          "sourceIds": [
+            8
+          ],
+          "extraSources": [
+            {
+              "label": "Apache Calcite｜Relational Algebra",
+              "url": "https://calcite.apache.org/docs/algebra.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "plans",
+              "title": "SQL 已经有 AST，为什么还需要逻辑计划？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "相同查询的不同层次",
+                  "headers": [
+                    "层次",
+                    "关注点",
+                    "教学例子"
+                  ],
+                  "rows": [
+                    [
+                      "AST",
+                      "语言写了哪些语法结构",
+                      "WHERE、JOIN、列引用、函数调用"
+                    ],
+                    [
+                      "逻辑计划 Logical Plan",
+                      "用哪些关系运算得到结果",
+                      "Scan → Filter → Join → Project"
+                    ],
+                    [
+                      "物理计划 Physical Plan",
+                      "选哪些具体算法和执行安排",
+                      "连接实现、数据交换、并行执行"
+                    ],
+                    [
+                      "运行记录 Runtime Evidence",
+                      "这一次实际发生了什么",
+                      "用了哪个版本、读取了哪些分区、执行是否成功"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "text": "优化器可以在语义等价的条件下调整计划，例如把能提前执行的过滤靠近扫描，以减少后续处理量。逻辑血缘解释可能的数据依赖，运行记录说明一次实际执行。前者不能独自证明某个任务已经成功运行，也不能确认代码外部的所有读写。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "similarity-lineage",
+          "title": "血缘追溯与相似任务检测：同一输入，两种目标",
+          "en": "Lineage vs Similarity Detection",
+          "kind": "comparison",
+          "summary": "相似度用于筛选候选任务，不证明业务结果等价，更不是自动删除许可。",
+          "sourceIds": [
+            1,
+            8
+          ],
+          "extraSources": [
+            {
+              "label": "scikit-learn｜Cosine Similarity",
+              "url": "https://scikit-learn.org/stable/modules/generated/sklearn.metrics.pairwise.cosine_similarity.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "two-pipelines",
+              "title": "为什么都用 AST，却不能混为一个算法？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "两条用途路径",
+                  "headers": [
+                    "目标",
+                    "常见处理",
+                    "产物及边界"
+                  ],
+                  "rows": [
+                    [
+                      "列血缘",
+                      "解析、校验、关系计划、追溯列来源",
+                      "输出列与输入来源/变换关系"
+                    ],
+                    [
+                      "相似任务候选",
+                      "归一化结构、选特征、向量化或结构比较",
+                      "相似候选及分数，需要继续核对"
+                    ],
+                    [
+                      "可合并或可退役决策",
+                      "核对结果、时间窗、用途、消费者和性能",
+                      "经过验证的迁移/退役方案"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "text": "余弦相似度（Cosine Similarity）比较向量方向，结果取决于选了哪些特征。若向量只统计 JOIN 和聚合数量，两段筛选条件相反的 SQL 也可能分数很高。结构相似不是语义等价；即使结果一样，不同刷新时间、权限隔离或下游承诺仍可能让两项任务有独立存在价值。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "asset-provenance",
+      "focus": "来源证明不仅问最早来自哪里，还可记录生成活动、版本和责任参与者。",
+      "sections": [
+        {
+          "id": "lineage-provenance",
+          "title": "Lineage 与 Provenance：术语范围需看语境",
+          "en": "Lineage & Provenance",
+          "kind": "comparison",
+          "summary": "入门文章的简化划分不能当作所有标准和产品的永久定义。",
+          "sourceIds": [
+            5
+          ],
+          "extraSources": [
+            {
+              "label": "W3C｜PROV Overview",
+              "url": "https://www.w3.org/TR/prov-overview/"
+            }
+          ],
+          "items": [
+            {
+              "id": "scope",
+              "title": "Provenance 真的只是数据的“出生地点”吗？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "一些入门材料用 Lineage 描述完整流转，用 Provenance 强调原始来源；这是便于解释的一种用法。W3C PROV 则覆盖实体、活动、参与者及生成、使用、派生等关系，范围明显更广。实际沟通应先说明需要追踪哪些事实，再确认工具里的术语含义，不能只凭英文名认定功能边界。"
+                },
+                {
+                  "type": "table",
+                  "title": "比背同义词更有用的提问",
+                  "headers": [
+                    "想知道的事实",
+                    "应要求的记录"
+                  ],
+                  "rows": [
+                    [
+                      "来源位置",
+                      "输入资产与版本"
+                    ],
+                    [
+                      "怎样产生",
+                      "处理活动、表达式或程序版本"
+                    ],
+                    [
+                      "谁参与",
+                      "负责团队、系统或其他参与者"
+                    ],
+                    [
+                      "能否复查",
+                      "时间、执行标识与保留的验证材料"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "prov-model",
+          "title": "Entity、Activity、Agent：把生成历史说完整",
+          "en": "W3C PROV Model",
+          "kind": "architecture",
+          "summary": "用“什么东西、什么过程、谁参与”连接一条可解释的产生记录。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "W3C｜PROV Overview",
+              "url": "https://www.w3.org/TR/prov-overview/"
+            }
+          ],
+          "items": [
+            {
+              "id": "report-example",
+              "title": "一份月报的来源证明该包含什么？",
+              "blocks": [
+                {
+                  "type": "example",
+                  "text": "月报是 Entity（实体），某版本的订单快照也是实体；执行汇总脚本是 Activity（活动）；负责的分析团队或自动化系统是 Agent（参与者）。记录这次活动使用哪个快照、生成哪份月报、关联哪个参与者，比只写“来自订单库”更容易解释和复查。这里的 Agent 是 PROV 的责任参与者概念，不特指 AI Agent。"
+                },
+                {
+                  "type": "takeaway",
+                  "text": "血缘图与 PROV 记录可以互补：前者常用来浏览数据依赖，后者帮助描述生成历史与责任。它们的具体能力仍由采集范围和实现决定。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "asset-coverage",
+      "focus": "图中没有边，只能说明当前证据没画出边，不能直接证明没有依赖。",
+      "sections": [
+        {
+          "id": "static-runtime",
+          "title": "静态解析与运行采集：可能发生和实际发生",
+          "en": "Static & Runtime Lineage",
+          "kind": "comparison",
+          "summary": "两种证据互补，都有采集和解释边界。",
+          "sourceIds": [
+            5,
+            8
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "complementary",
+              "title": "SQL 血缘为什么还需要运行记录？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "两类证据如何配合",
+                  "headers": [
+                    "方式",
+                    "擅长观察",
+                    "容易遗漏"
+                  ],
+                  "rows": [
+                    [
+                      "静态解析 Static Analysis",
+                      "代码中声明的依赖，可提前做影响分析",
+                      "动态 SQL、黑盒函数、外部服务读写"
+                    ],
+                    [
+                      "运行采集 Runtime Capture",
+                      "某次任务真正执行的输入输出和版本",
+                      "尚未运行的路径、未埋点或丢失的事件"
+                    ],
+                    [
+                      "结合使用",
+                      "对照设计依赖与实际行为",
+                      "仍需记录未知系统与采集失败"
+                    ]
+                  ]
+                },
+                {
+                  "type": "example",
+                  "text": "代码声明每天读取订单表，但今天任务因上游故障未执行。静态图仍有依赖边，这是正确的设计依赖；运行记录应显示当天没有成功产出。若把二者合并成一个模糊的“已更新”，就会误判数据新鲜度。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "unsupported-operators",
+          "title": "UDF、UDTF、Lookup Join：能运行不等于能追溯",
+          "en": "Unsupported Operators & Unknowns",
+          "kind": "reasoning",
+          "summary": "解析器和血缘处理器的覆盖范围必须单独验收。",
+          "sourceIds": [
+            8
+          ],
+          "extraSources": [
+            {
+              "label": "Apache Flink｜User-defined Functions",
+              "url": "https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/functions/udfs/"
+            }
+          ],
+          "items": [
+            {
+              "id": "operator-gaps",
+              "title": "复杂 SQL 没画出来源，应该显示“无来源”吗？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "不应把未知当作没有。历史案例中，Lookup Join 的 Snapshot 节点、UDTF 的 Correlate 等结构需要补充血缘处理。UDF 是用户自定义函数的统称；标量函数返回一个值，表函数（UDTF）可把一行展开成多行。不了解函数或算子语义时，来源和变换可能不完整，应标为不支持、解析失败或待确认，并保留语句与版本供排查。"
+                }
+              ]
+            },
+            {
+              "id": "impact-check",
+              "title": "准备删除字段，怎样检查血缘盲区？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "先看向下游传播的已知依赖，再检查涉及系统的接入覆盖、解析失败率、最近采集时间和访问记录。对关键报表、外部导出、临时脚本和自定义函数做针对性确认。影响分析是带证据和置信范围的判断；关键链路没有证据时，应该先补证据或安排受控迁移，而不是把空图当作删除许可。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "life-stages",
+      "focus": "沿数据从产生到退出的过程，把用途、责任、保护和处置条件持续接上。",
+      "sections": [
+        {
+          "id": "stage-controls",
+          "title": "创建、存储、使用、归档、删除：控制怎样接力",
+          "en": "Lifecycle Controls",
+          "kind": "workflow",
+          "summary": "阶段名称便于组织思考，数据可能复制、共享或循环进入多个阶段。",
+          "sourceIds": [
+            4
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "stage-questions",
+              "title": "为什么只会背“五个阶段”还不够？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "每个阶段都要问控制问题",
+                  "headers": [
+                    "阶段",
+                    "关键问题",
+                    "例子"
+                  ],
+                  "rows": [
+                    [
+                      "创建 / Collection",
+                      "确实需要收集什么、为哪个目的",
+                      "仅收需要的联系信息，避免无目的扩张"
+                    ],
+                    [
+                      "存储 / Storage",
+                      "在哪里、谁负责、怎样保护",
+                      "登记存储、敏感分类、访问控制"
+                    ],
+                    [
+                      "使用与共享 / Use & Sharing",
+                      "谁因何目的使用，是否产生新副本",
+                      "分析导出也要有责任与期限"
+                    ],
+                    [
+                      "归档 / Archival",
+                      "为什么继续保留、多久能取回",
+                      "低频历史数据移入较低成本层"
+                    ],
+                    [
+                      "删除 / Deletion",
+                      "何时触发、哪些副本、怎样验收",
+                      "跟踪活跃系统、备份和失败重试"
+                    ]
+                  ]
+                },
+                {
+                  "type": "example",
+                  "text": "一条评论进入在线数据库后，又被复制到日志、分析表和审核样本。原评论已删除，不代表后面三个对象自动消失。生命周期管理需要围绕用途和派生关系管理这些分支，而不是让数据沿一条永不分叉的直线走完。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "dlm-ilm",
+          "title": "DLM 与 ILM：操作阶段和信息价值",
+          "en": "DLM & ILM",
+          "kind": "comparison",
+          "summary": "两者常有重叠；先定义对象、控制粒度和目标，再解释使用的术语。",
+          "sourceIds": [
+            4
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "scope-not-size",
+              "title": "DLM 必然只管文件，ILM 必然只管字段吗？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "Data Lifecycle Management（DLM）通常强调数据在各阶段的策略与操作；Information Lifecycle Management（ILM）常更突出信息价值、业务需求和留存安排。IBM 入门文用文件与更细信息粒度帮助区分，但这不是所有产品必须遵守的命名法。设计评审应直接说明管的是对象、表、分区、字段还是记录。"
+                },
+                {
+                  "type": "example",
+                  "text": "例如日志系统的 DLM 方案可以按分区迁移和到期清理；敏感字段也可能在同一个项目中被识别、限制使用和删除。不能仅因项目叫 DLM，就认为字段级保护必然不在范围内。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "life-storage",
+      "focus": "先区分整体数据架构、存储系统、访问接口和底层设备，再比较性能与使用方式。",
+      "sections": [
+        {
+          "id": "storage-layers",
+          "title": "块、文件、对象：应用看到的访问抽象",
+          "en": "Block / File / Object Storage",
+          "kind": "comparison",
+          "summary": "视频、评论和播放量是业务数据类型，不会单独决定唯一存储方案。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "AWS｜块、文件与对象存储",
+              "url": "https://aws.amazon.com/compare/the-difference-between-block-file-object-storage/"
+            }
+          ],
+          "items": [
+            {
+              "id": "abstractions",
+              "title": "为什么评论不是天然等于“块存储”？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "客户端看到什么，比内容名字更重要",
+                  "headers": [
+                    "抽象",
+                    "访问单位",
+                    "上层通常负责什么"
+                  ],
+                  "rows": [
+                    [
+                      "Block Storage 块存储",
+                      "一段逻辑地址上的数据块",
+                      "文件系统或数据库组织内容、维护结构"
+                    ],
+                    [
+                      "File Storage 文件存储",
+                      "目录、路径和文件操作",
+                      "应用按文件语义读写，共享语义由系统提供"
+                    ],
+                    [
+                      "Object Storage 对象存储",
+                      "对象键、内容、元数据及 API",
+                      "应用或数据平台维护业务组织和访问方式"
+                    ]
+                  ]
+                },
+                {
+                  "type": "example",
+                  "text": "视频原件常放对象存储，评论和播放量常通过数据库访问，但这是常见组合。数据库底层可能使用块卷；评论导出的 Parquet 文件可以进入对象存储；同一视频也能暂存在本地文件系统。业务层说“存评论”和设备层说“写磁盘块”，是在回答不同问题。"
+                }
+              ]
+            },
+            {
+              "id": "stack",
+              "title": "怎样把看似冲突的技术放在同一张图里？",
+              "blocks": [
+                {
+                  "type": "diagram",
+                  "title": "一个教学存储分层",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "业务用途",
+                        "nodes": [
+                          {
+                            "id": "biz",
+                            "title": "评论服务与分析",
+                            "en": "Application",
+                            "text": "决定查询、更新、时延及治理需求"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "数据服务",
+                        "nodes": [
+                          {
+                            "id": "db",
+                            "title": "数据库 / 查询引擎",
+                            "en": "Data Service",
+                            "text": "组织业务记录、事务处理或需要的分析计算"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "访问抽象",
+                        "nodes": [
+                          {
+                            "id": "file",
+                            "title": "文件接口",
+                            "en": "File",
+                            "text": "以目录路径和相应文件操作读写所需数据"
+                          },
+                          {
+                            "id": "object",
+                            "title": "对象 API",
+                            "en": "Object",
+                            "text": "以对象键和产品 API 访问数据"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "底层承载",
+                        "nodes": [
+                          {
+                            "id": "device",
+                            "title": "逻辑块 → 物理介质",
+                            "en": "Block / Media",
+                            "text": "逻辑地址与物理位置不是同一层，由存储系统维护映射"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "biz",
+                        "to": "db",
+                        "label": "提出需求",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "db",
+                        "to": "file",
+                        "label": "一种实现",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "db",
+                        "to": "object",
+                        "label": "另一种实现",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "file",
+                        "to": "device",
+                        "label": "文件映射",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "object",
+                        "to": "device",
+                        "label": "服务内部实现",
+                        "kind": "flow"
+                      }
+                    ],
+                    "note": "用于区分层次，并非所有数据库都按此拓扑实现；对象服务的内部设备通常不向用户暴露。"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "block-layout",
+          "title": "块怎样切分：逻辑地址不等于文件名",
+          "en": "Block Layout & Addressing",
+          "kind": "concept",
+          "summary": "文件系统块、数据库页、磁盘扇区与 HDFS 块是不同层的单位。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "AWS｜块存储寻址",
+              "url": "https://aws.amazon.com/compare/the-difference-between-block-file-object-storage/"
+            },
+            {
+              "label": "Apache｜HDFS Architecture",
+              "url": "https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "read-write",
+              "title": "一段评论内容如何变成块读写？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "以“数据库文件放在文件系统，再放在块卷”为教学例子：数据库先把记录安排进自己的页，文件系统把文件的字节范围映射到逻辑块位置，存储设备再执行相应地址的读写。块存储通常不理解“这是一条评论”。地址的映射由不同层维护，不要求一个文件的所有片段在物理介质上连续。"
+                },
+                {
+                  "type": "table",
+                  "title": "都叫块，但不是同一尺寸或职责",
+                  "headers": [
+                    "单位",
+                    "所在层",
+                    "要点"
+                  ],
+                  "rows": [
+                    [
+                      "扇区 / 逻辑块 Sector / Logical Block",
+                      "设备接口",
+                      "设备对外寻址和读写单位"
+                    ],
+                    [
+                      "文件系统块 Filesystem Block",
+                      "文件系统",
+                      "组织文件分配与空间管理"
+                    ],
+                    [
+                      "数据库页 Database Page",
+                      "数据库存储引擎",
+                      "组织记录、索引和缓存读写"
+                    ],
+                    [
+                      "HDFS Block",
+                      "分布式文件系统",
+                      "把大文件分段分布到 DataNode；并非一个磁盘扇区"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "size-choice",
+              "title": "是不是所有块都是 4 KB？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "不是。不同层、产品和配置可以采用不同单位；不能把常见的 4 KB 文件系统块推成 HDFS 块大小，也不能把数据库页大小当作设备物理扇区大小。真正选型时要问工作负载是大量小随机读写，还是大文件顺序吞吐，并结合缓存、合并写、网络和设备能力测试。"
+                },
+                {
+                  "type": "example",
+                  "title": "一个简化的 12 KiB 文件",
+                  "text": "仅作教学：若文件系统用 4 KiB 分配单元，12 KiB 内容可分成三段，分别映射到逻辑块 20、81、82。读完整文件时，文件系统按文件顺序取回并组合；读中间一段时，只需定位对应范围及相关元数据。这里忽略缓存、压缩等细节，块编号也不等于真实物理盘位；例子的 4 KiB 更不是所有存储系统的固定大小。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "san-nas",
+          "title": "SAN 与 NAS：拿到一块磁盘，还是一个共享目录",
+          "en": "SAN vs NAS",
+          "kind": "comparison",
+          "summary": "SAN 常提供块访问，NAS 提供网络文件访问；二者不是“裸机快、文件必慢”的排序。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "IBM｜Storage Area Network",
+              "url": "https://www.ibm.com/think/topics/storage-area-network"
+            },
+            {
+              "label": "IBM｜Network Attached Storage",
+              "url": "https://www.ibm.com/think/topics/network-attached-storage"
+            },
+            {
+              "label": "AWS｜EBS Multi-Attach",
+              "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes-multi.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "client-view",
+              "title": "把 SAN 和 NAS 接到服务器后，服务器看到什么？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "从客户端职责比较",
+                  "headers": [
+                    "维度",
+                    "SAN：Storage Area Network",
+                    "NAS：Network Attached Storage"
+                  ],
+                  "rows": [
+                    [
+                      "常见访问形式",
+                      "块设备，类似可使用的磁盘卷",
+                      "通过 NFS/SMB 等访问共享文件"
+                    ],
+                    [
+                      "文件组织",
+                      "通常由主机上的文件系统或数据库承担",
+                      "通常由 NAS 文件服务承担"
+                    ],
+                    [
+                      "共享写责任",
+                      "多主机写同一卷需要协调",
+                      "文件服务提供共享能力，仍需遵守具体锁与一致性语义"
+                    ],
+                    [
+                      "选型关注",
+                      "延迟、吞吐、路径冗余、主机管理",
+                      "并发客户端、元数据操作、协议与权限"
+                    ]
+                  ]
+                },
+                {
+                  "type": "example",
+                  "text": "类比租仓库：SAN 更像获得可自行规划的空间，NAS 更像使用已经编好目录的共享柜架。类比只帮助记职责，不证明哪种一定快。两种都可能经过网络，都可能使用同类 SSD，瓶颈取决于实际系统。"
+                }
+              ]
+            },
+            {
+              "id": "multiwriter",
+              "title": "块卷能接多台机器，就能随便同时写吗？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "某些块产品支持多主机挂载，例如有条件的 EBS Multi-Attach。但“都能看见地址”不等于“都能安全改同一份文件系统”。若各主机独立更新缓存和元数据，可能互相覆盖；需要支持共享写的集群文件系统或应用层协调。单纯多挂载普通文件系统不是完整的并发方案。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "posix-http",
+          "title": "POSIX 与 HTTP REST：接口语义，不能只比速度",
+          "en": "POSIX vs HTTP REST APIs",
+          "kind": "comparison",
+          "summary": "POSIX 是操作系统接口标准；HTTP 是协议，REST 是架构风格，层次并不相同。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "Open Group｜POSIX Backgrounder",
+              "url": "https://www.opengroup.org/austin/papers/backgrounder.html"
+            },
+            {
+              "label": "Open Group｜POSIX read",
+              "url": "https://pubs.opengroup.org/onlinepubs/9799919799/functions/read.html"
+            },
+            {
+              "label": "Fielding｜REST Architectural Style",
+              "url": "https://ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm"
+            },
+            {
+              "label": "Apache｜WebHDFS REST API",
+              "url": "https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/WebHDFS.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "full-name",
+              "title": "POSIX 的全称和优势到底是什么？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "POSIX 是 Portable Operating System Interface，可移植操作系统接口标准。文件相关部分约定 open、read、write 等接口及行为，帮助程序依赖熟悉的文件语义，提高源代码层面的可移植性。它并不只讲文件，也不规定底层一定是本地磁盘，更不承诺固定微秒延迟。兼容程度还要看具体文件系统。"
+                },
+                {
+                  "type": "table",
+                  "title": "较公平的比较：文件 API 与典型对象 API",
+                  "headers": [
+                    "需求",
+                    "文件 / POSIX 风格接口",
+                    "典型 HTTP 对象 API"
+                  ],
+                  "rows": [
+                    [
+                      "应用操作",
+                      "打开路径、读写字节区间、目录操作",
+                      "按对象键上传、获取、删除等"
+                    ],
+                    [
+                      "已有程序迁移",
+                      "适配传统文件应用通常较直接",
+                      "常需要 SDK、连接器或改访问逻辑"
+                    ],
+                    [
+                      "局部修改与共享语义",
+                      "由文件系统提供其支持的语义",
+                      "由具体产品 API 决定，不能泛化全部对象存储"
+                    ],
+                    [
+                      "性能判断",
+                      "受文件系统、网络、设备与模式影响",
+                      "受服务、请求粒度、网络与并发影响"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "webhdfs-counterexample",
+              "title": "用了 HTTP，为什么仍然可以是文件存储？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "HTTP（Hypertext Transfer Protocol）是通信协议，REST（Representational State Transfer）是架构风格。HTTP REST API 不是对象存储专属：WebHDFS 用它暴露创建、读取、追加、列目录和重命名等文件操作，后端仍是 HDFS。因此看到 URL、GET 或 PUT，不能直接推断底层数据模型、局部更新能力、文件锁或一致性保证。"
+                },
+                {
+                  "type": "example",
+                  "text": "同一个客户端可以经 WebHDFS 读取 /logs/day1 文件，也可以经对象 API 读取某个 bucket/key。两次都走 HTTP，但数据模型、允许操作和失败语义不同。比较方案时，应先列出应用需要哪些操作，再核对每个接口的合同。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hdfs-lake",
+          "title": "HDFS 与 Data Lake：存储底座和整体架构",
+          "en": "HDFS vs Data Lake",
+          "kind": "architecture",
+          "summary": "HDFS 可以是数据湖的存储层；数据湖不是与 HDFS 同层的产品。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "Apache｜HDFS Architecture",
+              "url": "https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html"
+            },
+            {
+              "label": "IBM｜Data Lake",
+              "url": "https://www.ibm.com/think/topics/data-lake"
+            },
+            {
+              "label": "IBM｜Data Lakehouse",
+              "url": "https://www.ibm.com/think/topics/data-lakehouse"
+            }
+          ],
+          "items": [
+            {
+              "id": "levels",
+              "title": "为什么不能直接说“HDFS 还是 Data Lake”？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "把四个词放回正确层次",
+                  "headers": [
+                    "概念",
+                    "它是什么",
+                    "不要误解为"
+                  ],
+                  "rows": [
+                    [
+                      "HDFS：Hadoop Distributed File System",
+                      "跨多台机器保存文件的分布式文件系统",
+                      "完整数据治理/分析体系"
+                    ],
+                    [
+                      "Data Lake 数据湖",
+                      "容纳多样数据并支撑后续处理、分析的架构",
+                      "只等于一个云对象桶"
+                    ],
+                    [
+                      "Data Warehouse 数据仓库",
+                      "面向组织后的分析数据、模型和查询服务",
+                      "只能用某一种磁盘或云服务"
+                    ],
+                    [
+                      "Data Lakehouse 数据湖仓",
+                      "在数据湖基础上结合表管理、可靠性和分析能力的架构",
+                      "换一个文件扩展名就自动实现"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "text": "更合理的问题是：“这套数据湖用 HDFS 还是对象存储做底座？需要哪些目录、表格式、计算和治理能力？”早期很多数据湖建在 HDFS 上，现代常见对象存储。存储和计算能否独立扩容是部署与系统设计维度，不能用它定义所有 HDFS 或所有数据湖。"
+                }
+              ]
+            },
+            {
+              "id": "composable-lake",
+              "title": "一套数据湖里，HDFS、计算引擎和目录怎么组合？",
+              "blocks": [
+                {
+                  "type": "diagram",
+                  "title": "数据湖的可组合能力",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "接入",
+                        "nodes": [
+                          {
+                            "id": "ingest",
+                            "title": "采集与写入",
+                            "en": "Ingestion",
+                            "text": "接入业务记录、事件、文件及其元数据"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "保存",
+                        "nodes": [
+                          {
+                            "id": "store",
+                            "title": "HDFS 或对象存储",
+                            "en": "Storage",
+                            "text": "作为持久层；按场景选择，也可共存"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "计算",
+                        "nodes": [
+                          {
+                            "id": "compute",
+                            "title": "Spark / Flink / 查询引擎",
+                            "en": "Processing",
+                            "text": "按业务任务处理、转换或查询所需的数据"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "理解与约束",
+                        "nodes": [
+                          {
+                            "id": "catalog",
+                            "title": "目录与元数据",
+                            "en": "Catalog",
+                            "text": "连接数据结构、业务含义、存储位置与责任"
+                          },
+                          {
+                            "id": "govern",
+                            "title": "权限与生命周期",
+                            "en": "Governance",
+                            "text": "对数据访问、使用目的、留存及处置施加约束"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "ingest",
+                        "to": "store",
+                        "label": "写入",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "store",
+                        "to": "compute",
+                        "label": "提供读取数据",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "compute",
+                        "to": "store",
+                        "label": "写回结果",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "catalog",
+                        "to": "store",
+                        "label": "定位资产",
+                        "kind": "control"
+                      },
+                      {
+                        "from": "catalog",
+                        "to": "compute",
+                        "label": "提供元信息",
+                        "kind": "control"
+                      },
+                      {
+                        "from": "govern",
+                        "to": "store",
+                        "label": "施加控制",
+                        "kind": "control"
+                      },
+                      {
+                        "from": "govern",
+                        "to": "compute",
+                        "label": "约束使用",
+                        "kind": "control"
+                      }
+                    ],
+                    "note": "教学组合图；只在需要保存处理结果时写回。并非每个引擎支持每一种连接器，也不表示所有治理能力由同一产品实现。"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "hdfs-internals",
+              "title": "HDFS 的 NameNode 和 DataNode 分别做什么？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "NameNode 管理目录、文件元数据及文件块的位置；DataNode 存放和提供数据块。客户端先获取位置信息，再与数据节点传输数据，文件内容并不都从 NameNode 转发。HDFS 面向大文件、高吞吐访问，放宽部分 POSIX 语义；支持追加等操作，不意味着支持任意位置的通用就地修改。"
+                }
+              ]
+            },
+            {
+              "id": "same-layer-choice",
+              "title": "真正同层的选型：HDFS 与对象存储怎样比较？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "先比存储需求，不拿数据湖代替某种底座",
+                  "headers": [
+                    "维度",
+                    "HDFS",
+                    "对象存储"
+                  ],
+                  "rows": [
+                    [
+                      "数据组织",
+                      "目录与文件，文件拆为分布式块",
+                      "对象键与元数据；额外目录语义依产品"
+                    ],
+                    [
+                      "主要关注",
+                      "大文件吞吐、数据节点与元数据服务管理",
+                      "对象 API、请求粒度、存储类别与服务限制"
+                    ],
+                    [
+                      "计算配合",
+                      "可利用数据本地性，需看实际部署",
+                      "常由独立计算通过网络读写，需优化访问模式"
+                    ],
+                    [
+                      "扩缩与运维",
+                      "容量、节点和容错由部署方案安排",
+                      "托管服务可降低设备管理负担，但有 API 和费用约束"
+                    ],
+                    [
+                      "不能笼统断言",
+                      "并非所有部署都必须存算绑死",
+                      "并非所有产品都弱一致或禁止一切局部更新"
+                    ]
+                  ]
+                },
+                {
+                  "type": "example",
+                  "text": "一家企业把数据湖从 HDFS 迁到对象存储，改变的是其中的存储底座和相应连接方式，数据湖这个整体仍然存在。迁移还要验证表格式、路径、权限、并发提交和查询性能；不是把 hdfs:// 改成 s3:// 就完成全部适配。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hpc-filesystem",
+          "title": "HPC 与并行文件系统：共享协调建在底层之上",
+          "en": "HPC & Parallel File Systems",
+          "kind": "reasoning",
+          "summary": "高性能计算需要的常是多机协作访问；块存储可以承载数据，但不会自动解决共享语义。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "AWS｜FSx for Lustre",
+              "url": "https://docs.aws.amazon.com/fsx/latest/LustreGuide/what-is.html"
+            },
+            {
+              "label": "AWS｜EBS Multi-Attach",
+              "url": "https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes-multi.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "why-parallel-fs",
+              "title": "为什么很多 HPC 任务用 Lustre，而不是直接让所有机器写块？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "许多 HPC 程序需要多台计算节点读写文件，依赖路径、目录、文件锁以及高并发吞吐。并行文件系统把文件的数据和元数据协调起来，并让数据访问分散到多个存储目标。其底层仍可使用磁盘或块设备，所以“用了文件系统”与“用了块设备”并不矛盾；它们提供的是不同层能力。"
+                },
+                {
+                  "type": "example",
+                  "text": "模拟任务中，几百个进程需要读取共同输入，再写各自结果。应用使用熟悉的文件接口，由并行文件系统处理布局和共享访问；长期结果又可转入对象存储。某些任务也适合本地 SSD 或直接对象访问，因此“所有 HPC 都不能用块/对象”都是过度概括。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "life-tiering",
+      "focus": "冷热分层优化的是满足访问和恢复要求后的总成本，不能只追求更低存储单价。",
+      "sections": [
+        {
+          "id": "heat-policy",
+          "title": "年龄、热度、业务价值：三种分层依据",
+          "en": "Age / Access Heat / Business Value",
+          "kind": "comparison",
+          "summary": "低频访问不等于低价值，观察不到访问也不等于没人用。",
+          "sourceIds": [
+            2,
+            4
+          ],
+          "extraSources": [
+            {
+              "label": "AWS S3｜Lifecycle Transitions",
+              "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "heat-inputs",
+              "title": "冷数据应该按多久没用，还是按创建日期判断？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "不同信号给出不同信息",
+                  "headers": [
+                    "信号",
+                    "能说明什么",
+                    "容易误判"
+                  ],
+                  "rows": [
+                    [
+                      "数据年龄 Age",
+                      "距离创建或指定起点多久",
+                      "很老的数据仍可能每天用于分析"
+                    ],
+                    [
+                      "最近访问 Recency",
+                      "多久没有被观察到访问",
+                      "日志覆盖不足或季度任务尚未运行"
+                    ],
+                    [
+                      "访问频次 Frequency",
+                      "观察窗口内使用多不多",
+                      "小窗口看不到周期性需求"
+                    ],
+                    [
+                      "业务价值与恢复约束",
+                      "停用/慢取回会造成什么影响",
+                      "不能简单压成一个通用热度分数"
+                    ]
+                  ]
+                },
+                {
+                  "type": "example",
+                  "text": "某季度结算表三个月才查一次，频率低但必须在结算日及时可用；某临时调试日志昨天生成，却很快失去用途。前者不应只因低频就进入难以即时取回的归档层，后者也不必因为年轻就长期留在高成本层。"
+                }
+              ]
+            },
+            {
+              "id": "thresholds",
+              "title": "能直接套用 7 天热、90 天冷和固定分数吗？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "这些数字可以当练习参数，不能当普遍标准。先收集有代表性的访问周期、查询要求和成本，再试运行规则并抽样检查被选中的资产。还要区分“没有访问”和“没有采集到访问”，为关键资产设保护条件，并用进入与退出层的不同门槛减少反复迁移。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tiering-architecture",
+          "title": "自动分层架构：观察、决策、迁移、恢复",
+          "en": "Automated Tiering Architecture",
+          "kind": "architecture",
+          "summary": "热度判断、目录路由和实际数据搬迁属于不同职责。",
+          "sourceIds": [
+            2,
+            4
+          ],
+          "extraSources": [
+            {
+              "label": "Apache Iceberg｜Maintenance",
+              "url": "https://iceberg.apache.org/docs/latest/maintenance/"
+            },
+            {
+              "label": "AWS S3｜Archived Object Restore",
+              "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/restoring-objects.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "components",
+              "title": "一套分层系统需要哪些组件？",
+              "blocks": [
+                {
+                  "type": "diagram",
+                  "title": "教学版自动分层控制流",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "观察",
+                        "nodes": [
+                          {
+                            "id": "signals",
+                            "title": "使用与资产信号",
+                            "en": "Telemetry",
+                            "text": "汇集访问、大小、Owner、分类与留存约束"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "决策",
+                        "nodes": [
+                          {
+                            "id": "policy",
+                            "title": "策略判断",
+                            "en": "Policy Engine",
+                            "text": "结合业务保护条件输出候选迁移计划"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "执行",
+                        "nodes": [
+                          {
+                            "id": "migrate",
+                            "title": "迁移与提交",
+                            "en": "Migration",
+                            "text": "按存储和表格式支持的能力执行迁移并校验"
+                          },
+                          {
+                            "id": "restore",
+                            "title": "恢复通道",
+                            "en": "Restore",
+                            "text": "需要访问归档时申请取回并追踪可读取状态"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "验证",
+                        "nodes": [
+                          {
+                            "id": "verify",
+                            "title": "结果验证",
+                            "en": "Verification",
+                            "text": "检查查询、成本、旧引用和失败情况"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "signals",
+                        "to": "policy",
+                        "label": "提供事实",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "policy",
+                        "to": "migrate",
+                        "label": "给出经确认的计划",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "migrate",
+                        "to": "verify",
+                        "label": "提交证据",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "restore",
+                        "to": "verify",
+                        "label": "确认可读",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "verify",
+                        "to": "policy",
+                        "label": "修正策略",
+                        "kind": "feedback"
+                      }
+                    ],
+                    "note": "这是综合教学设计，并非某篇文章提供的可直接部署配置；具体实现应遵循产品事务与恢复机制。"
+                  }
+                },
+                {
+                  "type": "explain",
+                  "text": "元数据目录帮助查询引擎定位当前文件，策略引擎负责判断要不要迁移，执行器负责真正搬运或切换存储类别。这些角色不能互相替代：目录地址改了不代表数据复制完成，迁移完成不代表查询达标，归档完成也不代表立刻可读。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "safe-migration",
+          "title": "文件迁移与表元数据：为什么不能 copy 后立即删原件",
+          "en": "Migration & Metadata Commit",
+          "kind": "workflow",
+          "summary": "目录切换、并发读写和旧快照引用需要一起处理。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "Apache Iceberg｜Maintenance",
+              "url": "https://iceberg.apache.org/docs/latest/maintenance/"
+            },
+            {
+              "label": "AWS S3｜Lifecycle Transitions",
+              "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "commit-sequence",
+              "title": "安全迁移为什么不是简单的三条命令？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "一般教学思路是先确认表格式和并发约束，再写入或迁移到目标位置、验证完整性，通过系统支持的机制提交新元数据，最后在旧读者和快照不再依赖旧文件后清理。Iceberg 等表格式有自身的快照、重写与过期机制，不能绕开它们任意移动文件并修改路径；对象存储的类别转换又是另一类操作。"
+                },
+                {
+                  "type": "table",
+                  "title": "容易漏掉的条件",
+                  "headers": [
+                    "环节",
+                    "需要确认"
+                  ],
+                  "rows": [
+                    [
+                      "开始前",
+                      "当前读写者、快照引用、权限与目标可读性"
+                    ],
+                    [
+                      "复制或重写后",
+                      "内容完整、分区和表结构正确"
+                    ],
+                    [
+                      "提交时",
+                      "使用表格式支持的原子提交/并发检查"
+                    ],
+                    [
+                      "清理前",
+                      "旧快照、读者及恢复路径不再引用旧文件"
+                    ],
+                    [
+                      "失败时",
+                      "能区分已提交与未提交状态，避免重复或误删"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "compaction",
+              "title": "Compaction 是压缩吗？为什么小文件多会贵？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "Compaction（文件合并整理）把许多小文件重写为更合适的布局，常用于减少文件打开、元数据和任务调度开销；Compression（压缩）则用编码减少字节量。两者可以一起做，但不是同一动作。合并也会消耗计算和 I/O，并产生新旧文件共存阶段；文件目标大小和编码参数应按查询与写入模式验证。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "restore-cost",
+          "title": "冷存储与深度归档：便宜不等于即取即用",
+          "en": "Cold Storage & Restore Cost",
+          "kind": "reasoning",
+          "summary": "总成本需要包含请求、取回、迁移和业务等待。",
+          "sourceIds": [],
+          "extraSources": [
+            {
+              "label": "AWS S3｜Lifecycle Transitions",
+              "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html"
+            },
+            {
+              "label": "AWS S3｜Archived Object Restore",
+              "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/restoring-objects.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "not-transparent",
+              "title": "改完元数据，归档文件就能透明实时查吗？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "不能据此保证。某些低频层仍可直接访问，某些归档层则要先发起恢复请求并等待可读副本。目录只能告诉查询引擎去哪找数据，不能消除底层取回流程。产品界面应区分已归档、恢复中、可读取和恢复失败，查询或任务也需要明确等待、取消和超时策略。"
+                },
+                {
+                  "type": "table",
+                  "title": "比较层级时同时看这些维度",
+                  "headers": [
+                    "维度",
+                    "要问的问题"
+                  ],
+                  "rows": [
+                    [
+                      "保存成本",
+                      "最低计费期、最小对象计费、元数据开销如何算"
+                    ],
+                    [
+                      "访问成本",
+                      "请求和取回多少，是否大量小对象"
+                    ],
+                    [
+                      "迁移成本",
+                      "重写、复制、网络和运行维护要花多少"
+                    ],
+                    [
+                      "服务要求",
+                      "用户能等多久，关键任务能否按时完成"
+                    ],
+                    [
+                      "退出要求",
+                      "到期删除与保留例外是否仍可执行"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "life-backup",
+      "focus": "复制提高持续服务能力，备份提供恢复时间点，归档服务长期保留；三者不能简单替代。",
+      "sections": [
+        {
+          "id": "three-protections",
+          "title": "Replication、Backup、Archive：保护目标不同",
+          "en": "Replication / Backup / Archive",
+          "kind": "comparison",
+          "summary": "数据多放几份，不代表可以恢复到错误发生之前。",
+          "sourceIds": [
+            4,
+            6
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "failure-types",
+              "title": "有三个副本，为什么仍可能需要备份？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "先明确要防哪种问题",
+                  "headers": [
+                    "机制",
+                    "主要目标",
+                    "典型局限"
+                  ],
+                  "rows": [
+                    [
+                      "Replication 复制",
+                      "节点失效时继续服务或分散访问",
+                      "误写与误删可能一起传播"
+                    ],
+                    [
+                      "Backup 备份",
+                      "恢复到受保护的时间点或版本",
+                      "需要验证能恢复，恢复可能耗时"
+                    ],
+                    [
+                      "Archive 归档",
+                      "长期保存较少使用的数据",
+                      "可能取回慢，不自动提供任意时间点恢复"
+                    ]
+                  ]
+                },
+                {
+                  "type": "example",
+                  "text": "一台存储服务器损坏，在线副本可能立即接管；如果有人把价格全部错误改为零，而该变更正常复制到每个节点，多个副本会一起变错。此时需要可恢复的历史版本或备份。反过来，备份保留完好也不能保证线上服务立即不中断。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "restore-test",
+          "title": "备份成功与恢复成功：两个验收条件",
+          "en": "Backup & Restore Verification",
+          "kind": "workflow",
+          "summary": "恢复测试要验证数据、依赖和服务可用性，而不是只看备份任务绿色。",
+          "sourceIds": [
+            6
+          ],
+          "extraSources": [
+            {
+              "label": "AWS Backup｜Restore Testing",
+              "url": "https://docs.aws.amazon.com/aws-backup/latest/devguide/restore-testing.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "restore-path",
+              "title": "恢复数据库后，还要检查什么？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "教学验收应覆盖备份文件可读取、密钥与配置可用、恢复数据一致、依赖连接正确，以及业务能够按要求恢复服务。还要确认备份中的旧权限、旧留存规则和已删除数据不会被未经检查地重新启用。具体检查依系统设计而定，不能仅凭“备份任务成功”推断灾难时一定可恢复。"
+                },
+                {
+                  "type": "example",
+                  "text": "某环境保存了加密备份，却没有可用的解密密钥或恢复权限；备份字节存在，但恢复流程无法完成。另一个环境成功还原数据，却连接到错误的消息队列。两者都说明恢复能力是端到端能力，不能只验一个存储动作。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "life-deletion",
+      "focus": "删除是跨副本、跨阶段的过程；请求被接受、不能访问和最终清除必须分别确认。",
+      "sections": [
+        {
+          "id": "deletion-states",
+          "title": "软删除、逻辑删除与底层清除：不同状态",
+          "en": "Deletion States",
+          "kind": "comparison",
+          "summary": "“删除成功”需要附带明确的完成定义。",
+          "sourceIds": [
+            6
+          ],
+          "extraSources": [
+            {
+              "label": "Google Cloud Storage｜Soft Delete",
+              "url": "https://docs.cloud.google.com/storage/docs/soft-delete"
+            },
+            {
+              "label": "NIST SP 800-88 Rev.2｜Media Sanitization",
+              "url": "https://csrc.nist.gov/pubs/sp/800/88/r2/final"
+            }
+          ],
+          "items": [
+            {
+              "id": "delete-meaning",
+              "title": "执行 DELETE 后，究竟已经完成什么？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "按状态说清楚结果",
+                  "headers": [
+                    "状态或机制",
+                    "可能已经做到",
+                    "不能直接推断"
+                  ],
+                  "rows": [
+                    [
+                      "请求接受 Request Accepted",
+                      "系统登记了删除工作",
+                      "所有下游已经完成"
+                    ],
+                    [
+                      "软删除 Soft Delete",
+                      "进入指定恢复状态",
+                      "不可恢复或已物理清除"
+                    ],
+                    [
+                      "逻辑删除 Logical Deletion",
+                      "应用或存储语义上移除对象/引用",
+                      "旧字节和所有备份都消失"
+                    ],
+                    [
+                      "底层清理 / Sanitization",
+                      "按适用机制处理存储残留",
+                      "仅凭应用回执已证实完成"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "text": "同一个“删除”按钮可能先隐藏记录，再异步清理索引、缓存、分析副本和备份。软删除强调恢复窗口，逻辑删除描述系统移除语义，两者在具体产品中可能重叠。设计时把状态、可访问性、恢复能力和完成证据写清楚，比强行把所有产品套进同一种名词顺序更有用。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "deletion-pipeline",
+          "title": "跨系统删除：范围、确认、重试与备份退出",
+          "en": "End-to-end Deletion Pipeline",
+          "kind": "architecture",
+          "summary": "Google 案例展示分阶段处理；下面将其转化为可讨论的项目控制问题。",
+          "sourceIds": [
+            6
+          ],
+          "extraSources": [],
+          "items": [
+            {
+              "id": "pipeline",
+              "title": "怎样组织一次可验收的删除？",
+              "blocks": [
+                {
+                  "type": "diagram",
+                  "title": "教学版删除追踪流程",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "确定范围",
+                        "nodes": [
+                          {
+                            "id": "request",
+                            "title": "请求与身份",
+                            "en": "Deletion Request",
+                            "text": "明确对象、身份映射、适用范围和例外"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "推进执行",
+                        "nodes": [
+                          {
+                            "id": "active",
+                            "title": "活跃系统",
+                            "en": "Active Systems",
+                            "text": "处理在线数据、搜索索引以及相关活跃副本"
+                          },
+                          {
+                            "id": "retry",
+                            "title": "状态与重试",
+                            "en": "Tracking",
+                            "text": "记录各目标确认，重试失败和未知状态"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "处理历史副本",
+                        "nodes": [
+                          {
+                            "id": "backup",
+                            "title": "备份与归档",
+                            "en": "Backup / Archive",
+                            "text": "按适用机制清除或到期，并管理恢复路径"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "验收",
+                        "nodes": [
+                          {
+                            "id": "proof",
+                            "title": "完成证据",
+                            "en": "Evidence",
+                            "text": "核对范围、剩余例外与各阶段完成条件"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "request",
+                        "to": "active",
+                        "label": "派发工作",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "active",
+                        "to": "retry",
+                        "label": "报告结果",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "retry",
+                        "to": "active",
+                        "label": "失败重试",
+                        "kind": "feedback"
+                      },
+                      {
+                        "from": "retry",
+                        "to": "backup",
+                        "label": "跟踪历史范围",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "backup",
+                        "to": "proof",
+                        "label": "提交状态",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "retry",
+                        "to": "proof",
+                        "label": "汇总确认",
+                        "kind": "flow"
+                      }
+                    ],
+                    "note": "这是教学设计，不是 Google 或 TikTok 的完整内部拓扑；Google 文档中的时间只属于其自身机制与承诺。"
+                  }
+                },
+                {
+                  "type": "example",
+                  "text": "假设用户删除账号，主数据库已处理但搜索索引失败。对外状态不能把主库成功包装成全链路完成；应记录失败目标、重试和升级条件。即使所有已知系统都确认，也仍要说明资产发现的覆盖范围，避免把未知副本排除在统计之外。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "crypto-erase",
+          "title": "加密清除：删密钥为什么可能有效，又何时不足",
+          "en": "Cryptographic Erasure",
+          "kind": "reasoning",
+          "summary": "有效性依赖密钥覆盖、密钥副本及明文残留等条件。",
+          "sourceIds": [
+            6
+          ],
+          "extraSources": [
+            {
+              "label": "NIST SP 800-88 Rev.2｜Media Sanitization",
+              "url": "https://csrc.nist.gov/pubs/sp/800/88/r2/final"
+            }
+          ],
+          "items": [
+            {
+              "id": "key-scope",
+              "title": "销毁一个密钥，是否就删除了所有个人数据？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "加密清除（Cryptographic Erasure）使相应密文失去可用解密能力，但必须确认数据确实由这些密钥保护、密钥副本和恢复路径受到处理，也没有遗漏明文副本。密钥粒度同样重要：许多用户共用一个密钥时，销毁它会影响不该删除的数据，不能把“删密钥”当作任意用户级删除的通用快捷键。"
+                },
+                {
+                  "type": "example",
+                  "text": "若某用户资料在主库按独立密钥加密，但其邮箱已明文导入另一张分析表，删除主库密钥不会让分析表中的邮箱消失。删除机制必须与数据实际流向和加密边界匹配。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "life-retention",
+      "focus": "分别定义何时到期、何时禁止删除、何时解除例外以及何时最终清理。",
+      "sections": [
+        {
+          "id": "ttl-lock-hold",
+          "title": "TTL、Retention、Legal Hold：三个不同开关",
+          "en": "TTL / Retention / Legal Hold",
+          "kind": "comparison",
+          "summary": "到期可删除、触发删除与立即清除不是同一件事。",
+          "sourceIds": [
+            4
+          ],
+          "extraSources": [
+            {
+              "label": "AWS｜DynamoDB TTL",
+              "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html"
+            },
+            {
+              "label": "AWS S3｜Object Lock",
+              "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "three-controls",
+              "title": "保护期结束，系统就一定删掉了吗？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "以具体产品机制说明，不当作通用法律规则",
+                  "headers": [
+                    "机制",
+                    "主要作用",
+                    "关键边界"
+                  ],
+                  "rows": [
+                    [
+                      "TTL：Time to Live",
+                      "标记或触发数据过期处理",
+                      "DynamoDB 的到期清理是异步的，不是时间一到字节立即消失"
+                    ],
+                    [
+                      "Retention Policy 留存策略",
+                      "约定保存或退出条件",
+                      "可能包含最少保留及最迟删除要求，需明确语境"
+                    ],
+                    [
+                      "S3 Object Lock Retention",
+                      "在指定保护期内限制删除受保护版本",
+                      "保护到期通常只是解除该限制，不自动完成删除"
+                    ],
+                    [
+                      "Legal Hold 保留冻结",
+                      "在解除前阻止相关受保护版本删除",
+                      "与普通到期时间分别管理，需要有解除责任"
+                    ]
+                  ]
+                },
+                {
+                  "type": "example",
+                  "text": "某对象有到期清理规则，同时处于有效的保留冻结状态。治理系统应识别冲突、记录原因并按授权流程处理，而不是强行删除或永久默默跳过。产品的具体优先级和权限行为要按文档核对。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "retention-scope",
+          "title": "留存起算点、对象版本与例外责任",
+          "en": "Retention Scope & Exceptions",
+          "kind": "workflow",
+          "summary": "“保留一年”只写了一个数字，离可实施策略还差多个决定。",
+          "sourceIds": [
+            4
+          ],
+          "extraSources": [
+            {
+              "label": "AWS S3｜Object Lock",
+              "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"
+            }
+          ],
+          "items": [
+            {
+              "id": "policy-fields",
+              "title": "同样保留一年，为什么结果可能差很多？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "一年可以从创建、最后活动、业务结束或另一个明确事件起算；对象可能是当前记录、所有版本、派生数据或备份。策略还需说明适用目的、责任人、例外、复核条件和退出证据。这里不提供统一期限：正确参数来自具体业务与经确认的要求，而不是照搬另一家公司或示例架构。"
+                },
+                {
+                  "type": "table",
+                  "title": "把留存策略写到可执行",
+                  "headers": [
+                    "必须说明",
+                    "不明确会怎样"
+                  ],
+                  "rows": [
+                    [
+                      "对象与范围",
+                      "只删当前版本，却留下旧版本和副本"
+                    ],
+                    [
+                      "起算事件与时区",
+                      "不同系统判断出不同到期日"
+                    ],
+                    [
+                      "处置方式",
+                      "到期仅打标，却无人推进清理"
+                    ],
+                    [
+                      "例外责任与复核",
+                      "临时暂停变成无期限保留"
+                    ],
+                    [
+                      "验证与证据",
+                      "只知道任务跑过，不知道目标是否处理完"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "versions",
+              "title": "S3 删除标记为什么不等于旧版本被清除？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "在启用版本控制的场景，当前名称下看不到对象，仍可能保留历史版本。Object Lock 的保护作用于具体对象版本；删除标记和被保护的旧版本需要分别理解。因此盘点、成本核算、留存和删除验收都应写明版本范围，不能仅用一次普通列表查询证明旧数据已经不存在。"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
