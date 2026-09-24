@@ -1,0 +1,526 @@
+{
+  "moduleEnglish": {
+    "governance": "Data Governance & Accountability",
+    "assets": "Data Assets, Metadata & Lineage",
+    "lifecycle": "Data Lifecycle Management"
+  },
+  "topicEnglish": {
+    "gov-boundary": "Data Governance vs. Data Management",
+    "gov-ownership": "Data Ownership & Stewardship",
+    "gov-models": "Centralized, Distributed & Federated Governance",
+    "gov-value": "Business-Value-Driven Governance",
+    "gov-workflow": "Governance Workflow & Rule Engine",
+    "gov-evidence": "Governance Metrics & Audit Evidence",
+    "asset-inventory": "Data Discovery & Asset Inventory",
+    "asset-metadata": "Metadata, Data Catalog & Data Lineage",
+    "asset-granularity": "Table-, Column- & Record-Level Lineage",
+    "asset-sql": "SQL Parsing, AST & Relational Plans",
+    "asset-provenance": "Data Provenance & W3C PROV",
+    "asset-coverage": "Lineage Coverage & Blind Spots",
+    "life-stages": "Data Lifecycle Management: DLM & ILM",
+    "life-storage": "Block, File & Object Storage",
+    "life-tiering": "Storage Tiering & Archiving",
+    "life-backup": "Replication, Backup & Restore",
+    "life-deletion": "Data Deletion & Cryptographic Erasure",
+    "life-retention": "TTL, Data Retention & Legal Hold"
+  },
+  "terms": [
+    {
+      "id": "structured-query-language", "zh": "结构化查询语言", "en": "Structured Query Language", "abbr": "SQL", "aliases": ["SQL 语言"],
+      "definition": "用来定义、查询和操作关系数据的语言，让人描述想得到什么结果。不同数据库和处理引擎使用各自的 SQL 方言，并把查询转成执行计划。",
+      "distinction": "SQL 是语言，Calcite 是查询框架，Flink 是处理系统；会写 SQL 不等于相同语句能在所有引擎原样运行。",
+      "example": "用 SELECT 筛选订单，再用 GROUP BY 统计各地区收入，是常见的 SQL 表达方式。",
+      "topicIds": ["asset-sql", "rel-cost"], "sourceIds": [8], "extraSources": [{"label":"IBM｜Structured Query Language","url":"https://www.ibm.com/think/topics/structured-query-language"}], "origin": "source"
+    },
+    {
+      "id": "directed-acyclic-graph", "zh": "有向无环图", "en": "Directed Acyclic Graph", "abbr": "DAG", "aliases": ["任务依赖图", "DAG 图"],
+      "definition": "由有方向的连接组成、沿方向走不会回到起点的图。任务调度常用它表示先后依赖，便于判断哪些任务可并行、哪些必须等待上游。",
+      "distinction": "DAG 是一种图结构，不自动等于关键路径；还需加入任务耗时和实际约束，才能分析哪条路径决定完成时间。",
+      "example": "清洗完成后，日报和模型特征可同时计算；最终验收再等待两个分支完成。",
+      "topicIds": ["rel-sla", "asset-coverage", "asset-sql"], "sourceIds": [1], "extraSources": [{"label":"Apache Airflow｜Dags","url":"https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html"}], "origin": "source"
+    },
+    {
+      "id": "data-quality", "zh": "数据质量", "en": "Data Quality", "abbr": "DQ", "aliases": [],
+      "definition": "判断数据能否满足特定用途的一组要求，常看准确性、完整性、一致性、有效性、唯一性和及时性。不同业务需要选择各自关键的检查维度。",
+      "distinction": "格式合法不代表内容真实，行数齐全也不代表没有重复；一个维度通过不能替代整体质量判断。",
+      "example": "订单金额不能为空只是完整性要求，还要检查金额是否准确、订单是否重复。",
+      "topicIds": ["rel-quality", "gov-boundary", "gov-evidence"], "sourceIds": [1, 2, 3], "extraSources": [{"label":"IBM｜Data Quality","url":"https://www.ibm.com/think/topics/data-quality"}], "origin": "source"
+    },
+    {
+      "id": "data-freshness", "zh": "数据新鲜度", "en": "Data Freshness", "abbr": "", "aliases": ["数据时效性"],
+      "definition": "衡量数据更新得是否足够及时，能够满足当前业务使用。需要明确观察的是最后更新时间、事件时间还是数据可用时间，避免同名指标口径不同。",
+      "distinction": "新鲜度是质量的一个维度；刚更新的数据仍可能错误。及时性也可能指按约定截止时间可用，定义要先对齐。",
+      "example": "风险判断需要近几分钟的事件，昨天生成的数据即使准确，也可能已经不够新鲜。",
+      "topicIds": ["rel-quality", "rel-sla", "asset-coverage"], "sourceIds": [], "extraSources": [{"label":"Google Cloud｜Data Quality Dimensions：Freshness","url":"https://docs.cloud.google.com/knowledge-catalog/docs/auto-data-quality-overview"},{"label":"IBM｜Data Quality Dimensions","url":"https://www.ibm.com/think/topics/data-quality"}], "origin": "extension"
+    },
+    {
+      "id": "extract-transform-load", "zh": "抽取、转换、加载", "en": "Extract, Transform, Load", "abbr": "ETL", "aliases": ["ETL 管道"],
+      "definition": "先从来源提取数据，再清洗或转换，最后加载到目标系统的一种集成顺序。治理需要跟踪这一路径中的字段变化、质量检查与使用权限。",
+      "distinction": "ETL 先转换再加载，ELT 先加载再转换；先后顺序会改变处理位置，但两者都需要治理。",
+      "example": "先把各地区订单金额换算成统一币种，再加载到分析仓库供报表使用。",
+      "topicIds": ["asset-metadata", "asset-coverage", "life-stages"], "sourceIds": [3, 5], "extraSources": [{"label":"IBM｜ETL","url":"https://www.ibm.com/think/topics/etl"}], "origin": "source"
+    },
+    {
+      "id": "extract-load-transform", "zh": "抽取、加载、转换", "en": "Extract, Load, Transform", "abbr": "ELT", "aliases": ["ELT 管道"],
+      "definition": "先把来源数据加载到目标平台，再利用目标平台的计算能力进行转换。原始数据可能更早进入目标环境，因此进入时就需要适当控制。",
+      "distinction": "ELT 不表示无需清洗，也不表示原始数据可无限保存；它主要改变转换发生的位置和顺序。",
+      "example": "订单先进入云数仓的原始层，再通过仓内查询生成清洗层与经营指标。",
+      "topicIds": ["asset-metadata", "asset-coverage", "life-stages"], "sourceIds": [3, 5], "extraSources": [{"label":"IBM｜ELT","url":"https://www.ibm.com/think/topics/elt"}], "origin": "source"
+    },
+    {
+      "id": "serialization", "zh": "序列化", "en": "Serialization", "abbr": "", "aliases": ["树的序列化"],
+      "definition": "把内存中的结构转换为可保存或传输的表示，例如字节流或结构化文本。AST 可以序列化，但处理树并不总要先走这个步骤。",
+      "distinction": "序列化是表示转换，向量化是提取数值特征；两者不相同，也不能声称所有相似度算法都必须先序列化。",
+      "example": "把 SQL 语法树保存为 JSON 便于传输，然后由具体算法选择怎样提取比较特征。",
+      "topicIds": ["asset-sql", "rel-cost"], "sourceIds": [1], "extraSources": [{"label":"Oracle｜Java Object Serialization Architecture","url":"https://docs.oracle.com/en/java/javase/25/docs/specs/serialization/serial-arch.html"}], "origin": "extension"
+    },
+    {
+      "id": "data-governance", "zh": "数据治理", "en": "Data Governance", "abbr": "", "aliases": [],
+      "definition": "约定数据由谁决定、遵循什么规则、出了问题谁负责，并推动规则被执行和检查。它把业务目标变成明确的责任、标准与控制。",
+      "distinction": "治理属于更广的数据管理；建表、搬数据是实施活动，制定责任与验收规则是治理活动，两者需要衔接。",
+      "example": "公司规定客户数据必须有负责人；工程团队把负责人登记和缺失提醒接入建表流程。",
+      "topicIds": ["gov-boundary", "gov-workflow"], "sourceIds": [3], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "data-management", "zh": "数据管理", "en": "Data Management", "abbr": "", "aliases": [],
+      "definition": "组织让数据可获取、可保存、可使用和可维护的整体实践，包含架构、集成、存储、质量、安全与治理等工作。可以理解为整个数据运营体系。",
+      "distinction": "数据管理范围更大；数据治理决定管理工作的责任和规则，不能把两者画成彼此完全独立的部门。",
+      "example": "建设订单数仓、维护备份、明确访问权限和负责人，都属于数据管理体系的不同部分。",
+      "topicIds": ["gov-boundary", "life-stages"], "sourceIds": [3, 4], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "data-owner", "zh": "数据所有者", "en": "Data Owner", "abbr": "", "aliases": ["数据责任人", "数据负责人"],
+      "definition": "对某个数据域的业务决策、使用要求与治理结果承担责任的角色。这里的所有者强调组织责任，并不等于数据库账号的技术所有权。",
+      "distinction": "Owner 通常负责决策和结果，Steward 负责日常维护；具体权限要由组织约定，不能只看职位名称。",
+      "example": "订单负责人决定取消订单是否计入成交额，并对这个口径被正确使用负责。",
+      "topicIds": ["gov-ownership", "asset-inventory"], "sourceIds": [3, 1], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "data-steward", "zh": "数据管理员", "en": "Data Steward", "abbr": "", "aliases": ["数据管家", "数据监管员"],
+      "definition": "维护数据定义、质量问题和日常治理流程的角色，把业务规则转成团队可以理解和执行的工作。不同公司也会称为数据管家或数据监管员。",
+      "distinction": "Steward 不自动等于数据库管理员 DBA；前者重在数据含义与治理维护，后者重在数据库技术运行。",
+      "example": "发现两个报表的成交额不一致，Steward 核对定义、登记问题并协调修正。",
+      "topicIds": ["gov-ownership"], "sourceIds": [3], "extraSources": [{"label":"IBM｜Data Stewardship","url":"https://www.ibm.com/think/topics/data-stewardship"}], "origin": "source"
+    },
+    {
+      "id": "data-domain", "zh": "数据域", "en": "Data Domain", "abbr": "", "aliases": ["业务数据域", "治理域"],
+      "definition": "按业务含义或治理责任划出的一组相关数据，例如客户域、订单域。实际治理项目也可以按数据库、团队或资源范围圈选治理域。",
+      "distinction": "数据域是责任或业务边界，不一定等于一个数据库；同一数据库可能放着多个域的数据。",
+      "example": "订单域既包含订单表，也包含订单事件流和相关指标，可能跨越多个系统。",
+      "topicIds": ["gov-ownership", "gov-models", "gov-workflow"], "sourceIds": [1, 2, 3], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "centralized-governance", "zh": "集中式治理", "en": "Centralized Data Governance", "abbr": "", "aliases": ["集中治理"],
+      "definition": "把较多数据规则和治理决策集中在共同团队或委员会，再由各业务协同实施。它通常便于统一标准，但中心团队也可能形成处理瓶颈。",
+      "distinction": "集中的是权责与决策方式，不表示所有数据必须物理集中存放；组织模式与存储架构是不同维度。",
+      "example": "新增敏感数据类别需要统一治理团队确认，各业务按同一分类标准执行。",
+      "topicIds": ["gov-models"], "sourceIds": [1, 2], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "distributed-governance", "zh": "分布式治理", "en": "Distributed Data Governance", "abbr": "", "aliases": ["分布式自治", "分布式数据治理"],
+      "definition": "把治理目标、责任与执行更多放到业务单元，由平台提供工具和监督。业务围绕自己的痛点形成治理闭环，跨团队仍需协调责任交界。",
+      "distinction": "责任分布不等于所有政策任意决定，也不等于一定有中央委员会；共同约束如何制定要看具体组织。",
+      "example": "推荐团队负责自己的延迟和成本治理，平台提供诊断规则与结果追踪能力。",
+      "topicIds": ["gov-models", "gov-value"], "sourceIds": [1, 2, 7], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "federated-governance", "zh": "联合治理", "en": "Federated Data Governance", "abbr": "", "aliases": ["联邦式治理", "联邦治理"],
+      "definition": "共同层维护组织标准，各数据域在这个边界内负责自己的定义、质量与实施。关键是明确哪些决定统一做、哪些决定由业务域来做。",
+      "distinction": "Federated 更强调共同标准与域内自治的结合；不要把它直接当成所有分布式治理案例的同义词。",
+      "example": "统一敏感数据保护要求，订单域和客服域分别决定如何在各自系统里落实。",
+      "topicIds": ["gov-models"], "sourceIds": [], "extraSources": [{"label":"IBM｜Data Mesh：Federated Governance","url":"https://www.ibm.com/think/topics/data-mesh"}], "origin": "framework"
+    },
+    {
+      "id": "value-driven-governance", "zh": "价值驱动治理", "en": "Business-Value-Driven Governance", "abbr": "", "aliases": ["业务价值驱动", "问题驱动治理"],
+      "definition": "先选一个明确业务问题，再决定需要哪些规则、工具和责任安排。治理是否有效，要看延迟、浪费或风险等问题是否得到可衡量的改善。",
+      "distinction": "它是一种实施取向，不是固定产品名或认证方法；追求短期收益时也要保留长期架构与必要控制。",
+      "example": "先治理每天拖慢核心报表的十条任务，用收益争取业务参与，再逐步扩大范围。",
+      "topicIds": ["gov-value", "gov-workflow"], "sourceIds": [1, 2], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "governance-rule-engine", "zh": "治理规则引擎", "en": "Governance Rule Engine", "abbr": "", "aliases": ["规则引擎"],
+      "definition": "把治理条件写成可重复执行的规则，再对资产或运行信息进行检查。引擎产出的通常是问题线索和处置依据，是否自动操作还需要单独设计。",
+      "distinction": "命中规则不等于问题已经解决；检测、派单、修改和结果验收是后续不同环节。",
+      "example": "规则找出长期无人访问且未设置过期时间的表，先交给负责人确认是否可清理。",
+      "topicIds": ["gov-workflow", "gov-evidence"], "sourceIds": [1, 2], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "audit-trail", "zh": "审计轨迹", "en": "Audit Trail", "abbr": "", "aliases": ["审计记录", "审计证据"],
+      "definition": "能还原某项操作由谁、在何时、依据什么规则完成以及结果如何的一组记录。它帮助检查决策与执行过程，而不只是显示一个完成状态。",
+      "distinction": "仪表板是结果摘要，审计轨迹提供可追溯的细节；留有日志也不自动证明日志完整或控制有效。",
+      "example": "删除工单关联审批、策略版本、各系统回执和失败重试记录，方便日后核查。",
+      "topicIds": ["gov-evidence", "gov-workflow"], "sourceIds": [3, 5], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "data-asset", "zh": "数据资产", "en": "Data Asset", "abbr": "", "aliases": [],
+      "definition": "组织需要识别、使用和管理的数据对象，例如表、文件、报表、事件流或模型相关数据。称为资产强调它有用途、责任与需要管理的风险。",
+      "distinction": "数据资产不只是一张表；资产范围可以包括非结构化文件和派生结果，但不意味着每个对象都有同等价值。",
+      "example": "一份订单明细表和基于它生成的经营报表是两个相关的数据资产。",
+      "topicIds": ["asset-inventory", "asset-metadata"], "sourceIds": [3, 7], "extraSources": [{"label":"IBM｜Data Catalog：Data Assets","url":"https://www.ibm.com/think/topics/data-catalog"}], "origin": "source"
+    },
+    {
+      "id": "data-inventory", "zh": "数据资产清单", "en": "Data Inventory", "abbr": "", "aliases": ["资产清单", "数据清单", "资产盘点"],
+      "definition": "把已经发现的数据资产列出来，至少说清有什么、在哪里、由谁负责。它是治理范围的底账，需要随新增、迁移和下线持续更新。",
+      "distinction": "Inventory 强调清点结果；Data Catalog 通常在此基础上加入可搜索的元数据、业务说明和关系。两者有关，但不是完全相同的能力。",
+      "example": "先登记公司有二百张业务表及负责人，再把这些记录接入可搜索的数据目录。",
+      "topicIds": ["asset-inventory", "asset-metadata"], "sourceIds": [3], "extraSources": [{"label":"美国联邦数据治理指南｜Data Inventory 与 Data Catalog","url":"https://resources.data.gov/assets/documents/Zero-Trust-DataSecurityGuide_Oct24-Appendices.pdf"}], "origin": "source"
+    },
+    {
+      "id": "data-catalog", "zh": "数据目录", "en": "Data Catalog", "abbr": "", "aliases": ["数据资产目录"],
+      "definition": "利用元数据把资产组织成可搜索、可理解的目录，让人找到需要的数据，并了解含义、位置、负责人及使用条件。可以把它想成企业数据的图书馆目录。",
+      "distinction": "Catalog 不是存放业务数据本身的数仓，也不只是文件夹；资产清单偏向清点，目录还帮助发现和理解。",
+      "example": "搜索成交额后，目录展示对应数据表、口径说明、更新频率和申请访问入口。",
+      "topicIds": ["asset-metadata", "asset-inventory"], "sourceIds": [3, 5], "extraSources": [{"label":"IBM｜What Is a Data Catalog?","url":"https://www.ibm.com/think/topics/data-catalog"}], "origin": "source"
+    },
+    {
+      "id": "metadata", "zh": "元数据", "en": "Metadata", "abbr": "", "aliases": [],
+      "definition": "描述数据的信息，例如字段类型、业务含义、存储位置、负责人和最近更新时间。它让人理解一份数据是什么，也让系统据此做检索和治理。",
+      "distinction": "订单金额是业务数据，金额字段的单位和定义是元数据；元数据是基础信息，目录和血缘是利用它的能力。",
+      "example": "字段 price 的类型是小数、单位是人民币、含义是折扣后金额，这些都是元数据。",
+      "topicIds": ["asset-metadata", "asset-inventory"], "sourceIds": [5], "extraSources": [{"label":"IBM｜Metadata","url":"https://www.ibm.com/think/topics/metadata"}], "origin": "source"
+    },
+    {
+      "id": "business-glossary", "zh": "业务术语表", "en": "Business Glossary", "abbr": "", "aliases": ["业务词汇表"],
+      "definition": "统一解释业务名词及其使用范围，例如活跃用户、成交额和有效订单。它让产品、分析与工程团队用同一种语言讨论指标和数据。",
+      "distinction": "业务术语表解释业务含义，数据字典更多描述字段、类型和格式；一个业务词可能映射多个字段。",
+      "example": "先约定活跃用户是否包含游客，再将定义关联到各地区报表使用的数据字段。",
+      "topicIds": ["asset-metadata", "gov-boundary"], "sourceIds": [3], "extraSources": [{"label":"IBM｜Data Catalog 与 Business Glossary","url":"https://www.ibm.com/think/topics/data-catalog"}], "origin": "source"
+    },
+    {
+      "id": "data-lineage", "zh": "数据血缘", "en": "Data Lineage", "abbr": "", "aliases": ["数据沿袭", "血缘关系"],
+      "definition": "记录数据从哪里来、经过什么处理、流向哪里，以及资产之间如何依赖。它帮助追查错误和评估变更影响，但完整程度取决于接入与采集能力。",
+      "distinction": "目录帮你找数据，血缘帮你看数据之间的生成关系；画出了关系图也不等于覆盖所有真实链路。",
+      "example": "订单金额经过汇率换算进入收入表，再用于日报；血缘把这条加工路线连起来。",
+      "topicIds": ["asset-metadata", "asset-coverage"], "sourceIds": [5, 8], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "table-level-lineage", "zh": "表级血缘", "en": "Table-Level Lineage", "abbr": "", "aliases": ["表级数据血缘"],
+      "definition": "以数据表为节点，记录哪些表被哪些任务读取并生成哪些目标表。它适合先看整体上下游关系，再决定是否需要深入到字段。",
+      "distinction": "知道收入表依赖订单表，不代表知道收入字段具体取自哪个字段；那需要列级血缘。",
+      "example": "订单表和退款表共同生成收入汇总表，表级血缘画出两条输入关系。",
+      "topicIds": ["asset-granularity", "asset-sql"], "sourceIds": [5, 8], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "column-level-lineage", "zh": "列级血缘", "en": "Column-Level Lineage", "abbr": "", "aliases": ["字段血缘", "字段级血缘", "列级数据血缘"],
+      "definition": "追踪目标字段由哪些源字段及转换产生，比表级关系更细。它能帮助判断修改一个字段会影响哪些报表指标或下游字段。",
+      "distinction": "列级血缘描述字段关系，不自动给出某个用户每一行记录在哪些副本中；个人删除通常还需要身份映射。",
+      "example": "net_amount 来自订单金额减退款金额；修改退款口径会影响这个目标字段。",
+      "topicIds": ["asset-granularity", "asset-sql", "asset-coverage"], "sourceIds": [8, 5], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "record-level-lineage", "zh": "记录级血缘", "en": "Record-Level Lineage", "abbr": "", "aliases": ["行级血缘"],
+      "definition": "把追踪粒度细化到某条记录及其生成或使用关系。这里是用于理解血缘粒度的学习扩展，实际系统能否做到要看标识、事件记录和计算方式。",
+      "distinction": "列级说明哪个字段来自哪里，记录级继续追问某一条具体结果来自哪些输入；维护成本通常更高。",
+      "example": "一条退款汇总记录需要追溯到参与计算的几笔退款，而不仅是退款金额字段。",
+      "topicIds": ["asset-granularity", "asset-provenance"], "sourceIds": [], "extraSources": [{"label":"W3C｜PROV：实体与派生关系模型","url":"https://www.w3.org/TR/prov-overview/"}], "origin": "extension"
+    },
+    {
+      "id": "data-provenance", "zh": "数据溯源", "en": "Data Provenance", "abbr": "", "aliases": ["数据来源", "来源追溯"],
+      "definition": "记录数据如何产生以及谁参与了生成过程。W3C PROV 用实体、活动和参与者描述这些关系，范围可以超出最初的一个来源位置。",
+      "distinction": "IBM 入门文对 Provenance 使用较窄表述；W3C 定义更广。因此不要把它一律记成只看第一来源。",
+      "example": "模型输出由哪个版本的输入、哪次处理和哪个服务生成，都可以进入溯源记录。",
+      "topicIds": ["asset-provenance", "asset-metadata"], "sourceIds": [5], "extraSources": [{"label":"W3C｜PROV Overview","url":"https://www.w3.org/TR/prov-overview/"}], "origin": "extension"
+    },
+    {
+      "id": "impact-analysis", "zh": "影响分析", "en": "Impact Analysis", "abbr": "", "aliases": ["变更影响分析"],
+      "definition": "在修改数据结构、口径或处理任务前，沿依赖关系寻找可能受影响的下游。这样可以提前协调消费者、安排验证并控制变更范围。",
+      "distinction": "影响分析通常向下游看变化会波及哪里；根因分析通常从异常向上游找原因。两者可使用同一张血缘图。",
+      "example": "准备删除 customer_id 字段时，先确认哪些报表、服务和训练任务仍在使用它。",
+      "topicIds": ["asset-coverage", "asset-granularity"], "sourceIds": [5], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "root-cause-analysis", "zh": "根因分析", "en": "Root Cause Analysis", "abbr": "RCA", "aliases": ["根因排查", "故障追因"],
+      "definition": "从观察到的问题逐步检查上游输入、处理步骤和运行证据，寻找真正导致异常的原因。血缘提供调查路线，但还要结合日志和数据检查。",
+      "distinction": "看到某表在上游，不等于已经证明它是根因；依赖关系只是线索，需要时间和执行证据支持。",
+      "example": "日报金额骤降，沿血缘查到汇率任务未更新，再用运行日志确认失败原因。",
+      "topicIds": ["asset-coverage", "gov-evidence"], "sourceIds": [5, 1], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "abstract-syntax-tree", "zh": "抽象语法树", "en": "Abstract Syntax Tree", "abbr": "AST", "aliases": ["语法树", "SQL AST"],
+      "definition": "把 SQL 等代码的语法结构表示成一棵树，例如查询、字段和过滤条件成为不同节点。它由解析过程生成，方便程序进一步检查或转换代码。",
+      "distinction": "AST 是树而非链表，也不是已经执行的结果；结构相似不等于业务含义完全相同，更不能直接据此删除任务。",
+      "example": "SELECT price FROM orders 会解析成查询节点及其字段、来源表等子节点。",
+      "topicIds": ["asset-sql", "asset-coverage"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜SqlNode","url":"https://calcite.apache.org/javadocAggregate/org/apache/calcite/sql/SqlNode.html"}], "origin": "source"
+    },
+    {
+      "id": "sql-parsing", "zh": "SQL 解析", "en": "SQL Parsing", "abbr": "", "aliases": ["语法解析", "SQL 语法分析"],
+      "definition": "识别 SQL 文本的语法结构并形成程序可处理的表示。之后通常还要校验表、字段和函数是否存在，再转换为关系运算计划。",
+      "distinction": "Parse 解决结构能否读懂，Validate 继续检查名称和类型等；通过语法解析不表示 SQL 已经正确执行。",
+      "example": "解析器识别 SELECT 和 WHERE；校验阶段再发现查询使用了不存在的字段。",
+      "topicIds": ["asset-sql", "asset-coverage"], "sourceIds": [8], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "logical-plan", "zh": "逻辑计划", "en": "Logical Plan", "abbr": "", "aliases": ["逻辑查询计划", "优化逻辑计划"],
+      "definition": "把查询写成扫描、过滤、投影、连接或聚合等关系运算，说明要做哪些数据操作。优化器可以在保持语义的前提下改写运算顺序。",
+      "distinction": "AST 贴近 SQL 语法，逻辑计划贴近关系运算；物理计划进一步选择具体执行方法与资源安排。",
+      "example": "先过滤当天订单再关联客户表，逻辑计划能够清楚显示过滤与连接的关系。",
+      "topicIds": ["asset-sql"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜Relational Algebra","url":"https://calcite.apache.org/docs/algebra.html"}], "origin": "source"
+    },
+    {
+      "id": "physical-plan", "zh": "物理执行计划", "en": "Physical Execution Plan", "abbr": "", "aliases": ["物理计划", "物理查询计划"],
+      "definition": "将逻辑上的数据操作落实为可以运行的具体执行方式，例如采用哪类连接策略、怎样分发数据和调度算子。它更接近实际运行过程。",
+      "distinction": "字段血缘案例在逻辑计划阶段即可提取所需关系；并不是必须把查询真的提交执行后才能得到任何血缘。",
+      "example": "逻辑上同样是两表连接，物理执行可能选择广播较小的表来减少数据传输。",
+      "topicIds": ["asset-sql"], "sourceIds": [8], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "apache-calcite", "zh": "Calcite 查询框架", "en": "Apache Calcite", "abbr": "", "aliases": ["Calcite"],
+      "definition": "供数据处理系统复用的查询规划与优化框架，包含 SQL 解析、关系表达式及元数据能力。Flink 血缘案例借用其中的列来源查询来构建字段关系。",
+      "distinction": "Calcite 是框架，Flink 是处理系统；前者不等于一个独立负责保存所有业务数据的数据库产品。",
+      "example": "应用取得目标列对应的关系节点，再向 Calcite 查询它依赖哪些源列。",
+      "topicIds": ["asset-sql"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜Relational Algebra","url":"https://calcite.apache.org/docs/algebra.html"}], "origin": "source"
+    },
+    {
+      "id": "flink-sql", "zh": "Flink SQL", "en": "Apache Flink SQL", "abbr": "", "aliases": ["FlinkSQL", "Flink SQL"],
+      "definition": "使用 SQL 表达 Flink 中的数据处理任务，可用于有界和无界数据的关系查询。平台把这些查询转换成处理计划，再由运行系统执行。",
+      "distinction": "Flink 不只支持一种实时查询；批或流处理取决于数据与执行设置。这里的血缘案例也受所用版本限制。",
+      "example": "持续读取订单事件，按时间窗口汇总成交额，并把结果写入下游数据表。",
+      "topicIds": ["asset-sql", "asset-coverage"], "sourceIds": [8], "extraSources": [{"label":"Apache Flink｜Applications","url":"https://flink.apache.org/what-is-flink/flink-applications/"}], "origin": "source"
+    },
+    {
+      "id": "calcite-sqlnode", "zh": "SQL 语法节点", "en": "SqlNode", "abbr": "", "aliases": ["SqlNode"],
+      "definition": "Calcite 中表示 SQL 语法节点的基础类型，节点组合起来形成 SQL 语法树。解析与校验阶段处理这些节点，后续再转换成关系表达式。",
+      "distinction": "SqlNode 表示语法，RelNode 表示关系运算；两种树描述的层次不同，不能仅凭名称相近就混用。",
+      "example": "FROM 和 SELECT 中的内容先被表示为语法节点，然后再转成扫描、投影等运算。",
+      "topicIds": ["asset-sql"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜SqlNode API","url":"https://calcite.apache.org/javadocAggregate/org/apache/calcite/sql/SqlNode.html"}], "origin": "source"
+    },
+    {
+      "id": "calcite-relnode", "zh": "关系运算节点", "en": "RelNode", "abbr": "", "aliases": ["RelNode", "关系表达式树"],
+      "definition": "Calcite 中表示关系运算的接口，扫描、过滤、连接等节点组合成计划。字段血缘案例沿着这些运算关系查询目标列的来源。",
+      "distinction": "RelNode 不只意味着某一种优化阶段；要分清拿到的是原始逻辑、优化逻辑还是具有物理执行特性的计划。",
+      "example": "Join 节点连接两个输入，Project 节点选择或计算需要写入目标表的字段。",
+      "topicIds": ["asset-sql"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜Relational Algebra","url":"https://calcite.apache.org/docs/algebra.html"}], "origin": "source"
+    },
+    {
+      "id": "column-origins", "zh": "列来源查询", "en": "Column Origins", "abbr": "", "aliases": ["原始字段查询", "getColumnOrigins"],
+      "definition": "查询一个输出列能够追溯到哪些输入表字段。Calcite 的 getColumnOrigins 是案例用到的接口，结果是否完整取决于相关算子的元数据处理能力。",
+      "distinction": "找出来源列不自动等于保存完整转换表达式；遇到未支持的算子，也可能返回未知或缺少关系。",
+      "example": "输出 full_name 来自 first_name 与 last_name，列来源查询应能找到两个输入列。",
+      "topicIds": ["asset-sql", "asset-coverage"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜RelMetadataQuery","url":"https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/metadata/RelMetadataQuery.html"}], "origin": "source"
+    },
+    {
+      "id": "user-defined-function", "zh": "用户自定义函数", "en": "User-Defined Function", "abbr": "UDF", "aliases": ["自定义函数"],
+      "definition": "开发者为查询系统补充的函数，用于内置能力无法直接表达的计算。函数可能返回标量、表或聚合结果，解析器未必知道函数内部的数据处理细节。",
+      "distinction": "UDF 常作为大类名称；UDTF 是返回表式结果的一类函数，不要默认所有 UDF 都是一行输入对应一个值。",
+      "example": "自定义清洗函数把各种手机号写法统一；血缘能否理解其中转换需要额外支持。",
+      "topicIds": ["asset-coverage", "asset-sql"], "sourceIds": [8], "extraSources": [{"label":"Apache Flink｜User-defined Functions","url":"https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/functions/udfs/"}], "origin": "source"
+    },
+    {
+      "id": "user-defined-table-function", "zh": "用户自定义表函数", "en": "User-Defined Table Function", "abbr": "UDTF", "aliases": ["表函数"],
+      "definition": "把一次输入转换成零行、一行或多行表式输出的自定义函数。它适合拆词等展开任务，也让输出字段与原输入之间的血缘解析更复杂。",
+      "distinction": "标量函数通常返回一个值；表函数可以产生多行多列，需要明确每个输出字段怎样依赖输入。",
+      "example": "将一句话拆成多行，每行包含一个单词和长度，这是知乎案例采用的表函数形式。",
+      "topicIds": ["asset-sql", "asset-coverage"], "sourceIds": [8], "extraSources": [{"label":"Apache Flink｜Table Functions","url":"https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/functions/udfs/"}], "origin": "source"
+    },
+    {
+      "id": "lookup-join", "zh": "查找关联", "en": "Lookup Join", "abbr": "", "aliases": ["维表关联", "Lookup Join"],
+      "definition": "处理流中记录时，按键查询外部维表并补充信息的一种关联方式。案例中的特殊计划节点需要补充处理，否则维表字段可能漏出血缘图。",
+      "distinction": "普通 Join 与 Lookup Join 都是关联，但实现和计划节点可能不同；解析器支持一种不代表覆盖全部关联类型。",
+      "example": "订单流带有公司编号，处理时查维表补上公司名称，名称也应进入字段血缘。",
+      "topicIds": ["asset-sql", "asset-coverage"], "sourceIds": [8], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "data-lifecycle-management", "zh": "数据生命周期管理", "en": "Data Lifecycle Management", "abbr": "DLM", "aliases": ["生命周期管理"],
+      "definition": "管理数据从创建、存储、使用、共享到归档与删除的过程。每个阶段都需要约定责任、控制和退出条件，数据也可能在阶段间循环流转。",
+      "distinction": "DLM 是整个生命周期的管理方式；TTL 只是其中一种过期机制，不能用一个过期时间代替全部生命周期策略。",
+      "example": "订单日志先用于分析，低频后转冷层，到达允许删除条件时再执行并确认清理。",
+      "topicIds": ["life-stages", "life-retention"], "sourceIds": [4], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "information-lifecycle-management", "zh": "信息生命周期管理", "en": "Information Lifecycle Management", "abbr": "ILM", "aliases": [],
+      "definition": "根据内容及其业务价值管理信息的整个生命周期。IBM 入门文用文件内信息与文件层级进行对比，帮助理解，但不同产品对 ILM 和 DLM 的用法有重叠。",
+      "distinction": "不要把 DLM 永远等于文件、ILM 永远等于单行当成通用技术定律；实际设计要写清管理对象和策略。",
+      "example": "同一文件中的不同客户信息可能有不同业务用途和维护要求，需要分别判断。",
+      "topicIds": ["life-stages"], "sourceIds": [4], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "block-storage", "zh": "块存储", "en": "Block Storage", "abbr": "", "aliases": [],
+      "definition": "以带地址的块为单位提供读写空间，上层文件系统或数据库负责组织内容。它像提供一块可用磁盘，自己并不靠业务文件名识别数据。",
+      "distinction": "块存储不等于某一种文件类型专用，也不是天然只能单机使用；多机共享写需要相应文件系统和协调机制。",
+      "example": "数据库把数据页写到云盘上；云盘提供块接口，数据库负责解释页里的记录。",
+      "topicIds": ["life-storage"], "sourceIds": [], "extraSources": [{"label":"AWS｜Block、File 与 Object Storage","url":"https://aws.amazon.com/compare/the-difference-between-block-file-object-storage/"},{"label":"AWS EBS｜Multi-Attach","url":"https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes-multi.html"}], "origin": "extension"
+    },
+    {
+      "id": "file-storage", "zh": "文件存储", "en": "File Storage", "abbr": "", "aliases": [],
+      "definition": "通过目录、路径和文件名组织数据，应用使用文件操作来读取或修改内容。它适合需要共享文件或依赖已有文件系统接口的应用。",
+      "distinction": "文件访问是一层抽象，底下仍可能用块或其他存储实现；具体一致性和随机写能力要看产品。",
+      "example": "多个分析程序通过共享目录访问同一批输入文件，而不用直接处理磁盘块地址。",
+      "topicIds": ["life-storage"], "sourceIds": [], "extraSources": [{"label":"AWS｜Block、File 与 Object Storage","url":"https://aws.amazon.com/compare/the-difference-between-block-file-object-storage/"}], "origin": "extension"
+    },
+    {
+      "id": "object-storage", "zh": "对象存储", "en": "Object Storage", "abbr": "", "aliases": [],
+      "definition": "将内容连同元数据作为对象保存，通过对象键和接口访问。它常用于大规模文件、媒体和数据湖，但更新、延迟与一致性特性由具体服务决定。",
+      "distinction": "对象键看起来像目录路径，不代表具备完整文件系统语义；也不能一概认定对象存储永远不能局部更新。",
+      "example": "用唯一对象键保存一段视频，业务表只记录该键及视频的业务信息。",
+      "topicIds": ["life-storage", "life-tiering"], "sourceIds": [], "extraSources": [{"label":"AWS｜Block、File 与 Object Storage","url":"https://aws.amazon.com/compare/the-difference-between-block-file-object-storage/"}], "origin": "extension"
+    },
+    {
+      "id": "storage-area-network", "zh": "存储区域网络", "en": "Storage Area Network", "abbr": "SAN", "aliases": ["块存储网络"],
+      "definition": "让服务器通过专用存储网络访问存储设备的架构，通常向主机提供块级访问。主机可以在这些空间上建立文件系统或供数据库使用。",
+      "distinction": "SAN 通常提供块访问，NAS 通常提供文件访问；不能只凭缩写判断谁一定更快，要看配置和负载。",
+      "example": "数据库服务器通过 SAN 访问远端存储卷，操作方式类似使用本地磁盘。",
+      "topicIds": ["life-storage"], "sourceIds": [], "extraSources": [{"label":"IBM｜Storage Area Network","url":"https://www.ibm.com/think/topics/storage-area-network"}], "origin": "extension"
+    },
+    {
+      "id": "network-attached-storage", "zh": "网络附加存储", "en": "Network-Attached Storage", "abbr": "NAS", "aliases": ["网络连接存储"],
+      "definition": "通过网络向客户端提供文件共享的存储系统，常使用 NFS 或 SMB 等协议。用户通常操作共享文件夹，而不需要自己管理远端的裸块空间。",
+      "distinction": "NAS 的核心是网络文件服务，不是所有远程存储的统称；通过网络访问对象存储也不会使其变成 NAS。",
+      "example": "设计和分析团队通过同一共享目录交换文件，权限由文件共享服务管理。",
+      "topicIds": ["life-storage"], "sourceIds": [], "extraSources": [{"label":"IBM｜Network-Attached Storage","url":"https://www.ibm.com/think/topics/network-attached-storage"}], "origin": "extension"
+    },
+    {
+      "id": "posix", "zh": "可移植操作系统接口", "en": "Portable Operating System Interface", "abbr": "POSIX", "aliases": ["POSIX 接口", "POSIX 标准"],
+      "definition": "一组帮助应用在兼容操作系统间移植的接口与行为标准，文件操作只是其中一部分。它约定接口语义，并不指定底层硬件和实现方式。",
+      "distinction": "符合 POSIX 不等于一定有微秒延迟，也不代表所有分布式文件系统都完整符合这些语义。",
+      "example": "应用用标准文件接口打开和读取文件，有机会在多个兼容系统上复用相同代码。",
+      "topicIds": ["life-storage"], "sourceIds": [], "extraSources": [{"label":"The Open Group｜POSIX.1 FAQ","url":"https://www.opengroup.org/austin/papers/posix_faq.html"},{"label":"POSIX.1-2024｜Introduction","url":"https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap01.html"}], "origin": "extension"
+    },
+    {
+      "id": "object-rest-api", "zh": "对象存储 REST 接口", "en": "Object Storage REST API", "abbr": "", "aliases": ["HTTP REST API"],
+      "definition": "通过网络请求操作对象存储资源的接口形式，例如上传、读取或删除一个对象。REST 是架构风格，HTTP 是常用通信协议，两者不是同一个概念。",
+      "distinction": "HTTP 接口描述调用方式，不自动决定一致性、延迟或更新粒度；这些仍由具体服务的接口和实现保证。",
+      "example": "应用向对象服务发送上传请求，并用对象键读取内容，而不是执行本地文件写入。",
+      "topicIds": ["life-storage"], "sourceIds": [], "extraSources": [{"label":"Amazon S3｜REST API Reference","url":"https://docs.aws.amazon.com/AmazonS3/latest/API/Welcome.html"}], "origin": "extension"
+    },
+    {
+      "id": "hdfs", "zh": "Hadoop 分布式文件系统", "en": "Hadoop Distributed File System", "abbr": "HDFS", "aliases": [],
+      "definition": "将大文件分布到多台机器上保存的文件系统，重视大规模顺序读写和吞吐量。它通过数据块与副本支持分布式处理，并有自己的访问和写入约束。",
+      "distinction": "HDFS 提供文件系统抽象，但不完整遵循 POSIX，也不适合被理解成任意位置都能随时修改的普通本地文件。",
+      "example": "大型日志被拆成多个 HDFS 数据块，计算任务并行读取各部分进行统计。",
+      "topicIds": ["life-storage", "life-backup"], "sourceIds": [1], "extraSources": [{"label":"Apache Hadoop｜HDFS Architecture","url":"https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html"}], "origin": "extension"
+    },
+    {
+      "id": "data-lake", "zh": "数据湖", "en": "Data Lake", "abbr": "", "aliases": [],
+      "definition": "保存多种形式数据以支持后续处理和分析的架构，常保留较接近原始形式的数据。现代实现经常使用对象存储，但仍需要元数据、权限和生命周期管理。",
+      "distinction": "数据湖是数据架构，对象存储是可能使用的存储底座；买了对象存储并不等于建好了可治理的数据湖。",
+      "example": "把日志、图片和事件数据统一纳入湖中，再按需要供分析或训练任务使用。",
+      "topicIds": ["life-storage", "asset-inventory"], "sourceIds": [3, 5], "extraSources": [{"label":"IBM｜Data Lake","url":"https://www.ibm.com/think/topics/data-lake"}], "origin": "extension"
+    },
+    {
+      "id": "data-warehouse", "zh": "数据仓库", "en": "Data Warehouse", "abbr": "DW", "aliases": ["数仓"],
+      "definition": "为分析、报表和决策组织与整合数据的系统，通常提供稳定的数据模型和查询能力。它会把多个业务来源的数据整理成可持续使用的分析结构。",
+      "distinction": "业务数据库主要服务交易操作，数据仓库主要服务分析；数据目录负责发现与解释资产，也不能替代数仓。",
+      "example": "把订单、退款和广告投入整合成每日经营报表所需的数据模型。",
+      "topicIds": ["life-storage", "asset-inventory"], "sourceIds": [1, 3, 5], "extraSources": [{"label":"IBM｜Data Warehouse","url":"https://www.ibm.com/think/topics/data-warehouse"}], "origin": "source"
+    },
+    {
+      "id": "data-lakehouse", "zh": "湖仓一体", "en": "Data Lakehouse", "abbr": "", "aliases": ["湖仓架构"],
+      "definition": "在数据湖较灵活的存储基础上加入表管理、事务和分析等能力的架构。它希望让多种分析与机器学习场景共享可管理的数据基础。",
+      "distinction": "Lakehouse 不是把两个名称拼起来就完成建设；需要具体表格式、计算引擎、元数据与治理机制配合。",
+      "example": "对象存储承载数据文件，开放表格式管理版本，再由多个计算引擎读取。",
+      "topicIds": ["life-storage", "life-tiering"], "sourceIds": [], "extraSources": [{"label":"IBM｜Data Lakehouse","url":"https://www.ibm.com/think/topics/data-lakehouse"}], "origin": "extension"
+    },
+    {
+      "id": "storage-tiering", "zh": "存储分层", "en": "Storage Tiering", "abbr": "", "aliases": ["冷热分层", "冷热数据分层", "温存降级"],
+      "definition": "按访问频率、业务重要性和恢复需求，将数据放到合适的存储层级。决策应综合保存、请求、迁移与取回成本，而不只是比较每月容量单价。",
+      "distinction": "把数据移到冷层不是删除；降低存储单价也可能增加取回费用或恢复等待时间，需要一起评估。",
+      "example": "近期常查日志留在热层，低频历史日志转冷层，但关键审计数据保留可接受的恢复能力。",
+      "topicIds": ["life-tiering", "life-stages"], "sourceIds": [2], "extraSources": [{"label":"AWS S3｜Lifecycle Transitions","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html"}], "origin": "extension"
+    },
+    {
+      "id": "hot-warm-cold-storage", "zh": "热温冷存储", "en": "Hot, Warm & Cold Storage", "abbr": "", "aliases": ["热数据", "温数据", "冷数据", "冷存储"],
+      "definition": "用访问需求区分存储层的常见说法：热层偏向频繁访问，冷层偏向较少访问，温层位于中间。名称和具体能力会随产品而变化。",
+      "distinction": "数据年龄大不一定冷，历史报表也可能天天被查询；冷层也不必然需要解冻，应看具体存储类别。",
+      "example": "两年前的财务基准表仍被高频读取，就不应只因时间较久而自动归入最冷层。",
+      "topicIds": ["life-tiering"], "sourceIds": [2], "extraSources": [{"label":"AWS S3｜Storage Classes 与生命周期迁移","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html"}], "origin": "extension"
+    },
+    {
+      "id": "data-archiving", "zh": "数据归档", "en": "Data Archiving", "abbr": "", "aliases": ["归档存储", "深度归档"],
+      "definition": "将日常较少使用但仍需保留的数据按明确策略保存，以便以后检索或恢复。归档需要考虑保留条件、检索能力及可接受的恢复等待时间。",
+      "distinction": "归档重在长期保存和查阅，备份重在恢复；Archive 与 Deep Archive 也可能是具体产品类别，能力不能混为一谈。",
+      "example": "已结项项目的记录进入归档，平时不参与在线查询，需要复核时按流程取回。",
+      "topicIds": ["life-tiering", "life-backup", "life-stages"], "sourceIds": [4], "extraSources": [{"label":"AWS S3｜Archive Storage Transitions","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html"}], "origin": "source"
+    },
+    {
+      "id": "data-compaction", "zh": "数据文件合并", "en": "Data Compaction", "abbr": "", "aliases": ["小文件合并", "Compaction"],
+      "definition": "把许多小文件或分散的数据段重写整理成更适合读取与维护的布局。具体系统也可能在合并时清理过期内容，减少文件数量与读取开销。",
+      "distinction": "Compaction 不等于 Compression：前者重点是整理布局，后者重点是减少编码后的体积，两者可以同时发生。",
+      "example": "将上千个很小的日志文件合并成较大文件，减少查询需要打开的文件数量。",
+      "topicIds": ["life-tiering", "life-deletion"], "sourceIds": [6], "extraSources": [{"label":"Apache Iceberg｜Maintenance：Compact Data Files","url":"https://iceberg.apache.org/docs/latest/maintenance/"}], "origin": "extension"
+    },
+    {
+      "id": "data-backup", "zh": "数据备份", "en": "Data Backup", "abbr": "", "aliases": ["备份副本"],
+      "definition": "为以后恢复数据或系统而保留的副本，通常对应某个时间点或变化集合。备份是否有用，需要通过恢复验证，而不仅是看到备份任务成功。",
+      "distinction": "持续复制可能同步误删；备份通常帮助回到过去的状态。备份也有过期和删除责任，不是永久保留的理由。",
+      "example": "今天误改了大量记录，使用经过验证的昨日备份恢复到可用状态。",
+      "topicIds": ["life-backup", "life-deletion"], "sourceIds": [4, 6], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "data-replication", "zh": "数据复制", "en": "Data Replication", "abbr": "", "aliases": ["活跃副本", "复制副本"],
+      "definition": "在多个位置维护数据副本，以支持可用性、访问性能或故障切换。复制的及时程度与一致性方式由系统决定，删除操作也需要考虑这些副本。",
+      "distinction": "Replication 侧重维持可用副本，不自动提供历史恢复点；如果删除同步到了所有副本，仍可能需要独立备份恢复。",
+      "example": "数据库跨可用区保存副本，一个节点故障后由另一个副本继续服务。",
+      "topicIds": ["life-backup", "life-deletion"], "sourceIds": [6], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "data-restore", "zh": "数据恢复", "en": "Data Restore", "abbr": "", "aliases": ["备份恢复", "归档取回", "解冻"],
+      "definition": "把备份或归档中的数据重新变成可使用状态的操作。恢复可能涉及数据取回、重建索引和一致性检查，需要验证完成时间与实际可用性。",
+      "distinction": "备份成功不等于恢复成功；冷归档取回和系统灾难恢复也是不同范围，不能只用一个等待时间概括。",
+      "example": "从备份恢复数据库后，验证记录完整性，并检查已经生效的删除要求是否仍被遵守。",
+      "topicIds": ["life-backup", "life-tiering"], "sourceIds": [4, 6], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "soft-deletion", "zh": "软删除", "en": "Soft Deletion", "abbr": "", "aliases": ["Soft Delete"],
+      "definition": "把数据或资源置于已删除但在一定条件下仍可恢复的状态，用于防止误删。Google Cloud 案例中，这类恢复窗口位于后续清理步骤之前。",
+      "distinction": "软删除常强调可恢复状态，逻辑删除强调系统层面的移除；不同产品叫法会重叠，要看实际行为和完成条件。",
+      "example": "用户误删存储资源后，在产品规定的恢复窗口内可以申请找回。",
+      "topicIds": ["life-deletion"], "sourceIds": [6], "extraSources": [{"label":"Google Cloud Storage｜Soft Delete","url":"https://docs.cloud.google.com/storage/docs/soft-delete"}], "origin": "source"
+    },
+    {
+      "id": "logical-deletion", "zh": "逻辑删除", "en": "Logical Deletion", "abbr": "", "aliases": [],
+      "definition": "在系统可见性、索引或有效记录层面移除数据，而底层存储块可能随后才被回收或覆盖。具体含义需要结合数据库或存储产品的删除机制。",
+      "distinction": "逻辑上读不到，不等于所有介质字节已清除；也不能把逻辑删除一概理解成仅添加一个业务标记。",
+      "example": "记录已从活跃查询结果消失，但后台还需要完成存储空间回收和备份过期。",
+      "topicIds": ["life-deletion"], "sourceIds": [6], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "cryptographic-erasure", "zh": "加密清除", "en": "Cryptographic Erasure", "abbr": "", "aliases": ["加密擦除", "密钥销毁"],
+      "definition": "通过使解密所需密钥不可用，让已加密数据无法再被解读。是否有效取决于密钥覆盖范围、密钥副本及明文副本是否都得到妥善处理。",
+      "distinction": "加密清除不是逐块覆盖磁盘；删除某把密钥也不保证所有相关数据都不可恢复，必须核对真实依赖与残留。",
+      "example": "某批数据由专用密钥加密，安全清除这把密钥及必要副本后，密文无法解开。",
+      "topicIds": ["life-deletion"], "sourceIds": [6], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "backup-expiration", "zh": "备份过期", "en": "Backup Expiration", "abbr": "", "aliases": ["备份系统过期"],
+      "definition": "备份达到其保留规则后被淘汰，并按系统机制进入覆盖或其他清理流程。活跃数据已删除时，删除前生成的备份可能仍需等待这个过程。",
+      "distinction": "备份过期周期是具体系统设计，不是所有公司的统一删除期限；应用库删完也不能代替备份状态确认。",
+      "example": "旧备份按轮换策略退役，后续恢复时还要防止已经要求删除的数据重新进入服务。",
+      "topicIds": ["life-deletion", "life-backup"], "sourceIds": [6], "extraSources": [], "origin": "source"
+    },
+    {
+      "id": "time-to-live", "zh": "生存时间", "en": "Time to Live", "abbr": "TTL", "aliases": ["过期时间", "到期清理"],
+      "definition": "为对象或记录指定有效时长或过期时点的机制。用于存储时，它可以让系统在到期后安排清理，但触发条件和实际执行延迟取决于产品。",
+      "distinction": "TTL 到期不等于这一秒已物理擦除，更不能自动解决备份、派生数据或依法需要暂停删除的例外。",
+      "example": "临时会话记录到期后等待后台清理；应用仍需正确处理已过期但尚未移除的记录。",
+      "topicIds": ["life-retention", "life-stages"], "sourceIds": [1, 2], "extraSources": [{"label":"AWS DynamoDB｜Time to Live","url":"https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html"}], "origin": "source"
+    },
+    {
+      "id": "data-retention", "zh": "数据保留策略", "en": "Data Retention Policy", "abbr": "", "aliases": ["数据留存", "保留期", "留存期限"],
+      "definition": "规定哪些数据基于什么用途保留、从何时起算、保留多久以及何时可以或必须删除。策略还应明确例外、责任人和复核条件。",
+      "distinction": "一般保留策略可能涉及最短或最长时限；Object Lock 的保护期主要限制删除，不能代表全部留存政策。",
+      "example": "临时诊断日志按既定用途保留，到期前检查有效例外，再执行对应清理流程。",
+      "topicIds": ["life-retention", "life-stages"], "sourceIds": [4], "extraSources": [{"label":"AWS S3｜Retention Period 与 Object Lock","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"}], "origin": "source"
+    },
+    {
+      "id": "legal-hold", "zh": "法律保留", "en": "Legal Hold", "abbr": "", "aliases": ["诉讼保留", "暂停删除"],
+      "definition": "因调查、诉讼或相关要求暂停删除指定数据的一种保留状态。以 S3 产品为例，它可以持续到有权限的人明确解除，不依赖固定到期日。",
+      "distinction": "Legal Hold 与普通保留期独立；期限届满不自动解除 Hold。这里解释机制，具体适用范围由负责团队确定。",
+      "example": "一批记录正在调查范围内，正常清理任务遇到有效 Hold 时保留记录并登记原因。",
+      "topicIds": ["life-retention"], "sourceIds": [], "extraSources": [{"label":"AWS S3｜Legal Holds","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"}], "origin": "framework"
+    },
+    {
+      "id": "object-lock", "zh": "对象锁", "en": "Object Lock", "abbr": "", "aliases": ["对象锁定", "Object Lock 保护期"],
+      "definition": "用于防止对象被删除或覆盖的保护机制。S3 Object Lock 针对对象版本，可配置保留期或 Legal Hold，其行为还与保护模式和权限有关。",
+      "distinction": "锁保护的是特定对象版本；增加删除标记不等于该版本已被清除，保护期结束也不会自动删除它。",
+      "example": "某个审计文件版本在保护期内不能按普通流程删除，到期后再由清理策略处理。",
+      "topicIds": ["life-retention", "life-deletion"], "sourceIds": [], "extraSources": [{"label":"AWS S3｜Object Lock","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"}], "origin": "framework"
+    },
+    {
+      "id": "deletion-acknowledgment", "zh": "删除确认回执", "en": "Deletion Acknowledgment", "abbr": "ACK", "aliases": ["删除回执", "确认信号"],
+      "definition": "系统对删除请求或某个删除阶段返回的确认信号。它能帮助协调跨系统流程，但要先约定确认的是接收、逻辑移除还是整个目标范围的完成。",
+      "distinction": "ACK 是 Acknowledgment 的缩写，不天然代表全链路物理删除；不同接口的确认语义必须明确。",
+      "example": "服务 A 已确认逻辑删除，备份服务仍在等待过期，项目不能仅凭 A 的回执宣布全部完成。",
+      "topicIds": ["life-deletion", "gov-evidence"], "sourceIds": [6], "extraSources": [], "origin": "source"
+    }
+  ]
+}

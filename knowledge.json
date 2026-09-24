@@ -153,6 +153,10 @@
             {
               "label": "架构取舍",
               "text": "自治要配合共同规则、责任交界和例外升级机制。"
+            },
+            {
+              "label": "案例边界",
+              "text": "此处比较通用组织模式。DataLeap 历史案例强调业务自治，并非采用统一中央治理委员会的例子；联合治理是补充的框架视角。"
             }
           ],
           "related": [
@@ -164,6 +168,10 @@
             {
               "label": "#1 火山引擎｜分布式数据治理（官方全文）",
               "url": "https://developer.volcengine.com/articles/7316454283333877798"
+            },
+            {
+              "label": "补充框架｜IBM Data Mesh：Federated Governance",
+              "url": "https://www.ibm.com/think/topics/data-mesh"
             }
           ],
           "status": "synthesis",

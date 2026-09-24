@@ -8,12 +8,17 @@
   <meta name="description" content="从三层关键词进入六层学习导图，用白话解释、教学例子和概念对比表理解企业数据治理。">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./learn.css">
-  <script src="./learn.js" defer></script>
+  <link rel="stylesheet" href="./memory.css?v=terms-1">
+  <script src="./terms.js?v=terms-1" defer></script>
+  <script src="./memory-core.js?v=terms-1" defer></script>
+  <script src="./memory.js?v=terms-1" defer></script>
+  <script src="./learn.js?v=terms-1" defer></script>
 </head>
 <body>
   <header class="app-header">
     <a class="identity" href="./learn.html"><img src="./favicon.svg" width="32" height="32" alt=""><span>学习思维导图<small>DATA ATLAS · LEARN</small></span></a>
-    <div class="header-note">从关键词出发，把每个概念读懂。</div>
+    <div class="header-note">中英对照理解，再用记忆卡复习。</div>
+    <nav class="learning-sections" aria-label="学习方式"><button id="map-nav" class="active" aria-current="page">学习导图</button><button id="memory-nav">词汇记忆卡</button></nav>
     <a class="original-link" href="./index.html">速查知识库 ↗</a>
   </header>
   <div class="workspace">
@@ -38,6 +43,7 @@
       <div class="canvas-footer"><div class="zoom-controls"><button id="zoom-out" aria-label="缩小导图">−</button><output id="zoom-value" aria-label="当前缩放">100%</output><button id="zoom-in" aria-label="放大导图">＋</button><span></span><button id="fit" title="适配当前分支">适配</button><button id="focus-node" title="以可读大小定位当前节点">聚焦</button></div><p>拖动平移 · 滚轮缩放</p></div>
     </main>
     <aside id="reader" class="reader" aria-label="学习讲解"><div class="reader-placeholder">正在准备讲解…</div></aside>
+    <section id="memory-section" class="memory-section" aria-label="专业词汇记忆卡"></section>
   </div>
   <button id="drawer-backdrop" class="drawer-backdrop" aria-label="关闭知识目录" hidden></button>
   <div id="announcer" class="sr-only" role="status" aria-live="polite"></div>
