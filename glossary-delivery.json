@@ -12,7 +12,7 @@
     "rel-lifecycle": "Software Development Life Cycle",
     "rel-improvement": "Continuous Improvement",
     "risk-loop": "Signals, Decisions, Actions & Feedback",
-    "risk-library-rescan": "Online Sample Library & Historical Rescan",
+    "risk-library-rescan": "Online Blacklist & Historical Rescanning",
     "risk-match": "Lexical & Semantic Similarity",
     "risk-patterns": "FP-Growth & Embeddings",
     "risk-features": "Text Features & Risk Detection",
@@ -169,14 +169,14 @@
       "topicIds": ["risk-loop", "risk-metrics"], "sourceIds": [14, 15], "extraSources": [], "origin": "source"
     },
     {
-      "id": "risk-assessment", "zh": "风险评估结果", "en": "Risk Assessment", "abbr": "", "aliases": ["reCAPTCHA 评估", "评估响应"],
+      "id": "risk-assessment", "zh": "reCAPTCHA 评估对象", "en": "reCAPTCHA Assessment", "abbr": "", "aliases": ["reCAPTCHA 评估", "评估响应", "风险评估结果", "Risk Assessment"],
       "definition": "reCAPTCHA 后端评估返回的结构化结果，包含令牌属性与风险分析等信息。业务应先验证结果是否适用于当前请求，再读取风险评分。",
       "distinction": "Assessment 是一次评估对象，score 只是其中一个字段；拿到分数不代表令牌有效或操作匹配。",
       "example": "服务端先检查令牌有效性和操作名称，再决定是否对本次登录追加验证。",
       "topicIds": ["risk-loop"], "sourceIds": [15], "extraSources": [], "origin": "source"
     },
     {
-      "id": "action-verification", "zh": "操作匹配校验", "en": "Action Verification", "abbr": "", "aliases": ["操作一致性校验", "action 校验"],
+      "id": "action-verification", "zh": "操作匹配校验", "en": "reCAPTCHA Action Validation", "abbr": "", "aliases": ["操作一致性校验", "action 校验"],
       "definition": "在 reCAPTCHA 评估中比较令牌所对应的操作名称与后端预期操作，确认评估能用于当前业务动作，同时独立检查令牌是否有效。",
       "distinction": "操作匹配只核对请求语境，不证明用户无风险；令牌有效也不自动意味着 action 与 expectedAction 一致。",
       "example": "登录接口预期 login，却收到 signup 的令牌操作，不能直接沿用该分数放行。",
@@ -198,22 +198,22 @@
       "extraSources": [{"label": "Google：分类阈值", "url": "https://developers.google.com/machine-learning/crash-course/classification/thresholding"}], "origin": "extension"
     },
     {
-      "id": "assessment-annotation", "zh": "评估结果标注", "en": "Assessment Annotation", "abbr": "", "aliases": ["评估注释", "标注反馈"],
-      "definition": "将后续确认的真实结果与先前评估关联，作为纠错和模型改进的反馈。应记录标签来源及可信度，避免把系统自己的处罚当作事实。",
+      "id": "assessment-annotation", "zh": "评估结果标注", "en": "reCAPTCHA Assessment Annotation", "abbr": "", "aliases": ["评估注释", "标注反馈"],
+      "definition": "在 reCAPTCHA 中，将后续确认的结果标注到原 Assessment，向服务提供反馈。更一般的风控系统也需要反馈标签，但接口、标签和学习机制未必相同。",
       "distinction": "模型判高风险属于预测；审核、申诉或已确认的业务结果才可能提供真实标签，仍需质量检查。",
       "example": "人工复核确认某次登录属于本人后，把该结果关联回原评估，帮助校准后续判断。",
       "topicIds": ["risk-loop", "risk-metrics"], "sourceIds": [15],
       "extraSources": [{"label": "Google：Annotate Assessments", "url": "https://docs.cloud.google.com/recaptcha/docs/annotate-assessment"}], "origin": "extension"
     },
     {
-      "id": "online-sample-library", "zh": "在线黑样本库", "en": "Online Known-bad Sample Library", "abbr": "", "aliases": ["在线黑库", "文本黑库", "黑库"],
-      "definition": "把已确认样本放入可检索的索引，供新内容匹配，帮助控制后续增量风险。这里的英文是描述性译法，不是字节公开接口的固定名称。",
-      "distinction": "样本库不等于单词禁用清单；命中通常是策略信号。黑库也可支持语义检索，不能定义成只做字符匹配。",
+      "id": "online-sample-library", "zh": "在线黑库", "en": "Online Blacklist", "abbr": "", "aliases": ["在线黑样本库", "文本黑库", "黑库", "黑名单", "Blacklist", "Blocklist", "Denylist"],
+      "definition": "黑名单通常称 Blacklist，也常见 Blocklist、Denylist。抖音文章中的在线黑库具体采用可增删文本样本的检索索引，为新增内容提供风险匹配信号。这里不是声称字节公开了同名英文 API。",
+      "distinction": "该案例支持字面、语义等检索，原文也允许使用白样本；不能将其等同于简单禁词表或“命中即封禁”。处置仍由匹配语境、证据和策略决定。",
       "example": "确认一条违规话术后，新评论与样本库比较；仍须验证正常引用或反诈骗内容会不会被误伤。",
-      "topicIds": ["risk-library-rescan", "risk-match"], "sourceIds": [14], "extraSources": [], "origin": "source"
+      "topicIds": ["risk-library-rescan", "risk-match"], "sourceIds": [14], "extraSources": [{"label": "NIST｜Blacklist", "url": "https://csrc.nist.gov/glossary/term/blacklist"}, {"label": "Microsoft｜Text Blocklists", "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/how-to/use-blocklist"}], "origin": "source"
     },
     {
-      "id": "historical-rescan", "zh": "历史内容回扫", "en": "Historical Content Rescan", "abbr": "", "aliases": ["离线回扫", "存量回扫", "回扫"],
+      "id": "historical-rescan", "zh": "历史内容回扫", "en": "Historical Content Rescanning", "abbr": "", "aliases": ["离线回扫", "存量回扫", "回扫"],
       "definition": "用新发现的风险线索重新检查已存在的历史内容，找到以前漏过的候选，再按策略复核处置。英文是描述性译法，不是固定产品名。",
       "distinction": "回扫的区别在于检查存量内容；既能用关键词，也能用语义。更新在线黑库不会自动完成历史处置。",
       "example": "今天确认新型诈骗话术后，检索过去一周评论并逐步处理确认违规的历史记录。",
@@ -442,11 +442,11 @@
     },
     {
       "id": "false-discovery-rate", "zh": "错误发现率", "en": "False Discovery Rate", "abbr": "FDR", "aliases": ["假发现率", "查出样本误判占比"],
-      "definition": "分类评估语境中，在被预测为正类的样本里，实际为负类的比例：FP / (TP + FP)，有定义时等于 1 − Precision。",
-      "distinction": "它与 FPR 的分母不同；统计多重检验中的 FDR 还涉及期望比例，学习时要明确所在语境。",
-      "example": "系统挑出 100 条疑似违规内容，其中 20 条其实正常，样本内的 FDR 为 20%。",
+      "definition": "需区分统计口径：多重检验中的 FDR 是错误发现比例的期望；一批样本观测到的 FP/(TP+FP) 称 FDP，分母非零时等于 1−Precision。分类报表也常将观测比例记作 FDR，使用时须明确约定。",
+      "distinction": "FPR 看实际负类中有多少被误判；FDP 看预测正类中有多少是误报。两者分母不同，FDR 的统计期望又不等于某一批次的观测值。",
+      "example": "100 条预测违规中有 20 条正常，这批样本的 FDP 为 20%。若报表将这一项叫 FDR，应写明公式及样本范围。",
       "topicIds": ["risk-metrics"], "sourceIds": [],
-      "extraSources": [{"label": "scikit-learn：分类指标与混淆矩阵", "url": "https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics"}], "origin": "extension"
+      "extraSources": [{"label": "scikit-learn：分类指标与混淆矩阵", "url": "https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics"}, {"label": "SciPy｜False Discovery Rate", "url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.false_discovery_control.html"}], "origin": "extension"
     },
     {
       "id": "program-scope", "zh": "项目范围", "en": "Project Scope", "abbr": "", "aliases": ["范围界定", "项目边界"],

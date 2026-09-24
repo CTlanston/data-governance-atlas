@@ -173,7 +173,7 @@
     },
     {
       "id": "evidence-brief", "zh": "证据简报", "en": "Evidence Brief", "abbr": "", "aliases": ["结构化证据简报"],
-      "definition": "把与当前分类有关的线索整理成简短材料，说明哪些支持判断、哪些反对判断，以及线索从哪里来，帮助模型和审核者理解依据。",
+      "definition": "Meta 资产分类案例把筛选后的判断材料称为 Evidence Brief：列出支持与反对分类的线索、来源及不确定性，供模型和审核者使用。这是案例中的组件用语。",
       "distinction": "它是经过筛选的判断材料，不是先把正确答案标好；堆进更多原始上下文也不一定让证据更清楚。",
       "example": "教学例子：判断 email 字段时，简报同时列出字段语义、调用代码及是否属于测试数据。",
       "topicIds": ["ai-classification", "ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "source"
@@ -201,14 +201,14 @@
     },
     {
       "id": "target-leakage", "zh": "目标泄漏", "en": "Target Leakage", "abbr": "", "aliases": ["标签泄漏", "答案泄漏"],
-      "definition": "本应由模型独立预测的答案或不该提前知道的信息，混进了输入或评估过程，导致看起来很准确，却没有学会依靠合理证据判断。",
-      "distinction": "这里的泄漏指评估或学习信息串入错误位置，不一定涉及隐私数据外泄；测试集污染是相关但不完全相同的问题。",
+      "definition": "预测目标本身，或在真实预测时不应可用、却能透露目标的信息，进入输入特征或规则条件，使离线结果虚高。需要按任务时点和可用信息边界判断。",
+      "distinction": "目标泄漏是数据泄漏的一种；测试集被反复用于调参、用自身预测充当参考标签属于相关评估问题，不能全部混称为 Target Leakage。它也不同于个人数据被披露。",
       "example": "教学例子：让模型判断字段是否为邮箱，却在输入里保留旧的“邮箱”分类标签。",
       "topicIds": ["ai-evaluation", "ai-classification"], "sourceIds": [13], "extraSources": [{"label": "scikit-learn：数据泄漏", "url": "https://scikit-learn.org/stable/common_pitfalls.html#data-leakage"}], "origin": "extension"
     },
     {
-      "id": "masking-invariant", "zh": "标签遮蔽不变量", "en": "Masking Invariant", "abbr": "", "aliases": ["脱敏不变量", "系统级遮蔽"],
-      "definition": "在本案例中，把会泄露待预测答案的字段持续排除在判断依据之外，并让相关模型与规则学习路径遵守相同约束。",
+      "id": "masking-invariant", "zh": "标签遮蔽不变量", "en": "Masking Invariant", "abbr": "", "aliases": ["标签遮蔽约束", "系统级遮蔽", "Target Label Masking"],
+      "definition": "Meta 案例将跨组件持续遵守的目标标签遮蔽约束称为 Masking Invariant：从分类器屏蔽的循环答案字段，也不能通过规则蒸馏重新成为判断依据。",
       "distinction": "这里遮蔽的是循环目标标签，不等于所有个人信息都已匿名化；只对 LLM 遮蔽而允许规则学习偷看答案仍有问题。",
       "example": "教学例子：旧隐私标签不进入模型输入，也不能被蒸馏器拿来生成“旧标签等于邮箱”的规则。",
       "topicIds": ["ai-evaluation", "ai-classification"], "sourceIds": [13], "extraSources": [], "origin": "source"
@@ -256,11 +256,11 @@
       "topicIds": ["ai-classification", "ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "source"
     },
     {
-      "id": "prompt-oscillation", "zh": "提示词优化震荡", "en": "Prompt Optimization Oscillation", "abbr": "", "aliases": ["Prompt 震荡", "优化震荡"],
-      "definition": "调优过程在多个提示词或判断模式之间反复切换，却没有获得稳定改善。需要保留历史表现和停止条件，避免持续消耗计算资源。",
+      "id": "prompt-oscillation", "zh": "提示词优化震荡", "en": "Oscillation in Prompt Optimization", "abbr": "", "aliases": ["Prompt 震荡", "优化震荡"],
+      "definition": "描述提示词优化在版本间反复切换、没有稳定改善的现象，不是一个统一标准的算法或产品名。可用回归评估、错误分布和独立参考集分析原因。",
       "distinction": "震荡不必然就是过拟合；噪声、矛盾标签、薄弱上下文或修复一类案例却损害另一类，都可能造成停滞。",
       "example": "教学例子：版本 A 解决一组错误却制造另一组，版本 B 又改回来，总体效果始终未提升。",
-      "topicIds": ["ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "extension"
     },
     {
       "id": "shadow-mode", "zh": "影子模式", "en": "Shadow Mode", "abbr": "", "aliases": ["影子测试", "阴影模式", "旁路验证"],
@@ -298,7 +298,7 @@
       "topicIds": ["ai-lineage"], "sourceIds": [12], "extraSources": [{"label": "gRPC：核心概念", "url": "https://grpc.io/docs/what-is-grpc/core-concepts/"}], "origin": "extension"
     },
     {
-      "id": "training-manifest", "zh": "训练数据清单", "en": "Training Manifest", "abbr": "", "aliases": ["训练清单"],
+      "id": "training-manifest", "zh": "训练数据清单", "en": "Training Data Manifest", "abbr": "", "aliases": ["训练清单"],
       "definition": "记录某次训练实际选用了哪些数据资产及其版本等信息的清单，帮助把训练任务和上游数据连接起来，支持复现与用途核查。",
       "distinction": "有数据集名称还不一定足以复现；具体清单字段依系统而定，也不能只凭清单存在就认定所有数据都获准训练。",
       "example": "教学例子：训练任务记录表版本、筛选条件和输入快照，让审核者追查某批数据是否进入了训练。",
@@ -319,9 +319,9 @@
       "topicIds": ["ai-lineage", "privacy-user-control"], "sourceIds": [12], "extraSources": [], "origin": "source"
     },
     {
-      "id": "embedding", "zh": "嵌入向量", "en": "Embedding", "abbr": "", "aliases": ["向量表示", "特征向量"],
-      "definition": "把文本、图片等对象转换为一组数值，用这种表示支持相似性计算或模型处理。数值化改变了表示方式，但不自动消除原始信息的影响。",
-      "distinction": "Embedding 不是加密，也不天然等于匿名数据；向量相近通常表示某种学到的相似性，不能保证原始对象完全相同。",
+      "id": "embedding", "zh": "嵌入向量", "en": "Embedding", "abbr": "", "aliases": ["嵌入", "向量嵌入", "Embedding Vector"],
+      "definition": "将对象映射为数值向量，使表示中的关系可以支持模型处理或相似检索。机器学习中常通过训练获得这种表示；它是特征表示的一种，并非所有手工特征向量都应称为 Embedding。",
+      "distinction": "Embedding 不等于一般特征向量，也不等于加密或匿名化。相近向量仅表示在该表示下接近，不保证对象相同或风险标签相同。",
       "example": "教学例子：两段意思相近的文字被编码为相近向量，便于检索，但仍需管理这些向量的来源与用途。",
       "topicIds": ["ai-classification", "ai-lineage", "ai-unlearning", "risk-match", "risk-patterns"], "sourceIds": [13], "extraSources": [{"label": "Google：Embeddings", "url": "https://developers.google.com/machine-learning/crash-course/embeddings"}], "origin": "extension"
     },
@@ -361,11 +361,11 @@
       "topicIds": ["ai-agent"], "sourceIds": [], "extraSources": [{"label": "OWASP：Prompt Injection", "url": "https://genai.owasp.org/llmrisk/llm01-prompt-injection/"}], "origin": "extension"
     },
     {
-      "id": "cross-server-pii-reconstruction", "zh": "跨服务器个人信息重构", "en": "Cross-Server PII Reconstruction", "abbr": "", "aliases": ["PII 重构", "跨服务身份重构"],
-      "definition": "不同服务各自返回的信息经过多轮组合后，重新联系到具体个人。即使每次调用看起来合理，组合后的含义和用途也可能发生变化。",
+      "id": "cross-server-pii-reconstruction", "zh": "跨服务身份重识别", "en": "Cross-service Re-identification", "abbr": "", "aliases": ["PII 重构", "跨服务身份重构", "Cross-Server PII Reconstruction", "跨服务重识别"],
+      "definition": "不同服务返回的标识符和属性被组合后，重新关联到具体个人。此处用跨服务重识别描述 MCP 案例风险；它不是 MCP 协议定义的一项标准功能。",
       "distinction": "没有直接传递姓名，不代表最终无法识别；检查单次调用权限之外，还需看标识符关联、上下文传播和整体用途。",
       "example": "教学例子：从交易服务拿到账户编号，再从客户服务查姓名，原本汇总的失败记录被重新归属到个人。",
-      "topicIds": ["ai-agent", "privacy-threats"], "sourceIds": [18], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-agent", "privacy-threats"], "sourceIds": [18], "extraSources": [{"label": "NIST｜Re-identification", "url": "https://csrc.nist.gov/glossary/term/re_identification"}], "origin": "source"
     },
     {
       "id": "machine-unlearning", "zh": "机器遗忘", "en": "Machine Unlearning", "abbr": "", "aliases": ["模型遗忘"],
@@ -411,7 +411,7 @@
     },
     {
       "id": "counterfactual-masking", "zh": "反事实遮蔽检查", "en": "Counterfactual Masking", "abbr": "", "aliases": ["移除单项证据测试"],
-      "definition": "暂时去掉一项上下文线索，再观察分类是否改变，用来检查判断是否过度依赖某个薄弱信号。这是一种稳健性检查，而非自动判错。",
+      "definition": "Meta 案例用 Counterfactual Masking 指逐项移除上下文线索、观察分类是否改变的稳健性检查。名称来自该案例；这种检查本身不是对因果关系的完整证明。",
       "distinction": "移除关键证据后改变判断可能合理；需要结合该信号可靠性分析，不能把任何变化都直接当成错误。",
       "example": "教学例子：只删除一个不可靠的字段描述就让类别翻转，应进一步审核模型的判断依据。",
       "topicIds": ["ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "source"

@@ -234,7 +234,7 @@ function bindCanvas(){
 async function init(){
   try{
     const files=['knowledge.json','conceptmap-governance.json','conceptmap-privacy.json','conceptmap-delivery.json'];
-    const data=await Promise.all(files.map(async file=>{const r=await fetch(`./${file}?v=concept-2`);if(!r.ok)throw new Error(`无法读取 ${file}`);return r.json();}));
+    const data=await Promise.all(files.map(async file=>{const r=await fetch(`./${file}?v=professional-1`);if(!r.ok)throw new Error(`无法读取 ${file}`);return r.json();}));
     S.base=data[0];data.slice(1).flatMap(d=>d.topics).forEach(t=>S.lessons.set(t.id,t));
     await AtlasTerms.load(S.base);AtlasDiagrams.init();buildKnowledgeTree();
     AtlasMemory.init({terms:AtlasTerms.data.terms,base:S.base,onTopic:id=>showTopic(id)});

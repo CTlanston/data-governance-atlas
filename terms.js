@@ -16,10 +16,11 @@ window.AtlasTerms = (() => {
     'purpose-limitation':['目的限制'],'asset-classification':['资产分类'],
     'confidence-calibration':['概率校准'],'shadow-mode':['影子测试'],
     'model-checkpoint':['模型快照'],'cross-stack-lineage':['跨栈血缘'],
+    'cross-server-pii-reconstruction':['跨服务器个人信息重构','跨服务重识别'],
     'entity-masking':['实体占位替换'],'cohens-kappa':['卡帕系数'],
     'service-level-indicator':['服务水平指标'],'service-level-objective':['服务水平目标'],'service-level-agreement':['服务水平协议'],
     'query-execution-plan':['查询计划'],'risk-score':['风险得分'],
-    'multi-factor-authentication':['多因子认证'],'online-sample-library':['在线黑库','文本黑库'],
+    'multi-factor-authentication':['多因子认证'],'online-sample-library':['在线黑样本库','文本黑库','黑库'],
     'historical-rescan':['离线回扫','存量回扫'],'idempotency':['幂等'],
     'bipartite-graph':['二分图'],'precision':['精确率','精准率'],'recall':['查全率'],
     'true-positive':['真正阳性'],'true-negative':['真正阴性'],'false-positive':['假阳性'],'false-negative':['假阴性'],
@@ -27,7 +28,7 @@ window.AtlasTerms = (() => {
   };
   async function load(base){
     const files=['glossary-governance.json','glossary-privacy.json','glossary-delivery.json'];
-    const parts=await Promise.all(files.map(async f=>{const r=await fetch(`./${f}?v=concept-2`);if(!r.ok)throw new Error(`术语读取失败：${f}`);return r.json();}));
+    const parts=await Promise.all(files.map(async f=>{const r=await fetch(`./${f}?v=professional-1`);if(!r.ok)throw new Error(`术语读取失败：${f}`);return r.json();}));
     const topicModules=new Map(base.modules.flatMap(m=>m.topics.map(t=>[t.id,m.id])));
     for(const part of parts){
       Object.assign(data.moduleEnglish,part.moduleEnglish);Object.assign(data.topicEnglish,part.topicEnglish);

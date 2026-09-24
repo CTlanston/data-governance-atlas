@@ -18,7 +18,7 @@
           "items": [
             {
               "id": "scope",
-              "title": "为什么治理属于管理，却不能被清洗数据替代？",
+              "title": "数据治理与数据管理在决策权、职责和执行活动上有何区别？",
               "blocks": [
                 {
                   "type": "explain",
@@ -56,7 +56,7 @@
         },
         {
           "id": "policy-control",
-          "title": "政策、控制、证据：把一句要求接到系统",
+          "title": "政策、控制与审计证据",
           "en": "Policy → Control → Evidence",
           "kind": "workflow",
           "summary": "一份政策只有被落实并验证，才能支撑实际治理结果。",
@@ -68,7 +68,7 @@
           "items": [
             {
               "id": "three-links",
-              "title": "“只能为批准用途访问”怎样落地？",
+              "title": "如何将数据使用政策转化为系统控制和可审计证据？",
               "blocks": [
                 {
                   "type": "diagram",
@@ -166,7 +166,7 @@
           "items": [
             {
               "id": "division",
-              "title": "数据质量失败时，应该找谁？",
+              "title": "数据质量问题如何在 Owner、Steward、工程团队和 TPM 之间分责？",
               "blocks": [
                 {
                   "type": "table",
@@ -222,7 +222,7 @@
           "items": [
             {
               "id": "shared-table",
-              "title": "两个业务都使用同一张表，谁能删除或改字段？",
+              "title": "共享数据资产的变更决策权、消费者责任与升级机制如何划分？",
               "blocks": [
                 {
                   "type": "explain",
@@ -260,7 +260,7 @@
           "items": [
             {
               "id": "decision-rights",
-              "title": "“分布式”为什么不等于所有政策随便定？",
+              "title": "集中式、分布式与联合治理如何分配决策权和执行责任？",
               "blocks": [
                 {
                   "type": "explain",
@@ -310,7 +310,7 @@
           "items": [
             {
               "id": "actual-case",
-              "title": "文章里的平台究竟负责什么？",
+              "title": "DataLeap 的分布式治理案例如何划分业务域与平台的职责？",
               "blocks": [
                 {
                   "type": "explain",
@@ -326,7 +326,7 @@
         },
         {
           "id": "shared-boundaries",
-          "title": "同一条政策，哪些部分可自治？",
+          "title": "域内自治与共同政策边界",
           "en": "Autonomy & Shared Constraints",
           "kind": "reasoning",
           "summary": "先拆政策中的义务、参数和实施方法，再决定授权范围。",
@@ -340,7 +340,7 @@
           "items": [
             {
               "id": "retention-example",
-              "title": "业务自定留存期，会不会违反共同要求？",
+              "title": "如何在业务域自治与企业共同约束之间划定政策边界？",
               "blocks": [
                 {
                   "type": "explain",
@@ -424,7 +424,7 @@
           "items": [
             {
               "id": "cost-example",
-              "title": "删掉重复任务，为什么不只算省了多少资源？",
+              "title": "如何同时衡量治理收益、实施成本与业务影响？",
               "blocks": [
                 {
                   "type": "example",
@@ -457,7 +457,7 @@
           "items": [
             {
               "id": "operating-model",
-              "title": "管理者和执行者为什么看到不同视图？",
+              "title": "治理平台应如何支持管理者、推动者与执行者的不同决策？",
               "blocks": [
                 {
                   "type": "diagram",
@@ -572,7 +572,7 @@
           "items": [
             {
               "id": "unused-table",
-              "title": "“90 天没访问”能否自动删除？",
+              "title": "将闲置资产检测规则用于自动整改前，需要验证哪些条件？",
               "blocks": [
                 {
                   "type": "explain",
@@ -628,7 +628,7 @@
           "items": [
             {
               "id": "denominator",
-              "title": "“治理覆盖率 95%”还缺哪些信息？",
+              "title": "如何定义治理活动、控制覆盖与实际结果指标，避免分母偏差？",
               "blocks": [
                 {
                   "type": "table",
@@ -678,7 +678,7 @@
           "items": [
             {
               "id": "traceable-result",
-              "title": "审计时如何解释一张表为什么被归档？",
+              "title": "治理决策需要保留哪些证据，才能支持审计与问题追溯？",
               "blocks": [
                 {
                   "type": "explain",
@@ -717,7 +717,7 @@
           "items": [
             {
               "id": "two-questions",
-              "title": "都是一份数据列表，为什么仍要区分？",
+              "title": "Data Inventory 与 Data Catalog 在目标、内容和使用场景上有何区别？",
               "blocks": [
                 {
                   "type": "table",
@@ -767,7 +767,7 @@
           "items": [
             {
               "id": "asset-identity",
-              "title": "表改名以后，如何避免把它当成全新资产？",
+              "title": "如何保持资产身份与发现记录在改名、迁移和新增时持续准确？",
               "blocks": [
                 {
                   "type": "explain",
@@ -831,7 +831,7 @@
           "items": [
             {
               "id": "customer-table",
-              "title": "一张 customers 表如何同时出现在三种视图里？",
+              "title": "元数据、数据目录和数据血缘分别支持哪些治理任务？",
               "blocks": [
                 {
                   "type": "table",
@@ -886,7 +886,7 @@
           "items": [
             {
               "id": "active-user",
-              "title": "“活跃用户”应该写在字段备注还是统一术语中？",
+              "title": "数据字典与业务术语表如何关联，跨团队指标口径如何管理？",
               "blocks": [
                 {
                   "type": "explain",
@@ -920,7 +920,7 @@
           "items": [
             {
               "id": "granularity-choice",
-              "title": "改字段、查故障和删个人记录，需要同一种图吗？",
+              "title": "如何为影响分析、故障追踪和用户数据定位选择血缘粒度？",
               "blocks": [
                 {
                   "type": "table",
@@ -963,7 +963,7 @@
         },
         {
           "id": "origin-transformation",
-          "title": "来源字段与转换表达式：只画箭头会丢什么",
+          "title": "来源字段与转换语义",
           "en": "Column Origins & Transformations",
           "kind": "concept",
           "summary": "同一来源可以经过保留原值、聚合或脱敏等不同加工。",
@@ -974,7 +974,7 @@
           "items": [
             {
               "id": "concat-example",
-              "title": "知道 display_name 来自 name，就足够了吗？",
+              "title": "列来源与转换表达式分别提供什么信息，如何共同支持影响分析？",
               "blocks": [
                 {
                   "type": "explain",
@@ -1038,11 +1038,11 @@
           "items": [
             {
               "id": "tree-example",
-              "title": "SELECT name FROM users WHERE age > 18 怎样变成树？",
+              "title": "SQL 解析生成的 AST 如何表达查询结构？",
               "blocks": [
                 {
                   "type": "explain",
-                  "text": "解析（Parsing）识别 SQL 的语法关系：SELECT 节点连接选取的列、来源表和 WHERE 条件；条件节点再连接 age、比较运算符和常量 18。这种父子结构是抽象语法树（Abstract Syntax Tree, AST）。它不是沿着一个 next 指针串起来的链表，尽管程序可以按某种顺序把树写成一串文本。"
+                  "text": "解析器把 SQL 文本组织为有层次的语法节点，表达查询子句、列引用、运算符和子表达式。以 SELECT name FROM users WHERE age > 18 为例，选择项、来源表与条件构成不同子结构，条件内部再关联 age、比较符和常量。AST 表达语法结构；对象解析、类型校验和关系运算计划需要后续阶段补充。"
                 },
                 {
                   "type": "table",
@@ -1079,11 +1079,11 @@
             },
             {
               "id": "serialization-purpose",
-              "title": "为什么有时序列化？能不能直接从树取特征？",
+              "title": "AST 序列化与特征提取各解决什么问题，何时需要组合使用？",
               "blocks": [
                 {
                   "type": "explain",
-                  "text": "可以直接遍历树取特征。序列化解决“怎样保存或传送结构”，向量化解决“怎样把选定特征表示成数字”，它们不是同一件事。分布式处理可能先把结构编码后传给另一服务，也可以在当前进程直接计算特征。把原始字节当数字比较，不会自动获得 SQL 的业务语义。"
+                  "text": "AST 序列化用于保存、传输或交换结构，特征提取则选择与目标分析有关的信息并转为可比较的表示。可以直接遍历内存中的树提取特征；跨进程交换时也可以先序列化再还原。两者没有固定的必经先后关系，把原始字节当数字比较也不会自动获得 SQL 的业务语义。"
                 },
                 {
                   "type": "example",
@@ -1225,7 +1225,7 @@
           "items": [
             {
               "id": "plans",
-              "title": "SQL 已经有 AST，为什么还需要逻辑计划？",
+              "title": "AST、逻辑计划与物理计划的职责和信息粒度有何区别？",
               "blocks": [
                 {
                   "type": "table",
@@ -1268,7 +1268,7 @@
         },
         {
           "id": "similarity-lineage",
-          "title": "血缘追溯与相似任务检测：同一输入，两种目标",
+          "title": "字段血缘与相似任务检测",
           "en": "Lineage vs Similarity Detection",
           "kind": "comparison",
           "summary": "相似度用于筛选候选任务，不证明业务结果等价，更不是自动删除许可。",
@@ -1285,7 +1285,7 @@
           "items": [
             {
               "id": "two-pipelines",
-              "title": "为什么都用 AST，却不能混为一个算法？",
+              "title": "基于 SQL 结构的血缘追踪与相似任务检测，在目标和输出上有何区别？",
               "blocks": [
                 {
                   "type": "table",
@@ -1345,7 +1345,7 @@
           "items": [
             {
               "id": "scope",
-              "title": "Provenance 真的只是数据的“出生地点”吗？",
+              "title": "Data Lineage 与 Data Provenance 的范围如何区分，为什么需要声明语境？",
               "blocks": [
                 {
                   "type": "explain",
@@ -1397,7 +1397,7 @@
           "items": [
             {
               "id": "report-example",
-              "title": "一份月报的来源证明该包含什么？",
+              "title": "如何用 W3C PROV 的实体、活动与参与者描述数据生成历史？",
               "blocks": [
                 {
                   "type": "example",
@@ -1431,7 +1431,7 @@
           "items": [
             {
               "id": "complementary",
-              "title": "SQL 血缘为什么还需要运行记录？",
+              "title": "静态解析与运行时采集在血缘覆盖和证据能力上如何互补？",
               "blocks": [
                 {
                   "type": "table",
@@ -1485,7 +1485,7 @@
           "items": [
             {
               "id": "operator-gaps",
-              "title": "复杂 SQL 没画出来源，应该显示“无来源”吗？",
+              "title": "如何识别和管理 UDF、UDTF 等复杂算子造成的血缘缺口？",
               "blocks": [
                 {
                   "type": "explain",
@@ -1524,7 +1524,7 @@
           "items": [
             {
               "id": "stage-questions",
-              "title": "为什么只会背“五个阶段”还不够？",
+              "title": "数据生命周期各阶段应设置哪些策略、控制和责任？",
               "blocks": [
                 {
                   "type": "table",
@@ -1583,7 +1583,7 @@
           "items": [
             {
               "id": "scope-not-size",
-              "title": "DLM 必然只管文件，ILM 必然只管字段吗？",
+              "title": "DLM 与 ILM 的关注点和管理范围有何差异？",
               "blocks": [
                 {
                   "type": "explain",
@@ -1608,7 +1608,7 @@
           "title": "块、文件、对象：应用看到的访问抽象",
           "en": "Block / File / Object Storage",
           "kind": "comparison",
-          "summary": "视频、评论和播放量是业务数据类型，不会单独决定唯一存储方案。",
+          "summary": "访问模型决定应用如何组织数据；适用性还取决于读写模式、共享语义和服务目标。",
           "sourceIds": [],
           "extraSources": [
             {
@@ -1619,43 +1619,27 @@
           "items": [
             {
               "id": "abstractions",
-              "title": "为什么评论不是天然等于“块存储”？",
+              "title": "块、文件与对象存储的访问语义有何差异，分别适合哪些工作负载？",
               "blocks": [
                 {
                   "type": "table",
-                  "title": "客户端看到什么，比内容名字更重要",
-                  "headers": [
-                    "抽象",
-                    "访问单位",
-                    "上层通常负责什么"
-                  ],
+                  "title": "访问方式、适用负载与验证重点",
+                  "headers": ["存储抽象", "访问语义与职责", "典型适用负载", "选型验证重点"],
                   "rows": [
-                    [
-                      "Block Storage 块存储",
-                      "一段逻辑地址上的数据块",
-                      "文件系统或数据库组织内容、维护结构"
-                    ],
-                    [
-                      "File Storage 文件存储",
-                      "目录、路径和文件操作",
-                      "应用按文件语义读写，共享语义由系统提供"
-                    ],
-                    [
-                      "Object Storage 对象存储",
-                      "对象键、内容、元数据及 API",
-                      "应用或数据平台维护业务组织和访问方式"
-                    ]
+                    ["Block Storage 块存储", "以逻辑块地址读写；文件系统或数据库组织数据结构", "需要低延迟随机读写、由存储引擎管理页面的数据库等", "IOPS、尾部时延、吞吐、持久性及多主机写协调"],
+                    ["File Storage 文件存储", "以目录、路径和文件操作访问；共享语义由具体系统提供", "依赖文件接口的应用、共享工作目录和部分 HPC 任务", "元数据性能、并发访问、锁语义、协议兼容性"],
+                    ["Object Storage 对象存储", "以对象键和 API 管理内容及元数据", "媒体原件、备份、日志与数据湖分析文件等", "对象与请求大小、读写一致性、连接器、请求和取回费用"]
                   ]
                 },
                 {
                   "type": "example",
-                  "text": "视频原件常放对象存储，评论和播放量常通过数据库访问，但这是常见组合。数据库底层可能使用块卷；评论导出的 Parquet 文件可以进入对象存储；同一视频也能暂存在本地文件系统。业务层说“存评论”和设备层说“写磁盘块”，是在回答不同问题。"
+                  "text": "选型先确认应用需要的操作，再比较访问模式、可靠性、共享和总成本。这些是常见适配关系，不是强制绑定：数据库可运行在块卷上，评论导出的 Parquet 文件可进入对象存储，视频编辑的临时工作区也可能使用文件系统。同一种业务数据在生命周期不同阶段可以采用不同存储组件。"
                 }
               ]
             },
             {
               "id": "stack",
-              "title": "怎样把看似冲突的技术放在同一张图里？",
+              "title": "应用、数据库、文件系统与底层存储之间如何分层协作？",
               "blocks": [
                 {
                   "type": "diagram",
@@ -1754,7 +1738,7 @@
         },
         {
           "id": "block-layout",
-          "title": "块怎样切分：逻辑地址不等于文件名",
+          "title": "逻辑寻址、分配单元与存储层次",
           "en": "Block Layout & Addressing",
           "kind": "concept",
           "summary": "文件系统块、数据库页、磁盘扇区与 HDFS 块是不同层的单位。",
@@ -1772,7 +1756,7 @@
           "items": [
             {
               "id": "read-write",
-              "title": "一段评论内容如何变成块读写？",
+              "title": "数据库页、文件系统块与设备逻辑块分别承担什么职责？",
               "blocks": [
                 {
                   "type": "explain",
@@ -1813,11 +1797,11 @@
             },
             {
               "id": "size-choice",
-              "title": "是不是所有块都是 4 KB？",
+              "title": "不同存储层的块大小如何影响随机读写与顺序吞吐？",
               "blocks": [
                 {
                   "type": "explain",
-                  "text": "不是。不同层、产品和配置可以采用不同单位；不能把常见的 4 KB 文件系统块推成 HDFS 块大小，也不能把数据库页大小当作设备物理扇区大小。真正选型时要问工作负载是大量小随机读写，还是大文件顺序吞吐，并结合缓存、合并写、网络和设备能力测试。"
+                  "text": "设备逻辑块、文件系统分配单元、数据库页和 HDFS Block 属于不同层次，不能共用一个固定大小假设。较大的分配或传输单位可能利于顺序吞吐，却可能增加小随机访问的放大和内存开销；过小的文件或分段也可能增加元数据与调度负担。应结合缓存、合并写、网络和设备能力测量目标工作负载，不能只凭某个块大小判断性能。"
                 },
                 {
                   "type": "example",
@@ -1830,7 +1814,7 @@
         },
         {
           "id": "san-nas",
-          "title": "SAN 与 NAS：拿到一块磁盘，还是一个共享目录",
+          "title": "SAN 与 NAS：块访问与文件共享",
           "en": "SAN vs NAS",
           "kind": "comparison",
           "summary": "SAN 常提供块访问，NAS 提供网络文件访问；二者不是“裸机快、文件必慢”的排序。",
@@ -1852,7 +1836,7 @@
           "items": [
             {
               "id": "client-view",
-              "title": "把 SAN 和 NAS 接到服务器后，服务器看到什么？",
+              "title": "SAN 与 NAS 在访问接口、管理职责和共享方式上有何区别？",
               "blocks": [
                 {
                   "type": "table",
@@ -1893,7 +1877,7 @@
             },
             {
               "id": "multiwriter",
-              "title": "块卷能接多台机器，就能随便同时写吗？",
+              "title": "多主机共享块存储需要哪些并发协调与数据一致性机制？",
               "blocks": [
                 {
                   "type": "explain",
@@ -1905,7 +1889,7 @@
         },
         {
           "id": "posix-http",
-          "title": "POSIX 与 HTTP REST：接口语义，不能只比速度",
+          "title": "POSIX 与 HTTP REST：抽象层次与接口语义",
           "en": "POSIX vs HTTP REST APIs",
           "kind": "comparison",
           "summary": "POSIX 是操作系统接口标准；HTTP 是协议，REST 是架构风格，层次并不相同。",
@@ -1931,7 +1915,7 @@
           "items": [
             {
               "id": "full-name",
-              "title": "POSIX 的全称和优势到底是什么？",
+              "title": "POSIX 文件接口与 HTTP REST API 在抽象层次和应用适配上有何区别？",
               "blocks": [
                 {
                   "type": "explain",
@@ -1972,7 +1956,7 @@
             },
             {
               "id": "webhdfs-counterexample",
-              "title": "用了 HTTP，为什么仍然可以是文件存储？",
+              "title": "如何区分传输协议、API 语义与存储数据模型？",
               "blocks": [
                 {
                   "type": "explain",
@@ -2010,7 +1994,7 @@
           "items": [
             {
               "id": "levels",
-              "title": "为什么不能直接说“HDFS 还是 Data Lake”？",
+              "title": "HDFS 与 Data Lake 分别处于哪个架构层次，二者是什么关系？",
               "blocks": [
                 {
                   "type": "table",
@@ -2170,7 +2154,7 @@
             },
             {
               "id": "same-layer-choice",
-              "title": "真正同层的选型：HDFS 与对象存储怎样比较？",
+              "title": "数据湖选择 HDFS 或对象存储时，应比较哪些能力与成本？",
               "blocks": [
                 {
                   "type": "table",
@@ -2236,7 +2220,7 @@
           "items": [
             {
               "id": "why-parallel-fs",
-              "title": "为什么很多 HPC 任务用 Lustre，而不是直接让所有机器写块？",
+              "title": "并行文件系统如何支持 HPC 的共享访问与高吞吐需求？",
               "blocks": [
                 {
                   "type": "explain",
@@ -2275,7 +2259,7 @@
           "items": [
             {
               "id": "heat-inputs",
-              "title": "冷数据应该按多久没用，还是按创建日期判断？",
+              "title": "存储分层策略如何结合数据年龄、访问热度与业务恢复要求？",
               "blocks": [
                 {
                   "type": "table",
@@ -2316,11 +2300,11 @@
             },
             {
               "id": "thresholds",
-              "title": "能直接套用 7 天热、90 天冷和固定分数吗？",
+              "title": "冷热分层阈值应如何制定、验证并防止频繁迁移？",
               "blocks": [
                 {
                   "type": "explain",
-                  "text": "这些数字可以当练习参数，不能当普遍标准。先收集有代表性的访问周期、查询要求和成本，再试运行规则并抽样检查被选中的资产。还要区分“没有访问”和“没有采集到访问”，为关键资产设保护条件，并用进入与退出层的不同门槛减少反复迁移。"
+                  "text": "阈值应由代表性的访问周期、查询时效和总成本决定。先建立基线，再以只观察不执行或小范围试点的方式检查候选资产；区分“没有访问”与“没有采集到访问”，为关键资产设置保护条件。进入与退出存储层可采用不同门槛，减少反复迁移；7 天、90 天等数字只能是待验证参数，不是通用标准。"
                 }
               ]
             }
@@ -2452,7 +2436,7 @@
         },
         {
           "id": "safe-migration",
-          "title": "文件迁移与表元数据：为什么不能 copy 后立即删原件",
+          "title": "文件迁移、元数据提交与并发一致性",
           "en": "Migration & Metadata Commit",
           "kind": "workflow",
           "summary": "目录切换、并发读写和旧快照引用需要一起处理。",
@@ -2470,7 +2454,7 @@
           "items": [
             {
               "id": "commit-sequence",
-              "title": "安全迁移为什么不是简单的三条命令？",
+              "title": "数据迁移如何保证内容完整、元数据一致和并发读写安全？",
               "blocks": [
                 {
                   "type": "explain",
@@ -2510,7 +2494,7 @@
             },
             {
               "id": "compaction",
-              "title": "Compaction 是压缩吗？为什么小文件多会贵？",
+              "title": "文件合并与数据压缩有何区别，分别影响哪些成本？",
               "blocks": [
                 {
                   "type": "explain",
@@ -2522,7 +2506,7 @@
         },
         {
           "id": "restore-cost",
-          "title": "冷存储与深度归档：便宜不等于即取即用",
+          "title": "冷存储与归档：恢复时效与总成本",
           "en": "Cold Storage & Restore Cost",
           "kind": "reasoning",
           "summary": "总成本需要包含请求、取回、迁移和业务等待。",
@@ -2540,11 +2524,11 @@
           "items": [
             {
               "id": "not-transparent",
-              "title": "改完元数据，归档文件就能透明实时查吗？",
+              "title": "冷存储与归档层的取回机制如何影响查询时效和总成本？",
               "blocks": [
                 {
                   "type": "explain",
-                  "text": "不能据此保证。某些低频层仍可直接访问，某些归档层则要先发起恢复请求并等待可读副本。目录只能告诉查询引擎去哪找数据，不能消除底层取回流程。产品界面应区分已归档、恢复中、可读取和恢复失败，查询或任务也需要明确等待、取消和超时策略。"
+                  "text": "存储层的可访问性决定恢复流程：有些低频层支持直接读取，另一些归档层需要先发起取回并等待可读副本。目录定位不能消除这一等待。方案需要把已归档、恢复中、可读取和失败状态接到查询或任务流程，并明确等待、取消及超时行为。随后结合请求、取回和迁移费用评估总成本。"
                 },
                 {
                   "type": "table",
@@ -2600,7 +2584,7 @@
           "items": [
             {
               "id": "failure-types",
-              "title": "有三个副本，为什么仍可能需要备份？",
+              "title": "复制、备份和归档分别保护哪些故障或留存场景？",
               "blocks": [
                 {
                   "type": "table",
@@ -2654,7 +2638,7 @@
           "items": [
             {
               "id": "restore-path",
-              "title": "恢复数据库后，还要检查什么？",
+              "title": "如何验证端到端恢复能力，以及恢复后的数据和控制一致性？",
               "blocks": [
                 {
                   "type": "explain",
@@ -2696,7 +2680,7 @@
           "items": [
             {
               "id": "delete-meaning",
-              "title": "执行 DELETE 后，究竟已经完成什么？",
+              "title": "请求接受、软删除、逻辑删除与底层清理分别代表什么完成状态？",
               "blocks": [
                 {
                   "type": "table",
@@ -2750,7 +2734,7 @@
           "items": [
             {
               "id": "pipeline",
-              "title": "怎样组织一次可验收的删除？",
+              "title": "跨系统数据删除应如何定义范围、状态、重试与验收证据？",
               "blocks": [
                 {
                   "type": "diagram",
@@ -2859,7 +2843,7 @@
         },
         {
           "id": "crypto-erase",
-          "title": "加密清除：删密钥为什么可能有效，又何时不足",
+          "title": "加密清除的适用条件与边界",
           "en": "Cryptographic Erasure",
           "kind": "reasoning",
           "summary": "有效性依赖密钥覆盖、密钥副本及明文残留等条件。",
@@ -2875,7 +2859,7 @@
           "items": [
             {
               "id": "key-scope",
-              "title": "销毁一个密钥，是否就删除了所有个人数据？",
+              "title": "加密清除适用哪些场景，其有效性依赖哪些密钥和数据边界？",
               "blocks": [
                 {
                   "type": "explain",
@@ -2917,7 +2901,7 @@
           "items": [
             {
               "id": "three-controls",
-              "title": "保护期结束，系统就一定删掉了吗？",
+              "title": "TTL、保留策略、Object Lock 与 Legal Hold 如何影响数据删除？",
               "blocks": [
                 {
                   "type": "table",
@@ -2976,7 +2960,7 @@
           "items": [
             {
               "id": "policy-fields",
-              "title": "同样保留一年，为什么结果可能差很多？",
+              "title": "一项可执行的保留策略需要明确哪些对象、时间与例外条件？",
               "blocks": [
                 {
                   "type": "explain",
@@ -3016,7 +3000,7 @@
             },
             {
               "id": "versions",
-              "title": "S3 删除标记为什么不等于旧版本被清除？",
+              "title": "对象版本控制如何影响数据盘点、保留和删除验收？",
               "blocks": [
                 {
                   "type": "explain",

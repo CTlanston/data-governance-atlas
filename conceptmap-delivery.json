@@ -24,7 +24,7 @@
           "items": [
             {
               "id": "three-objects",
-              "title": "报表准时，究竟是在看什么？",
+              "title": "如何区分 SLI、SLO 与 SLA，并将业务时效要求转为可测量承诺？",
               "blocks": [
                 {
                   "type": "table",
@@ -80,7 +80,7 @@
           "items": [
             {
               "id": "path-calculation",
-              "title": "为什么不是把所有任务时间加起来？",
+              "title": "如何根据任务依赖、并行关系与执行时间计算关键路径？",
               "blocks": [
                 {
                   "type": "diagram",
@@ -177,12 +177,12 @@
             },
             {
               "id": "target-compression",
-              "title": "从 15 分钟改为 5 分钟，怎样才算真的优化？",
+              "title": "缩短数据交付时限时，应如何评估优化效果和可靠性代价？",
               "blocks": [
                 {
                   "type": "explain",
                   "title": "承诺不是加速器",
-                  "text": "不能把每个任务机械除以 3，也不能假设加机器就线性变快。先找长路径上能减少的工作，例如提前准备数据、改全量为增量、优化查询或消除不必要依赖。每次改动后重新测量并重算；B 缩短后，C 所在分支可能成为新瓶颈。"
+                  "text": "不能把每个任务机械除以 3，也不能假设加机器就线性变快。先找长路径上能减少的工作，例如提前准备数据、改全量为增量、优化查询或消除不必要依赖。每次改动后重新测量并重算；B 缩短后，C 所在分支可能成为新瓶颈。 同时检查结果正确性、失败与重试、资源费用和剩余缓冲，避免仅缩短单次耗时却降低整体可靠性。"
                 },
                 {
                   "type": "example",
@@ -212,7 +212,7 @@
           "items": [
             {
               "id": "three-time-budgets",
-              "title": "同样是“留时间”，其实有三种含义",
+              "title": "倒排计划、浮动时间与风险缓冲分别解决什么问题？",
               "blocks": [
                 {
                   "type": "table",
@@ -249,7 +249,7 @@
             },
             {
               "id": "check-understanding",
-              "title": "非关键任务优化很多，为什么总耗时没变？",
+              "title": "如何判断单个任务的优化是否会缩短端到端交付时间？",
               "blocks": [
                 {
                   "type": "example",
@@ -285,7 +285,7 @@
           "items": [
             {
               "id": "rules-versus-signals",
-              "title": "行数正常，为什么数据仍可能错？",
+              "title": "数据质量规则与可观测信号在检测能力上如何互补？",
               "blocks": [
                 {
                   "type": "table",
@@ -351,7 +351,7 @@
           "items": [
             {
               "id": "measured-object",
-              "title": "“预测行数”不是预测每一行的内容",
+              "title": "动态行数基线应如何定义统计对象、时间窗口和预期范围？",
               "blocks": [
                 {
                   "type": "explain",
@@ -367,12 +367,12 @@
             },
             {
               "id": "drift-and-control",
-              "title": "动态基线会不会把真正错误学成正常？",
+              "title": "动态基线如何应对业务变化，并避免把异常纳入正常范围？",
               "blocks": [
                 {
                   "type": "explain",
-                  "title": "会，因此仍要保留硬规则",
-                  "text": "长期漏数若不断进入历史，自动基线可能跟着下降；促销或产品改版又可能让真实增长被判异常。因此应标注已知事件、复核训练窗口，保留必须满足的业务约束，并让负责人确认异常原因。动态阈值减少固定阈值的僵硬，不会自动理解所有业务变化。"
+                  "title": "业务漂移与异常污染需要分别处理",
+                  "text": "动态基线可能受到异常污染：持续漏数进入历史后，估计范围会跟着下降；促销或产品改版又可能造成合理的分布变化。应标注业务事件、检查训练窗口与数据质量，保留不可违反的业务规则，并由负责人判断是否重建基线。动态阈值是一种检测机制，不能代替业务语义和异常调查。"
                 }
               ]
             }
@@ -392,7 +392,7 @@
           "items": [
             {
               "id": "response-path",
-              "title": "一条报警怎样变成可靠动作？",
+              "title": "质量异常应如何触发阻断、隔离、修复和下游恢复？",
               "blocks": [
                 {
                   "type": "diagram",
@@ -513,7 +513,7 @@
       "sections": [
         {
           "id": "key-routing",
-          "title": "同一个 Key 为什么挤到同一份工作",
+          "title": "热点键与分区负载",
           "en": "Key Skew & Partitioning",
           "kind": "architecture",
           "summary": "按键聚合或连接时，相同键的记录通常需要汇到同一处理位置。",
@@ -530,7 +530,7 @@
           "items": [
             {
               "id": "hot-key",
-              "title": "机器很多，为什么还有一台忙不过来？",
+              "title": "热点键如何造成分区负载不均，应如何定位？",
               "blocks": [
                 {
                   "type": "diagram",
@@ -646,7 +646,7 @@
           "items": [
             {
               "id": "three-loads",
-              "title": "先区分“条数多”“每条大”“每条难算”",
+              "title": "如何区分记录数量、字节量和计算复杂度造成的数据倾斜？",
               "blocks": [
                 {
                   "type": "table",
@@ -685,7 +685,7 @@
         },
         {
           "id": "hash-modulo",
-          "title": "Hash 取模只决定去哪，不保证均匀",
+          "title": "哈希分区、取模与负载分布",
           "en": "Hash & Modulo",
           "kind": "concept",
           "summary": "把运算符认清，才能理解分区逻辑与它的局限。",
@@ -702,7 +702,7 @@
           "items": [
             {
               "id": "operators",
-              "title": "/、//、% 分别做什么？",
+              "title": "哈希分区如何使用取模分配数据，为什么不能保证负载均衡？",
               "blocks": [
                 {
                   "type": "table",
@@ -763,7 +763,7 @@
           "items": [
             {
               "id": "semantic-safety",
-              "title": "加盐、预聚合、过滤空值分别有什么代价？",
+              "title": "加盐、预聚合与数据过滤适用哪些倾斜场景，如何保证结果正确？",
               "blocks": [
                 {
                   "type": "table",
@@ -835,7 +835,7 @@
           "items": [
             {
               "id": "scan-output",
-              "title": "扫描诊断最终要输出什么？",
+              "title": "查询成本诊断应收集哪些扫描、计划和消费依赖信息？",
               "blocks": [
                 {
                   "type": "explain",
@@ -851,7 +851,7 @@
             },
             {
               "id": "partition-pruning",
-              "title": "分区裁剪到底少做了什么？",
+              "title": "分区裁剪如何减少扫描量，其生效条件和局限是什么？",
               "blocks": [
                 {
                   "type": "explain",
@@ -877,7 +877,7 @@
           "items": [
             {
               "id": "ast-order",
-              "title": "SQL、AST、序列化、向量是什么顺序？",
+              "title": "SQL 相似任务检测中，解析、结构归一化、序列化与特征提取如何分工？",
               "blocks": [
                 {
                   "type": "diagram",
@@ -973,7 +973,7 @@
             },
             {
               "id": "similar-not-equivalent",
-              "title": "结构相似，为什么不能直接删任务？",
+              "title": "任务相似性与业务等价性有何区别，退役前需要验证什么？",
               "blocks": [
                 {
                   "type": "table",
@@ -1034,7 +1034,7 @@
           "items": [
             {
               "id": "merge-gates",
-              "title": "从建议到下线，至少经过哪些确认？",
+              "title": "任务合并或下线需要哪些依赖确认、迁移验证和收益证据？",
               "blocks": [
                 {
                   "type": "explain",
@@ -1091,7 +1091,7 @@
           "items": [
             {
               "id": "engine-boundaries",
-              "title": "怎样从系统职责理解，而不是背三个绰号？",
+              "title": "Hive、Flink 与 Spark 的系统职责和执行模式如何区分？",
               "blocks": [
                 {
                   "type": "table",
@@ -1157,7 +1157,7 @@
           "items": [
             {
               "id": "traceable-control",
-              "title": "“未经授权不能导出”还缺少什么？",
+              "title": "如何将数据访问要求转化为明确的控制条件和验收标准？",
               "blocks": [
                 {
                   "type": "table",
@@ -1212,7 +1212,7 @@
           "items": [
             {
               "id": "test-matrix",
-              "title": "重试和恢复为什么必须进入测试？",
+              "title": "控制验证如何覆盖正常、拒绝、重试、故障和恢复路径？",
               "blocks": [
                 {
                   "type": "table",
@@ -1280,7 +1280,7 @@
           "items": [
             {
               "id": "canary-and-handoff",
-              "title": "上线门槛与运营交接要交接哪些能力？",
+              "title": "控制上线前需要哪些发布门槛和运营交接条件？",
               "blocks": [
                 {
                   "type": "explain",
@@ -1321,7 +1321,7 @@
           "items": [
             {
               "id": "symptom-versus-cause",
-              "title": "CPU 高就一定应该叫醒人吗？",
+              "title": "告警应如何关联用户影响、服务目标与可执行响应？",
               "blocks": [
                 {
                   "type": "explain",
@@ -1377,7 +1377,7 @@
           "items": [
             {
               "id": "beyond-human-error",
-              "title": "“某人忘了操作”为什么不够？",
+              "title": "事故复盘如何识别系统性原因并形成可验收的改进？",
               "blocks": [
                 {
                   "type": "explain",
@@ -1412,7 +1412,7 @@
           "items": [
             {
               "id": "automation-tradeoff",
-              "title": "不是所有人工工作都值得自动化",
+              "title": "如何评估运维自动化的收益、维护成本与失败风险？",
               "blocks": [
                 {
                   "type": "explain",
@@ -1436,7 +1436,7 @@
       "sections": [
         {
           "id": "assessment-validation",
-          "title": "先验证评估属于这次操作",
+          "title": "风险评估的有效性与操作绑定",
           "en": "Assessment Validation",
           "kind": "workflow",
           "summary": "无效或操作不匹配的评估，不能直接拿分数作正常业务决策。",
@@ -1447,7 +1447,7 @@
           "items": [
             {
               "id": "token-action",
-              "title": "拿到 score 前先看什么？",
+              "title": "使用 reCAPTCHA 评分前，应如何验证 token 有效性与操作绑定？",
               "blocks": [
                 {
                   "type": "explain",
@@ -1562,7 +1562,7 @@
           "items": [
             {
               "id": "score-direction",
-              "title": "先辨方向，再讨论阈值",
+              "title": "风险分数的方向与适用场景应如何确认？",
               "blocks": [
                 {
                   "type": "explain",
@@ -1573,7 +1573,7 @@
             },
             {
               "id": "graduated-response",
-              "title": "为什么不把所有可疑行为直接封禁？",
+              "title": "如何根据风险、用户影响与处置成本设计分级响应？",
               "blocks": [
                 {
                   "type": "table",
@@ -1629,7 +1629,7 @@
           "items": [
             {
               "id": "two-loops",
-              "title": "为什么同一系统同时涉及治理与风控？",
+              "title": "风控反馈与数据治理分别管理哪些对象，如何协作？",
               "blocks": [
                 {
                   "type": "table",
@@ -1679,14 +1679,14 @@
       "sections": [
         {
           "id": "lookup-direction",
-          "title": "谁拿什么去查谁：两条检索方向",
-          "en": "Online Sample Library & Historical Rescan",
+          "title": "在线黑库与历史回扫：索引范围与检索方向",
+          "en": "Online Blacklist & Historical Rescanning",
           "kind": "comparison",
           "summary": "区别首先在于待检查的人群和查询方向，而不是字面算法与语义算法。",
           "sourceIds": [
             14
           ],
-          "extraSources": [],
+          "extraSources": [{"label": "NIST｜Blacklist / Blocklist / Denylist", "url": "https://csrc.nist.gov/glossary/term/blacklist"}, {"label": "Microsoft｜Text Blocklists", "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/how-to/use-blocklist"}],
           "items": [
             {
               "id": "two-indexes",
@@ -1730,14 +1730,14 @@
                 },
                 {
                   "type": "example",
-                  "title": "为什么两条线路都要有",
-                  "text": "周一发布的内容当时尚未被识别，周三审核确认了同类风险并更新样本库。新内容从周三开始能被匹配，不等于周一的内容会被重新访问；要处理过去，需要显式创建历史回扫任务。这里的英文是职责描述，不是某个固定 API 名称。"
+                  "title": "通行术语与本案例的实现范围",
+                  "text": "黑名单通常称 Blacklist，也常写作 Blocklist 或 Denylist。抖音文章中的“黑库”采用可增删样本的在线索引，支持多种相似检索，原文也允许将该机制用于白样本；因此这里需同时交代具体实现。命中是供策略使用的证据，不自动等于封禁。在线库更新控制后续输入，处理先前发布的内容则需要单独的历史回扫任务。"
                 }
               ]
             },
             {
               "id": "sample-to-policy",
-              "title": "一条违规样本，能否直接拆成几个禁词？",
+              "title": "风险样本入库或转化为规则前，如何验证代表性与误伤风险？",
               "blocks": [
                 {
                   "type": "explain",
@@ -1766,7 +1766,7 @@
           "items": [
             {
               "id": "actors",
-              "title": "审核系统和回扫 Worker 谁生产、谁消费？",
+              "title": "异步回扫中，生产者、消息队列和消费者如何分工？",
               "blocks": [
                 {
                   "type": "diagram",
@@ -1896,7 +1896,7 @@
             },
             {
               "id": "async-meaning",
-              "title": "异步解决等待问题，不自动解决正确性",
+              "title": "异步处理如何影响响应时延、任务状态和完成一致性？",
               "blocks": [
                 {
                   "type": "explain",
@@ -1931,7 +1931,7 @@
           "items": [
             {
               "id": "durable-dispatch",
-              "title": "任务写入成功，消息没发出去怎么办？",
+              "title": "如何保证业务状态提交与消息发布之间的一致性？",
               "blocks": [
                 {
                   "type": "explain",
@@ -1942,7 +1942,7 @@
             },
             {
               "id": "ack-crash",
-              "title": "什么时候确认消息，Worker 崩溃后会怎样？",
+              "title": "消息确认、重试与故障恢复应如何设计？",
               "blocks": [
                 {
                   "type": "table",
@@ -1984,7 +1984,7 @@
             },
             {
               "id": "idempotent-action",
-              "title": "已处罚成功却没有收到响应，重试会重复处罚吗？",
+              "title": "风险处置如何实现幂等，避免重试造成重复处罚？",
               "blocks": [
                 {
                   "type": "explain",
@@ -2013,7 +2013,7 @@
           "items": [
             {
               "id": "separate-states",
-              "title": "黑库已经更新，为什么回扫还不算结束？",
+              "title": "如何分别验证在线检测更新、历史回扫和处置完成？",
               "blocks": [
                 {
                   "type": "table",
@@ -2055,7 +2055,7 @@
             },
             {
               "id": "bounded-rescan",
-              "title": "为什么回扫不一定要把历史全部重算？",
+              "title": "如何依据风险类型和索引能力确定历史回扫范围？",
               "blocks": [
                 {
                   "type": "explain",
@@ -2090,7 +2090,7 @@
           "items": [
             {
               "id": "representations",
-              "title": "两个句子“像”，可以是哪种像？",
+              "title": "字面相似与语义相似在表示、召回能力和误判风险上有何区别？",
               "blocks": [
                 {
                   "type": "table",
@@ -2150,7 +2150,7 @@
           "items": [
             {
               "id": "four-combinations",
-              "title": "为什么历史回扫也可以只查一个精确词？",
+              "title": "如何分别选择检索方法与在线、离线运行方式？",
               "blocks": [
                 {
                   "type": "table",
@@ -2196,7 +2196,7 @@
           "items": [
             {
               "id": "false-positive-example",
-              "title": "为什么“点击主页”不能单独证明违规？",
+              "title": "文本匹配结果转为处置决定前，还需要哪些上下文与证据？",
               "blocks": [
                 {
                   "type": "explain",
@@ -2231,7 +2231,7 @@
           "items": [
             {
               "id": "candidate-budget",
-              "title": "候选多一点一定更好吗？",
+              "title": "如何平衡候选召回、审核成本、时延和误伤风险？",
               "blocks": [
                 {
                   "type": "explain",
@@ -2276,7 +2276,7 @@
       "sections": [
         {
           "id": "discrete-vectors",
-          "title": "离散项集与向量相似不是一种计算",
+          "title": "频繁项集与向量表示",
           "en": "Itemsets vs Embeddings",
           "kind": "comparison",
           "summary": "先看输入输出，就不会把两种方法混为一谈。",
@@ -2292,7 +2292,7 @@
           "items": [
             {
               "id": "io-boundary",
-              "title": "FP-Growth 到底吃什么、吐什么？",
+              "title": "FP-Growth 与 Embedding 在输入、计算目标和输出上有何区别？",
               "blocks": [
                 {
                   "type": "table",
@@ -2357,7 +2357,7 @@
           "items": [
             {
               "id": "transaction-definition",
-              "title": "一条事务是一句文本、一个账号还是一天？",
+              "title": "频繁项集挖掘应如何定义事务与离散项，粒度如何影响结果？",
               "blocks": [
                 {
                   "type": "explain",
@@ -2373,7 +2373,7 @@
             },
             {
               "id": "normalization-masking",
-              "title": "去停用词、占位符和脱敏有什么边界？",
+              "title": "文本归一化、实体掩码与隐私脱敏的目标和边界有何区别？",
               "blocks": [
                 {
                   "type": "explain",
@@ -2402,7 +2402,7 @@
           "items": [
             {
               "id": "support-example",
-              "title": "支持度的分母是什么？",
+              "title": "支持计数与支持度如何计算，其分母应如何定义？",
               "blocks": [
                 {
                   "type": "table",
@@ -2459,7 +2459,7 @@
             },
             {
               "id": "prefix-compression",
-              "title": "FP-Tree 压缩的是什么？",
+              "title": "FP-Tree 如何压缩事务前缀并支持频繁模式挖掘？",
               "blocks": [
                 {
                   "type": "diagram",
@@ -2568,7 +2568,7 @@
           "items": [
             {
               "id": "boolean-rule",
-              "title": "AND、OR、NOT 能怎样组合信号？",
+              "title": "如何将共现模式转为布尔规则，并验证业务意义与误伤风险？",
               "blocks": [
                 {
                   "type": "explain",
@@ -2629,7 +2629,7 @@
           "items": [
             {
               "id": "taxonomy-model",
-              "title": "RiskText 是不是一种固定神经网络？",
+              "title": "风险标签体系与分类模型架构分别承担什么职责？",
               "blocks": [
                 {
                   "type": "table",
@@ -2671,7 +2671,7 @@
             },
             {
               "id": "channel-model-options",
-              "title": "文字、读音、字形各看见什么？",
+              "title": "多通道文本模型如何利用文字、读音与字形特征？",
               "blocks": [
                 {
                   "type": "table",
@@ -2725,7 +2725,7 @@
           "items": [
             {
               "id": "four-training-tools",
-              "title": "一致性训练与主动学习到底改了什么？",
+              "title": "数据增广、一致性训练、标签清理与主动学习分别改善什么？",
               "blocks": [
                 {
                   "type": "table",
@@ -2785,7 +2785,7 @@
           "items": [
             {
               "id": "discovery-application",
-              "title": "映射表怎么产生，又怎样影响下游？",
+              "title": "风险文本变体如何发现、验证、归一化并更新到下游？",
               "blocks": [
                 {
                   "type": "diagram",
@@ -2887,7 +2887,7 @@
             },
             {
               "id": "channels-versus-pipeline",
-              "title": "同样用拼音和字形，为什么不是同一个模块？",
+              "title": "多通道建模与变体处理流水线有何区别，如何协作？",
               "blocks": [
                 {
                   "type": "table",
@@ -2936,7 +2936,7 @@
         },
         {
           "id": "contact-extraction",
-          "title": "联系方式：有没有、在哪里、风险多大、关联到谁",
+          "title": "联系方式检测、提取、评分与标签关联",
           "en": "Contact Detection & Extraction",
           "kind": "workflow",
           "summary": "检测、抽取、风险判断与关系分析各有自己的输入输出。",
@@ -2947,7 +2947,7 @@
           "items": [
             {
               "id": "four-contact-stages",
-              "title": "发现一个号码为什么还没有完成风控？",
+              "title": "联系方式检测、提取、风险评分与标签关联如何分工？",
               "blocks": [
                 {
                   "type": "table",
@@ -2989,7 +2989,7 @@
             },
             {
               "id": "graph-boundary",
-              "title": "二部图能带来什么，不能证明什么？",
+              "title": "二部图与标签传播能提供哪些风险信号，有哪些误判边界？",
               "blocks": [
                 {
                   "type": "explain",
@@ -3014,7 +3014,7 @@
           "items": [
             {
               "id": "full-text-system",
-              "title": "把几个模块放进同一张图",
+              "title": "文本分类、归一化和实体提取如何接入统一风险决策？",
               "blocks": [
                 {
                   "type": "diagram",
@@ -3160,7 +3160,7 @@
                 },
                 {
                   "type": "example",
-                  "title": "一道检查理解的小问题",
+                  "title": "变更影响与版本追踪",
                   "text": "若新增谐音映射，首先变化的是归一化产物；它可能影响检索、分类和抽取，但并不等于分类器权重已经更新。若新增人工标注并重训模型，变化的是预测能力，也不意味着所有规则和映射自动改写。沿着图中产物与版本追踪，才能判断影响范围。"
                 }
               ]
@@ -3189,7 +3189,7 @@
           "items": [
             {
               "id": "four-cells",
-              "title": "先把正类定义成“违规内容”",
+              "title": "如何定义正类和统计单位，并构建 TP、FP、FN、TN 混淆矩阵？",
               "blocks": [
                 {
                   "type": "table",
@@ -3215,7 +3215,7 @@
                 {
                   "type": "explain",
                   "title": "把错判与处置分开",
-                  "text": "FP 是正常内容被模型判成违规；如果后续只是送审核且被纠正，它不一定已经造成错误封禁。FN 是风险未被模型识别，是否最终放行还取决于其他控制。评估模型要看四格，评估产品还要看错误动作、审核等待、申诉和恢复成本。"
+                  "text": "先约定正类为违规内容，并说明统计单位是内容、请求还是用户；不同单位不能混算。TP 是正确识别的违规，FP 是正常内容被误判违规，FN 是被漏检的违规，TN 是正确识别的正常内容。预测错误与最终处置仍要分开：误判后若由审核纠正，就不一定造成错误封禁；产品评估还要看错误动作、等待和恢复成本。"
                 }
               ]
             }
@@ -3228,20 +3228,11 @@
           "kind": "comparison",
           "summary": "1−查准率与正常样本误判率不是同一个比例。",
           "sourceIds": [],
-          "extraSources": [
-            {
-              "label": "Google ML：准确率、查准率与召回率",
-              "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall"
-            },
-            {
-              "label": "scikit-learn：分类指标",
-              "url": "https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics"
-            }
-          ],
+          "extraSources": [{"label": "Google ML：准确率、查准率与召回率", "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall"}, {"label": "scikit-learn：分类指标", "url": "https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics"}, {"label": "SciPy｜False Discovery Rate", "url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.false_discovery_control.html"}],
           "items": [
             {
               "id": "calculate-all",
-              "title": "用同一张表算五个指标",
+              "title": "Precision、Recall、Accuracy、FPR 与预测正例错误比例如何计算？",
               "blocks": [
                 {
                   "type": "table",
@@ -3278,7 +3269,7 @@
                       "真实正常内容中，多少被误判？"
                     ],
                     [
-                      "样本 FDR 错误发现比例",
+                      "预测正例中的错误比例 FDP",
                       "FP/(TP+FP)",
                       "20/100=20%",
                       "被判为违规的内容中，多少是误报？"
@@ -3288,13 +3279,13 @@
                 {
                   "type": "explain",
                   "title": "为什么“误伤率”这个词要补定义",
-                  "text": "团队口语中的误伤率可能指 FPR、错误处罚占全部处罚的比例，或受影响用户比例；它们的分母完全不同。汇报时应写公式和统计对象。样本 FDR 在分母非零时等于 1−Precision，但并不等于 FPR；若涉及多重检验，FDR 还有更严格的统计定义。"
+                  "text": "“误伤率”可能指正常样本被误判的比例 FPR，也可能指全部处罚中错误处罚的比例，必须给出公式和统计单位。此批样本的 FP/(TP+FP)=1−Precision，统计上称 False Discovery Proportion（FDP）；多重检验中的 False Discovery Rate（FDR）是这一比例的期望。分类报表中也常把观测比例记作 FDR，需说明口径；无预测正例时，比例的报告约定也应明确。"
                 }
               ]
             },
             {
               "id": "class-imbalance",
-              "title": "96% 准确率为什么仍可能不够？",
+              "title": "类别不平衡时，如何选择能揭示漏判与误伤的评估指标？",
               "blocks": [
                 {
                   "type": "explain",
@@ -3323,7 +3314,7 @@
           "items": [
             {
               "id": "direction-and-tradeoff",
-              "title": "降低阈值是更严还是更松？",
+              "title": "风险阈值的调整如何影响召回、误伤和业务成本？",
               "blocks": [
                 {
                   "type": "explain",
@@ -3379,7 +3370,7 @@
           "items": [
             {
               "id": "sampling-bias",
-              "title": "没有查看放行区，Recall 从哪里来？",
+              "title": "选择性审核如何造成评估偏差，应如何设计代表性抽样？",
               "blocks": [
                 {
                   "type": "explain",
@@ -3417,7 +3408,7 @@
           "items": [
             {
               "id": "four-definitions",
-              "title": "怎样把“加强数据隐私”改成项目语言？",
+              "title": "如何将业务目标转化为项目范围、交付物和验收标准？",
               "blocks": [
                 {
                   "type": "table",
@@ -3452,7 +3443,7 @@
                 },
                 {
                   "type": "explain",
-                  "title": "让目标可以反驳",
+                  "title": "验收标准必须可核验",
                   "text": "好的验收允许别人指出“这里还没完成”。例如主库删除成功，但范围内搜索索引没有反馈，项目就不能仅凭接口上线宣布端到端成功。具体时限和保留决策由适用要求与专业责任人确定，TPM 把它们转成可实现的接口、计划和证据。"
                 }
               ]
@@ -3475,7 +3466,7 @@
           "items": [
             {
               "id": "coverage-completion",
-              "title": "覆盖率很高，为什么仍可能有盲区？",
+              "title": "分期项目如何定义覆盖分母、排除范围与完成边界？",
               "blocks": [
                 {
                   "type": "table",
@@ -3537,7 +3528,7 @@
           "items": [
             {
               "id": "decision-package",
-              "title": "面对“顺便再加一个系统”，TPM 要带什么信息？",
+              "title": "新增范围应如何评估价值、依赖、资源和关键路径影响？",
               "blocks": [
                 {
                   "type": "explain",
@@ -3579,7 +3570,7 @@
           "items": [
             {
               "id": "raci-output",
-              "title": "给团队贴 RACI 标签之前先定义哪件事？",
+              "title": "如何围绕交付物和决策建立 RACI 责任分配？",
               "blocks": [
                 {
                   "type": "table",
@@ -3637,7 +3628,7 @@
           "items": [
             {
               "id": "handoff-definition",
-              "title": "一个可执行的依赖记录长什么样？",
+              "title": "一项可执行的跨团队依赖需要定义哪些输入、接口和时点？",
               "blocks": [
                 {
                   "type": "table",
@@ -3702,7 +3693,7 @@
           "items": [
             {
               "id": "four-concepts",
-              "title": "同一个阻塞怎样准确描述？",
+              "title": "风险、已发生问题、依赖与决策事项应如何区分和升级？",
               "blocks": [
                 {
                   "type": "table",
@@ -3744,7 +3735,7 @@
             },
             {
               "id": "critical-path-resource",
-              "title": "人力冲突为什么也会改变关键路径？",
+              "title": "技术依赖与共享资源约束如何共同影响关键路径？",
               "blocks": [
                 {
                   "type": "explain",
@@ -3779,7 +3770,7 @@
           "items": [
             {
               "id": "full-project-flow",
-              "title": "一个跨团队项目怎样跑到上线之后？",
+              "title": "跨团队项目从设计到运营应设置哪些阶段和质量门槛？",
               "blocks": [
                 {
                   "type": "diagram",
@@ -3920,7 +3911,7 @@
           "items": [
             {
               "id": "scenario-matrix",
-              "title": "怎样覆盖最容易漏掉的路径？",
+              "title": "端到端验收应如何覆盖跨系统正常、失败、重试与恢复场景？",
               "blocks": [
                 {
                   "type": "table",
@@ -3958,7 +3949,7 @@
                 },
                 {
                   "type": "explain",
-                  "title": "故障演练检验的不是勇气",
+                  "title": "故障演练的验证范围",
                   "text": "可以在隔离测试环境或受控范围模拟失败，观察报警、重试、人工接管和最终结果是否符合设计。测试重点是现实故障边界：接口返回成功但结果尚未持久化、回执丢失、消费者重启等。TPM 确保跨团队共同验收这些接口之间的缝隙。"
                 }
               ]
@@ -3967,7 +3958,7 @@
         },
         {
           "id": "rollout-handoff",
-          "title": "灰度、回滚与运营交接怎样协作",
+          "title": "灰度发布、回滚与运营交接",
           "en": "Canary, Rollback & Handoff",
           "kind": "comparison",
           "summary": "灰度管理暴露范围，回滚处理变更，交接保证持续负责。",
@@ -3985,7 +3976,7 @@
           "items": [
             {
               "id": "different-safeguards",
-              "title": "三个词不是同一个保险开关",
+              "title": "灰度发布、回滚与运营交接分别降低哪些交付风险？",
               "blocks": [
                 {
                   "type": "table",
@@ -4049,7 +4040,7 @@
           "items": [
             {
               "id": "three-questions",
-              "title": "为什么任务完成率不能单独证明项目成功？",
+              "title": "如何区分项目交付健康、控制效果与业务价值指标？",
               "blocks": [
                 {
                   "type": "table",
@@ -4107,7 +4098,7 @@
           "items": [
             {
               "id": "comparable-metrics",
-              "title": "成本下降 30%，先追问什么？",
+              "title": "效果评估应如何控制基线、分母、观察窗口和护栏指标？",
               "blocks": [
                 {
                   "type": "explain",
@@ -4160,7 +4151,7 @@
           "items": [
             {
               "id": "five-current-metrics",
-              "title": "为什么不能只背旧版“四大指标”？",
+              "title": "DORA 软件交付指标如何衡量吞吐与不稳定性，使用时有哪些边界？",
               "blocks": [
                 {
                   "type": "table",
@@ -4217,7 +4208,7 @@
           "items": [
             {
               "id": "roi-assumptions",
-              "title": "节省工时是否等于现金收益？",
+              "title": "项目 ROI 如何区分现金收益、产能释放、风险收益与持续成本？",
               "blocks": [
                 {
                   "type": "explain",
@@ -4278,7 +4269,7 @@
           "items": [
             {
               "id": "configuration-boundaries",
-              "title": "什么应统一，什么可以差异化？",
+              "title": "全球项目如何区分共同控制要求与本地实施差异？",
               "blocks": [
                 {
                   "type": "table",
@@ -4338,7 +4329,7 @@
           "items": [
             {
               "id": "exception-record",
-              "title": "旧系统暂时做不到，不能只写“已知问题”",
+              "title": "控制例外应如何审批、设置补偿措施并到期复核？",
               "blocks": [
                 {
                   "type": "table",
@@ -4395,7 +4386,7 @@
           "items": [
             {
               "id": "handoff-message",
-              "title": "一条有用的状态更新包含什么？",
+              "title": "跨时区项目沟通应如何明确状态、阻塞、决策与交接责任？",
               "blocks": [
                 {
                   "type": "explain",
@@ -4453,7 +4444,7 @@
           "items": [
             {
               "id": "identity-scope",
-              "title": "收到“删除我的数据”，编排器先知道什么？",
+              "title": "用户删除请求受理时，如何验证身份并确定数据和系统范围？",
               "blocks": [
                 {
                   "type": "explain",
@@ -4486,7 +4477,7 @@
             },
             {
               "id": "policy-branches",
-              "title": "是不是找到的所有数据都立即删除？",
+              "title": "删除请求如何处理保留要求、法律冻结与其他适用例外？",
               "blocks": [
                 {
                   "type": "explain",
@@ -4517,7 +4508,7 @@
           "items": [
             {
               "id": "end-to-end",
-              "title": "删除编排器到底编排什么？",
+              "title": "跨系统删除编排器需要管理哪些任务、依赖、状态与证据？",
               "blocks": [
                 {
                   "type": "diagram",
@@ -4692,7 +4683,7 @@
             },
             {
               "id": "durable-retry",
-              "title": "一个系统超时，要不要把整个请求重做？",
+              "title": "删除子任务超时或结果未知时，应如何重试和恢复？",
               "blocks": [
                 {
                   "type": "explain",
@@ -4747,7 +4738,7 @@
           "items": [
             {
               "id": "copies-proof",
-              "title": "为什么主库 DELETE 成功仍不够？",
+              "title": "如何验证删除请求在主库、缓存、索引、派生数据和备份中的完成状态？",
               "blocks": [
                 {
                   "type": "table",
@@ -4788,7 +4779,7 @@
             },
             {
               "id": "restore-and-unlearning",
-              "title": "恢复了旧备份，已删除数据怎么办？",
+              "title": "备份恢复如何防止已删除数据重新进入使用，模型影响应如何单独处理？",
               "blocks": [
                 {
                   "type": "explain",
@@ -4820,7 +4811,7 @@
           "items": [
             {
               "id": "workstream-plan",
-              "title": "TPM 怎样组织这类大项目？",
+              "title": "用户数据删除项目应如何划分工作流、责任和关键依赖？",
               "blocks": [
                 {
                   "type": "table",

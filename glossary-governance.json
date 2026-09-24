@@ -131,16 +131,16 @@
       "topicIds": ["gov-models"], "sourceIds": [], "extraSources": [{"label":"IBM｜Data Mesh：Federated Governance","url":"https://www.ibm.com/think/topics/data-mesh"}], "origin": "framework"
     },
     {
-      "id": "value-driven-governance", "zh": "价值驱动治理", "en": "Business-Value-Driven Governance", "abbr": "", "aliases": ["业务价值驱动", "问题驱动治理"],
+      "id": "value-driven-governance", "zh": "价值驱动治理", "en": "Value-driven Data Governance", "abbr": "", "aliases": ["业务价值驱动", "问题驱动治理"],
       "definition": "先选一个明确业务问题，再决定需要哪些规则、工具和责任安排。治理是否有效，要看延迟、浪费或风险等问题是否得到可衡量的改善。",
       "distinction": "它是一种实施取向，不是固定产品名或认证方法；追求短期收益时也要保留长期架构与必要控制。",
       "example": "先治理每天拖慢核心报表的十条任务，用收益争取业务参与，再逐步扩大范围。",
       "topicIds": ["gov-value", "gov-workflow"], "sourceIds": [1, 2], "extraSources": [], "origin": "source"
     },
     {
-      "id": "governance-rule-engine", "zh": "治理规则引擎", "en": "Governance Rule Engine", "abbr": "", "aliases": ["规则引擎"],
+      "id": "governance-rule-engine", "zh": "治理规则引擎", "en": "Rule Engine", "abbr": "", "aliases": ["规则引擎"],
       "definition": "把治理条件写成可重复执行的规则，再对资产或运行信息进行检查。引擎产出的通常是问题线索和处置依据，是否自动操作还需要单独设计。",
-      "distinction": "命中规则不等于问题已经解决；检测、派单、修改和结果验收是后续不同环节。",
+      "distinction": "Rule Engine 是通用技术名称，此卡限定治理规则的应用。规则命中不等于问题已解决；检测、派单、修改和验收仍是不同环节。",
       "example": "规则找出长期无人访问且未设置过期时间的表，先交给负责人确认是否可清理。",
       "topicIds": ["gov-workflow", "gov-evidence"], "sourceIds": [1, 2], "extraSources": [], "origin": "source"
     },
@@ -292,7 +292,7 @@
       "topicIds": ["asset-sql"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜Relational Algebra","url":"https://calcite.apache.org/docs/algebra.html"}], "origin": "source"
     },
     {
-      "id": "column-origins", "zh": "列来源查询", "en": "Column Origins", "abbr": "", "aliases": ["原始字段查询", "getColumnOrigins"],
+      "id": "column-origins", "zh": "列来源查询", "en": "Column Origins (Calcite)", "abbr": "", "aliases": ["原始字段查询", "getColumnOrigins"],
       "definition": "查询一个输出列能够追溯到哪些输入表字段。Calcite 的 getColumnOrigins 是案例用到的接口，结果是否完整取决于相关算子的元数据处理能力。",
       "distinction": "找出来源列不自动等于保存完整转换表达式；遇到未支持的算子，也可能返回未知或缺少关系。",
       "example": "输出 full_name 来自 first_name 与 last_name，列来源查询应能找到两个输入列。",
@@ -432,8 +432,8 @@
       "topicIds": ["life-tiering", "life-backup", "life-stages"], "sourceIds": [4], "extraSources": [{"label":"AWS S3｜Archive Storage Transitions","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html"}], "origin": "source"
     },
     {
-      "id": "data-compaction", "zh": "数据文件合并", "en": "Data Compaction", "abbr": "", "aliases": ["小文件合并", "Compaction"],
-      "definition": "把许多小文件或分散的数据段重写整理成更适合读取与维护的布局。具体系统也可能在合并时清理过期内容，减少文件数量与读取开销。",
+      "id": "data-compaction", "zh": "数据文件合并", "en": "File Compaction", "abbr": "", "aliases": ["小文件合并", "Compaction"],
+      "definition": "在本数据湖场景中，将多个小数据文件重写合并为更适合读取和维护的布局，以减少文件打开、元数据与调度开销。其他存储系统中的 compaction 可能还有合并版本、清理过期项等语义。",
       "distinction": "Compaction 不等于 Compression：前者重点是整理布局，后者重点是减少编码后的体积，两者可以同时发生。",
       "example": "将上千个很小的日志文件合并成较大文件，减少查询需要打开的文件数量。",
       "topicIds": ["life-tiering", "life-deletion"], "sourceIds": [6], "extraSources": [{"label":"Apache Iceberg｜Maintenance：Compact Data Files","url":"https://iceberg.apache.org/docs/latest/maintenance/"}], "origin": "extension"
