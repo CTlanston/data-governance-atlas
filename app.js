@@ -94,6 +94,7 @@ async function init(){
     const response=await fetch('./knowledge.json');if(!response.ok)throw new Error('内容读取失败');
     state.data=await response.json();state.topics=state.data.modules.flatMap(m=>m.topics.map(t=>({...t,moduleId:m.id})));
     buildTree();render();
+    $('.skip').addEventListener('click',e=>{e.preventDefault();$('#main').focus({preventScroll:true});window.scrollTo({top:0,behavior:'instant'});});
     $('#main').addEventListener('click',e=>{const button=e.target.closest('[data-scroll]');if(button)document.getElementById(button.dataset.scroll)?.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});});
     window.addEventListener('hashchange',()=>{render();$('#main').focus({preventScroll:true});});
     $('#open-search').addEventListener('click',openSearch);
@@ -102,6 +103,7 @@ async function init(){
     $('#search-input').addEventListener('keydown',e=>{if(e.key==='ArrowDown'){e.preventDefault();$('.search-result')?.focus();}if(e.key==='Enter'){e.preventDefault();const a=$('.search-result');if(a){$('#search-dialog').close();location.hash=a.hash;}}});
     $('#search-dialog').addEventListener('click',e=>{if(e.target===$('#search-dialog'))$('#search-dialog').close();});
     document.addEventListener('keydown',e=>{
+      if(e.key==='Escape'&&$('#search-dialog').open){e.preventDefault();$('#search-dialog').close();return;}
       if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();closeMenu();openSearch();}
       if(e.key==='Escape'&&$('#sidebar').classList.contains('open')){closeMenu();$('#open-menu').focus();}
       if(e.key==='Tab'&&$('#sidebar').classList.contains('open')){const items=[...$('#sidebar').querySelectorAll('a,button,summary')].filter(x=>x.checkVisibility());const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}
