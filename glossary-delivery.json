@@ -31,7 +31,8 @@
       "distinction": "SLI 是测量值；SLO 是给该值设定的目标；SLA 是包含服务责任及未达标后果的协议。",
       "example": "假设本周一万次合格删除请求中，九千九百次按约定完成，完成率就是一个 SLI。",
       "topicIds": ["rel-sla", "rel-quality", "tpm-metrics"], "sourceIds": [],
-      "extraSources": [{"label": "Google SRE：服务等级目标", "url": "https://sre.google/sre-book/service-level-objectives/"}], "origin": "extension"
+      "extraSources": [{"label": "Google SRE：服务等级目标", "url": "https://sre.google/sre-book/service-level-objectives/"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "指标分母与测量窗口决定服务承诺是否可验证。", "focus": "把用户体验转成可重复计算的测量口径。", "checkpoints": ["明确合格事件、成功条件、分母与统计窗口。", "区分测量结果 SLI、目标 SLO 和协议 SLA。"], "links": [{"topicId": "rel-sla", "sectionId": "service-levels", "itemId": "three-objects", "label": "对比测量值、目标和协议", "relation": "易混对比"}, {"topicId": "tpm-metrics", "sectionId": "baseline-guardrails", "itemId": "comparable-metrics", "label": "在项目成效评估中保持测量口径一致", "relation": "应用"}]}
     },
     {
       "id": "service-level-objective", "zh": "服务等级目标", "en": "Service Level Objective", "abbr": "SLO", "aliases": ["服务水平目标"],
@@ -39,7 +40,8 @@
       "distinction": "目标不等于测量结果，也不自动成为对外合同。写下更紧的目标，不能直接缩短系统真实执行时间。",
       "example": "教学例子：约定一个月内至少 99% 的合格请求在内部目标时限内完成。",
       "topicIds": ["rel-sla", "tpm-metrics"], "sourceIds": [],
-      "extraSources": [{"label": "Google SRE：服务等级目标", "url": "https://sre.google/sre-book/service-level-objectives/"}], "origin": "extension"
+      "extraSources": [{"label": "Google SRE：服务等级目标", "url": "https://sre.google/sre-book/service-level-objectives/"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "目标要结合用户需要和实际链路能力，存在明确工程权衡。", "focus": "为 SLI 设置有窗口、可兑现的目标。", "checkpoints": ["给出目标值、窗口与用户体验依据。", "说明目标未达时如何触发改进，避免把目标当已实现能力。"], "links": [{"topicId": "rel-sla", "sectionId": "service-levels", "itemId": "three-objects", "label": "区分内部目标与合同承诺", "relation": "易混对比"}, {"topicId": "rel-sla", "sectionId": "critical-path", "itemId": "target-compression", "label": "评估收紧时限的工程代价", "relation": "应用"}, {"topicId": "tpm-metrics", "sectionId": "baseline-guardrails", "itemId": "comparable-metrics", "label": "用基线和护栏验证目标改善", "relation": "应用"}]}
     },
     {
       "id": "service-level-agreement", "zh": "服务等级协议", "en": "Service Level Agreement", "abbr": "SLA", "aliases": ["服务水平协议", "交付承诺"],
@@ -47,7 +49,8 @@
       "distinction": "日常把所有完成时间都叫 SLA 会模糊边界；只有目标而未明确协议和后果时，通常更接近 SLO。",
       "example": "报表团队与上游约定产出时间，并记录延迟时通知谁、如何补救及如何升级。",
       "topicIds": ["rel-sla", "tpm-dependencies"], "sourceIds": [1],
-      "extraSources": [{"label": "Google SRE：服务等级目标", "url": "https://sre.google/sre-book/service-level-objectives/"}], "origin": "extension"
+      "extraSources": [{"label": "Google SRE：服务等级目标", "url": "https://sre.google/sre-book/service-level-objectives/"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "协议责任与内部目标的边界会改变升级和兑现方式。", "focus": "确认承诺主体、服务口径及未达标后果。", "checkpoints": ["说明协议覆盖的服务、责任方和后果。", "区分 SLO 目标与依赖团队间的交付接口。"], "links": [{"topicId": "rel-sla", "sectionId": "service-levels", "itemId": "three-objects", "label": "比较 SLA、SLO 与 SLI", "relation": "易混对比"}, {"topicId": "tpm-dependencies", "sectionId": "dependency-contract", "itemId": "handoff-definition", "label": "把依赖承诺落实到可验收接口", "relation": "应用"}]}
     },
     {
       "id": "critical-path", "zh": "关键路径", "en": "Critical Path", "abbr": "", "aliases": ["关键依赖链"],
@@ -55,7 +58,8 @@
       "distinction": "关键路径不是所有任务耗时之和，也不是主管认为最重要的任务列表；并行分支不能简单相加。",
       "example": "身份映射完成后才能联调删除服务，联调完成后才能上线，这条依赖链可能决定发布日期。",
       "topicIds": ["rel-sla", "tpm-dependencies"], "sourceIds": [],
-      "extraSources": [{"label": "PMI：项目管理术语", "url": "https://www.pmi.org/standards/lexicon"}, {"label": "岗位职责：Critical Path Execution", "url": "./index.html#role-context"}], "origin": "extension"
+      "extraSources": [{"label": "PMI：项目管理术语", "url": "https://www.pmi.org/standards/lexicon"}, {"label": "岗位职责：Critical Path Execution", "url": "./index.html#role-context"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "需要计算依赖与并行关系，直接支持进度决策。", "focus": "识别决定最早完成时间的任务链。", "checkpoints": ["按依赖累计各路径时长，不能把并行任务全部相加。", "优化后重算路径，并单独考虑共享资源限制。"], "links": [{"topicId": "rel-sla", "sectionId": "critical-path", "itemId": "path-calculation", "label": "计算并行数据链的关键路径", "relation": "应用"}, {"topicId": "rel-sla", "sectionId": "backward-buffer", "itemId": "check-understanding", "label": "辨别局部提速与端到端提速", "relation": "易混对比"}, {"topicId": "tpm-dependencies", "sectionId": "risk-issue-escalation", "itemId": "critical-path-resource", "label": "分析跨团队资源约束", "relation": "应用"}, {"topicId": "tpm-delete-case", "sectionId": "program-workstreams", "itemId": "workstream-plan", "label": "定位删除项目的集成依赖", "relation": "应用"}]}
     },
     {
       "id": "schedule-buffer", "zh": "时间缓冲", "en": "Schedule Buffer", "abbr": "", "aliases": ["缓冲时间", "时间余量"],
@@ -63,7 +67,8 @@
       "distinction": "缓冲是人为预留的保护空间，不等于依赖计算得出的浮动时间；也没有适合所有链路的固定分配比例。",
       "example": "历史上上游任务偶尔重试十分钟，安排下游前先评估是否需要预留相应恢复时间。",
       "topicIds": ["rel-sla", "tpm-dependencies"], "sourceIds": [],
-      "extraSources": [{"label": "Google SRE：安全余量", "url": "https://sre.google/sre-book/service-level-objectives/"}], "origin": "extension"
+      "extraSources": [{"label": "Google SRE：安全余量", "url": "https://sre.google/sre-book/service-level-objectives/"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "缓冲与浮动时间易混，预留量取决于失败和波动。", "focus": "区分人为保护时间与依赖计算得到的余量。", "checkpoints": ["说明缓冲用于覆盖哪些重试或不确定性。", "解释浮动时间与缓冲的来源不同，避免机械按比例分摊。"], "links": [{"topicId": "rel-sla", "sectionId": "backward-buffer", "itemId": "three-time-budgets", "label": "对比倒排计划、浮动时间与缓冲", "relation": "易混对比"}, {"topicId": "rel-sla", "sectionId": "critical-path", "itemId": "target-compression", "label": "缩短交付时限时检查剩余恢复空间", "relation": "应用"}]}
     },
     {
       "id": "observability", "zh": "可观测性", "en": "Observability", "abbr": "", "aliases": ["数据可观测性"],
@@ -71,7 +76,8 @@
       "distinction": "可观测性帮助看清运行状态；数据质量检查判断数据是否适合业务使用。任务正常完成也可能产出错误金额。",
       "example": "报表变慢时，沿调用追踪发现瓶颈在上游查询，而不是只看到一个总耗时数字。",
       "topicIds": ["rel-quality", "rel-improvement"], "sourceIds": [],
-      "extraSources": [{"label": "OpenTelemetry：可观测性基础", "url": "https://opentelemetry.io/docs/concepts/observability-primer/"}], "origin": "extension"
+      "extraSources": [{"label": "OpenTelemetry：可观测性基础", "url": "https://opentelemetry.io/docs/concepts/observability-primer/"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "运行成功与数据正确存在边界，调查需组合多种信号。", "focus": "让质量异常能被发现、解释并定位。", "checkpoints": ["区分业务质量规则与运行指标、日志、追踪。", "让告警关联用户影响、负责人和可执行响应。"], "links": [{"topicId": "rel-quality", "sectionId": "rules-observability", "itemId": "rules-versus-signals", "label": "比较数据质量规则与可观测信号", "relation": "易混对比"}, {"topicId": "rel-improvement", "sectionId": "actionable-alerts", "itemId": "symptom-versus-cause", "label": "把信号转为可执行告警", "relation": "应用"}, {"topicId": "risk-library-rescan", "sectionId": "completion-evidence", "itemId": "separate-states", "label": "观察扫描、复核与处置的不同完成状态", "relation": "应用"}]}
     },
     {
       "id": "dynamic-threshold", "zh": "动态阈值", "en": "Dynamic Threshold", "abbr": "", "aliases": ["动态阈值监控", "异常检测阈值"],
@@ -79,7 +85,8 @@
       "distinction": "动态不代表永远正确；行数落在预测区间，只说明数量信号未异常，不能证明字段内容或业务计算正确。",
       "example": "订单量在周末常下降，监控按周末基线判断，而不是每天都套用工作日的固定下限。",
       "topicIds": ["rel-quality", "rel-improvement"], "sourceIds": [],
-      "extraSources": [{"label": "Amazon CloudWatch：异常检测", "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Anomaly_Detection.html"}], "origin": "extension"
+      "extraSources": [{"label": "Amazon CloudWatch：异常检测", "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Anomaly_Detection.html"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "历史基线会受业务漂移和异常污染，需要判断更新条件。", "focus": "设计随时间变化且可解释的正常范围。", "checkpoints": ["定义被测量对象、时间窗口、周期和预期范围。", "区分合理业务变化与持续漏数，保留硬性业务规则。"], "links": [{"topicId": "rel-quality", "sectionId": "dynamic-threshold", "itemId": "measured-object", "label": "建立动态行数基线", "relation": "应用"}, {"topicId": "rel-quality", "sectionId": "dynamic-threshold", "itemId": "drift-and-control", "label": "比较业务漂移与异常污染", "relation": "易混对比"}, {"topicId": "tpm-metrics", "sectionId": "baseline-guardrails", "itemId": "comparable-metrics", "label": "区分检测基线与成效比较基线", "relation": "易混对比"}]}
     },
     {
       "id": "data-skew", "zh": "数据倾斜", "en": "Data Skew", "abbr": "", "aliases": ["负载倾斜"],
@@ -87,7 +94,8 @@
       "distinction": "哈希分区不能消除热点键；记录条数相同，也可能因为单条文本更大或计算更复杂而产生负载差异。",
       "example": "大多数账号只有十条互动，一位热门账号有百万条，按账号分组时某个任务会特别慢。",
       "topicIds": ["rel-skew", "rel-cost"], "sourceIds": [],
-      "extraSources": [{"label": "Apache Spark：SQL 性能调优", "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"}], "origin": "extension"
+      "extraSources": [{"label": "Apache Spark：SQL 性能调优", "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "需从记录、字节和计算成本定位长尾，方案会影响语义。", "focus": "诊断少数分区为何主导作业耗时。", "checkpoints": ["分别检查记录数、字节量、计算成本和任务时长。", "按热点来源选择加盐、预聚合等方案并验证输出。"], "links": [{"topicId": "rel-skew", "sectionId": "key-routing", "itemId": "hot-key", "label": "定位热点键", "relation": "应用"}, {"topicId": "rel-skew", "sectionId": "value-cost", "itemId": "three-loads", "label": "比较三种负载不均来源", "relation": "应用"}, {"topicId": "rel-skew", "sectionId": "skew-remedies", "itemId": "semantic-safety", "label": "验证倾斜优化的语义安全", "relation": "应用"}, {"topicId": "rel-skew", "sectionId": "skew-remedies", "itemId": "shuffle-aqe", "label": "区分倾斜现象与 Shuffle 过程", "relation": "易混对比"}]}
     },
     {
       "id": "data-partition", "zh": "数据分区", "en": "Data Partition", "abbr": "", "aliases": ["计算分区", "表分区"],
@@ -95,7 +103,8 @@
       "distinction": "按日期落盘的表分区与执行时的计算分区不是同一层概念；分区数量相同也不保证各部分负载均衡。",
       "example": "订单表按日期存放；查询某一天后，计算引擎还可能把这一天的数据拆给多个任务处理。",
       "topicIds": ["rel-skew", "rel-cost"], "sourceIds": [],
-      "extraSources": [{"label": "Apache Spark：分区与执行优化", "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"}], "origin": "extension"
+      "extraSources": [{"label": "Apache Spark：分区与执行优化", "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "存储分区与计算分区职责不同，影响扫描和负载。", "focus": "根据目标区分存储布局与任务并行单位。", "checkpoints": ["说明当前讨论的是表分区还是执行分区。", "用实际扫描量或分区负载验证收益。"], "links": [{"topicId": "rel-cost", "sectionId": "scan-diagnosis", "itemId": "partition-pruning", "label": "存储分区如何减少扫描", "relation": "应用"}, {"topicId": "rel-skew", "sectionId": "hash-modulo", "itemId": "operators", "label": "计算分区为何不能保证均衡", "relation": "易混对比"}]}
     },
     {
       "id": "shuffle", "zh": "数据重分布", "en": "Shuffle", "abbr": "", "aliases": ["洗牌", "数据洗牌"],
@@ -103,7 +112,8 @@
       "distinction": "Shuffle 是重分布过程，Data Skew 是负载不均的现象；有 Shuffle 不一定倾斜，但热点键可能在此时暴露。",
       "example": "按账号统计总评论数时，不同机器上属于同一账号的记录需要被汇集到可共同处理的位置。",
       "topicIds": ["rel-skew", "rel-cost"], "sourceIds": [],
-      "extraSources": [{"label": "Apache Spark：SQL 性能调优", "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"}], "origin": "extension"
+      "extraSources": [{"label": "Apache Spark：SQL 性能调优", "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "跨分区重分布产生实际资源成本，并与倾斜互相影响。", "focus": "解释何时需要重分布以及怎样度量开销。", "checkpoints": ["指出聚合或连接为何要求按键重分发。", "区分网络、序列化、溢写成本与热点长尾。"], "links": [{"topicId": "rel-skew", "sectionId": "skew-remedies", "itemId": "shuffle-aqe", "label": "分析 Shuffle 开销与 AQE 调整", "relation": "应用"}, {"topicId": "rel-skew", "sectionId": "value-cost", "itemId": "three-loads", "label": "区分重分布与负载不均", "relation": "易混对比"}, {"topicId": "rel-cost", "sectionId": "scan-diagnosis", "itemId": "scan-output", "label": "在查询计划与运行统计中定位成本", "relation": "应用"}]}
     },
     {
       "id": "adaptive-query-execution", "zh": "自适应查询执行", "en": "Adaptive Query Execution", "abbr": "AQE", "aliases": ["自适应执行"],
@@ -111,7 +121,8 @@
       "distinction": "AQE 是运行时优化机制，不是所有慢查询的通用修复；无法替代正确的业务口径、数据设计和性能诊断。",
       "example": "原先估计某表很大，运行后发现很小，引擎可能切换到更合适的连接策略。",
       "topicIds": ["rel-skew", "rel-cost"], "sourceIds": [],
-      "extraSources": [{"label": "Apache Spark：Adaptive Query Execution", "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"}], "origin": "extension"
+      "extraSources": [{"label": "Apache Spark：Adaptive Query Execution", "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "运行时改计划有明确触发条件和适用边界。", "focus": "用实际统计修正分区或连接策略。", "checkpoints": ["举出合并分区、倾斜分区拆分或连接策略调整。", "检查最终计划与结果，不把 AQE 当作所有慢查询的修复。"], "links": [{"topicId": "rel-skew", "sectionId": "skew-remedies", "itemId": "shuffle-aqe", "label": "解释 AQE 的运行时决策", "relation": "应用"}, {"topicId": "rel-cost", "sectionId": "scan-diagnosis", "itemId": "partition-pruning", "label": "区分运行时优化与减少源端扫描", "relation": "易混对比"}]}
     },
     {
       "id": "partition-pruning", "zh": "分区裁剪", "en": "Partition Pruning", "abbr": "", "aliases": ["分区过滤"],
@@ -119,7 +130,8 @@
       "distinction": "写了过滤条件不保证成功裁剪；没做裁剪也不必然错误，全量统计可能确实需要读取全部分区。",
       "example": "只查询昨天的订单时，让引擎只读取昨天分区，避免扫描过去几年的订单文件。",
       "topicIds": ["rel-cost"], "sourceIds": [],
-      "extraSources": [{"label": "Apache Spark：查询优化", "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"}], "origin": "extension"
+      "extraSources": [{"label": "Apache Spark：查询优化", "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "谓词与存储布局是否匹配决定能否减少扫描。", "focus": "验证引擎是否跳过无关存储分区。", "checkpoints": ["说明过滤条件与分区字段、优化器能力的关系。", "检查实际计划和扫描量，并识别确需全量读取的任务。"], "links": [{"topicId": "rel-cost", "sectionId": "scan-diagnosis", "itemId": "partition-pruning", "label": "验证分区裁剪生效条件", "relation": "应用"}, {"topicId": "rel-skew", "sectionId": "hash-modulo", "itemId": "operators", "label": "区分存储裁剪与计算分区均衡", "relation": "易混对比"}]}
     },
     {
       "id": "query-execution-plan", "zh": "查询执行计划", "en": "Query Execution Plan", "abbr": "", "aliases": ["执行计划", "查询计划"],
@@ -127,7 +139,8 @@
       "distinction": "语法树描述语句结构，逻辑计划描述数据操作，物理执行计划进一步选择具体执行办法；三者不能混称。",
       "example": "两条 SQL 长度相近，但一条扫描全表并做大规模交换，另一条只读一个分区。",
       "topicIds": ["rel-cost", "asset-sql"], "sourceIds": [],
-      "extraSources": [{"label": "Apache Spark：SQL 性能调优", "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"}], "origin": "extension"
+      "extraSources": [{"label": "Apache Spark：SQL 性能调优", "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "计划层次与运行证据的区别直接影响诊断结论。", "focus": "把查询结构转成可观察的执行代价。", "checkpoints": ["区分 AST、逻辑计划、物理计划和实际运行记录。", "定位扫描、连接、交换及其统计误差。"], "links": [{"topicId": "asset-sql", "sectionId": "plan-layers", "itemId": "plans", "label": "比较语法、逻辑、物理与运行记录", "relation": "易混对比"}, {"topicId": "rel-cost", "sectionId": "scan-diagnosis", "itemId": "scan-output", "label": "用计划和统计诊断查询成本", "relation": "应用"}, {"topicId": "rel-skew", "sectionId": "skew-remedies", "itemId": "shuffle-aqe", "label": "解释运行中计划为何变化", "relation": "应用"}]}
     },
     {
       "id": "software-development-life-cycle", "zh": "软件开发生命周期", "en": "Software Development Life Cycle", "abbr": "SDLC", "aliases": ["研发全生命周期"],
@@ -135,7 +148,8 @@
       "distinction": "SDLC 的对象是软件交付，DLM 的对象是数据生命周期；软件上线后，数据保留和删除责任仍继续存在。",
       "example": "设计用户删除功能时就定义副本范围和验收标准，上线后继续监控失败任务与例外。",
       "topicIds": ["rel-lifecycle", "tpm-delivery", "tpm-delete-case"], "sourceIds": [7],
-      "extraSources": [{"label": "AWS：Software Development Life Cycle", "url": "https://aws.amazon.com/what-is/sdlc/"}, {"label": "岗位职责：SDLC", "url": "./index.html#role-context"}], "origin": "framework"
+      "extraSources": [{"label": "AWS：Software Development Life Cycle", "url": "https://aws.amazon.com/what-is/sdlc/"}, {"label": "岗位职责：SDLC", "url": "./index.html#role-context"}], "origin": "framework",
+      "learning": {"status": "supporting", "rationale": "控制需贯穿软件交付且不能替代数据生命周期管理。", "focus": "把隐私与治理要求嵌入软件各阶段。", "checkpoints": ["关联要求、设计、验证、发布及运营责任。", "区分软件上线完成与数据持续保留、删除责任。"], "links": [{"topicId": "rel-lifecycle", "sectionId": "requirements-controls", "itemId": "traceable-control", "label": "把要求转换为可验收控制", "relation": "应用"}, {"topicId": "tpm-delivery", "sectionId": "delivery-gates", "itemId": "full-project-flow", "label": "组织跨团队质量门槛", "relation": "应用"}, {"topicId": "life-stages", "sectionId": "stage-controls", "itemId": "stage-questions", "label": "对比软件与数据生命周期", "relation": "易混对比"}]}
     },
     {
       "id": "rollback", "zh": "回滚", "en": "Rollback", "abbr": "", "aliases": ["发布回退", "版本回退"],
@@ -143,7 +157,8 @@
       "distinction": "回滚代码不等于撤销已发生的数据写入、删除或外部处罚；这些副作用可能需要单独补偿或恢复方案。",
       "example": "新风控规则误伤上升时切回旧规则，同时另行处理已被误限制的用户。",
       "topicIds": ["rel-lifecycle", "tpm-delivery", "tpm-delete-case"], "sourceIds": [],
-      "extraSources": [{"label": "Google SRE：灰度发布与回退", "url": "https://sre.google/workbook/canarying-releases/"}], "origin": "framework"
+      "extraSources": [{"label": "Google SRE：灰度发布与回退", "url": "https://sre.google/workbook/canarying-releases/"}], "origin": "framework",
+      "learning": {"status": "core", "rationale": "版本回退不撤销外部副作用，必须设计恢复边界。", "focus": "为失败发布定义可执行的回退与补偿。", "checkpoints": ["说明触发条件、负责人、已知可用版本与兼容性。", "区分代码回退、数据恢复与错误处置补偿。"], "links": [{"topicId": "tpm-delivery", "sectionId": "rollout-handoff", "itemId": "different-safeguards", "label": "比较灰度、回滚与交接", "relation": "易混对比"}, {"topicId": "rel-lifecycle", "sectionId": "failure-paths", "itemId": "test-matrix", "label": "验证回退与恢复路径", "relation": "应用"}, {"topicId": "tpm-delete-case", "sectionId": "completion-restoration", "itemId": "restore-and-unlearning", "label": "处理恢复后的已删除数据边界", "relation": "应用"}]}
     },
     {
       "id": "toil", "zh": "重复性运维劳动", "en": "Toil", "abbr": "", "aliases": ["运维苦工", "重复性人工工作"],
@@ -151,7 +166,8 @@
       "distinction": "并非所有人工工作都是 Toil；一次深入设计或事故分析虽然费时，但可以产生持久价值。",
       "example": "每天手动重跑同类失败任务是重复负担；修复导致失败的依赖问题能持续减少这项负担。",
       "topicIds": ["rel-improvement", "tpm-metrics"], "sourceIds": [],
-      "extraSources": [{"label": "Google SRE：Eliminating Toil", "url": "https://sre.google/sre-book/eliminating-toil/"}], "origin": "extension"
+      "extraSources": [{"label": "Google SRE：Eliminating Toil", "url": "https://sre.google/sre-book/eliminating-toil/"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "需要识别可自动化重复负担并衡量自动化净收益。", "focus": "把日常运维负担转为值得投资的工程改进。", "checkpoints": ["区分重复运行劳动与能产生持久价值的分析设计。", "计算节省人时、维护成本与自动错误的影响。"], "links": [{"topicId": "rel-improvement", "sectionId": "toil-value", "itemId": "automation-tradeoff", "label": "评估自动化收益与风险", "relation": "应用"}, {"topicId": "tpm-metrics", "sectionId": "roi-attribution", "itemId": "roi-assumptions", "label": "区分释放产能与现金收益", "relation": "易混对比"}]}
     },
     {
       "id": "postmortem", "zh": "事故复盘", "en": "Incident Postmortem", "abbr": "", "aliases": ["事后复盘", "无责复盘"],
@@ -159,35 +175,40 @@
       "distinction": "复盘不能只追究谁最后操作；要查系统与流程如何允许问题发生。关闭改进工单也不自动证明风险已下降。",
       "example": "删除队列阻塞后，补充积压告警、容量保护和恢复演练，并验证下次能更早发现。",
       "topicIds": ["rel-improvement", "tpm-delivery"], "sourceIds": [1],
-      "extraSources": [{"label": "Google SRE：复盘文化", "url": "https://sre.google/sre-book/postmortem-culture/"}], "origin": "extension"
+      "extraSources": [{"label": "Google SRE：复盘文化", "url": "https://sre.google/sre-book/postmortem-culture/"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "复盘要从事件证据形成能降低复发的系统改进。", "focus": "识别促成因素并验证改进效果。", "checkpoints": ["重建影响、时间线和系统性原因。", "给改进动作责任人与期限，并用复发或响应指标验收。"], "links": [{"topicId": "rel-improvement", "sectionId": "incident-learning", "itemId": "beyond-human-error", "label": "从事故找到系统改进", "relation": "应用"}, {"topicId": "tpm-metrics", "sectionId": "metric-layers", "itemId": "three-questions", "label": "区分工单关闭与风险下降", "relation": "易混对比"}]}
     },
     {
       "id": "risk-score", "zh": "风险评分", "en": "Risk Score", "abbr": "", "aliases": ["风险分", "风险得分"],
       "definition": "系统根据观察到的信号给请求或对象一个风险相关分值，供业务策略参考。先确认分数方向、适用场景与可靠程度，再讨论怎样处置。",
       "distinction": "分数不是最终处罚；普通 reCAPTCHA 高分偏低风险，SMS Defense 的欺诈分方向相反，也不能把所有分数当概率。",
       "example": "同样一个低可信登录请求，可以增加验证；可疑评论则可以进入人工审核队列。",
-      "topicIds": ["risk-loop", "risk-metrics"], "sourceIds": [14, 15], "extraSources": [], "origin": "source"
+      "topicIds": ["risk-loop", "risk-metrics"], "sourceIds": [14, 15], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "评分方向、可信度和动作边界决定业务风险。", "focus": "将评分解释为特定场景的决策信号。", "checkpoints": ["先确认评分类型、方向及适用请求。", "组合成本和上下文选择动作，不把分数等同概率或处罚。"], "links": [{"topicId": "risk-loop", "sectionId": "score-actions", "itemId": "score-direction", "label": "确认不同评分的方向", "relation": "应用"}, {"topicId": "risk-loop", "sectionId": "score-actions", "itemId": "graduated-response", "label": "设计分级响应", "relation": "应用"}, {"topicId": "risk-loop", "sectionId": "assessment-validation", "itemId": "token-action", "label": "区分评分值与有效评估", "relation": "易混对比"}, {"topicId": "ai-evaluation", "sectionId": "confidence-agreement-truth", "itemId": "black-box-confidence", "label": "对比风险分数与经验校准", "relation": "易混对比"}]}
     },
     {
       "id": "risk-assessment", "zh": "reCAPTCHA 评估对象", "en": "reCAPTCHA Assessment", "abbr": "", "aliases": ["reCAPTCHA 评估", "评估响应", "风险评估结果", "Risk Assessment"],
       "definition": "reCAPTCHA 后端评估返回的结构化结果，包含令牌属性与风险分析等信息。业务应先验证结果是否适用于当前请求，再读取风险评分。",
       "distinction": "Assessment 是一次评估对象，score 只是其中一个字段；拿到分数不代表令牌有效或操作匹配。",
       "example": "服务端先检查令牌有效性和操作名称，再决定是否对本次登录追加验证。",
-      "topicIds": ["risk-loop"], "sourceIds": [15], "extraSources": [], "origin": "source"
+      "topicIds": ["risk-loop"], "sourceIds": [15], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "评估对象包含独立的有效性字段，不能简化成一个分数。", "focus": "检查 reCAPTCHA 评估与当前请求是否对应。", "checkpoints": ["先核验 token，再核对 action 与预期操作。", "识别 Assessment 对象与 riskAnalysis.score 字段的层次。"], "links": [{"topicId": "risk-loop", "sectionId": "assessment-validation", "itemId": "token-action", "label": "验证评估对象的有效性", "relation": "应用"}, {"topicId": "risk-loop", "sectionId": "score-actions", "itemId": "score-direction", "label": "区分有效对象与评分解释", "relation": "易混对比"}]}
     },
     {
       "id": "action-verification", "zh": "操作匹配校验", "en": "reCAPTCHA Action Validation", "abbr": "", "aliases": ["操作一致性校验", "action 校验"],
       "definition": "在 reCAPTCHA 评估中比较令牌所对应的操作名称与后端预期操作，确认评估能用于当前业务动作，同时独立检查令牌是否有效。",
       "distinction": "操作匹配只核对请求语境，不证明用户无风险；令牌有效也不自动意味着 action 与 expectedAction 一致。",
       "example": "登录接口预期 login，却收到 signup 的令牌操作，不能直接沿用该分数放行。",
-      "topicIds": ["risk-loop"], "sourceIds": [15], "extraSources": [], "origin": "source"
+      "topicIds": ["risk-loop"], "sourceIds": [15], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "操作绑定能防止把另一业务动作的评估错误复用。", "focus": "独立校验 token 有效性与操作一致性。", "checkpoints": ["比较返回 action 与后端预期操作。", "对无效或不匹配结果使用明确异常路径，不能当低分直接套用。"], "links": [{"topicId": "risk-loop", "sectionId": "assessment-validation", "itemId": "token-action", "label": "检查 token 与操作绑定", "relation": "应用"}, {"topicId": "risk-loop", "sectionId": "score-actions", "itemId": "graduated-response", "label": "区分上下文校验与风险处置", "relation": "易混对比"}]}
     },
     {
       "id": "multi-factor-authentication", "zh": "多因素认证", "en": "Multi-factor Authentication", "abbr": "MFA", "aliases": ["多因子认证"],
       "definition": "通过不同类别的身份凭据共同确认使用者，例如密码加持有设备上的认证因素。风控判断可疑时，可以用它提高身份验证强度。",
       "distinction": "多做一步不一定是多因素；两个同类知识问题并未形成独立因素。追加验证也不能保证完全消除风险。",
       "example": "账号密码正确，但登录环境异常，系统再要求用户通过已绑定设备完成认证。",
-      "topicIds": ["risk-loop"], "sourceIds": [15], "extraSources": [], "origin": "source"
+      "topicIds": ["risk-loop"], "sourceIds": [15], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "独立因素、认证保证与业务风险存在不同边界。", "focus": "选择风险触发的认证动作并控制绕过。", "checkpoints": ["说明因素类别，不把两个同类问题当 MFA。", "设计会话绑定、恢复和不可用路径，衡量正常用户摩擦。"], "links": [{"topicId": "risk-loop", "sectionId": "score-actions", "itemId": "step-up-mfa", "label": "设计追加认证及恢复路径", "relation": "应用"}, {"topicId": "risk-match", "sectionId": "matching-decisions", "itemId": "false-positive-example", "label": "区分身份认证与内容合规判断", "relation": "易混对比"}]}
     },
     {
       "id": "decision-threshold", "zh": "决策阈值", "en": "Decision Threshold", "abbr": "", "aliases": ["分类阈值", "风险阈值"],
@@ -195,7 +216,8 @@
       "distinction": "阈值调整不等于重新训练；同一模型在登录和评论场景可以使用不同阈值，也不必只设放行与封禁两档。",
       "example": "把一段中间分数区间交给人工审核，观察真实误伤和审核负担后再调整范围。",
       "topicIds": ["risk-metrics", "risk-loop", "risk-match"], "sourceIds": [15],
-      "extraSources": [{"label": "Google：分类阈值", "url": "https://developers.google.com/machine-learning/crash-course/classification/thresholding"}], "origin": "extension"
+      "extraSources": [{"label": "Google：分类阈值", "url": "https://developers.google.com/machine-learning/crash-course/classification/thresholding"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "阈值把模型信号转成有成本的动作，需实证选择。", "focus": "根据错误代价和容量约束选择分级阈值。", "checkpoints": ["确认分数方向，再比较候选阈值下的精确率、召回率和 FPR。", "区分调阈值与重训，并同时检查审核容量和用户影响。"], "links": [{"topicId": "risk-metrics", "sectionId": "threshold-action-cost", "itemId": "direction-and-tradeoff", "label": "量化阈值调整的代价", "relation": "应用"}, {"topicId": "risk-loop", "sectionId": "score-actions", "itemId": "graduated-response", "label": "将阈值映射到分级动作", "relation": "应用"}, {"topicId": "risk-match", "sectionId": "retrieval-tradeoffs", "itemId": "candidate-budget", "label": "在检索场景控制候选量", "relation": "应用"}, {"topicId": "ai-evaluation", "sectionId": "confidence-agreement-truth", "itemId": "black-box-confidence", "label": "区分阈值与分数校准", "relation": "易混对比"}]}
     },
     {
       "id": "assessment-annotation", "zh": "评估结果标注", "en": "reCAPTCHA Assessment Annotation", "abbr": "", "aliases": ["评估注释", "标注反馈"],
@@ -203,35 +225,40 @@
       "distinction": "模型判高风险属于预测；审核、申诉或已确认的业务结果才可能提供真实标签，仍需质量检查。",
       "example": "人工复核确认某次登录属于本人后，把该结果关联回原评估，帮助校准后续判断。",
       "topicIds": ["risk-loop", "risk-metrics"], "sourceIds": [15],
-      "extraSources": [{"label": "Google：Annotate Assessments", "url": "https://docs.cloud.google.com/recaptcha/docs/annotate-assessment"}], "origin": "extension"
+      "extraSources": [{"label": "Google：Annotate Assessments", "url": "https://docs.cloud.google.com/recaptcha/docs/annotate-assessment"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "反馈质量与接口范围决定是否形成有效学习信号。", "focus": "把经确认的业务结果关联回原评估。", "checkpoints": ["保留原 Assessment 标识、标签来源与可信程度。", "区分真实结果、未知与旧预测，避免把未申诉当正常。"], "links": [{"topicId": "risk-loop", "sectionId": "feedback-governance", "itemId": "two-loops", "label": "组织 reCAPTCHA 反馈与标签治理", "relation": "应用"}, {"topicId": "risk-metrics", "sectionId": "feedback-bias", "itemId": "sampling-bias", "label": "识别反馈样本的选择偏差", "relation": "易混对比"}]}
     },
     {
       "id": "online-sample-library", "zh": "在线黑库", "en": "Online Blacklist", "abbr": "", "aliases": ["在线黑样本库", "文本黑库", "黑库", "黑名单", "Blacklist", "Blocklist", "Denylist"],
       "definition": "黑名单通常称 Blacklist，也常见 Blocklist、Denylist。抖音文章中的在线黑库具体采用可增删文本样本的检索索引，为新增内容提供风险匹配信号。这里不是声称字节公开了同名英文 API。",
       "distinction": "该案例支持字面、语义等检索，原文也允许使用白样本；不能将其等同于简单禁词表或“命中即封禁”。处置仍由匹配语境、证据和策略决定。",
       "example": "确认一条违规话术后，新评论与样本库比较；仍须验证正常引用或反诈骗内容会不会被误伤。",
-      "topicIds": ["risk-library-rescan", "risk-match"], "sourceIds": [14], "extraSources": [{"label": "NIST｜Blacklist", "url": "https://csrc.nist.gov/glossary/term/blacklist"}, {"label": "Microsoft｜Text Blocklists", "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/how-to/use-blocklist"}], "origin": "source"
+      "topicIds": ["risk-library-rescan", "risk-match"], "sourceIds": [14], "extraSources": [{"label": "NIST｜Blacklist", "url": "https://csrc.nist.gov/glossary/term/blacklist"}, {"label": "Microsoft｜Text Blocklists", "url": "https://learn.microsoft.com/en-us/azure/ai-services/content-safety/how-to/use-blocklist"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "在线索引的范围、更新和处置边界需要独立设计。", "focus": "用已确认样本检测新增内容并限制误伤。", "checkpoints": ["说明索引存什么、由什么新输入查询以及版本如何生效。", "区分相似命中、违规确认、最终处罚与历史回扫。"], "links": [{"topicId": "risk-library-rescan", "sectionId": "lookup-direction", "itemId": "two-indexes", "label": "比较在线黑库与历史回扫", "relation": "易混对比"}, {"topicId": "risk-library-rescan", "sectionId": "lookup-direction", "itemId": "sample-to-policy", "label": "验证入库样本的代表性", "relation": "应用"}, {"topicId": "risk-match", "sectionId": "timing-axis", "itemId": "four-combinations", "label": "跨在线、离线选择字面或语义方法", "relation": "应用"}, {"topicId": "risk-library-rescan", "sectionId": "completion-evidence", "itemId": "separate-states", "label": "核验索引版本和处置完成", "relation": "应用"}]}
     },
     {
       "id": "historical-rescan", "zh": "历史内容回扫", "en": "Historical Content Rescanning", "abbr": "", "aliases": ["离线回扫", "存量回扫", "回扫"],
       "definition": "用新发现的风险线索重新检查已存在的历史内容，找到以前漏过的候选，再按策略复核处置。英文是描述性译法，不是固定产品名。",
       "distinction": "回扫的区别在于检查存量内容；既能用关键词，也能用语义。更新在线黑库不会自动完成历史处置。",
       "example": "今天确认新型诈骗话术后，检索过去一周评论并逐步处理确认违规的历史记录。",
-      "topicIds": ["risk-library-rescan", "risk-match"], "sourceIds": [14], "extraSources": [], "origin": "source"
+      "topicIds": ["risk-library-rescan", "risk-match"], "sourceIds": [14], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "回扫的覆盖范围、异步执行和处置证明不同于在线检测。", "focus": "让新的风险线索覆盖明确的历史内容范围。", "checkpoints": ["定义时间、数据源、风险条件与索引版本。", "分开验收扫描、复核和动作，记录失败与排除范围。"], "links": [{"topicId": "risk-library-rescan", "sectionId": "lookup-direction", "itemId": "two-indexes", "label": "区分增量检测与存量检查", "relation": "易混对比"}, {"topicId": "risk-library-rescan", "sectionId": "completion-evidence", "itemId": "bounded-rescan", "label": "界定回扫范围", "relation": "应用"}, {"topicId": "risk-library-rescan", "sectionId": "reliability-boundaries", "itemId": "ack-crash", "label": "设计失败后的恢复", "relation": "应用"}, {"topicId": "risk-match", "sectionId": "timing-axis", "itemId": "four-combinations", "label": "选择回扫使用的检索方法", "relation": "应用"}]}
     },
     {
       "id": "lexical-similarity", "zh": "字面相似", "en": "Lexical Similarity", "abbr": "", "aliases": ["字符相似", "字面匹配"],
       "definition": "从字符、词或它们的表面结构判断文本是否接近，例如只改了一个字或符号。具体比较办法可以使用编辑距离等特征。",
       "distinction": "字面接近不保证意图相同，否定词可能改变意思；字面检索也不只用于在线黑库，回扫同样可以使用。",
       "example": "“点击主页领取资料”和“点击主頁领取资料”字面接近，但还需要上下文判断风险。",
-      "topicIds": ["risk-match", "risk-library-rescan"], "sourceIds": [14], "extraSources": [], "origin": "source"
+      "topicIds": ["risk-match", "risk-library-rescan"], "sourceIds": [14], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "表面匹配有可解释优势，也有否定和变体边界。", "focus": "选择字符或词级信号并验证误判。", "checkpoints": ["说明比较单位和匹配方式。", "给出字面接近但风险含义不同的反例。"], "links": [{"topicId": "risk-match", "sectionId": "lexical-semantic", "itemId": "representations", "label": "比较字面与语义表示", "relation": "易混对比"}, {"topicId": "risk-match", "sectionId": "lexical-semantic", "itemId": "edit-distance-boundary", "label": "计算编辑距离并检查短文本边界", "relation": "应用"}, {"topicId": "risk-match", "sectionId": "timing-axis", "itemId": "four-combinations", "label": "分别用于在线匹配和历史回扫", "relation": "应用"}]}
     },
     {
       "id": "semantic-similarity", "zh": "语义相似", "en": "Semantic Similarity", "abbr": "", "aliases": ["语义匹配", "语义相似度"],
       "definition": "比较两段内容表达的含义是否接近，即使它们使用不同词语。常可借助语义表示与相似度计算，但分数仍需按具体任务验证。",
       "distinction": "语义相近不等于都违规；宣传骗局和提醒用户远离骗局可能共享很多语义。相似度也不是违规概率。",
       "example": "“谨防高薪招聘骗局”和“别被海外高薪招工骗了”词语不同，却表达相近提醒。",
-      "topicIds": ["risk-match", "risk-patterns"], "sourceIds": [14], "extraSources": [], "origin": "source"
+      "topicIds": ["risk-match", "risk-patterns"], "sourceIds": [14], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "语义召回与违规判断不是同一目标，阈值需按任务验证。", "focus": "利用含义接近扩大候选召回。", "checkpoints": ["区分相似度、对象相同和违规概率。", "检验反诈骗引用、否定和改写，控制候选审核负担。"], "links": [{"topicId": "risk-match", "sectionId": "lexical-semantic", "itemId": "representations", "label": "比较语义与字面检索", "relation": "易混对比"}, {"topicId": "risk-match", "sectionId": "matching-decisions", "itemId": "false-positive-example", "label": "识别相似语境下的误伤", "relation": "应用"}, {"topicId": "risk-match", "sectionId": "retrieval-tradeoffs", "itemId": "candidate-budget", "label": "评估召回、时延与审核成本", "relation": "应用"}, {"topicId": "risk-patterns", "sectionId": "discrete-vectors", "itemId": "io-boundary", "label": "区分向量检索与频繁项集", "relation": "易混对比"}]}
     },
     {
       "id": "edit-distance", "zh": "编辑距离", "en": "Edit Distance", "abbr": "", "aliases": ["莱文斯坦距离", "Levenshtein 距离"],
@@ -239,14 +266,16 @@
       "distinction": "距离小只表示表面改动少，不表示含义或风险相同；不同距离定义允许的操作与权重也可能不同。",
       "example": "“资料”和“资料呀”只多一个字符，而添加一个“不”可能让句子意图完全相反。",
       "topicIds": ["risk-match", "risk-features"], "sourceIds": [],
-      "extraSources": [{"label": "NIST：Levenshtein Distance", "url": "https://xlinux.nist.gov/dads/HTML/Levenshtein.html"}], "origin": "extension"
+      "extraSources": [{"label": "NIST：Levenshtein Distance", "url": "https://xlinux.nist.gov/dads/HTML/Levenshtein.html"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "计算规则及文本长度影响阈值含义，存在可演算边界。", "focus": "用最少字符编辑衡量字面变化。", "checkpoints": ["明确插入、删除、替换及比较单位，算一个简单距离。", "解释相同距离在不同长度或否定语境中的不同意义。"], "links": [{"topicId": "risk-match", "sectionId": "lexical-semantic", "itemId": "edit-distance-boundary", "label": "计算距离并分析风险反例", "relation": "应用"}, {"topicId": "risk-features", "sectionId": "variant-normalization", "itemId": "discovery-application", "label": "将变体候选验证后映射", "relation": "应用"}, {"topicId": "risk-match", "sectionId": "lexical-semantic", "itemId": "representations", "label": "区别字面距离与语义相近", "relation": "易混对比"}]}
     },
     {
       "id": "boolean-rule", "zh": "布尔规则", "en": "Boolean Rule", "abbr": "", "aliases": ["组合布尔规则", "布尔规则检索"],
       "definition": "用 AND、OR、NOT 等逻辑运算把多个条件组合成真假判断。组合可以表达更精确的业务条件，但正确性仍需要样本验证。",
       "distinction": "多加条件不保证置信度按固定倍数提升；规则逻辑可解释，也仍可能遗漏场景或误伤正常内容。",
       "example": "教学规则把异常发送行为与疑似导流文本结合，再交审核，而不是看到“点击主页”就处罚。",
-      "topicIds": ["risk-library-rescan", "risk-patterns"], "sourceIds": [14], "extraSources": [], "origin": "extension"
+      "topicIds": ["risk-library-rescan", "risk-patterns"], "sourceIds": [14], "extraSources": [], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "共现模式转为布尔条件涉及逻辑语义与误伤验证。", "focus": "把离散候选模式转成明确且可测试的条件。", "checkpoints": ["说明 AND、OR、NOT 的匹配范围。", "用正负样本验证规则，不把高支持度直接当违规证据。"], "links": [{"topicId": "risk-patterns", "sectionId": "patterns-to-rules", "itemId": "boolean-rule", "label": "从共现模式生成布尔规则", "relation": "应用"}, {"topicId": "risk-library-rescan", "sectionId": "lookup-direction", "itemId": "sample-to-policy", "label": "区分样本确认与规则确认", "relation": "易混对比"}]}
     },
     {
       "id": "asynchronous-processing", "zh": "异步处理", "en": "Asynchronous Processing", "abbr": "", "aliases": ["异步触发", "异步任务"],
@@ -254,7 +283,8 @@
       "distinction": "异步不等于自动新建一个进程，也不等于必然并行或保证成功；返回“已接收”不代表任务已完成。",
       "example": "审核系统提交回扫请求后立即返回任务号，后台服务随后处理并更新完成状态。",
       "topicIds": ["risk-library-rescan", "tpm-delete-case"], "sourceIds": [],
-      "extraSources": [{"label": "AWS：发布与订阅消息", "url": "https://aws.amazon.com/what-is/pub-sub-messaging/"}], "origin": "extension"
+      "extraSources": [{"label": "AWS：发布与订阅消息", "url": "https://aws.amazon.com/what-is/pub-sub-messaging/"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "请求接收与业务完成分离，需要持久状态和恢复机制。", "focus": "设计后台任务的状态、反馈与失败路径。", "checkpoints": ["区分已接收、执行中、部分完成和最终完成。", "说明如何持久化、重试、监测和通知结果。"], "links": [{"topicId": "risk-library-rescan", "sectionId": "queue-workers", "itemId": "async-meaning", "label": "区分异步、并行与完成一致性", "relation": "易混对比"}, {"topicId": "risk-library-rescan", "sectionId": "reliability-boundaries", "itemId": "durable-dispatch", "label": "保证任务记录与发布一致", "relation": "应用"}, {"topicId": "tpm-delete-case", "sectionId": "orchestration-architecture", "itemId": "end-to-end", "label": "应用于跨系统删除编排", "relation": "应用"}]}
     },
     {
       "id": "message-queue", "zh": "消息队列", "en": "Message Queue", "abbr": "MQ", "aliases": ["任务队列"],
@@ -262,7 +292,8 @@
       "distinction": "队列存的是消息，不是进程；队列有数据不代表处置已经执行，消息确认也不一定代表所有下游效果完成。",
       "example": "短时间出现大量回扫请求时先排队，由有限数量的工作节点逐步消费。",
       "topicIds": ["risk-library-rescan"], "sourceIds": [],
-      "extraSources": [{"label": "AWS：发布与订阅消息", "url": "https://aws.amazon.com/what-is/pub-sub-messaging/"}], "origin": "extension"
+      "extraSources": [{"label": "AWS：发布与订阅消息", "url": "https://aws.amazon.com/what-is/pub-sub-messaging/"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "消息持久化、确认与业务效果存在多处可靠性边界。", "focus": "让突发任务可缓冲且可恢复地交给消费者。", "checkpoints": ["区分生产端确认、消费者确认与最终业务效果。", "处理丢失、重复、毒消息和积压，并定义告警与恢复。"], "links": [{"topicId": "risk-library-rescan", "sectionId": "queue-workers", "itemId": "actors", "label": "理解任务分发角色", "relation": "应用"}, {"topicId": "risk-library-rescan", "sectionId": "reliability-boundaries", "itemId": "durable-dispatch", "label": "协调状态提交和消息发布", "relation": "应用"}, {"topicId": "risk-library-rescan", "sectionId": "reliability-boundaries", "itemId": "ack-crash", "label": "区分消息确认与业务完成", "relation": "易混对比"}, {"topicId": "tpm-delete-case", "sectionId": "orchestration-architecture", "itemId": "durable-retry", "label": "用于删除任务的持久重试", "relation": "应用"}]}
     },
     {
       "id": "producer-consumer", "zh": "生产者与消费者", "en": "Producer and Consumer", "abbr": "", "aliases": ["生产者消费者模型", "生产者", "消费者"],
@@ -270,7 +301,8 @@
       "distinction": "审核系统可能是生产者，回扫工作节点可能是消费者；两者不必都叫回扫器，也不意味着属于同一个组件。",
       "example": "审核服务发送“检查这条风险线索”，回扫服务接收后检索历史内容。",
       "topicIds": ["risk-library-rescan"], "sourceIds": [],
-      "extraSources": [{"label": "AWS：发布与订阅消息", "url": "https://aws.amazon.com/what-is/pub-sub-messaging/"}], "origin": "extension"
+      "extraSources": [{"label": "AWS：发布与订阅消息", "url": "https://aws.amazon.com/what-is/pub-sub-messaging/"}], "origin": "extension",
+      "learning": {"status": "reference", "rationale": "这里主要是消息流角色名称，机制已由队列与异步卡承载。", "focus": "在架构图中识别发出任务和执行任务的组件。", "checkpoints": ["指出谁生产工作描述、谁消费，并说明角色不等于进程创建。"], "links": [{"topicId": "risk-library-rescan", "sectionId": "queue-workers", "itemId": "actors", "label": "查看生产者、队列与消费者的职责解释", "relation": "应用"}]}
     },
     {
       "id": "idempotency", "zh": "幂等性", "en": "Idempotency", "abbr": "", "aliases": ["幂等", "幂等处理"],
@@ -278,7 +310,8 @@
       "distinction": "幂等不等于消息只投递一次；简单先查询再写入可能遭遇并发竞争，不能单靠一次状态检查保证。",
       "example": "同一处罚请求因超时重试，系统识别相同操作标识，避免给同一用户重复扣分。",
       "topicIds": ["risk-library-rescan", "tpm-delete-case"], "sourceIds": [],
-      "extraSources": [{"label": "AWS Builders' Library：安全重试与幂等", "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/"}], "origin": "extension"
+      "extraSources": [{"label": "AWS Builders' Library：安全重试与幂等", "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "重复投递和并发重试能产生重复处罚，需原子业务设计。", "focus": "让同一逻辑操作重试时保持一个业务效果。", "checkpoints": ["定义包含业务语义和版本范围的幂等键。", "将去重与状态变更可靠结合，处理结果未知与晚到请求。"], "links": [{"topicId": "risk-library-rescan", "sectionId": "reliability-boundaries", "itemId": "idempotent-action", "label": "防止重复风险处罚", "relation": "应用"}, {"topicId": "risk-library-rescan", "sectionId": "reliability-boundaries", "itemId": "ack-crash", "label": "区分幂等与只投递一次", "relation": "易混对比"}, {"topicId": "tpm-delete-case", "sectionId": "orchestration-architecture", "itemId": "durable-retry", "label": "处理删除请求超时与重复执行", "relation": "应用"}]}
     },
     {
       "id": "eventual-consistency", "zh": "最终一致性", "en": "Eventual Consistency", "abbr": "", "aliases": ["异步一致性"],
@@ -286,7 +319,8 @@
       "distinction": "最终一致性不承诺固定几分钟内完成；黑库更新与历史回扫是不同业务步骤，也不能只贴此标签就证明不漏处置。",
       "example": "权限变更先写入主系统，其他副本稍后同步；期间需要控制并验证旧权限仍可用的窗口。",
       "topicIds": ["risk-library-rescan", "tpm-delete-case"], "sourceIds": [],
-      "extraSources": [{"label": "Amazon DynamoDB：读一致性", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadConsistency.html"}], "origin": "extension"
+      "extraSources": [{"label": "Amazon DynamoDB：读一致性", "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadConsistency.html"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "收敛条件、传播延迟和顺序控制不能用一句标签代替。", "focus": "说明何时收敛以及如何发现长期不一致。", "checkpoints": ["列明无新更新、传播可继续等收敛条件。", "独立设计时限、重试和版本顺序，不把不同业务步骤视为自动同步。"], "links": [{"topicId": "risk-library-rescan", "sectionId": "queue-workers", "itemId": "async-meaning", "label": "区分异步响应与最终一致", "relation": "易混对比"}, {"topicId": "privacy-user-control", "sectionId": "interface-to-enforcement", "itemId": "preference-flow", "label": "防止旧偏好覆盖新状态", "relation": "应用"}, {"topicId": "tpm-delete-case", "sectionId": "orchestration-architecture", "itemId": "durable-retry", "label": "追踪跨系统删除的未完成分支", "relation": "应用"}]}
     },
     {
       "id": "fp-growth", "zh": "频繁模式增长算法", "en": "Frequent Pattern Growth", "abbr": "FP-Growth", "aliases": ["频繁项集挖掘算法"],
@@ -294,7 +328,8 @@
       "distinction": "它不直接计算语义向量近邻；经常一起出现也不等于违规，输出模式转成处罚规则前仍需验证。",
       "example": "把评论转为候选词集合后，发现某几个词经常组合出现，再检查该组合是否真有区分力。",
       "topicIds": ["risk-patterns", "risk-features"], "sourceIds": [14],
-      "extraSources": [{"label": "Apache Spark：频繁模式挖掘", "url": "https://spark.apache.org/docs/latest/ml-frequent-pattern-mining.html"}], "origin": "source"
+      "extraSources": [{"label": "Apache Spark：频繁模式挖掘", "url": "https://spark.apache.org/docs/latest/ml-frequent-pattern-mining.html"}], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "算法输入为离散事务，输出为共现模式，与向量方法不同。", "focus": "说明频繁项集如何成为待验证的规则候选。", "checkpoints": ["定义事务、离散项和支持度口径。", "解释前缀压缩与条件模式挖掘，避免把频繁当风险。"], "links": [{"topicId": "risk-patterns", "sectionId": "discrete-vectors", "itemId": "io-boundary", "label": "对比 FP-Growth 与 Embedding", "relation": "易混对比"}, {"topicId": "risk-patterns", "sectionId": "support-tree", "itemId": "prefix-compression", "label": "理解 FP-Tree 的压缩与挖掘", "relation": "应用"}, {"topicId": "risk-patterns", "sectionId": "patterns-to-rules", "itemId": "boolean-rule", "label": "将候选模式转为可评估规则", "relation": "应用"}]}
     },
     {
       "id": "frequent-itemset", "zh": "频繁项集", "en": "Frequent Itemset", "abbr": "", "aliases": ["高频项目组合"],
@@ -302,7 +337,8 @@
       "distinction": "项集通常不表达词序或语法；它与连续短语、语义向量或因果关系都不是同一个东西。",
       "example": "五条文本中四条同时含 A、B 两个候选特征，集合 {A,B} 可达到设为 80% 的支持度门槛。",
       "topicIds": ["risk-patterns"], "sourceIds": [14],
-      "extraSources": [{"label": "Apache Spark：频繁项集", "url": "https://spark.apache.org/docs/latest/ml-frequent-pattern-mining.html"}], "origin": "extension"
+      "extraSources": [{"label": "Apache Spark：频繁项集", "url": "https://spark.apache.org/docs/latest/ml-frequent-pattern-mining.html"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "项集忽略词序，事务粒度会改变共现结论。", "focus": "定义满足支持门槛的离散项组合。", "checkpoints": ["明确一条事务和一个项代表什么，处理重复项。", "区分集合共现、连续短语与因果关系。"], "links": [{"topicId": "risk-patterns", "sectionId": "transaction-input", "itemId": "transaction-definition", "label": "选择事务粒度", "relation": "应用"}, {"topicId": "risk-patterns", "sectionId": "support-tree", "itemId": "support-example", "label": "计算项集支持度", "relation": "应用"}, {"topicId": "risk-patterns", "sectionId": "support-tree", "itemId": "prefix-compression", "label": "区分树路径与原文词序", "relation": "易混对比"}]}
     },
     {
       "id": "support", "zh": "支持度", "en": "Support", "abbr": "", "aliases": ["最小支持度", "支持计数"],
@@ -310,7 +346,8 @@
       "distinction": "支持度高只说明常见，不说明危险；Support、规则 Confidence 与模型预测置信度需要分开理解。",
       "example": "十条记录中三条含 A 和 B，{A,B} 的支持计数为 3，比例形式的支持度为 30%。",
       "topicIds": ["risk-patterns"], "sourceIds": [],
-      "extraSources": [{"label": "Apache Spark：minSupport 与频繁模式", "url": "https://spark.apache.org/docs/latest/ml-frequent-pattern-mining.html"}], "origin": "extension"
+      "extraSources": [{"label": "Apache Spark：minSupport 与频繁模式", "url": "https://spark.apache.org/docs/latest/ml-frequent-pattern-mining.html"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "分母和统计语境变化会改变支持度含义。", "focus": "在明确事务集合中计算组合出现的频率。", "checkpoints": ["区分支持计数和比例，并给出时间窗口与分母。", "区别项集 Support、分类样本数和预测置信度。"], "links": [{"topicId": "risk-patterns", "sectionId": "support-tree", "itemId": "support-example", "label": "计算支持计数和支持度", "relation": "应用"}, {"topicId": "risk-patterns", "sectionId": "patterns-to-rules", "itemId": "boolean-rule", "label": "区分常见模式与可上线规则", "relation": "易混对比"}, {"topicId": "ai-evaluation", "sectionId": "promotion-evidence", "itemId": "metric-meaning", "label": "比较候选规则评估的支持与覆盖", "relation": "应用"}]}
     },
     {
       "id": "fp-tree", "zh": "频繁模式树", "en": "Frequent Pattern Tree", "abbr": "FP-Tree", "aliases": ["频繁项集树"],
@@ -318,79 +355,90 @@
       "distinction": "FP-Tree 记录项目共现与计数，不是理解语义的神经网络，也不是数据库事务的提交树。",
       "example": "多条记录都包含同样的 A、B 前缀时共享树节点，节点计数反映经过它的记录数量。",
       "topicIds": ["risk-patterns"], "sourceIds": [],
-      "extraSources": [{"label": "Apache Spark：FP-Growth", "url": "https://spark.apache.org/docs/latest/ml-frequent-pattern-mining.html"}], "origin": "extension"
+      "extraSources": [{"label": "Apache Spark：FP-Growth", "url": "https://spark.apache.org/docs/latest/ml-frequent-pattern-mining.html"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "压缩前缀及计数结构值得机制理解，不能误读为语义树。", "focus": "解释共享前缀如何保留频繁项集挖掘所需信息。", "checkpoints": ["说明事务排序、共享前缀和节点计数。", "解释条件路径挖掘，区分树路径与连续短语。"], "links": [{"topicId": "risk-patterns", "sectionId": "support-tree", "itemId": "prefix-compression", "label": "理解前缀压缩与条件模式", "relation": "应用"}, {"topicId": "risk-patterns", "sectionId": "discrete-vectors", "itemId": "io-boundary", "label": "区分离散共现结构与向量表示", "relation": "易混对比"}]}
     },
     {
       "id": "risktext", "zh": "风控文本标签体系", "en": "RiskText", "abbr": "", "aliases": ["RiskText 标签体系"],
       "definition": "字节文章中用于组织风控文本语义类别的标签体系，帮助不同场景复用分类能力。要把标签含义、训练数据和实现模型分开看。",
       "distinction": "RiskText 不只是某一种多通道网络的名字；标签体系回答分成哪些类，模型架构回答怎样判断这些类。",
       "example": "多个产品入口共享一组风险语义标签，但各入口仍按自身场景选择审核或处置动作。",
-      "topicIds": ["risk-features", "risk-loop"], "sourceIds": [14], "extraSources": [], "origin": "source"
+      "topicIds": ["risk-features", "risk-loop"], "sourceIds": [14], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "案例揭示标签体系与模型架构的可复用边界。", "focus": "把风控语义类别与分类实现分开设计。", "checkpoints": ["说明标签含义、版本和跨场景一致性。", "区分标签体系、训练数据及多通道模型，标明历史案例范围。"], "links": [{"topicId": "risk-features", "sectionId": "taxonomy-channels", "itemId": "taxonomy-model", "label": "比较标签体系与模型架构", "relation": "易混对比"}, {"topicId": "risk-features", "sectionId": "system-intersection", "itemId": "full-text-system", "label": "将分类标签接入统一决策", "relation": "应用"}]}
     },
     {
       "id": "multi-channel-model", "zh": "多通道模型", "en": "Multi-channel Model", "abbr": "", "aliases": ["多 Channel 模型", "多通道输入"],
       "definition": "从同一输入提取不同方面的信息，再组合起来做判断。文本任务可结合文字、读音或字形线索，但各通道的具体模型需要另行验证。",
       "distinction": "多通道分类输出标签或分数；变体归一化输出标准化内容或映射关系。二者可以协作，但不能互相等同。",
       "example": "某个文字变体让字面通道难以识别时，读音或上下文信息可能补充线索。",
-      "topicIds": ["risk-features"], "sourceIds": [14], "extraSources": [], "origin": "source"
+      "topicIds": ["risk-features"], "sourceIds": [14], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "多种输入表示如何融合及其边界需要机制判断。", "focus": "利用文字、读音与字形信号提升变体稳健性。", "checkpoints": ["说明每个通道提供什么信息以及输出是什么。", "区分多通道分类和独立的变体归一化流水线。"], "links": [{"topicId": "risk-features", "sectionId": "taxonomy-channels", "itemId": "channel-model-options", "label": "解释多通道输入与模型选择", "relation": "应用"}, {"topicId": "risk-features", "sectionId": "variant-normalization", "itemId": "channels-versus-pipeline", "label": "比较建模与归一化职责", "relation": "易混对比"}]}
     },
     {
       "id": "variant-normalization", "zh": "变体归一化", "en": "Variant Normalization", "abbr": "", "aliases": ["变体映射", "归一映射", "变体归一映射"],
       "definition": "将确认表达同一实体或词语的不同写法映射到统一表示，方便后续提取、检索或分类。映射需要考虑上下文与错误替换风险。",
       "distinction": "归一化不是风险定罪；更新映射可让下游受益，但不能保证所有模型无需再验证或训练便识别全部新变体。",
       "example": "在合适语境下把某联系方式的字母变体还原成标准形式，再交下游判断是否存在风险。",
-      "topicIds": ["risk-features"], "sourceIds": [14], "extraSources": [], "origin": "source"
+      "topicIds": ["risk-features"], "sourceIds": [14], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "错误映射可能同时影响多个下游，需要版本和回归控制。", "focus": "把确认等价的变体转为可复用的标准表示。", "checkpoints": ["分开变体发现、判断与映射发布，保留原始证据。", "验证误替换、上下文和下游影响，并区分归一化与违规判断。"], "links": [{"topicId": "risk-features", "sectionId": "variant-normalization", "itemId": "discovery-application", "label": "设计映射更新流程", "relation": "应用"}, {"topicId": "risk-features", "sectionId": "variant-normalization", "itemId": "channels-versus-pipeline", "label": "区分归一化与多通道分类", "relation": "易混对比"}, {"topicId": "risk-patterns", "sectionId": "transaction-input", "itemId": "normalization-masking", "label": "比较文本处理与隐私脱敏", "relation": "易混对比"}, {"topicId": "risk-features", "sectionId": "system-intersection", "itemId": "full-text-system", "label": "管理跨下游版本影响", "relation": "应用"}]}
     },
     {
       "id": "active-learning", "zh": "主动学习", "en": "Active Learning", "abbr": "", "aliases": ["主动采样学习"],
       "definition": "模型从未标注样本中挑选可能最有学习价值的一部分，请人补充标签，再用于更新模型。目标是在有限审核预算下获得更有用的数据。",
       "distinction": "主动学习不是模型自己决定真实标签，也不只等于选择分数接近 0.5 的样本；还要考虑多样性和代表性。",
       "example": "优先送审模型分歧较大、又能代表新型话术的样本，然后用确认标签改进分类。",
-      "topicIds": ["risk-features"], "sourceIds": [14], "extraSources": [], "origin": "source"
+      "topicIds": ["risk-features"], "sourceIds": [14], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "标注预算分配影响训练收益与评估代表性。", "focus": "选择有信息价值且不过度偏斜的待标注样本。", "checkpoints": ["说明不确定性、多样性与代表性如何影响样本选择。", "保留独立评估样本，不能用主动抽样结果直接估计总体表现。"], "links": [{"topicId": "risk-features", "sectionId": "training-feedback", "itemId": "four-training-tools", "label": "比较主动学习、增广与标签清理", "relation": "易混对比"}, {"topicId": "risk-metrics", "sectionId": "feedback-bias", "itemId": "sampling-bias", "label": "区分训练采样与总体效果评估", "relation": "应用"}]}
     },
     {
       "id": "consistency-training", "zh": "一致性训练", "en": "Consistency Training", "abbr": "", "aliases": ["一致性正则化"],
       "definition": "对不应改变标签的合理输入扰动，鼓励模型给出相近判断，以提升稳健性。关键前提是增强或扰动确实保留了原来的任务含义。",
       "distinction": "一致性不等于正确性；若扰动改变了语义却强迫输出相同标签，反而可能教错模型。",
       "example": "不改变意思的少量符号变化可用于训练稳定性，而加入否定词就不能随意视为同标签。",
-      "topicIds": ["risk-features"], "sourceIds": [14], "extraSources": [], "origin": "source"
+      "topicIds": ["risk-features"], "sourceIds": [14], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "只有保留任务含义的扰动才适合施加一致性约束。", "focus": "通过合理扰动训练稳健判断。", "checkpoints": ["说明扰动为什么应保持标签。", "验证否定、联系方式变化等可能改变语义的情况。"], "links": [{"topicId": "risk-features", "sectionId": "training-feedback", "itemId": "four-training-tools", "label": "区分一致性训练与标签清理", "relation": "易混对比"}, {"topicId": "risk-features", "sectionId": "variant-normalization", "itemId": "channels-versus-pipeline", "label": "比较训练稳健性与预处理映射", "relation": "应用"}]}
     },
     {
       "id": "label-noise-cleaning", "zh": "标签噪声清理", "en": "Label Noise Cleaning", "abbr": "", "aliases": ["样本降噪", "标签降噪"],
       "definition": "识别并处理训练数据中可能错误或不一致的标签，改善学习信号。可疑样本需要通过复核或可靠规则确认，避免把模型偏见写回标签。",
       "distinction": "模型与人工标签冲突不代表人工一定错；清洗流程应能保留争议、追踪依据并检查不同群体影响。",
       "example": "同一语境的相似评论被标成相反类别，先送审确认标注口径，再决定修正或保留。",
-      "topicIds": ["risk-features", "risk-metrics"], "sourceIds": [14], "extraSources": [], "origin": "source"
+      "topicIds": ["risk-features", "risk-metrics"], "sourceIds": [14], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "错误标签和模型分歧需要独立裁决，避免反馈循环。", "focus": "建立可追踪的标签质量修复流程。", "checkpoints": ["说明如何发现可疑标签、复核并保留争议。", "检查修改依据和分群影响，不能自动用模型预测覆盖标签。"], "links": [{"topicId": "risk-features", "sectionId": "training-feedback", "itemId": "four-training-tools", "label": "选择标签清理而非盲目增广", "relation": "应用"}, {"topicId": "risk-metrics", "sectionId": "feedback-bias", "itemId": "sampling-bias", "label": "检查标签样本的选择偏差", "relation": "应用"}, {"topicId": "ai-evaluation", "sectionId": "disagreement-adjudication", "itemId": "independent-reference", "label": "区分模型分歧与标签错误", "relation": "易混对比"}]}
     },
     {
       "id": "bipartite-graph", "zh": "二部图", "en": "Bipartite Graph", "abbr": "", "aliases": ["二分图", "用户联系方式二部图"],
       "definition": "节点可分成两类，边只连接不同类节点的图。风控中可以把用户和联系方式分别作为两类节点，用边表示观察到的使用关系。",
       "distinction": "图中的关联只提供线索，不证明所有相连账号都违规；共享联系方式可能有正常业务原因。",
       "example": "用户甲和用户乙都使用某联系方式，图上可追踪共同关系，再结合上下文评估风险。",
-      "topicIds": ["risk-features", "risk-patterns"], "sourceIds": [14], "extraSources": [], "origin": "source"
+      "topicIds": ["risk-features", "risk-patterns"], "sourceIds": [14], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "节点与边语义决定关联推断能否成立。", "focus": "用两类节点表示用户与联系方式的关系。", "checkpoints": ["区分节点类别、边的证据和时间范围。", "给出共享联系渠道等正常关联，避免把连接当违规。"], "links": [{"topicId": "risk-features", "sectionId": "contact-extraction", "itemId": "graph-boundary", "label": "解释用户与联系方式二部图", "relation": "应用"}, {"topicId": "risk-features", "sectionId": "contact-extraction", "itemId": "four-contact-stages", "label": "区分实体提取、评分与标签传播", "relation": "易混对比"}]}
     },
     {
       "id": "label-propagation", "zh": "标签传播", "en": "Label Propagation", "abbr": "", "aliases": ["标签扩散", "图标签扩散"],
       "definition": "利用图中的连接关系，把已知节点的标签信息传到相关节点，帮助发现更多候选。传播规则、边的含义和错误放大风险都需要验证。",
       "distinction": "传播结果是推断线索，不等同人工确认的事实；直接沿所有关系处罚会把一个错误放大到更多正常用户。",
       "example": "发现多个已确认违规账号共享联系方式后，对其他关联账号提高复核优先级。",
-      "topicIds": ["risk-features", "risk-metrics"], "sourceIds": [14], "extraSources": [], "origin": "source"
+      "topicIds": ["risk-features", "risk-metrics"], "sourceIds": [14], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "图推断可能扩散错误，必须控制边语义和传播范围。", "focus": "把关联用于发现候选而非直接扩散处罚。", "checkpoints": ["明确种子标签来源、边语义、衰减或范围限制。", "评估错误放大、正常共享关系和复核门槛。"], "links": [{"topicId": "risk-features", "sectionId": "contact-extraction", "itemId": "graph-boundary", "label": "评估传播信号与误伤边界", "relation": "应用"}, {"topicId": "risk-features", "sectionId": "contact-extraction", "itemId": "four-contact-stages", "label": "区分关联推断与已确认标签", "relation": "易混对比"}, {"topicId": "risk-metrics", "sectionId": "feedback-bias", "itemId": "sampling-bias", "label": "验证传播候选的实际质量", "relation": "应用"}]}
     },
     {
-      "id": "precision", "zh": "查准率", "en": "Precision", "abbr": "", "aliases": ["精确率", "精准率"],
+      "id": "precision", "zh": "精确率", "en": "Precision", "abbr": "", "aliases": ["查准率", "精准率"],
       "definition": "在被预测为正类的样本中，真正属于正类的比例：TP / (TP + FP)。风控约定违规为正类时，它回答抓出来的内容有多少真的违规。",
       "distinction": "Precision 不是总体 Accuracy，也不是 1 − FPR；它的分母是预测为正的样本，而非所有正常样本。",
-      "example": "系统挑出 100 条疑似违规评论，其中 80 条确认违规，查准率为 80%。",
+      "example": "系统挑出 100 条疑似违规评论，其中 80 条确认违规，精确率为 80%。",
       "topicIds": ["risk-metrics", "risk-match"], "sourceIds": [14],
-      "extraSources": [{"label": "Google：分类评估指标", "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall"}], "origin": "extension"
+      "extraSources": [{"label": "Google ML: Precision (Chinese)", "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall?hl=zh-cn"}, {"label": "Google：分类评估指标", "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "分母、类别定义和抽样直接影响风控动作质量判断。", "focus": "衡量预测正例中真正正例的比例。", "checkpoints": ["先定义正类，计算 TP/(TP+FP)，无预测正例时说明报告约定。", "区分 Accuracy、Recall 和 FPR；精确率与查准率是合法同义译名。"], "links": [{"topicId": "risk-metrics", "sectionId": "metric-denominators", "itemId": "calculate-all", "label": "演算精确率并对比分母", "relation": "易混对比"}, {"topicId": "risk-metrics", "sectionId": "threshold-action-cost", "itemId": "direction-and-tradeoff", "label": "以错误动作代价选择阈值", "relation": "应用"}, {"topicId": "risk-match", "sectionId": "retrieval-tradeoffs", "itemId": "candidate-budget", "label": "评估检索候选的审核价值", "relation": "应用"}, {"topicId": "ai-evaluation", "sectionId": "promotion-evidence", "itemId": "metric-meaning", "label": "用于敏感资产分类的质量门槛", "relation": "应用"}, {"topicId": "risk-metrics", "sectionId": "feedback-bias", "itemId": "sampling-bias", "label": "辨识仅审核高分样本的偏差", "relation": "应用"}]}
     },
     {
       "id": "recall", "zh": "召回率", "en": "Recall / True Positive Rate", "abbr": "TPR", "aliases": ["查全率", "真正率"],
       "definition": "在实际属于正类的全部样本中，被成功识别的比例：TP / (TP + FN)。风控以违规为正类时，它回答真正的违规内容找到了多少。",
-      "distinction": "查准率看抓出来的内容，召回率看所有实际违规内容；只观察已处罚样本，通常不足以估计漏检。",
+      "distinction": "精确率看抓出来的内容，召回率看所有实际违规内容；只观察已处罚样本，通常不足以估计漏检。",
       "example": "抽样确认共有 200 条违规内容，系统发现了 160 条，召回率为 80%。",
       "topicIds": ["risk-metrics", "risk-match"], "sourceIds": [14],
-      "extraSources": [{"label": "Google：分类评估指标", "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall"}], "origin": "extension"
+      "extraSources": [{"label": "Google：分类评估指标", "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "漏检需要观察预测负类，不能仅从处罚样本推断。", "focus": "衡量实际正例中被找出的比例。", "checkpoints": ["计算 TP/(TP+FN) 并说明真实正例如何被识别。", "区分精确率和召回率，设计覆盖放行流量的评估。"], "links": [{"topicId": "risk-metrics", "sectionId": "metric-denominators", "itemId": "calculate-all", "label": "比较召回率与精确率的分母", "relation": "易混对比"}, {"topicId": "risk-metrics", "sectionId": "feedback-bias", "itemId": "sampling-bias", "label": "用代表性抽样估计漏检", "relation": "应用"}, {"topicId": "risk-match", "sectionId": "retrieval-tradeoffs", "itemId": "candidate-budget", "label": "权衡召回与候选审核量", "relation": "应用"}, {"topicId": "ai-evaluation", "sectionId": "promotion-evidence", "itemId": "metric-meaning", "label": "评估敏感类别漏标风险", "relation": "应用"}]}
     },
     {
       "id": "accuracy", "zh": "总体准确率", "en": "Accuracy", "abbr": "", "aliases": ["分类准确率", "准确率"],
@@ -398,7 +446,8 @@
       "distinction": "Accuracy 与 Precision 中文有时被混称，计算分母完全不同；违规极少时，高总体准确率可能仍漏掉全部违规。",
       "example": "一万条内容只有十条违规，全部预测正常也有 99.9% 准确率，但违规召回率为零。",
       "topicIds": ["risk-metrics"], "sourceIds": [],
-      "extraSources": [{"label": "Google：分类评估指标", "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall"}], "origin": "extension"
+      "extraSources": [{"label": "Google：分类评估指标", "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "类别不平衡会让总体正确率掩盖严重漏检。", "focus": "判断总体准确率何时会产生误导。", "checkpoints": ["计算 (TP+TN)/总样本数并给出多数类基线。", "补充分类别精确率、召回率和错误代价。"], "links": [{"topicId": "risk-metrics", "sectionId": "metric-denominators", "itemId": "class-imbalance", "label": "解释高准确率下仍可能全漏风险", "relation": "应用"}, {"topicId": "risk-metrics", "sectionId": "metric-denominators", "itemId": "calculate-all", "label": "区分 Accuracy 与 Precision", "relation": "易混对比"}, {"topicId": "ai-evaluation", "sectionId": "promotion-evidence", "itemId": "metric-meaning", "label": "避免敏感资产稀有类别被平均值掩盖", "relation": "应用"}]}
     },
     {
       "id": "true-positive", "zh": "真正例", "en": "True Positive", "abbr": "TP", "aliases": ["真正阳性"],
@@ -406,7 +455,8 @@
       "distinction": "True 表示预测正确，Positive 表示预测为正类；Positive 不是“好用户”的意思，必须先说明正类定义。",
       "example": "一条确认违规的评论被模型判为违规，它在评估表中记为一个 TP。",
       "topicIds": ["risk-metrics", "risk-loop"], "sourceIds": [],
-      "extraSources": [{"label": "Google：混淆矩阵", "url": "https://developers.google.com/machine-learning/crash-course/classification/thresholding"}], "origin": "extension"
+      "extraSources": [{"label": "Google：混淆矩阵", "url": "https://developers.google.com/machine-learning/crash-course/classification/thresholding"}], "origin": "extension",
+      "learning": {"status": "reference", "rationale": "单独词义只是一格混淆矩阵，推理由整体矩阵和指标卡承载。", "focus": "在明确正类后识别正确预测的正例。", "checkpoints": ["先定义正类，再指出 TP 所在的预测与真实类别交叉位置。"], "links": [{"topicId": "risk-metrics", "sectionId": "confusion-matrix", "itemId": "four-cells", "label": "在完整混淆矩阵中理解 TP", "relation": "应用"}]}
     },
     {
       "id": "true-negative", "zh": "真负例", "en": "True Negative", "abbr": "TN", "aliases": ["真正阴性"],
@@ -414,7 +464,8 @@
       "distinction": "Negative 指预测类别，不是负面评价；TN 与 TP 都是预测正确，只是对应的真实类别不同。",
       "example": "正常用户分享学习资料的评论，被正确判断为无违规，记为一个 TN。",
       "topicIds": ["risk-metrics", "risk-loop"], "sourceIds": [],
-      "extraSources": [{"label": "Google：混淆矩阵", "url": "https://developers.google.com/machine-learning/crash-course/classification/thresholding"}], "origin": "extension"
+      "extraSources": [{"label": "Google：混淆矩阵", "url": "https://developers.google.com/machine-learning/crash-course/classification/thresholding"}], "origin": "extension",
+      "learning": {"status": "reference", "rationale": "单独记忆一格矩阵不足以构成独立考点，保留为公式查阅。", "focus": "在明确负类后识别正确预测的负例。", "checkpoints": ["指出 TN 是真实负类且预测负类，与 TP 都属于正确预测。"], "links": [{"topicId": "risk-metrics", "sectionId": "confusion-matrix", "itemId": "four-cells", "label": "在完整混淆矩阵中理解 TN", "relation": "应用"}]}
     },
     {
       "id": "false-positive", "zh": "假正例", "en": "False Positive", "abbr": "FP", "aliases": ["假阳性", "误报样本"],
@@ -422,7 +473,8 @@
       "distinction": "FP 是错误预测，不自动等于用户已被误伤；如果先人工复核纠正，最终处置可能没有错误。",
       "example": "反诈骗提醒被模型判成诈骗内容，是一个 FP；审核纠正后可以避免错误下架。",
       "topicIds": ["risk-metrics"], "sourceIds": [],
-      "extraSources": [{"label": "Google：混淆矩阵", "url": "https://developers.google.com/machine-learning/crash-course/classification/thresholding"}], "origin": "extension"
+      "extraSources": [{"label": "Google：混淆矩阵", "url": "https://developers.google.com/machine-learning/crash-course/classification/thresholding"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "错误预测与错误处罚并不等价，会影响用户成本核算。", "focus": "定位实际负例被判正例的错误及其后续效果。", "checkpoints": ["先说明正类和统计单位，再定位 FP。", "区分模型误报、审核纠正与最终错误动作。"], "links": [{"topicId": "risk-metrics", "sectionId": "confusion-matrix", "itemId": "four-cells", "label": "区分 FP、FN 与最终处罚", "relation": "易混对比"}, {"topicId": "risk-match", "sectionId": "matching-decisions", "itemId": "false-positive-example", "label": "分析正常引用被误报的情境", "relation": "应用"}, {"topicId": "risk-metrics", "sectionId": "threshold-action-cost", "itemId": "direction-and-tradeoff", "label": "将误报转为实际用户成本", "relation": "应用"}]}
     },
     {
       "id": "false-negative", "zh": "假负例", "en": "False Negative", "abbr": "FN", "aliases": ["假阴性", "漏检样本"],
@@ -430,7 +482,8 @@
       "distinction": "FN 不是审核排队未处理；它是预测类别错误。后续回扫可能补救，但不会改变原评估时点的漏检事实。",
       "example": "一条实际违规的变体话术被分类器判正常，在这次模型评估中记为一个 FN。",
       "topicIds": ["risk-metrics", "risk-library-rescan"], "sourceIds": [],
-      "extraSources": [{"label": "Google：混淆矩阵", "url": "https://developers.google.com/machine-learning/crash-course/classification/thresholding"}], "origin": "extension"
+      "extraSources": [{"label": "Google：混淆矩阵", "url": "https://developers.google.com/machine-learning/crash-course/classification/thresholding"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "漏检与未完成处置的原因不同，需要不同补救。", "focus": "区分预测漏判与后续执行遗漏。", "checkpoints": ["定位真实正类被判负类的情况。", "解释回扫补救不改变原时点评估的 FN，并区分排队未处理。"], "links": [{"topicId": "risk-metrics", "sectionId": "confusion-matrix", "itemId": "four-cells", "label": "比较 FP 与 FN", "relation": "易混对比"}, {"topicId": "risk-library-rescan", "sectionId": "completion-evidence", "itemId": "separate-states", "label": "区分模型漏检与执行未完成", "relation": "应用"}, {"topicId": "risk-metrics", "sectionId": "feedback-bias", "itemId": "sampling-bias", "label": "设计能发现漏检的抽样", "relation": "应用"}]}
     },
     {
       "id": "false-positive-rate", "zh": "假正例率", "en": "False Positive Rate", "abbr": "FPR", "aliases": ["假阳性率", "正常样本误报率"],
@@ -438,7 +491,8 @@
       "distinction": "FPR 的分母是实际正常样本；1 − Precision 的分母是预测违规样本。因此使用“误伤率”时必须说明分母。",
       "example": "一万条确认正常评论中有 20 条被误判违规，FPR 为 0.2%。",
       "topicIds": ["risk-metrics"], "sourceIds": [],
-      "extraSources": [{"label": "Google：FPR 与 Precision", "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall"}], "origin": "extension"
+      "extraSources": [{"label": "Google：FPR 与 Precision", "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "误报率与错误发现比例分母不同，直接影响风险解释。", "focus": "衡量真实正常样本被误判的比例。", "checkpoints": ["计算 FP/(FP+TN)，明确实际负类样本来源。", "区分 FPR、FDP 和最终错误处罚率。"], "links": [{"topicId": "risk-metrics", "sectionId": "metric-denominators", "itemId": "calculate-all", "label": "比较 FPR 与 1−Precision", "relation": "易混对比"}, {"topicId": "risk-metrics", "sectionId": "threshold-action-cost", "itemId": "direction-and-tradeoff", "label": "将正常用户误报设为护栏", "relation": "应用"}, {"topicId": "risk-metrics", "sectionId": "feedback-bias", "itemId": "sampling-bias", "label": "确保正常样本评估具有代表性", "relation": "应用"}]}
     },
     {
       "id": "false-discovery-rate", "zh": "错误发现率", "en": "False Discovery Rate", "abbr": "FDR", "aliases": ["假发现率", "查出样本误判占比"],
@@ -446,7 +500,8 @@
       "distinction": "FPR 看实际负类中有多少被误判；FDP 看预测正类中有多少是误报。两者分母不同，FDR 的统计期望又不等于某一批次的观测值。",
       "example": "100 条预测违规中有 20 条正常，这批样本的 FDP 为 20%。若报表将这一项叫 FDR，应写明公式及样本范围。",
       "topicIds": ["risk-metrics"], "sourceIds": [],
-      "extraSources": [{"label": "scikit-learn：分类指标与混淆矩阵", "url": "https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics"}, {"label": "SciPy｜False Discovery Rate", "url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.false_discovery_control.html"}], "origin": "extension"
+      "extraSources": [{"label": "scikit-learn：分类指标与混淆矩阵", "url": "https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics"}, {"label": "SciPy｜False Discovery Rate", "url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.false_discovery_control.html"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "统计期望与单批观测比例有实质差异，不能混用分母。", "focus": "明确报表中的 FDR 是何种统计口径。", "checkpoints": ["区分观测 FDP=FP/(TP+FP) 与多重检验 FDR 的期望含义。", "说明与 FPR 的分母差异及无预测正例时的约定。"], "links": [{"topicId": "risk-metrics", "sectionId": "metric-denominators", "itemId": "calculate-all", "label": "比较 FDR、FDP、FPR 与精确率", "relation": "易混对比"}, {"topicId": "risk-metrics", "sectionId": "feedback-bias", "itemId": "sampling-bias", "label": "说明观测比例的样本范围与局限", "relation": "应用"}]}
     },
     {
       "id": "program-scope", "zh": "项目范围", "en": "Project Scope", "abbr": "", "aliases": ["范围界定", "项目边界"],
@@ -454,7 +509,8 @@
       "distinction": "目标说明为什么做和希望改变什么，范围说明这次具体做到哪里；模糊范围会让每个团队理解出不同交付物。",
       "example": "第一期删除项目覆盖账号资料与在线副本；训练数据相关处理明确列为后续受控工作项。",
       "topicIds": ["tpm-scope", "tpm-delete-case"], "sourceIds": [],
-      "extraSources": [{"label": "岗位职责：Scope 与 Priorities", "url": "./index.html#role-context"}], "origin": "framework"
+      "extraSources": [{"label": "岗位职责：Scope 与 Priorities", "url": "./index.html#role-context"}], "origin": "framework",
+      "learning": {"status": "reference", "rationale": "字面范围定义适合在项目题中直接解释，无需单独背诵词卡。", "focus": "把系统、地区、数据与排除项写入交付范围。", "checkpoints": ["在案例中说明包含项、排除项和覆盖分母。"], "links": [{"topicId": "tpm-scope", "sectionId": "coverage-phasing", "itemId": "coverage-completion", "label": "查看分期项目的范围与覆盖解释", "relation": "应用"}, {"topicId": "tpm-delete-case", "sectionId": "program-workstreams", "itemId": "workstream-plan", "label": "将范围应用到删除项目", "relation": "应用"}]}
     },
     {
       "id": "acceptance-criteria", "zh": "验收标准", "en": "Acceptance Criteria", "abbr": "", "aliases": ["验收条件", "验收门槛"],
@@ -462,7 +518,8 @@
       "distinction": "任务完成或代码合并是活动状态，验收标准描述交付应达到的结果；不能用“功能已上线”代替效果核验。",
       "example": "删除接口返回成功之外，还要证明指定副本已处理、失败可重试、例外有可追踪记录。",
       "topicIds": ["tpm-scope", "tpm-delivery", "tpm-delete-case"], "sourceIds": [],
-      "extraSources": [{"label": "PMI：项目管理术语", "url": "https://www.pmi.org/standards/lexicon"}], "origin": "framework"
+      "extraSources": [{"label": "PMI：项目管理术语", "url": "https://www.pmi.org/standards/lexicon"}], "origin": "framework",
+      "learning": {"status": "reference", "rationale": "独立词义是通用交付用语，具体机制在控制验证与发布题练习。", "focus": "用结果与证据描述完成条件。", "checkpoints": ["为一项交付列出可核验结果、验证方式和批准责任。"], "links": [{"topicId": "tpm-scope", "sectionId": "goal-scope-acceptance", "itemId": "four-definitions", "label": "区分目标、范围、交付物与验收", "relation": "应用"}, {"topicId": "tpm-delete-case", "sectionId": "program-workstreams", "itemId": "launch-acceptance", "label": "查看删除项目的扩展门槛", "relation": "应用"}]}
     },
     {
       "id": "dependency", "zh": "依赖关系", "en": "Dependency", "abbr": "", "aliases": ["跨团队依赖", "项目依赖"],
@@ -470,7 +527,8 @@
       "distinction": "相关团队不一定形成依赖；必须说清自己在等什么。已有依赖也不一定在关键路径上。",
       "example": "隐私产品团队必须等身份平台提供可靠用户映射，才能完成跨系统删除联调。",
       "topicIds": ["tpm-dependencies", "rel-sla", "tpm-delete-case"], "sourceIds": [],
-      "extraSources": [{"label": "岗位职责：Cross-functional Dependencies", "url": "./index.html#role-context"}], "origin": "framework"
+      "extraSources": [{"label": "岗位职责：Cross-functional Dependencies", "url": "./index.html#role-context"}], "origin": "framework",
+      "learning": {"status": "reference", "rationale": "名称本身仅说明前置关系，推理应在关键路径与接口题中练习。", "focus": "把正在等待的输入与时点说清楚。", "checkpoints": ["指出所等交付物、负责人、时点和延迟影响。"], "links": [{"topicId": "tpm-dependencies", "sectionId": "dependency-contract", "itemId": "handoff-definition", "label": "查看可执行依赖的接口约定", "relation": "应用"}, {"topicId": "tpm-dependencies", "sectionId": "risk-issue-escalation", "itemId": "critical-path-resource", "label": "在关键路径中分析依赖", "relation": "应用"}]}
     },
     {
       "id": "milestone", "zh": "里程碑", "en": "Milestone", "abbr": "", "aliases": ["关键交付节点"],
@@ -478,7 +536,8 @@
       "distinction": "里程碑是节点，任务是需要执行的工作；“周五开会”通常不如“完成方案决策”能说明交付进展。",
       "example": "把“跨系统删除联调验收通过”设为里程碑，前面的各服务开发是支撑任务。",
       "topicIds": ["tpm-dependencies", "tpm-delivery"], "sourceIds": [],
-      "extraSources": [{"label": "岗位职责：Milestones", "url": "./index.html#role-context"}], "origin": "framework"
+      "extraSources": [{"label": "岗位职责：Milestones", "url": "./index.html#role-context"}], "origin": "framework",
+      "learning": {"status": "reference", "rationale": "通用进度节点用语不需要独立概念卡。", "focus": "让里程碑绑定已达成结果。", "checkpoints": ["区分结果节点、执行任务和日历会议。"], "links": [{"topicId": "tpm-delivery", "sectionId": "delivery-gates", "itemId": "full-project-flow", "label": "在阶段门槛中理解里程碑", "relation": "应用"}]}
     },
     {
       "id": "raci", "zh": "责任分配矩阵", "en": "Responsible, Accountable, Consulted, Informed", "abbr": "RACI", "aliases": ["RACI 矩阵", "职责矩阵"],
@@ -486,7 +545,8 @@
       "distinction": "R 是做事者，A 是对结果负责者；C 提供意见，I 接收信息。写进矩阵仍需要组织确认资源和实际权限。",
       "example": "删除规则由工程实现，产品负责人对交付结果负责，隐私专家提供意见，客服知会处理流程。",
       "topicIds": ["tpm-dependencies", "tpm-global"], "sourceIds": [],
-      "extraSources": [{"label": "PMI：Roles, Responsibilities, and Resources", "url": "https://www.pmi.org/learning/library/best-practices-managing-people-quality-management-7012"}], "origin": "framework"
+      "extraSources": [{"label": "PMI：Roles, Responsibilities, and Resources", "url": "https://www.pmi.org/learning/library/best-practices-managing-people-quality-management-7012"}], "origin": "framework",
+      "learning": {"status": "supporting", "rationale": "执行责任、最终责任与实际授权的区别值得应用判断。", "focus": "把跨团队责任落到具体交付物与决策。", "checkpoints": ["区分 R、A、C、I，并明确最终决策责任。", "核实矩阵背后的资源、权限与升级路径。"], "links": [{"topicId": "tpm-dependencies", "sectionId": "ownership-raci", "itemId": "raci-output", "label": "按交付物分配职责", "relation": "应用"}, {"topicId": "tpm-global", "sectionId": "async-decisions", "itemId": "handoff-message", "label": "区分通知、征询和决策责任", "relation": "易混对比"}, {"topicId": "tpm-delete-case", "sectionId": "program-workstreams", "itemId": "workstream-plan", "label": "应用到跨系统删除工作流", "relation": "应用"}]}
     },
     {
       "id": "return-on-investment", "zh": "投资回报率", "en": "Return on Investment", "abbr": "ROI", "aliases": ["投入回报率"],
@@ -494,7 +554,8 @@
       "distinction": "省下的服务器费用不是全部净收益，还需扣除建设与维护成本；风险降低也不应无依据换算为确定现金收益。",
       "example": "治理重复任务一年节省算力费用，同时计算改造和持续维护投入，再评估净回报。",
       "topicIds": ["tpm-metrics", "rel-cost", "rel-improvement"], "sourceIds": [],
-      "extraSources": [{"label": "岗位职责：ROI 与 Success Measurement", "url": "./index.html#role-context"}], "origin": "framework"
+      "extraSources": [{"label": "岗位职责：ROI 与 Success Measurement", "url": "./index.html#role-context"}], "origin": "framework",
+      "learning": {"status": "supporting", "rationale": "现金、产能与风险收益的归因不同，容易重复计数。", "focus": "在同一时间范围比较可归因收益与总投入。", "checkpoints": ["列出建设、迁移、维护和持续运行成本。", "区分现金节约、释放产能与不确定风险收益，披露假设。"], "links": [{"topicId": "tpm-metrics", "sectionId": "roi-attribution", "itemId": "roi-assumptions", "label": "比较不同收益口径", "relation": "易混对比"}, {"topicId": "rel-cost", "sectionId": "consolidation", "itemId": "merge-gates", "label": "验证任务退役的净收益", "relation": "应用"}, {"topicId": "rel-improvement", "sectionId": "toil-value", "itemId": "automation-tradeoff", "label": "评估自动化投资", "relation": "应用"}]}
     },
     {
       "id": "measurement-baseline", "zh": "度量基线", "en": "Measurement Baseline", "abbr": "", "aliases": ["效果基线", "指标基线"],
@@ -502,7 +563,8 @@
       "distinction": "效果基线是比较参照；项目管理中的范围或进度基线常指经批准的计划版本，不能不说明语境就混用。",
       "example": "比较治理前后每百万请求的失败数和人工处理时间，避免把流量下降误认为治理收益。",
       "topicIds": ["tpm-metrics", "rel-improvement"], "sourceIds": [],
-      "extraSources": [{"label": "DORA：建立基线并验证改进", "url": "https://dora.dev/guides/dora-metrics/"}], "origin": "framework"
+      "extraSources": [{"label": "DORA：建立基线并验证改进", "url": "https://dora.dev/guides/dora-metrics/"}], "origin": "framework",
+      "learning": {"status": "core", "rationale": "样本与窗口不一致会使改进归因失真。", "focus": "建立能公平比较前后效果的参照。", "checkpoints": ["固定指标、业务量、样本构成与观察窗口。", "区分效果基线、批准计划和动态检测阈值。"], "links": [{"topicId": "tpm-metrics", "sectionId": "baseline-guardrails", "itemId": "comparable-metrics", "label": "建立可比较的效果评估", "relation": "应用"}, {"topicId": "rel-quality", "sectionId": "dynamic-threshold", "itemId": "measured-object", "label": "区分检测基线与成效基线", "relation": "易混对比"}, {"topicId": "risk-metrics", "sectionId": "feedback-bias", "itemId": "sampling-bias", "label": "控制前后样本选择偏差", "relation": "应用"}]}
     },
     {
       "id": "guardrail-metric", "zh": "护栏指标", "en": "Guardrail Metric", "abbr": "", "aliases": ["约束指标", "副作用指标"],
@@ -510,7 +572,8 @@
       "distinction": "主指标告诉你目标改善多少，护栏关注代价是否失控；具体阈值要按场景设定，不能靠一项漂亮结果替代。",
       "example": "提高违规检出量时，同步观察正常用户误伤、申诉撤销率与审核队列延迟。",
       "topicIds": ["tpm-metrics", "risk-metrics", "tpm-delivery"], "sourceIds": [],
-      "extraSources": [{"label": "Google SRE：发布评估与多种副作用指标", "url": "https://sre.google/workbook/canarying-releases/"}], "origin": "framework"
+      "extraSources": [{"label": "Google SRE：发布评估与多种副作用指标", "url": "https://sre.google/workbook/canarying-releases/"}], "origin": "framework",
+      "learning": {"status": "core", "rationale": "主目标改善可能掩盖用户、成本和可靠性损害。", "focus": "为优化设置不可接受副作用的监测条件。", "checkpoints": ["同时定义主指标、护栏、分群和观察窗口。", "说明停止或回滚触发及指标冲突的决策责任。"], "links": [{"topicId": "tpm-metrics", "sectionId": "baseline-guardrails", "itemId": "comparable-metrics", "label": "区分主指标与护栏", "relation": "易混对比"}, {"topicId": "risk-metrics", "sectionId": "threshold-action-cost", "itemId": "direction-and-tradeoff", "label": "约束误报、漏检与审核成本", "relation": "应用"}, {"topicId": "tpm-delivery", "sectionId": "rollout-handoff", "itemId": "different-safeguards", "label": "让护栏连接灰度停止条件", "relation": "应用"}, {"topicId": "rel-improvement", "sectionId": "toil-value", "itemId": "automation-tradeoff", "label": "防止自动化放大错误", "relation": "应用"}]}
     },
     {
       "id": "dora-metrics", "zh": "软件交付表现指标", "en": "DORA Software Delivery Performance Metrics", "abbr": "DORA", "aliases": ["DORA 指标", "DORA 软件交付指标"],
@@ -518,7 +581,8 @@
       "distinction": "这是应用或服务层面的持续改进参考，不能直接用于给个人排名；旧资料中的四项指标不是当前页面全部口径。",
       "example": "交付更频繁后，继续看失败与返工是否增加，再决定发布流程是否真正改善。",
       "topicIds": ["tpm-metrics", "rel-improvement", "rel-lifecycle"], "sourceIds": [],
-      "extraSources": [{"label": "DORA：2026 年五项软件交付指标", "url": "https://dora.dev/guides/dora-metrics/"}], "origin": "framework"
+      "extraSources": [{"label": "DORA：2026 年五项软件交付指标", "url": "https://dora.dev/guides/dora-metrics/"}], "origin": "framework",
+      "learning": {"status": "supporting", "rationale": "软件交付速度与不稳定性需组合解释，适用对象有边界。", "focus": "用交付表现指标寻找系统改进方向。", "checkpoints": ["说明当前五项指标分别衡量吞吐或不稳定性。", "固定应用与时间口径，不用于个人排名或替代业务结果。"], "links": [{"topicId": "tpm-metrics", "sectionId": "dora-metrics", "itemId": "five-current-metrics", "label": "理解五项软件交付指标", "relation": "应用"}, {"topicId": "tpm-metrics", "sectionId": "metric-layers", "itemId": "three-questions", "label": "区分交付健康、控制效果与业务价值", "relation": "易混对比"}]}
     },
     {
       "id": "risk-register", "zh": "风险登记册", "en": "Risk Register", "abbr": "", "aliases": ["项目风险台账", "风险台账"],
@@ -526,7 +590,8 @@
       "distinction": "风险是尚不确定会发生的影响；已发生并阻碍执行的问题应按问题或阻塞管理，不只留在风险列表里。",
       "example": "记录身份接口可能延期的风险，并约定何时升级、是否能先用受控替代方案联调。",
       "topicIds": ["tpm-dependencies", "tpm-global", "tpm-scope"], "sourceIds": [],
-      "extraSources": [{"label": "岗位职责：风险与缓解计划", "url": "./index.html#role-context"}], "origin": "framework"
+      "extraSources": [{"label": "岗位职责：风险与缓解计划", "url": "./index.html#role-context"}], "origin": "framework",
+      "learning": {"status": "reference", "rationale": "登记册是通用管理载体，概念推理放到风险与问题区分中。", "focus": "让潜在风险关联触发条件和应对责任。", "checkpoints": ["区分未发生风险与已发生问题，并记录升级条件。"], "links": [{"topicId": "tpm-dependencies", "sectionId": "risk-issue-escalation", "itemId": "four-concepts", "label": "查看风险、问题、依赖和决策的区别", "relation": "应用"}]}
     },
     {
       "id": "exception-management", "zh": "例外管理", "en": "Exception Management", "abbr": "", "aliases": ["例外台账", "例外处理"],
@@ -534,7 +599,8 @@
       "distinction": "例外不是自动豁免，也不总意味着延迟删除；某些请求可能需要拒绝或受限保留，须由适当负责人确认依据。",
       "example": "某数据副本暂不能自动处理，记录责任人和经确认的临时措施，并跟踪到复审或解决。",
       "topicIds": ["tpm-global", "tpm-delete-case"], "sourceIds": [],
-      "extraSources": [{"label": "岗位职责：Global Compliance 与 Risk Mitigation", "url": "./index.html#role-context"}], "origin": "framework"
+      "extraSources": [{"label": "岗位职责：Global Compliance 与 Risk Mitigation", "url": "./index.html#role-context"}], "origin": "framework",
+      "learning": {"status": "core", "rationale": "控制例外需要依据、补偿和到期复核，不能无限绕过要求。", "focus": "管理标准流程之外的明确分支。", "checkpoints": ["给出适用依据、批准人、补偿控制与复核期限。", "区分合法保留、临时无法执行和真正的完成状态。"], "links": [{"topicId": "tpm-global", "sectionId": "exception-lifecycle", "itemId": "exception-record", "label": "建立例外生命周期", "relation": "应用"}, {"topicId": "tpm-delete-case", "sectionId": "request-policy", "itemId": "policy-branches", "label": "处理保留与删除冲突", "relation": "应用"}, {"topicId": "privacy-user-control", "sectionId": "partial-completion", "itemId": "completion-levels", "label": "区分例外与全部完成", "relation": "易混对比"}]}
     },
     {
       "id": "operational-handoff", "zh": "运营交接", "en": "Operational Handoff", "abbr": "", "aliases": ["运维交接", "上线交接"],
@@ -542,7 +608,8 @@
       "distinction": "发布完成不等于交接完成；只发一份文档也不证明接手方知道告警后该怎么处理。",
       "example": "删除服务上线后，运营团队能查询失败任务、升级异常，并按已验证流程执行恢复操作。",
       "topicIds": ["tpm-delivery", "tpm-global"], "sourceIds": [],
-      "extraSources": [{"label": "岗位职责：从 Planning 到 Launch 的跨团队交付", "url": "./index.html#role-context"}], "origin": "framework"
+      "extraSources": [{"label": "岗位职责：从 Planning 到 Launch 的跨团队交付", "url": "./index.html#role-context"}], "origin": "framework",
+      "learning": {"status": "reference", "rationale": "名称是通用交付活动，所需机制已在发布与运营案例中解释。", "focus": "让接手团队能够实际运行和恢复服务。", "checkpoints": ["核验负责人、权限、运行手册、告警和故障演练。"], "links": [{"topicId": "tpm-delivery", "sectionId": "rollout-handoff", "itemId": "different-safeguards", "label": "查看运营交接与发布门槛", "relation": "应用"}, {"topicId": "tpm-global", "sectionId": "async-decisions", "itemId": "handoff-message", "label": "查看跨时区交接内容", "relation": "应用"}]}
     },
     {
       "id": "decision-record", "zh": "决策记录", "en": "Decision Record", "abbr": "", "aliases": ["关键决策记录", "决策台账"],
@@ -550,7 +617,8 @@
       "distinction": "会议逐字稿不等于决策记录；关键是决定、理由、责任和后续影响，而非把讨论过程完整复制一遍。",
       "example": "记录删除方案为何分两期上线、第一期的范围与剩余风险，以及何时重新评估。",
       "topicIds": ["tpm-global", "tpm-delivery"], "sourceIds": [],
-      "extraSources": [{"label": "岗位职责：Key Decisions 与 Program Communications", "url": "./index.html#role-context"}], "origin": "framework"
+      "extraSources": [{"label": "岗位职责：Key Decisions 与 Program Communications", "url": "./index.html#role-context"}], "origin": "framework",
+      "learning": {"status": "reference", "rationale": "主要是字面可懂的协作文书名称，不构成独立机制考点。", "focus": "用决定、理由和责任保留可执行共识。", "checkpoints": ["记录已决定事项、依据、负责人及后续影响，区分未决问题。"], "links": [{"topicId": "tpm-global", "sectionId": "async-decisions", "itemId": "handoff-message", "label": "查看跨时区决策与交接记录", "relation": "应用"}]}
     },
     {
       "id": "trade-off", "zh": "方案权衡", "en": "Trade-off", "abbr": "", "aliases": ["设计权衡", "取舍分析"],
@@ -558,7 +626,8 @@
       "distinction": "存在权衡不等于永远只能牺牲一个目标；改变架构或流程有时能同时提升速度与稳定性。",
       "example": "提高审核覆盖可能增加延迟，团队比较风险减少、用户等待和审核成本后选择分级处置。",
       "topicIds": ["tpm-scope", "tpm-metrics", "risk-metrics"], "sourceIds": [],
-      "extraSources": [{"label": "Google SRE：目标与产品属性权衡", "url": "https://sre.google/sre-book/service-level-objectives/"}], "origin": "extension"
+      "extraSources": [{"label": "Google SRE：目标与产品属性权衡", "url": "https://sre.google/sre-book/service-level-objectives/"}], "origin": "extension",
+      "learning": {"status": "reference", "rationale": "通用权衡一词不值得独立背诵，应放在具体方案选择中练习。", "focus": "在共同约束下比较方案收益、成本与风险。", "checkpoints": ["写清比较维度、约束与假设，再说明选择及未解决代价。"], "links": [{"topicId": "tpm-scope", "sectionId": "scope-change", "itemId": "decision-package", "label": "在范围变更中比较选项", "relation": "应用"}, {"topicId": "risk-metrics", "sectionId": "threshold-action-cost", "itemId": "direction-and-tradeoff", "label": "在风险阈值中分析具体代价", "relation": "应用"}]}
     }
   ]
 }

@@ -1,0 +1,1002 @@
+{
+  "questions": [
+    {
+      "id": "gov-interview-governance-accountability",
+      "domain": "governance",
+      "type": "technical",
+      "title": "分布式治理中的决策权与执行责任",
+      "prompt": "多个业务域各自管理数据时，哪些决定应共同约定，哪些可以由域内负责？用一项跨域数据保留策略说明。",
+      "priority": "核心",
+      "minutes": 4,
+      "assumptions": [],
+      "answer": [
+        {
+          "title": "先分清决策与实施",
+          "text": "数据治理安排决策权、责任和监督，数据管理还包含存储、集成与运行等实施活动。先明确谁确定保留依据、谁维护资产范围、谁开发清理机制，以及谁验证结果；避免把全部责任都交给平台团队。"
+        },
+        {
+          "title": "用具体决定划边界",
+          "text": "共同约定可包括最低证据格式、升级路径与适用约束；业务域可在授权范围内配置用途、资产清单和执行方式。跨域复制要明确发送方与接收方责任，冲突或例外需要负责人、期限及复核。"
+        },
+        {
+          "title": "保留案例边界",
+          "text": "Distributed 描述责任分布；Federated 常强调共同规则与域内自治的组合，但两者不能机械互换。DataLeap 的历史分布式实践有自身组织背景，不能由通用框架推断其存在统一中央委员会。"
+        }
+      ],
+      "checkpoints": [
+        "能明确列出决策、实施和验证的责任主体。",
+        "共同约束与域内自主权具有具体边界。",
+        "说明跨域冲突、例外到期和升级路径。"
+      ],
+      "pitfalls": [
+        "把分布式治理解释成业务可以自行取消共同约束。",
+        "把数据集中存放当作集中治理的必要条件。"
+      ],
+      "followups": [
+        "两个域对同一共享字段的定义不一致，谁做最终决定？",
+        "业务不愿投入治理时，如何选择首个共同目标？"
+      ],
+      "links": [
+        {
+          "topicId": "gov-ownership",
+          "sectionId": "roles",
+          "itemId": "division",
+          "label": "Owner、Steward 与工程职责"
+        },
+        {
+          "topicId": "gov-models",
+          "sectionId": "three-models",
+          "itemId": "decision-rights",
+          "label": "三种治理模式的决策权"
+        },
+        {
+          "topicId": "gov-models",
+          "sectionId": "dataleap-autonomy",
+          "itemId": "actual-case",
+          "label": "DataLeap 历史案例边界"
+        },
+        {
+          "topicId": "gov-models",
+          "sectionId": "shared-boundaries",
+          "itemId": "retention-example",
+          "label": "跨域保留策略"
+        }
+      ],
+      "termIds": [
+        "data-governance",
+        "data-management",
+        "data-owner",
+        "data-steward",
+        "distributed-governance",
+        "federated-governance"
+      ],
+      "sourceIds": [
+        1,
+        3
+      ],
+      "extraSources": [
+        {
+          "label": "IBM｜Data Mesh",
+          "url": "https://www.ibm.com/think/topics/data-mesh"
+        }
+      ]
+    },
+    {
+      "id": "gov-interview-inventory-catalog-lineage",
+      "domain": "governance",
+      "type": "technical",
+      "title": "资产盘点、目录与血缘如何配合",
+      "prompt": "企业想找到某个敏感字段及其下游使用者。Data Inventory、Data Catalog、Metadata 和 Data Lineage 分别解决哪一步，怎样检验覆盖完整性？",
+      "priority": "核心",
+      "minutes": 4,
+      "assumptions": [],
+      "answer": [
+        {
+          "title": "先把四种能力连起来",
+          "text": "Inventory 记录有哪些资产、位置与责任人；Metadata 描述字段含义、结构和运行信息；Catalog 组织这些信息以支持搜索和理解；Lineage 连接来源、变换及去向。产品可能集成这些能力，但概念不等同。"
+        },
+        {
+          "title": "按目标选粒度",
+          "text": "查一个字段影响哪些报表通常需要列级关系和消费者信息。若目标变成查某个用户的所有副本，还需要身份映射、记录定位及副本清单，列血缘不能直接替代逐用户索引。"
+        },
+        {
+          "title": "用分母与盲区验收",
+          "text": "先确定应接入的系统和资产清单，再看采集成功、更新时间与算子支持。把未接入、解析失败和已确认无依赖分开；用代表性数据流与运行证据抽查，不能只数图上的节点。"
+        }
+      ],
+      "checkpoints": [
+        "区分资产存在性、可发现性、含义与依赖关系。",
+        "按字段变更或个人定位选择所需粒度。",
+        "覆盖率具有明确分母，未知状态不会冒充无依赖。"
+      ],
+      "pitfalls": [
+        "把资产清单直接翻译成 Data Catalog。",
+        "看见一张完整的图就宣称覆盖了所有副本。"
+      ],
+      "followups": [
+        "资产重命名或迁移时，如何保持身份连续？",
+        "如何降低目录中 Owner 与业务说明过时的风险？"
+      ],
+      "links": [
+        {
+          "topicId": "asset-inventory",
+          "sectionId": "inventory-catalog",
+          "itemId": "two-questions",
+          "label": "清单与目录"
+        },
+        {
+          "topicId": "asset-metadata",
+          "sectionId": "three-tools",
+          "itemId": "customer-table",
+          "label": "元数据、目录与血缘"
+        },
+        {
+          "topicId": "asset-granularity",
+          "sectionId": "table-column-record",
+          "itemId": "granularity-choice",
+          "label": "血缘粒度"
+        },
+        {
+          "topicId": "asset-coverage",
+          "sectionId": "static-runtime",
+          "itemId": "complementary",
+          "label": "覆盖与运行验证"
+        }
+      ],
+      "termIds": [
+        "data-inventory",
+        "data-catalog",
+        "metadata",
+        "data-lineage",
+        "column-level-lineage",
+        "record-level-lineage"
+      ],
+      "sourceIds": [
+        5
+      ],
+      "extraSources": [
+        {
+          "label": "IBM｜Data Catalog",
+          "url": "https://www.ibm.com/think/topics/data-catalog"
+        }
+      ]
+    },
+    {
+      "id": "gov-interview-sql-lineage-coverage",
+      "domain": "governance",
+      "type": "technical",
+      "title": "SQL 能执行为何不代表血缘已覆盖",
+      "prompt": "设计 SQL 列级血缘时，如何从语法树走到列来源？面对 UDF、表函数和 Lookup Join，应怎样报告与验证解析能力？",
+      "priority": "进阶",
+      "minutes": 5,
+      "assumptions": [],
+      "answer": [
+        {
+          "title": "区分处理阶段",
+          "text": "Parse 组织语法，Validate 结合目录、作用域和类型理解引用，Convert 形成关系运算计划；随后按输出列追溯输入来源。Calcite 的列来源集合与完整变换表达式不是同一产物，后者可能需要另外保存。"
+        },
+        {
+          "title": "把支持范围做成合同",
+          "text": "按方言、引擎版本和算子维护覆盖清单。UDF 可能隐藏处理逻辑，表函数可能产生多行，Lookup Join 还有外部维表。未知关系应显式标记，保留失败原因与人工确认入口。"
+        },
+        {
+          "title": "用已知答案验证",
+          "text": "准备包含同名列、多源表达式、嵌套查询、函数及维表补全的样本，核对来源集合和预期边。结合运行记录检查目录版本和外部读写；静态图用于影响分析，不能独自证明实际执行及所有数据副本。"
+        }
+      ],
+      "checkpoints": [
+        "正确区分 AST、逻辑计划、列来源与运行事实。",
+        "能指出至少两类会造成血缘缺口的机制。",
+        "验收包含已知答案和未知状态，而非只看查询成功。"
+      ],
+      "pitfalls": [
+        "把 AST 当成链表，或把序列化当成理解语义的必经步骤。",
+        "把历史案例某个算子不支持推广为所有当前 Flink 版本不支持。"
+      ],
+      "followups": [
+        "一列由 CONCAT(first_name,last_name) 生成，要记录哪些信息？",
+        "如何衡量列血缘的正确率和覆盖率，两者分母有什么不同？"
+      ],
+      "links": [
+        {
+          "topicId": "asset-sql",
+          "sectionId": "sql-lineage",
+          "itemId": "pipeline",
+          "label": "解析、校验与来源追溯"
+        },
+        {
+          "topicId": "asset-granularity",
+          "sectionId": "origin-transformation",
+          "itemId": "concat-example",
+          "label": "来源与表达式"
+        },
+        {
+          "topicId": "asset-coverage",
+          "sectionId": "unsupported-operators",
+          "itemId": "operator-gaps",
+          "label": "算子支持缺口"
+        },
+        {
+          "topicId": "asset-sql",
+          "sectionId": "lookup-join",
+          "itemId": "lineage-coverage",
+          "label": "维表补全血缘"
+        }
+      ],
+      "termIds": [
+        "abstract-syntax-tree",
+        "logical-plan",
+        "column-level-lineage",
+        "user-defined-function",
+        "user-defined-table-function",
+        "lookup-join"
+      ],
+      "sourceIds": [
+        8
+      ],
+      "extraSources": [
+        {
+          "label": "Apache Calcite｜RelMetadataQuery",
+          "url": "https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/metadata/RelMetadataQuery.html"
+        }
+      ]
+    },
+    {
+      "id": "gov-interview-lookup-time-freshness",
+      "domain": "governance",
+      "type": "technical",
+      "title": "Lookup Join 的时间语义与缓存权衡",
+      "prompt": "事件需要补入不断变化的账号属性。怎样选择 Lookup Join、事件时间 Temporal Join、Regular Join 或 Interval Join？缓存会改变哪些保证？",
+      "priority": "核心",
+      "minutes": 5,
+      "assumptions": [],
+      "answer": [
+        {
+          "title": "先明确业务要哪个时点",
+          "text": "要处理时可查询到的属性，可考虑 Lookup Join；要事件发生时的维度版本，应评估事件时间 Temporal Join 及版本化数据。要匹配两个流中一定时间内的事件，用 Interval Join；需要持续反映两侧动态表匹配关系，则评估 Regular Join 与状态成本。"
+        },
+        {
+          "title": "不要把分类当互斥开关",
+          "text": "Flink 的 Lookup Join 使用处理时间 Temporal Join 语法，并依赖支持查找的连接器。当前值查询不提供历史可复现保证；维表未来更新也不会自动修正此前已输出的所有结果。"
+        },
+        {
+          "title": "把缓存作为时效合同的一部分",
+          "text": "缓存减少外部查询但可能陈旧，也可能缓存未命中结果。需要检查源更新延迟、失效策略、超时和未匹配语义；记录必要的版本或时间信息。低延迟、结果新鲜度与外部源压力需要一起评估。"
+        }
+      ],
+      "checkpoints": [
+        "能按时间语义选择方案，而不是只根据 SQL 写法。",
+        "知道 Lookup 与处理时间 Temporal 的关系。",
+        "明确缓存、源延迟和重放对结果的影响。"
+      ],
+      "pitfalls": [
+        "以为关闭缓存就得到无延迟且可复现的数据。",
+        "把维表版本匹配等同于两个事件在时间窗内配对。"
+      ],
+      "followups": [
+        "账号属性变更后，既有风控决定是否需要重新评估？",
+        "连接器查询失败时，允许缺值输出还是等待重试，依据是什么？"
+      ],
+      "links": [
+        {
+          "topicId": "asset-sql",
+          "sectionId": "lookup-join",
+          "itemId": "join-semantics",
+          "label": "Join 时间语义对比"
+        },
+        {
+          "topicId": "asset-sql",
+          "sectionId": "lookup-join",
+          "itemId": "freshness-cache",
+          "label": "缓存、新鲜度与重放"
+        },
+        {
+          "topicId": "asset-sql",
+          "sectionId": "lookup-join",
+          "itemId": "mechanism",
+          "label": "外部维表补全"
+        }
+      ],
+      "termIds": [
+        "lookup-join",
+        "data-freshness",
+        "data-quality"
+      ],
+      "sourceIds": [
+        8
+      ],
+      "extraSources": [
+        {
+          "label": "Apache Flink 2.3｜Joins",
+          "url": "https://nightlies.apache.org/flink/flink-docs-release-2.3/docs/sql/reference/queries/joins/"
+        },
+        {
+          "label": "Apache Flink｜JDBC Lookup Cache",
+          "url": "https://nightlies.apache.org/flink/flink-docs-stable/docs/connectors/table/jdbc/#lookup-cache"
+        }
+      ]
+    },
+    {
+      "id": "gov-interview-storage-abstractions",
+      "domain": "governance",
+      "type": "technical",
+      "title": "存储选型先分清哪些架构层次",
+      "prompt": "团队提出“用 Data Lake 替代 HDFS，并把 POSIX 改成 HTTP”。你会怎样澄清这两句话，再确定真正需要比较的方案？",
+      "priority": "核心",
+      "minutes": 5,
+      "assumptions": [],
+      "answer": [
+        {
+          "title": "先把不同层次拆开",
+          "text": "Data Lake 是包含接入、存储、计算、目录和治理的整体架构；HDFS 是可作为底座的分布式文件系统。POSIX 是操作系统接口标准，HTTP 是协议，REST 是架构风格。它们不是两组同层竞品。"
+        },
+        {
+          "title": "把需求转成接口与负载",
+          "text": "询问应用是否依赖路径、重命名、锁或随机更新，文件大小、共享并发、吞吐和恢复要求是什么。块、文件与对象存储提供不同访问语义；HTTP 接口也能访问文件系统，WebHDFS 就是反例。"
+        },
+        {
+          "title": "再做可组合的选型",
+          "text": "可在同一数据湖架构内比较 HDFS 与对象存储底座，另评估应用接口适配、目录和计算引擎。采用对象存储不自动获得完整湖治理；保留文件接口也不要求某一种底层硬件。"
+        }
+      ],
+      "checkpoints": [
+        "区分整体架构、存储系统、接口标准和通信协议。",
+        "用实际操作语义与负载确定比较维度。",
+        "方案包含适配和治理能力，而非仅换存储名称。"
+      ],
+      "pitfalls": [
+        "根据 HTTP 就断言后端一定是对象存储。",
+        "认为数据湖必然使用存算分离，或 HDFS 完全等同 POSIX 文件系统。"
+      ],
+      "followups": [
+        "一个多节点训练应用依赖共享文件路径，会如何影响选型？",
+        "迁移到底层对象存储后，哪些一致性和权限假设需要重验？"
+      ],
+      "links": [
+        {
+          "topicId": "life-storage",
+          "sectionId": "storage-layers",
+          "itemId": "stack",
+          "label": "存储架构分层"
+        },
+        {
+          "topicId": "life-storage",
+          "sectionId": "posix-http",
+          "itemId": "webhdfs-counterexample",
+          "label": "WebHDFS 与 HTTP"
+        },
+        {
+          "topicId": "life-storage",
+          "sectionId": "hdfs-lake",
+          "itemId": "composable-lake",
+          "label": "组合数据湖"
+        },
+        {
+          "topicId": "life-storage",
+          "sectionId": "hdfs-lake",
+          "itemId": "same-layer-choice",
+          "label": "同层选型"
+        }
+      ],
+      "termIds": [
+        "hdfs",
+        "data-lake",
+        "posix",
+        "object-rest-api",
+        "block-storage",
+        "file-storage",
+        "object-storage"
+      ],
+      "sourceIds": [],
+      "extraSources": [
+        {
+          "label": "Apache Hadoop｜HDFS Architecture",
+          "url": "https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html"
+        },
+        {
+          "label": "Apache Hadoop｜WebHDFS REST API",
+          "url": "https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/WebHDFS.html"
+        },
+        {
+          "label": "IBM｜Data Lake",
+          "url": "https://www.ibm.com/think/topics/data-lake"
+        }
+      ]
+    },
+    {
+      "id": "gov-interview-tiering-safe-migration",
+      "domain": "governance",
+      "type": "technical",
+      "title": "冷热分层如何保证可用并真正降本",
+      "prompt": "把冷数据迁到低成本存储时，如何定义“冷”、安全切换读取位置，并证明节省不是把成本移到取回或计算？",
+      "priority": "进阶",
+      "minutes": 5,
+      "assumptions": [],
+      "answer": [
+        {
+          "title": "先约定访问和恢复需求",
+          "text": "结合最近访问、频次、年龄、周期性任务及恢复时限判断热度；不能只按创建时间。保留例外清单，并设置防止频繁迁回迁出的阈值或观察期。不同产品冷层的即时访问、取回和最低存储期不同。"
+        },
+        {
+          "title": "把迁移视为可恢复流程",
+          "text": "先复制，核对完整性与访问，再以可协调的元数据或清单切换引用；处理并发读写和失败重试，最后按安全条件清理旧副本。切换前后需能说明哪份为有效版本，避免只复制一半就删除来源。"
+        },
+        {
+          "title": "用总成本和业务护栏验收",
+          "text": "比较存储、迁移、请求、取回及额外计算成本，结合查询延迟和恢复成功率。File Compaction 可减少小文件负担，但会重写数据、消耗 I/O，并受到旧快照引用影响，不能把文件数减少直接当净节省。"
+        }
+      ],
+      "checkpoints": [
+        "热度策略包含业务周期和恢复要求。",
+        "切换顺序能处理失败、并发和旧引用。",
+        "净收益同时计算运行成本与可用性护栏。"
+      ],
+      "pitfalls": [
+        "宣称所有冷数据都能透明即时读取。",
+        "把 File Compaction 与数据压缩视为同一操作。"
+      ],
+      "followups": [
+        "月初一次的大查询为何容易被错误判成冷数据？",
+        "迁移完成后旧快照仍引用旧文件，能否立即删除？"
+      ],
+      "links": [
+        {
+          "topicId": "life-tiering",
+          "sectionId": "heat-policy",
+          "itemId": "heat-inputs",
+          "label": "热度与业务需求"
+        },
+        {
+          "topicId": "life-tiering",
+          "sectionId": "safe-migration",
+          "itemId": "commit-sequence",
+          "label": "迁移与切换"
+        },
+        {
+          "topicId": "life-tiering",
+          "sectionId": "safe-migration",
+          "itemId": "compaction",
+          "label": "文件合并与引用"
+        },
+        {
+          "topicId": "life-tiering",
+          "sectionId": "restore-cost",
+          "itemId": "not-transparent",
+          "label": "取回与总成本"
+        }
+      ],
+      "termIds": [
+        "storage-tiering",
+        "data-archiving",
+        "data-compaction",
+        "data-restore"
+      ],
+      "sourceIds": [],
+      "extraSources": [
+        {
+          "label": "AWS｜S3 Storage Classes",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
+        },
+        {
+          "label": "Apache Iceberg｜Maintenance",
+          "url": "https://iceberg.apache.org/docs/latest/maintenance/"
+        }
+      ]
+    },
+    {
+      "id": "gov-interview-deletion-evidence",
+      "domain": "governance",
+      "type": "technical",
+      "title": "怎样定义全链路删除的完成证据",
+      "prompt": "业务表已经执行 DELETE。为了判断目标数据是否按约定完成删除，还要检查哪些状态、副本和证据？加密清除适用于什么条件？",
+      "priority": "核心",
+      "minutes": 5,
+      "assumptions": [],
+      "answer": [
+        {
+          "title": "先约定对象和完成状态",
+          "text": "区分请求接收、用户不可见、活跃数据清理、备份过期和其他最终清理阶段。确认目标身份及范围，列出缓存、索引、复制、导出、日志和派生结果；每阶段回执都要有明确语义。"
+        },
+        {
+          "title": "按副本类型验证",
+          "text": "活跃系统可用查询、清单和服务回执核验；备份按产品保留和清理机制检查。若恢复旧备份，需重施已生效的删除或访问限制，不能让数据重新进入正常使用。覆盖清单与未完成项应独立可见。"
+        },
+        {
+          "title": "检查加密清除的前提",
+          "text": "只有目标数据受相关密钥保护，且密钥副本、恢复路径和明文残留得到处理，清除密钥才可能满足对应范围。共享密钥会扩大影响，不能把一个用户记录与整盘密钥直接等同。"
+        }
+      ],
+      "checkpoints": [
+        "完成状态与对象范围可复查，不能只有总成功标记。",
+        "备份、恢复和派生副本被纳入控制。",
+        "加密清除的密钥范围和残留前提得到检验。"
+      ],
+      "pitfalls": [
+        "把 Google Cloud 的具体删除周期当作通用法规或 TikTok 目标。",
+        "把删除 ACK、逻辑删除与最终不可恢复混成同一状态。"
+      ],
+      "followups": [
+        "一个系统暂时不可用时，如何向请求方报告部分完成？",
+        "删除训练样本与消除已训练模型中的影响有什么区别？"
+      ],
+      "links": [
+        {
+          "topicId": "life-deletion",
+          "sectionId": "deletion-states",
+          "itemId": "delete-meaning",
+          "label": "删除状态"
+        },
+        {
+          "topicId": "life-deletion",
+          "sectionId": "deletion-pipeline",
+          "itemId": "pipeline",
+          "label": "全链路阶段"
+        },
+        {
+          "topicId": "life-deletion",
+          "sectionId": "crypto-erase",
+          "itemId": "key-scope",
+          "label": "密钥与清除粒度"
+        },
+        {
+          "topicId": "life-backup",
+          "sectionId": "restore-test",
+          "itemId": "restore-path",
+          "label": "恢复后的控制"
+        }
+      ],
+      "termIds": [
+        "logical-deletion",
+        "soft-deletion",
+        "cryptographic-erasure",
+        "backup-expiration",
+        "deletion-acknowledgment",
+        "data-backup"
+      ],
+      "sourceIds": [
+        6
+      ],
+      "extraSources": [
+        {
+          "label": "NIST｜SP 800-88 Rev. 2",
+          "url": "https://csrc.nist.gov/pubs/sp/800/88/r2/final"
+        }
+      ]
+    },
+    {
+      "id": "gov-interview-retention-ttl-hold",
+      "domain": "governance",
+      "type": "technical",
+      "title": "保留策略、TTL 与 Legal Hold 如何衔接",
+      "prompt": "一类日志配置了 TTL，同时对象存储启用了版本控制与保留保护。怎样判断何时应删除、何时可以删除，以及如何验证所有目标版本？",
+      "priority": "核心",
+      "minutes": 4,
+      "assumptions": [],
+      "answer": [
+        {
+          "title": "政策与机制分别描述",
+          "text": "保留策略定义对象、起算事件、期限、用途和例外；TTL 是产品中的过期机制，具体执行可能异步。先解释清楚业务要求，再核对实现是否覆盖这些条件。"
+        },
+        {
+          "title": "区分禁止删除与实际清理",
+          "text": "Legal Hold 在有依据的范围内暂停删除，需有责任人与解除流程；S3 Object Lock 保护具体对象版本，行为受模式和权限影响。保护结束往往只是允许清理，并不表示清理已发生。"
+        },
+        {
+          "title": "把版本和例外纳入验收",
+          "text": "检查当前及历史版本、删除标记、备份和派生数据。记录 Hold 原因、范围及复核日期；解除后重新评估到期条件，再观察实际清理结果，避免用无限期例外替代治理。"
+        }
+      ],
+      "checkpoints": [
+        "TTL 执行语义与保留政策的关系明确。",
+        "能区分应删、可删、已删三个判断。",
+        "版本、保留例外与解除后的执行都有证据。"
+      ],
+      "pitfalls": [
+        "把 TTL 到期视为即时物理删除保证。",
+        "认为出现删除标记就意味着所有旧版本已清除。"
+      ],
+      "followups": [
+        "数据复制到另一个业务域后，保留规则如何继承或重新确定？",
+        "已过保留期限但仍处于 Hold 的数据，日常访问权限应如何处理？"
+      ],
+      "links": [
+        {
+          "topicId": "life-retention",
+          "sectionId": "ttl-lock-hold",
+          "itemId": "three-controls",
+          "label": "TTL、Object Lock 与 Hold"
+        },
+        {
+          "topicId": "life-retention",
+          "sectionId": "retention-scope",
+          "itemId": "policy-fields",
+          "label": "保留政策字段"
+        },
+        {
+          "topicId": "life-retention",
+          "sectionId": "retention-scope",
+          "itemId": "versions",
+          "label": "版本与删除标记"
+        }
+      ],
+      "termIds": [
+        "data-retention",
+        "time-to-live",
+        "legal-hold",
+        "object-lock",
+        "data-lifecycle-management"
+      ],
+      "sourceIds": [
+        4,
+        6
+      ],
+      "extraSources": [
+        {
+          "label": "AWS｜S3 Object Lock",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"
+        },
+        {
+          "label": "AWS｜DynamoDB TTL",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html"
+        }
+      ]
+    },
+    {
+      "id": "gov-scenario-cross-domain-program",
+      "domain": "governance",
+      "type": "scenario",
+      "title": "跨域治理：从一次高损失问题开始",
+      "prompt": "假设你负责一个全球短视频平台的数据治理项目。多个业务域各自维护数据，报表口径频繁冲突，Owner 信息不完整，团队认为治理增加负担。请设计首个可交付阶段。",
+      "priority": "核心",
+      "minutes": 9,
+      "assumptions": [
+        "这是基于公开知识编写的 TikTok 类教学场景，不描述其内部架构或真实面试题。",
+        "可协调产品、数据平台和业务团队，但没有直接管理所有工程师的权限。",
+        "首阶段周期、预算和目标域需在回答中澄清，不预设全企业一次接入。"
+      ],
+      "answer": [
+        {
+          "title": "明确损失与首阶段范围",
+          "text": "先定位哪些口径冲突影响决策、产生多少返工或事故，选择一条重要业务链路和少量关键资产。约定基线、目标消费者和成功条件，说明哪些域及资产暂不纳入。用明确损失建立参与动力，而非先要求所有团队填完整目录。"
+        },
+        {
+          "title": "把责任和数据关系接起来",
+          "text": "沿链路登记资产身份、Owner、关键定义与消费者；业务 Owner 确认口径，Steward 维护规则，工程负责采集与控制。共同约定变更通知、证据格式和升级路径，域内保留授权范围内的实施选择。"
+        },
+        {
+          "title": "处理分歧与执行成本",
+          "text": "同名指标先比较用途与计算口径，有合理差异可保留清楚命名的变体。对无人认领、依赖冲突和例外设升级及期限；先验证高价值规则，再决定哪些可以自动整改，避免影响正常业务。"
+        },
+        {
+          "title": "验收成果并决定扩展",
+          "text": "同时看关键资产责任覆盖、定义确认、问题关闭质量及返工或事故变化。检查采集盲区和业务负担；只有试点形成可重复流程并获得净收益，才扩大域或沉淀平台能力。"
+        }
+      ],
+      "checkpoints": [
+        "首阶段范围由损失与依赖确定，存在明确分母。",
+        "责任分工能够覆盖业务决定、技术实现和结果验证。",
+        "有冲突处理、例外管理及可衡量的推广条件。"
+      ],
+      "pitfalls": [
+        "一开始只交付大而全的制度和评分榜。",
+        "把工单关闭数提升直接当成业务收益，忽略误伤与重复问题。"
+      ],
+      "followups": [
+        "如果试点提高了治理评分但返工没有下降，你会检查什么？",
+        "一个高影响资产无人愿意承担 Owner，怎样推进而不虚构责任人？"
+      ],
+      "links": [
+        {
+          "topicId": "gov-value",
+          "sectionId": "planning-value",
+          "itemId": "starting-point",
+          "label": "从痛点选择治理切口"
+        },
+        {
+          "topicId": "gov-ownership",
+          "sectionId": "cross-domain",
+          "itemId": "shared-table",
+          "label": "共享资产责任"
+        },
+        {
+          "topicId": "gov-workflow",
+          "sectionId": "platform-layers",
+          "itemId": "operating-model",
+          "label": "治理流程与角色"
+        },
+        {
+          "topicId": "gov-evidence",
+          "sectionId": "metric-levels",
+          "itemId": "denominator",
+          "label": "指标分母与价值"
+        }
+      ],
+      "termIds": [
+        "value-driven-governance",
+        "data-owner",
+        "data-steward",
+        "data-inventory",
+        "business-glossary",
+        "federated-governance"
+      ],
+      "sourceIds": [
+        1,
+        2,
+        3
+      ],
+      "extraSources": []
+    },
+    {
+      "id": "gov-scenario-deletion-discovery",
+      "domain": "governance",
+      "type": "scenario",
+      "title": "用户删除：先证明范围，再证明完成",
+      "prompt": "假设全球短视频平台收到一批删除请求。业务库能定位账号，但同一数据还进入日志、分析表、缓存与备份，现有血缘主要覆盖 SQL。你将如何建立可审计的删除范围与完成标准？",
+      "priority": "核心",
+      "minutes": 10,
+      "assumptions": [
+        "这是 TikTok 类教学假设，不代表实际产品、内部删除周期或法规结论。",
+        "具体适用要求、身份验证和允许保留的例外需要与负责团队确认。",
+        "初始 SQL 血缘存在覆盖盲区；不能预设所有系统已经具备逐用户定位能力。"
+      ],
+      "answer": [
+        {
+          "title": "澄清请求对象与约束",
+          "text": "明确删除的是账号、某类数据还是某段时间范围，验证请求主体及跨系统标识映射。与业务和相关专家确认保留例外、承诺口径及接收方范围，把有依据的例外和技术未完成分开报告。"
+        },
+        {
+          "title": "形成副本清单与定位能力",
+          "text": "从源系统、作业、服务调用和导出记录补全资产清单；列血缘支持发现候选下游，但逐用户删除还需键映射或记录索引。为每个系统记录定位能力、Owner、删除方式、备份策略和当前盲区。"
+        },
+        {
+          "title": "设计分阶段证据与失败处理",
+          "text": "分别记录请求已接收、活跃副本完成、备份待过期和经批准保留等状态。对失败系统保留可重试请求与未完成原因；恢复旧备份时重施删除约束。对无法定位的链路应升级补齐能力，不能伪报成功。"
+        },
+        {
+          "title": "验证覆盖与结果",
+          "text": "以在范围内的系统和副本为分母，跟踪定位覆盖、阶段完成时延、失败积压与例外到期。用已知测试身份检查复制、缓存、恢复和派生路径，发布前证明成功路径及不完整状态都可追踪。"
+        }
+      ],
+      "checkpoints": [
+        "资产血缘与逐用户记录定位的作用被区分。",
+        "完成声明对应明确范围、阶段、例外与证据。",
+        "有失败重试、恢复防回流和覆盖盲区的处理。"
+      ],
+      "pitfalls": [
+        "把主库 DELETE 成功率当作全链路删除完成率。",
+        "声称 SQL 血缘已经找到了每条个人记录。"
+      ],
+      "followups": [
+        "一个下游只保存聚合结果，应怎样判断其是否仍在请求范围内？",
+        "历史备份不能逐记录编辑时，如何定义可执行且诚实的完成状态？"
+      ],
+      "links": [
+        {
+          "topicId": "asset-granularity",
+          "sectionId": "table-column-record",
+          "itemId": "granularity-choice",
+          "label": "字段血缘与记录定位"
+        },
+        {
+          "topicId": "asset-coverage",
+          "sectionId": "static-runtime",
+          "itemId": "complementary",
+          "label": "补全非 SQL 盲区"
+        },
+        {
+          "topicId": "life-deletion",
+          "sectionId": "deletion-pipeline",
+          "itemId": "pipeline",
+          "label": "删除阶段与回执"
+        },
+        {
+          "topicId": "life-retention",
+          "sectionId": "retention-scope",
+          "itemId": "policy-fields",
+          "label": "范围与保留例外"
+        }
+      ],
+      "termIds": [
+        "data-inventory",
+        "data-lineage",
+        "record-level-lineage",
+        "data-retention",
+        "backup-expiration",
+        "deletion-acknowledgment"
+      ],
+      "sourceIds": [
+        4,
+        5,
+        6
+      ],
+      "extraSources": []
+    },
+    {
+      "id": "gov-scenario-risk-enrichment",
+      "domain": "governance",
+      "type": "scenario",
+      "title": "风控维表补全：低延迟与可信特征",
+      "prompt": "假设短视频平台的评论风控通过 Lookup Join 补入账号风险属性。缓存降低了延迟，但运营发现部分新风险账号仍使用旧属性；团队同时希望补入更多身份字段。你会怎样推进改进？",
+      "priority": "进阶",
+      "minutes": 10,
+      "assumptions": [
+        "这是 TikTok 类教学假设，Lookup Join 不代表其当前风控架构。",
+        "风险处置由模型或规则与产品策略共同决定，不能直接把单一特征当封禁命令。",
+        "需要澄清特征允许年龄、源更新延迟、峰值负载和外部源容量。"
+      ],
+      "answer": [
+        {
+          "title": "先界定时效问题",
+          "text": "沿事件产生、源属性更新、缓存读写和决策时间拆解延迟。确认需要当前可查询属性还是事件发生时的历史版本；分别统计缓存陈旧、源更新滞后、未命中与超时，避免一律用缩短 TTL 处理。"
+        },
+        {
+          "title": "把补全与治理一起设计",
+          "text": "补齐事件及维表字段血缘，记录必要的版本或更新时间信息。按处置需要只返回最小字段；身份关联可能改变数据分类与用途，应检查映射表权限、组合结果使用、缓存及派生结果的留存。"
+        },
+        {
+          "title": "为陈旧与故障定义策略",
+          "text": "比较缩短缓存、按关键变更失效、按风险等级调整查询等候选，但要验证连接器能力与外部源压力。明确未知或陈旧特征触发复核、降级或延迟处理的条件；保留重放与复评范围，防止重复处置。"
+        },
+        {
+          "title": "分阶段验证实际效果",
+          "text": "先用离线回放或受控样本比较结果与时间信息，再小范围上线。监控特征年龄、查找成功及超时率、端到端延迟和源负载，同时观察误伤、漏判及人工负担。通过护栏后再扩展，不能只以缓存命中率验收。"
+        }
+      ],
+      "checkpoints": [
+        "能区别时间语义与四类常见时效/查询问题。",
+        "优化包含外部依赖、血缘与组合隐私控制。",
+        "有未知值处置、负载护栏与真实业务效果验证。"
+      ],
+      "pitfalls": [
+        "把未命中或未知特征默认为低风险。",
+        "认为拿到各表访问权限就自动获准组合所有身份字段。"
+      ],
+      "followups": [
+        "要求重新解释上周的一次处置时，需要哪些额外证据？",
+        "若新的账号属性应立刻生效，现有缓存与失败策略怎样改变？"
+      ],
+      "links": [
+        {
+          "topicId": "asset-sql",
+          "sectionId": "lookup-join",
+          "itemId": "freshness-cache",
+          "label": "时效、缓存和重放"
+        },
+        {
+          "topicId": "asset-sql",
+          "sectionId": "lookup-join",
+          "itemId": "lineage-coverage",
+          "label": "维表字段和时间证据"
+        },
+        {
+          "topicId": "asset-sql",
+          "sectionId": "lookup-join",
+          "itemId": "privacy-linkage",
+          "label": "组合数据的隐私风险"
+        },
+        {
+          "topicId": "risk-loop",
+          "sectionId": "score-actions",
+          "itemId": "graduated-response",
+          "label": "迁移应用：未知特征下的分级处置"
+        }
+      ],
+      "termIds": [
+        "lookup-join",
+        "data-freshness",
+        "data-quality",
+        "data-lineage",
+        "audit-trail"
+      ],
+      "sourceIds": [
+        8,
+        11,
+        15
+      ],
+      "extraSources": [
+        {
+          "label": "Apache Flink｜JDBC Lookup Cache",
+          "url": "https://nightlies.apache.org/flink/flink-docs-stable/docs/connectors/table/jdbc/#lookup-cache"
+        }
+      ]
+    },
+    {
+      "id": "gov-scenario-lake-migration",
+      "domain": "governance",
+      "type": "scenario",
+      "title": "数据湖迁移：降低成本并保留控制",
+      "prompt": "假设全球短视频平台准备把部分 HDFS 分析数据迁到对象存储，并采用 ELT 保留原始数据。目标是降低成本、支持新的分析工作，但季度审计需要可恢复历史数据。请给出首阶段设计与验收。",
+      "priority": "进阶",
+      "minutes": 10,
+      "assumptions": [
+        "这是 TikTok 类教学假设，不描述内部存储或数据湖方案。",
+        "迁移地区、允许处理的数据范围、恢复时限与实际产品能力需在回答中确认。",
+        "“先存原始数据”不等于已获准增加用途或延长保留期限。"
+      ],
+      "answer": [
+        {
+          "title": "澄清架构与负载边界",
+          "text": "数据湖是整体架构，HDFS 和对象存储是可比较的底座候选。盘点应用所需文件操作、查询引擎、数据体量、跨地区约束和审计取回要求；选择依赖清楚、可回退的首批资产，避免只按低访问量选择。"
+        },
+        {
+          "title": "设计数据流和控制点",
+          "text": "明确接入、原始层、转换、消费和退出流程。ELT 将转换放到目标平台，原始层、失败落地和临时结果都要有 Owner、用途、权限与保留规则；目录和血缘需跟随稳定资产身份更新。"
+        },
+        {
+          "title": "处理迁移与长期成本",
+          "text": "复制后校验，再协调元数据或引用切换，验证并发与回退后清理旧副本。按访问及恢复需求选择层级，计入请求、取回、迁移和计算成本；旧快照、保护中的版本和备份分别处理，不能仅删主路径。"
+        },
+        {
+          "title": "定义可证明的上线门槛",
+          "text": "核对数量或校验值、关键查询结果、权限和删除行为，演练季度审计取回。以迁移范围的覆盖率、失败积压、查询/恢复时延和总成本验收；对超出支持范围的应用保留明确去向或暂缓方案。"
+        }
+      ],
+      "checkpoints": [
+        "存储底座、接口适配和数据湖治理被分开设计。",
+        "ELT 原始层以及临时/历史副本有完整控制。",
+        "上线前验证恢复、权限、正确性和总成本，而非只看上传成功。"
+      ],
+      "pitfalls": [
+        "把对象存储上线直接宣布为完整数据湖治理完成。",
+        "用冷层单价推算收益，却忽略季度取回和双份迁移成本。"
+      ],
+      "followups": [
+        "原始数据获准保留时间比分析结果更短，应如何安排依赖与重算？",
+        "旧应用依赖原子重命名或文件锁，迁移选择会怎样变化？"
+      ],
+      "links": [
+        {
+          "topicId": "life-storage",
+          "sectionId": "hdfs-lake",
+          "itemId": "same-layer-choice",
+          "label": "HDFS 与对象存储底座选型"
+        },
+        {
+          "topicId": "life-stages",
+          "sectionId": "etl-elt",
+          "itemId": "control-points",
+          "label": "ELT 的原始层控制"
+        },
+        {
+          "topicId": "life-tiering",
+          "sectionId": "safe-migration",
+          "itemId": "commit-sequence",
+          "label": "迁移切换与回退"
+        },
+        {
+          "topicId": "life-tiering",
+          "sectionId": "restore-cost",
+          "itemId": "not-transparent",
+          "label": "审计取回与总成本"
+        }
+      ],
+      "termIds": [
+        "data-lake",
+        "hdfs",
+        "object-storage",
+        "extract-load-transform",
+        "storage-tiering",
+        "data-retention",
+        "data-catalog"
+      ],
+      "sourceIds": [
+        3,
+        4
+      ],
+      "extraSources": [
+        {
+          "label": "IBM｜Data Lake",
+          "url": "https://www.ibm.com/think/topics/data-lake"
+        },
+        {
+          "label": "IBM｜ELT",
+          "url": "https://www.ibm.com/think/topics/elt"
+        },
+        {
+          "label": "AWS｜S3 Storage Classes",
+          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
+        }
+      ]
+    }
+  ]
+}

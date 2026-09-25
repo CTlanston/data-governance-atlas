@@ -1,0 +1,994 @@
+{
+  "questions": [
+    {
+      "id": "privacy-control-assurance",
+      "domain": "privacy",
+      "type": "technical",
+      "title": "一条隐私要求，怎样证明已在系统中生效？",
+      "prompt": "客服只能在处理相关工单时查看完整联系方式。请说明需要怎样的控制、责任分工与验收证据，不要只列产品或工具。",
+      "priority": "核心",
+      "minutes": 5,
+      "assumptions": [
+        "教学案例；允许使用联系方式的目的和条件已经由业务与隐私负责人确认。"
+      ],
+      "answer": [
+        {
+          "title": "把要求写成可执行条件",
+          "text": "明确受保护字段、操作者、允许用途、工单关联条件、适用入口，以及条件不满足或策略服务故障时的行为；把检查放到实际读取和导出的路径。"
+        },
+        {
+          "title": "安排控制与责任",
+          "text": "预防控制限制访问，检测控制发现异常或绕过，纠正控制撤销错误权限并修复影响。产品确认场景，工程实现，运营处理异常，隐私与安全专家审查规则和例外。"
+        },
+        {
+          "title": "证明行为并持续检查覆盖",
+          "text": "按不同身份、入口和失败情况测试，保留策略版本、覆盖范围与结果。持续检查新增接口、导出旁路和过期例外；上线记录只能证明部署，不能独自证明控制有效。"
+        }
+      ],
+      "checkpoints": [
+        "说清要求如何成为读取条件，以及失败时怎样处理。",
+        "同时解释控制类型、负责人和异常闭环。",
+        "用覆盖范围与行为证据证明有效性。"
+      ],
+      "pitfalls": [
+        "把策略配置成功或上线当作控制有效。",
+        "只报告告警数量，不说明未覆盖入口和异常是否修复。"
+      ],
+      "followups": [
+        "策略服务不可用时，哪些读取必须拒绝，哪些可按已批准的降级规则处理？",
+        "新增导出功能怎样进入同一控制范围？"
+      ],
+      "links": [
+        {
+          "topicId": "privacy-controls",
+          "sectionId": "policy-to-control",
+          "itemId": "control-contract",
+          "label": "把政策变成控制合同"
+        },
+        {
+          "topicId": "privacy-controls",
+          "sectionId": "three-controls",
+          "itemId": "one-access-incident",
+          "label": "预防、检测与纠正"
+        },
+        {
+          "topicId": "privacy-evidence",
+          "sectionId": "requirement-control-evidence",
+          "itemId": "one-requirement",
+          "label": "要求与证据的对应关系"
+        },
+        {
+          "topicId": "privacy-evidence",
+          "sectionId": "effectiveness-coverage-exceptions",
+          "itemId": "coverage-denominator",
+          "label": "覆盖分母与例外"
+        }
+      ],
+      "termIds": [
+        "privacy-by-design",
+        "preventive-control",
+        "detective-control",
+        "corrective-control",
+        "control-effectiveness"
+      ],
+      "sourceIds": [
+        9,
+        10
+      ],
+      "extraSources": []
+    },
+    {
+      "id": "privacy-threat-boundaries",
+      "domain": "privacy",
+      "type": "technical",
+      "title": "没有读到内容，为什么仍可能泄露隐私？",
+      "prompt": "某敏感主题社区的注册页面会提示邮箱是否已注册；另一个功能能把匿名账号与公开个人账号关联。请用隐私威胁类别解释问题，并给出控制思路。",
+      "priority": "核心",
+      "minutes": 5,
+      "assumptions": [
+        "场景用于练习威胁分析，不代表某平台的实际行为。"
+      ],
+      "answer": [
+        {
+          "title": "先描述泄露了什么",
+          "text": "提示是否注册可能暴露一个人是否参与该社区，属于 Detecting；把不同记录联系起来是 Linking，进一步确认现实身份是 Identifying。读取到受保护内容则涉及 Data Disclosure。这些风险可以同时存在。"
+        },
+        {
+          "title": "针对信号和关联路径设计控制",
+          "text": "评估统一响应、限制可枚举的查询、减少稳定关联标识符及跨来源匹配。还要检查用户是否理解这些使用方式、能否干预，以及这些处理是否必要。"
+        },
+        {
+          "title": "检查剩余风险与业务取舍",
+          "text": "统一文案后仍可能存在响应时间或其他侧信道；取消所有关联又可能影响反欺诈。应明确允许的目的、访问主体和数据范围，验证减少了哪些风险，而不是承诺绝对无法关联。"
+        }
+      ],
+      "checkpoints": [
+        "按参与方、可观察信号和隐私影响分析。",
+        "分清存在性、关联、身份和内容泄露。",
+        "控制措施对应具体路径，并说明剩余风险。"
+      ],
+      "pitfalls": [
+        "认为没有姓名或没有数据泄露事故就没有隐私风险。",
+        "只背 LINDDUN 缩写，不分析系统行为。"
+      ],
+      "followups": [
+        "设备标识符是否总能证明某个自然人的身份？",
+        "审计需要可归责记录时，怎样处理 Non-repudiation 带来的隐私取舍？"
+      ],
+      "links": [
+        {
+          "topicId": "privacy-threats",
+          "sectionId": "seven-questions",
+          "itemId": "questions-not-labels",
+          "label": "七类威胁的分析问题"
+        },
+        {
+          "topicId": "privacy-threats",
+          "sectionId": "linking-identifying",
+          "itemId": "anonymous-profile",
+          "label": "关联与识别"
+        },
+        {
+          "topicId": "privacy-threats",
+          "sectionId": "detecting-identifying-disclosure",
+          "itemId": "record-boundaries",
+          "label": "存在性与内容泄露"
+        },
+        {
+          "topicId": "privacy-threats",
+          "sectionId": "attributable-evidence-and-flow",
+          "itemId": "evidence-tradeoff",
+          "label": "可归责证据的取舍"
+        }
+      ],
+      "termIds": [
+        "linddun",
+        "linddun-detecting",
+        "linddun-linking",
+        "linddun-identifying",
+        "linddun-non-repudiation"
+      ],
+      "sourceIds": [
+        11
+      ],
+      "extraSources": []
+    },
+    {
+      "id": "privacy-transformation-choice",
+      "domain": "privacy",
+      "type": "technical",
+      "title": "为分析团队共享数据，如何选择保护方式？",
+      "prompt": "业务系统需要保留真实联系方式，分析团队只需要城市级分布。请比较动态脱敏、静态脱敏、假名化与匿名化，并判断是否需要共享逐条记录。",
+      "priority": "核心",
+      "minutes": 5,
+      "assumptions": [
+        "分析目的已经批准；接收方可获得的辅助信息仍需评估。"
+      ],
+      "answer": [
+        {
+          "title": "先确定最少需要的数据",
+          "text": "城市分布可能只需聚合结果，未必需要复制带联系方式的明细。先缩小字段、粒度、接收方和保留范围，再选择保护技术。"
+        },
+        {
+          "title": "分清方法、位置与结果",
+          "text": "动态脱敏改变特定查询或展示结果，原始数据仍在；静态脱敏生成处理后的副本。假名化用替代标识符降低直接识别风险，但可能借助映射或辅助信息重新关联；匿名化是需结合实际可识别性评估的结果，不能靠操作名称保证。"
+        },
+        {
+          "title": "检查旁路和重复发布",
+          "text": "验证原表、导出、API 与映射表的权限及准标识符组合。对小群体或重复统计发布，可评估差分隐私，但需说明保护单位、贡献限制、隐私预算和统计误差。"
+        }
+      ],
+      "checkpoints": [
+        "先判断明细共享是否必要。",
+        "指出原始值、映射与副本分别在哪里。",
+        "不把遮星、去姓名或向量化视作匿名化保证。"
+      ],
+      "pitfalls": [
+        "把隐藏手机号认定为匿名数据。",
+        "只检查单次结果，忽略辅助信息和重复查询。"
+      ],
+      "followups": [
+        "城市样本很少时，聚合结果为何仍可能泄露个人信息？",
+        "记录级与用户级差分隐私的保护边界有什么不同？"
+      ],
+      "links": [
+        {
+          "topicId": "privacy-dataworks",
+          "sectionId": "anonymity-boundary",
+          "itemId": "four-outcomes",
+          "label": "四种处理结果与可识别性"
+        },
+        {
+          "topicId": "privacy-dataworks",
+          "sectionId": "classification-to-enforcement",
+          "itemId": "four-jobs",
+          "label": "分类、策略与执行"
+        },
+        {
+          "topicId": "privacy-dataworks",
+          "sectionId": "anonymity-boundary",
+          "itemId": "differential-privacy",
+          "label": "差分隐私的保护单位与预算"
+        }
+      ],
+      "termIds": [
+        "data-minimization",
+        "dynamic-data-masking",
+        "static-data-masking",
+        "pseudonymisation",
+        "anonymisation",
+        "differential-privacy"
+      ],
+      "sourceIds": [
+        9,
+        11
+      ],
+      "extraSources": [
+        {
+          "label": "Google Differential Privacy：贡献限制与统计发布",
+          "url": "https://github.com/google/differential-privacy"
+        },
+        {
+          "label": "ICO：匿名化与可识别性",
+          "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/anonymisation/"
+        }
+      ]
+    },
+    {
+      "id": "privacy-purpose-choice",
+      "domain": "privacy",
+      "type": "technical",
+      "title": "读取权限、使用目的与用户选择应如何配合？",
+      "prompt": "客服服务有权限读取工单，团队希望把工单用于训练新模型；之后用户修改了相关隐私选择。请解释系统应分别判断什么，选择又如何传到下游。",
+      "priority": "核心",
+      "minutes": 5,
+      "assumptions": [
+        "用户同意并非所有数据处理的唯一依据；适用依据和用户选择的作用由相关专家确认。"
+      ],
+      "answer": [
+        {
+          "title": "分开判断三个问题",
+          "text": "访问权限回答谁能读什么；用途限制回答为什么可以处理；用户选择回答特定处理条件是否成立。客服能读取工单，并不自动授权训练用途；一个开关也不能覆盖所有用途和历史对象。"
+        },
+        {
+          "title": "把选择变成版本化执行信号",
+          "text": "记录适用用户、用途、范围、版本和请求标识，将变化传到实际读取、处理和导出路径。处理重复通知、乱序版本和离线服务，避免旧选择覆盖新选择。"
+        },
+        {
+          "title": "准确说明完成状态",
+          "text": "区分已收到选择、已传播和下游已执行。停止未来处理、删除历史副本以及处理已训练模型的影响是不同范围，应逐项定义验收和未完成状态。"
+        }
+      ],
+      "checkpoints": [
+        "区分访问、用途与处理条件。",
+        "说明选择的范围、版本以及重复乱序处理。",
+        "区分未来处理与历史数据、模型的处置。"
+      ],
+      "pitfalls": [
+        "把有读取权限等同于可以用于任何目的。",
+        "页面显示已关闭，就宣称所有下游和历史副本均已处理。"
+      ],
+      "followups": [
+        "用户修改选择时训练任务已开始，应如何界定处理范围？",
+        "一个下游未完成更新时，产品应展示什么状态？"
+      ],
+      "links": [
+        {
+          "topicId": "privacy-user-control",
+          "sectionId": "purpose-access-consent",
+          "itemId": "three-questions",
+          "label": "权限、用途与同意分别控制什么"
+        },
+        {
+          "topicId": "privacy-user-control",
+          "sectionId": "interface-to-enforcement",
+          "itemId": "preference-flow",
+          "label": "选择如何进入执行链路"
+        },
+        {
+          "topicId": "privacy-user-control",
+          "sectionId": "partial-completion",
+          "itemId": "completion-levels",
+          "label": "完成状态的不同层次"
+        }
+      ],
+      "termIds": [
+        "purpose-limitation",
+        "consent-management",
+        "linddun-unawareness-unintervenability",
+        "control-effectiveness"
+      ],
+      "sourceIds": [
+        11,
+        12
+      ],
+      "extraSources": [
+        {
+          "label": "ICO：英国处理依据指南（同意并非唯一依据）",
+          "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/a-guide-to-lawful-basis/"
+        }
+      ]
+    },
+    {
+      "id": "privacy-classification-metrics",
+      "domain": "privacy",
+      "type": "technical",
+      "title": "高准确率和高置信度，足以自动放行分类结果吗？",
+      "prompt": "敏感数据分类器总体准确率很高，也经常报出高置信度，但少数敏感类别仍有漏判。你会要求哪些评估证据，哪些结果应交给人工？",
+      "priority": "核心",
+      "minutes": 6,
+      "assumptions": [
+        "漏判可能使保护规则未触发；误判可能增加业务限制与审核负担。"
+      ],
+      "answer": [
+        {
+          "title": "先看错误分布与参考标签",
+          "text": "按类别和关键场景检查精确率、召回率、样本数量及标签质量。稀有敏感类即使大量漏判，也可能被总体准确率掩盖；先确认评估集是否代表实际处理范围。"
+        },
+        {
+          "title": "分清置信度、校准和一致性",
+          "text": "模型自报置信度不等于真实正确概率。校准检验相近置信度分组的实际正确比例；一致率或 Cohen’s kappa 衡量判断一致程度，不能单独证明判断正确。需要独立、经复核的参考标签。"
+        },
+        {
+          "title": "按错误代价安排自动化与复核",
+          "text": "结合类别风险、校准结果、证据不足和分歧情况决定哪些自动处理、哪些人工复核；持续观察新场景与漂移。阈值必须对应实际错误代价和处理能力，不能给所有类别套一个通用数字。"
+        }
+      ],
+      "checkpoints": [
+        "检查类别不平衡和稀有类召回率。",
+        "正确区分置信度、校准、一致性与正确性。",
+        "把自动化门槛和人工路由连接到错误代价。"
+      ],
+      "pitfalls": [
+        "把模型自报 95% 当作已经验证的正确概率。",
+        "把多数评审同意或高 kappa 当成客观真相。"
+      ],
+      "followups": [
+        "总体准确率提升但敏感类召回率下降，是否应发布？",
+        "参考标签本身存在专家分歧时怎样评估？"
+      ],
+      "links": [
+        {
+          "topicId": "ai-evaluation",
+          "sectionId": "promotion-evidence",
+          "itemId": "metric-meaning",
+          "label": "不同指标各自证明什么"
+        },
+        {
+          "topicId": "ai-evaluation",
+          "sectionId": "confidence-agreement-truth",
+          "itemId": "black-box-confidence",
+          "label": "置信度与校准"
+        },
+        {
+          "topicId": "ai-evaluation",
+          "sectionId": "confidence-agreement-truth",
+          "itemId": "kappa-numeric",
+          "label": "一致性与正确性"
+        },
+        {
+          "topicId": "ai-evaluation",
+          "sectionId": "disagreement-adjudication",
+          "itemId": "independent-reference",
+          "label": "参考标签与分歧裁决"
+        }
+      ],
+      "termIds": [
+        "confidence-calibration",
+        "ground-truth",
+        "cohens-kappa",
+        "precision",
+        "recall",
+        "rule-coverage"
+      ],
+      "sourceIds": [
+        13
+      ],
+      "extraSources": [
+        {
+          "label": "scikit-learn：概率校准",
+          "url": "https://scikit-learn.org/stable/modules/calibration.html"
+        }
+      ]
+    },
+    {
+      "id": "privacy-rule-promotion",
+      "domain": "privacy",
+      "type": "technical",
+      "title": "LLM 产生的分类经验，怎样安全转成生产规则？",
+      "prompt": "团队想把 LLM 处理疑难资产的经验蒸馏成规则，以降低分类成本。请说明在线分类、离线规则生成与正式发布的关系，并解释怎样防止泄漏和错误扩散。",
+      "priority": "进阶",
+      "minutes": 6,
+      "assumptions": [
+        "这是基于公开分类案例的教学设计，不是所有公司的必选架构。"
+      ],
+      "answer": [
+        {
+          "title": "分开当前判断与未来规则",
+          "text": "在线路径处理当前资产，可先运行已有规则，再让模型处理未覆盖或模糊情况；离线路径从证据和复核结果中生成候选规则。候选规则影响未来判断，不能生成后直接等同于已批准的控制。"
+        },
+        {
+          "title": "让评估输入保持独立",
+          "text": "旧分类标签若直接或间接进入输入，会形成答案捷径。遮蔽应覆盖特征、提示、规则生成与评估路径；用独立参考标签和保留集检验泛化，而不是只证明规则复现了已有标签。"
+        },
+        {
+          "title": "按证据逐步升级规则",
+          "text": "比较各类别错误、覆盖率、成本与延迟，先在隔离或影子路径观察，再经人工复核和涉及保护变化的审批进入版本发布。保留决策依据、失效条件、回退与退役机制。"
+        }
+      ],
+      "checkpoints": [
+        "区分在线响应、离线挖掘与发布审批。",
+        "说明标签泄漏跨越哪些输入路径。",
+        "评估与发布门槛包含质量、影响和可恢复性。"
+      ],
+      "pitfalls": [
+        "模型与规则一致，就认定规则正确。",
+        "只遮蔽 LLM 提示里的标签，漏掉其他输入或规则路径。"
+      ],
+      "followups": [
+        "LLM 生成规则是否意味着线上执行仍需要 LLM？",
+        "遮蔽后覆盖率下降，怎样区分原有泄漏与真实信息不足？"
+      ],
+      "links": [
+        {
+          "topicId": "ai-classification",
+          "sectionId": "online-offline-loop",
+          "itemId": "three-components",
+          "label": "规则、LLM 与证据的职责"
+        },
+        {
+          "topicId": "ai-evaluation",
+          "sectionId": "masking-across-paths",
+          "itemId": "shared-invariant",
+          "label": "跨路径保持遮蔽条件"
+        },
+        {
+          "topicId": "ai-evaluation",
+          "sectionId": "promotion-evidence",
+          "itemId": "evaluation-release-flow",
+          "label": "评估到发布的证据链"
+        },
+        {
+          "topicId": "ai-rollout",
+          "sectionId": "request-split",
+          "itemId": "side-by-side-routing",
+          "label": "影子路径的读取与副作用边界"
+        }
+      ],
+      "termIds": [
+        "rule-distillation",
+        "deterministic-rule",
+        "target-leakage",
+        "holdout-set",
+        "shadow-mode",
+        "decision-trace"
+      ],
+      "sourceIds": [
+        13
+      ],
+      "extraSources": []
+    },
+    {
+      "id": "privacy-unlearning-scope",
+      "domain": "privacy",
+      "type": "technical",
+      "title": "删除记录、删除检索向量与机器遗忘有何不同？",
+      "prompt": "用户要求处理曾提交给文档问答产品的资料。调查发现可能存在原文件、检索向量、日志以及训练使用记录。请区分处理对象和验收方法。",
+      "priority": "进阶",
+      "minutes": 6,
+      "assumptions": [
+        "先核实资料实际进入了哪些检索和训练路径；不能假设上传即进入训练。"
+      ],
+      "answer": [
+        {
+          "title": "按副本和用途定位范围",
+          "text": "列出原文件、分块、向量索引、缓存、日志及备份等对象，并用训练清单、任务记录和检查点关系判断是否进入训练。删除检索向量会改变可检索内容，但不直接改变已经训练出的参数。"
+        },
+        {
+          "title": "选择与对象对应的方法",
+          "text": "普通数据副本按系统删除机制处理；模型影响可能需要比较完全重训与机器遗忘等方法。输出过滤只限制可见回答，不等同于移除参数中的影响；方法选择需要说明适用范围与限制。"
+        },
+        {
+          "title": "验证遗忘、能力与成本",
+          "text": "约定待遗忘集、保留集和独立评估集，比较遗忘效果、保留能力与计算成本，并管理旧检查点和部署版本。成员推断等测试提供证据，单个攻击失败不能证明所有信息都已消失。"
+        }
+      ],
+      "checkpoints": [
+        "准确区分存储副本、检索路径和参数影响。",
+        "把方法与具体对象和目标对应。",
+        "同时评估遗忘效果、保留能力、成本和旧版本。"
+      ],
+      "pitfalls": [
+        "无法检索到原文就宣布模型影响已删除。",
+        "把一次成员推断攻击失败当作完整遗忘证明。"
+      ],
+      "followups": [
+        "保留集（Retain Set）与留出集（Holdout Set）的职责有何不同？",
+        "旧模型检查点仍可重新部署时，完成状态应如何表述？"
+      ],
+      "links": [
+        {
+          "topicId": "ai-unlearning",
+          "sectionId": "locate-the-copy",
+          "itemId": "deletion-scope",
+          "label": "删除对象与模型影响"
+        },
+        {
+          "topicId": "ai-unlearning",
+          "sectionId": "sets-and-methods",
+          "itemId": "three-sets",
+          "label": "待遗忘、保留与评估数据"
+        },
+        {
+          "topicId": "ai-unlearning",
+          "sectionId": "sets-and-methods",
+          "itemId": "methods-not-equivalent",
+          "label": "方法与目标是否对应"
+        },
+        {
+          "topicId": "ai-unlearning",
+          "sectionId": "forgetting-utility-cost",
+          "itemId": "evaluation-contract",
+          "label": "遗忘效果、能力和成本"
+        }
+      ],
+      "termIds": [
+        "machine-unlearning",
+        "forget-set",
+        "retain-set",
+        "full-retraining",
+        "membership-inference-attack",
+        "model-checkpoint"
+      ],
+      "sourceIds": [
+        6,
+        12,
+        19
+      ],
+      "extraSources": []
+    },
+    {
+      "id": "privacy-agent-composition",
+      "domain": "privacy",
+      "type": "technical",
+      "title": "各工具都通过授权，Agent 流程为何仍会越过用途边界？",
+      "prompt": "一个工具返回账户故障记录，另一个工具能查询账户对应姓名。Agent 的任务只需要总体故障数量。即使两个调用分别有权限，这个流程还需要检查什么？",
+      "priority": "进阶",
+      "minutes": 6,
+      "assumptions": [
+        "每个工具的调用授权都正确执行；重点分析组合后的用途与数据范围。"
+      ],
+      "answer": [
+        {
+          "title": "查看组合后的信息增量",
+          "text": "账户键可能把不同结果关联为个人资料；敏感内容即使没有出现在最后回复，也可能留在后续上下文。应画出工具、关联键、模型输入、日志和最终接收方，检查总体任务是否需要这些信息。"
+        },
+        {
+          "title": "在读取和组合前收窄范围",
+          "text": "优先请求聚合结果，限制工具、字段、关联目的与接收方；对确有需要的明细约定保留和后续使用。最终输出过滤无法替代之前的数据流控制。"
+        },
+        {
+          "title": "区分不同失效机制并测试全流程",
+          "text": "正常的工具调用组合也会产生隐私风险；提示注入则是非可信内容试图改变执行指令。两者都需要测试，但控制目标不同。应验证多轮轨迹、工具替换和异常路径，而不只验证单次 API 授权。"
+        }
+      ],
+      "checkpoints": [
+        "定位关联键、上下文保留和组合结果。",
+        "把控制放在获取、组合与继续使用之前。",
+        "区分调用授权、用途限制和提示注入。"
+      ],
+      "pitfalls": [
+        "把 MCP 或逐次授权当作完整的端到端隐私保证。",
+        "认为没有恶意输入、最后没输出姓名就安全。"
+      ],
+      "followups": [
+        "新增或替换一个工具，为什么需要重新测试整条轨迹？",
+        "如何保留必要排错证据，同时避免日志再次复制个人信息？"
+      ],
+      "links": [
+        {
+          "topicId": "ai-agent",
+          "sectionId": "cross-server-composition",
+          "itemId": "account-to-person",
+          "label": "跨服务器关联与流程边界"
+        },
+        {
+          "topicId": "ai-agent",
+          "sectionId": "context-persistence",
+          "itemId": "four-turns",
+          "label": "敏感内容在多轮上下文中的保留"
+        },
+        {
+          "topicId": "ai-agent",
+          "sectionId": "context-versus-training",
+          "itemId": "different-failures",
+          "label": "组合风险、注入与训练问题的区别"
+        }
+      ],
+      "termIds": [
+        "ai-agent",
+        "model-context-protocol",
+        "purpose-limitation",
+        "data-minimization",
+        "linddun-linking",
+        "prompt-injection"
+      ],
+      "sourceIds": [
+        18,
+        11
+      ],
+      "extraSources": [
+        {
+          "label": "OWASP：Prompt Injection",
+          "url": "https://genai.owasp.org/llmrisk/llm01-prompt-injection/"
+        }
+      ]
+    },
+    {
+      "id": "privacy-global-choice-program",
+      "domain": "privacy",
+      "type": "scenario",
+      "title": "TikTok 类全球平台：让隐私选择跨地区可靠生效",
+      "prompt": "某全球内容平台要让用户关闭一项可选的个性化用途。多个地区的已批准策略不同，推荐、离线分析和缓存由不同团队负责。你作为 TPM，如何确定范围、组织交付并判断可以扩大上线？",
+      "priority": "核心",
+      "minutes": 12,
+      "assumptions": [
+        "依据 JD 编写的教学假设，不描述 TikTok 内部架构或真实面试题。",
+        "地区规则、处理依据、时限与例外由相关专家确认，不设一个通用法律期限。"
+      ],
+      "answer": [
+        {
+          "title": "先把承诺和地区差异写清",
+          "text": "确认开关控制哪些用途、用户群、数据和地区，以及停止未来处理是否包含历史数据处置。建立系统与负责人的对应关系，把地区策略、接入依赖和产品文案列入验收范围。"
+        },
+        {
+          "title": "设计从选择到行为的链路",
+          "text": "记录选择范围、版本和请求标识，按适用策略分发到下游；读取和处理时执行相应条件。处理重复、乱序、缓存陈旧与断连，明确无法获得可信选择时的允许行为。"
+        },
+        {
+          "title": "按依赖和失败状态组织交付",
+          "text": "拆分产品入口、偏好服务、下游执行和地区运营工作；为未接入系统、传播延迟及部分失败指定负责人、重试和升级路径。不能用全局成功状态掩盖某个用途尚未生效。"
+        },
+        {
+          "title": "用行为指标决定扩大范围",
+          "text": "先选有限用户和系统试点，注入延迟、断连与乱序故障；检查覆盖率、生效时延、违反当前选择的处理、异常积压及用户是否理解状态。达到已约定门槛后逐步扩展。"
+        }
+      ],
+      "checkpoints": [
+        "明确对用户的承诺、地区差异和负责关系。",
+        "覆盖完整传播与执行链路，包含失败和部分完成。",
+        "验收检查实际处理行为，而不只是消息发送成功。"
+      ],
+      "pitfalls": [
+        "把一个地区的策略原样复制到全球。",
+        "把关闭一项用途说成所有历史数据已经删除。"
+      ],
+      "followups": [
+        "某下游短期无法接入，如何调整发布范围和用户承诺？",
+        "消息回执成功但缓存仍使用旧选择，怎样检测并修复？"
+      ],
+      "links": [
+        {
+          "topicId": "privacy-user-control",
+          "sectionId": "purpose-access-consent",
+          "itemId": "three-questions",
+          "label": "权限、用途和选择的边界"
+        },
+        {
+          "topicId": "privacy-user-control",
+          "sectionId": "interface-to-enforcement",
+          "itemId": "preference-flow",
+          "label": "从选择到实际执行"
+        },
+        {
+          "topicId": "privacy-user-control",
+          "sectionId": "partial-completion",
+          "itemId": "completion-levels",
+          "label": "部分完成的产品状态"
+        },
+        {
+          "topicId": "privacy-controls",
+          "sectionId": "shared-responsibility",
+          "itemId": "ownership-table",
+          "label": "跨团队责任"
+        },
+        {
+          "topicId": "privacy-evidence",
+          "sectionId": "effectiveness-coverage-exceptions",
+          "itemId": "coverage-denominator",
+          "label": "控制覆盖率与例外"
+        }
+      ],
+      "termIds": [
+        "consent-management",
+        "purpose-limitation",
+        "control-effectiveness",
+        "privacy-by-design",
+        "linddun-unawareness-unintervenability"
+      ],
+      "sourceIds": [
+        10,
+        11
+      ],
+      "extraSources": []
+    },
+    {
+      "id": "privacy-delete-ai-program",
+      "domain": "privacy",
+      "type": "scenario",
+      "title": "TikTok 类全球平台：把用户删除请求扩展到 AI 数据链路",
+      "prompt": "某全球平台已确认一项用户删除请求的处理范围，数据可能分布于数据库、缓存、向量索引、日志、备份和历史训练任务。你如何推动跨团队落地，并向用户和内部审核者说明完成情况？",
+      "priority": "核心",
+      "minutes": 15,
+      "assumptions": [
+        "依据 JD 编写的教学假设，不代表 TikTok 的系统或删除承诺。",
+        "身份验证、适用范围、保留例外和时限需要先确认；不能把供应商删除时间当作平台或法律期限。"
+      ],
+      "answer": [
+        {
+          "title": "建立对象清单和待确认项",
+          "text": "核对用户标识映射，枚举副本、派生数据和备份，用任务与训练记录确认是否进入模型。把已确认、待调查和经批准保留的对象分开，明确保留对象可继续用于什么。"
+        },
+        {
+          "title": "用任务状态协调所有者",
+          "text": "用稳定请求标识建立各系统子任务，指定负责人、重试和重复执行规则，记录成功、失败与未知状态。存储删除、未来训练排除和现有模型影响分别追踪，不能合并成一个数据库结果。"
+        },
+        {
+          "title": "处理恢复与模型的特殊路径",
+          "text": "验证备份恢复后不会把已处理数据重新带回可用链路；检查旧模型检查点和部署版本。若涉及参数影响，比较重训、遗忘方法的效果、时间和成本，不以输出过滤替代既定目标。"
+        },
+        {
+          "title": "按范围提供证据和完成状态",
+          "text": "汇总对象、版本、执行结果、例外与未决项；对外表述与已完成范围一致。验收看发现覆盖率、子任务时延和积压、恢复演练及约定的模型评估结果，同时说明证据局限。"
+        }
+      ],
+      "checkpoints": [
+        "把源数据、派生副本、备份与模型影响分别定位。",
+        "设计跨团队可追踪的重试、失败和未知状态。",
+        "覆盖恢复和旧版本重新上线的路径。",
+        "完成表述对应具体范围与证据。"
+      ],
+      "pitfalls": [
+        "一次 DELETE 成功就认定全链路完成。",
+        "从他家云文档搬数字当作 TikTok 的删除时限。"
+      ],
+      "followups": [
+        "无法确认某批数据是否进入训练时，如何推进并报告？",
+        "完全重训代价过高时，应向决策者呈现哪些选项与残余风险？"
+      ],
+      "links": [
+        {
+          "topicId": "ai-unlearning",
+          "sectionId": "locate-the-copy",
+          "itemId": "deletion-scope",
+          "label": "删除范围与模型影响"
+        },
+        {
+          "topicId": "ai-lineage",
+          "sectionId": "identifiers-and-artifacts",
+          "itemId": "what-to-connect",
+          "label": "任务、清单与检查点关联"
+        },
+        {
+          "topicId": "tpm-delete-case",
+          "sectionId": "completion-restoration",
+          "itemId": "restore-and-unlearning",
+          "label": "恢复和机器遗忘的验收"
+        },
+        {
+          "topicId": "ai-unlearning",
+          "sectionId": "forgetting-utility-cost",
+          "itemId": "evaluation-contract",
+          "label": "遗忘与保留能力的权衡"
+        },
+        {
+          "topicId": "privacy-user-control",
+          "sectionId": "partial-completion",
+          "itemId": "completion-levels",
+          "label": "完成状态与未决项"
+        }
+      ],
+      "termIds": [
+        "cross-stack-lineage",
+        "training-manifest",
+        "machine-unlearning",
+        "model-checkpoint",
+        "control-effectiveness",
+        "idempotency"
+      ],
+      "sourceIds": [
+        6,
+        12,
+        19
+      ],
+      "extraSources": []
+    },
+    {
+      "id": "privacy-classifier-rollout-program",
+      "domain": "privacy",
+      "type": "scenario",
+      "title": "TikTok 类平台：分类自动化降本，却增加稀有敏感类漏判",
+      "prompt": "某全球平台的新分类规则减少了 LLM 调用和成本，但影子评估发现一个稀有敏感类别的召回率下降。产品有交付日期，工程希望扩大自动化，隐私团队担心保护遗漏。你如何组织决策与后续发布？",
+      "priority": "核心",
+      "minutes": 15,
+      "assumptions": [
+        "依据公开技术案例构造的教学场景，不代表 TikTok 采用此架构。",
+        "分类标准及地区差异已经有负责人；仍需核对受影响样本与控制。"
+      ],
+      "answer": [
+        {
+          "title": "先确认质量变化及实际影响",
+          "text": "暂缓扩大受影响范围，核查样本数量、参考标签、类别与地区分布、输入遮蔽和规则版本。追踪漏判会漏掉哪项保护，区分标签分歧、数据变化和规则问题，不预设旧系统就是正确答案。"
+        },
+        {
+          "title": "给出可执行的范围与资源选项",
+          "text": "可以只保留已验证类别的规则，为不确定类别保留模型或人工复核，并分配修复与标注资源。比较质量、成本、延迟和审核负担，明确每个方案的责任人及交付依赖。"
+        },
+        {
+          "title": "重新积累发布证据",
+          "text": "先做独立保留集和分群回归评估，再通过影子路径观察真实输入；涉及保护变化应完成相应复核。进入小范围真实流量时设置停止条件、版本记录与回退路径，不能用低风险类别的平均表现抵消高风险漏判。"
+        },
+        {
+          "title": "让进度和 ROI 都反映风险",
+          "text": "向相关团队说明已通过、待验证和阻塞范围，记录决策依据。ROI 同时计入计算节省、人工和运维成本；验收还看敏感类召回、误判影响、覆盖率、异常闭环和回退演练。"
+        }
+      ],
+      "checkpoints": [
+        "把漏判与实际控制缺口联系起来。",
+        "提出缩小范围、复核与修复的具体交付选项。",
+        "区分离线、影子和真实流量阶段的证据。",
+        "用质量与完整成本共同评价收益。"
+      ],
+      "pitfalls": [
+        "仅凭总体准确率或成本下降批准全面上线。",
+        "不看类别风险，强行套用统一阈值。"
+      ],
+      "followups": [
+        "专家对参考标签分歧很大时，如何避免发布判断循环依赖？",
+        "回退新版本是否会自动修复已经产生的错误分类和权限影响？"
+      ],
+      "links": [
+        {
+          "topicId": "ai-evaluation",
+          "sectionId": "promotion-evidence",
+          "itemId": "metric-meaning",
+          "label": "质量指标与覆盖率"
+        },
+        {
+          "topicId": "ai-evaluation",
+          "sectionId": "disagreement-adjudication",
+          "itemId": "independent-reference",
+          "label": "参考标签争议与独立裁决"
+        },
+        {
+          "topicId": "ai-evaluation",
+          "sectionId": "promotion-evidence",
+          "itemId": "evaluation-release-flow",
+          "label": "发布证据链"
+        },
+        {
+          "topicId": "ai-rollout",
+          "sectionId": "holdout-to-rollout",
+          "itemId": "complementary-evidence",
+          "label": "离线、影子与金丝雀的分工"
+        },
+        {
+          "topicId": "ai-classification",
+          "sectionId": "improve-versus-replace",
+          "itemId": "two-improvements",
+          "label": "改进规则与替换模型的区别"
+        }
+      ],
+      "termIds": [
+        "rule-coverage",
+        "recall",
+        "precision",
+        "confidence-calibration",
+        "shadow-mode",
+        "canary-release",
+        "ground-truth"
+      ],
+      "sourceIds": [
+        13
+      ],
+      "extraSources": [
+        {
+          "label": "Google SRE：Canarying Releases",
+          "url": "https://sre.google/workbook/canarying-releases/"
+        }
+      ]
+    },
+    {
+      "id": "privacy-agent-regions-program",
+      "domain": "privacy",
+      "type": "scenario",
+      "title": "TikTok 类全球平台：为跨地区运营助手设计数据边界",
+      "prompt": "某全球平台的运营助手只需总结地区故障趋势。工具 A 可读某地区失败账户，工具 B 可查另一地区的客户资料，规划中的中心模型可能接收两者结果。所有工具调用各自有权限。你会怎样评估和设计端到端方案？",
+      "priority": "进阶",
+      "minutes": 15,
+      "assumptions": [
+        "依据 JD 编写的教学假设，不代表 TikTok 的模型部署或跨地区安排。",
+        "地区约束、允许的数据流与用途由相关专家提供，不预设所有跨地区处理都允许或禁止。"
+      ],
+      "answer": [
+        {
+          "title": "先确认任务是否需要个人明细",
+          "text": "把工具、关联键、Agent 上下文、模型位置、日志和输出接收方画成数据流。趋势统计可能不需要账户和姓名；逐段确认用途、必要字段、接收方和保留范围，识别组合后增加的信息。"
+        },
+        {
+          "title": "比较不同处理位置与粒度",
+          "text": "比较地区内聚合后仅传批准结果，与在符合要求的边界内处理明细等方案；评估模型能力、延迟、运维成本与审核可见性。假名或 embedding 仍可能携带关联信息，不能仅凭格式决定数据可自由流转。"
+        },
+        {
+          "title": "把控制放到获取与组合路径",
+          "text": "按目的限制工具、字段、关联键和接收方；设置上下文保留、日志最小化以及无法确定策略时的处理方式。把工具结果视为非可信内容，防止其改变既定指令和数据边界。"
+        },
+        {
+          "title": "用完整轨迹验证并分阶段交付",
+          "text": "明确平台、地区系统、运营及隐私负责人的验收责任；有限场景试点，测试多轮关联、工具新增字段、路由错误和故障。关注控制覆盖、未知数据路径、违规处理、任务成功率及延迟，再决定扩大范围。"
+        }
+      ],
+      "checkpoints": [
+        "分析完整数据流，而非只看工具各自授权。",
+        "比较处理位置和数据粒度，并说明取舍。",
+        "在读取、组合、上下文和日志中落实控制。",
+        "用多轮和异常轨迹测试实际边界。"
+      ],
+      "pitfalls": [
+        "只过滤最终回答中的姓名。",
+        "把加密、假名化或向量化当作新的用途授权。"
+      ],
+      "followups": [
+        "中心模型效果更好时，怎样量化方案差距并组织决策？",
+        "一个工具新增了返回字段，怎样发现它对完整流程的影响？"
+      ],
+      "links": [
+        {
+          "topicId": "ai-agent",
+          "sectionId": "cross-server-composition",
+          "itemId": "account-to-person",
+          "label": "多工具组合的隐私边界"
+        },
+        {
+          "topicId": "ai-agent",
+          "sectionId": "context-persistence",
+          "itemId": "four-turns",
+          "label": "上下文中的持续暴露"
+        },
+        {
+          "topicId": "ai-lineage",
+          "sectionId": "lineage-enforcement-proof",
+          "itemId": "three-distinct-capabilities",
+          "label": "血缘、执行与证据的区别"
+        },
+        {
+          "topicId": "privacy-dataworks",
+          "sectionId": "anonymity-boundary",
+          "itemId": "four-outcomes",
+          "label": "假名与向量化不等于匿名"
+        },
+        {
+          "topicId": "privacy-evidence",
+          "sectionId": "requirement-control-evidence",
+          "itemId": "one-requirement",
+          "label": "控制与验收证据"
+        }
+      ],
+      "termIds": [
+        "ai-agent",
+        "data-minimization",
+        "purpose-limitation",
+        "cross-stack-lineage",
+        "pseudonymisation",
+        "embedding",
+        "prompt-injection"
+      ],
+      "sourceIds": [
+        11,
+        12,
+        18
+      ],
+      "extraSources": []
+    }
+  ]
+}

@@ -30,497 +30,568 @@
       "definition": "用来定义、查询和操作关系数据的语言，让人描述想得到什么结果。不同数据库和处理引擎使用各自的 SQL 方言，并把查询转成执行计划。",
       "distinction": "SQL 是语言，Calcite 是查询框架，Flink 是处理系统；会写 SQL 不等于相同语句能在所有引擎原样运行。",
       "example": "用 SELECT 筛选订单，再用 GROUP BY 统计各地区收入，是常见的 SQL 表达方式。",
-      "topicIds": ["asset-sql", "rel-cost"], "sourceIds": [8], "extraSources": [{"label":"IBM｜Structured Query Language","url":"https://www.ibm.com/think/topics/structured-query-language"}], "origin": "source"
+      "topicIds": ["asset-sql", "rel-cost"], "sourceIds": [8], "extraSources": [{"label":"IBM｜Structured Query Language","url":"https://www.ibm.com/think/topics/structured-query-language"}], "origin": "source",
+      "learning": {"status": "reference", "rationale": "语言名称本身偏基础说明；保留正文入口，重点复习解析、计划与语义差异。", "focus": "识别 SQL 在查询处理链路中的位置。", "checkpoints": ["SQL 是输入语言；引擎仍需解析、校验和规划。"], "links": [{"topicId": "asset-sql", "sectionId": "ast-representation", "itemId": "tree-example", "label": "SQL 文本如何转成可分析的结构", "relation": "应用"}]}
     },
     {
       "id": "directed-acyclic-graph", "zh": "有向无环图", "en": "Directed Acyclic Graph", "abbr": "DAG", "aliases": ["任务依赖图", "DAG 图"],
       "definition": "由有方向的连接组成、沿方向走不会回到起点的图。任务调度常用它表示先后依赖，便于判断哪些任务可并行、哪些必须等待上游。",
       "distinction": "DAG 是一种图结构，不自动等于关键路径；还需加入任务耗时和实际约束，才能分析哪条路径决定完成时间。",
       "example": "清洗完成后，日报和模型特征可同时计算；最终验收再等待两个分支完成。",
-      "topicIds": ["rel-sla", "asset-coverage", "asset-sql"], "sourceIds": [1], "extraSources": [{"label":"Apache Airflow｜Dags","url":"https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html"}], "origin": "source"
+      "topicIds": ["rel-sla", "asset-coverage", "asset-sql"], "sourceIds": [1], "extraSources": [{"label":"Apache Airflow｜Dags","url":"https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html"}], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "依赖、并行和关键路径之间有实际推理要求，适合辅助复习。", "focus": "从依赖图判断并行边界与端到端完成时间。", "checkpoints": ["DAG 的边表示前置依赖，图中没有有向环。", "关键路径需结合耗时；任务数或耗时总和不能直接代替。"], "links": [{"topicId": "rel-sla", "sectionId": "critical-path", "itemId": "path-calculation", "label": "用依赖和耗时计算关键路径", "relation": "应用"}, {"topicId": "rel-sla", "sectionId": "critical-path", "itemId": "target-compression", "label": "判断优化是否缩短总体交付", "relation": "应用"}]}
     },
     {
       "id": "data-quality", "zh": "数据质量", "en": "Data Quality", "abbr": "DQ", "aliases": [],
       "definition": "判断数据能否满足特定用途的一组要求，常看准确性、完整性、一致性、有效性、唯一性和及时性。不同业务需要选择各自关键的检查维度。",
       "distinction": "格式合法不代表内容真实，行数齐全也不代表没有重复；一个维度通过不能替代整体质量判断。",
       "example": "订单金额不能为空只是完整性要求，还要检查金额是否准确、订单是否重复。",
-      "topicIds": ["rel-quality", "gov-boundary", "gov-evidence"], "sourceIds": [1, 2, 3], "extraSources": [{"label":"IBM｜Data Quality","url":"https://www.ibm.com/think/topics/data-quality"}], "origin": "source"
+      "topicIds": ["rel-quality", "gov-boundary", "gov-evidence"], "sourceIds": [1, 2, 3], "extraSources": [{"label":"IBM｜Data Quality","url":"https://www.ibm.com/think/topics/data-quality"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "质量维度、检查范围与故障处置会直接影响数据治理验收。", "focus": "把特定用途的质量要求转成规则与响应。", "checkpoints": ["分清准确性、完整性、有效性、唯一性和及时性等要求。", "规则命中后明确阻断、隔离、修复和恢复责任。", "质量通过只在声明的对象、范围与时间窗内成立。"], "links": [{"topicId": "rel-quality", "sectionId": "rules-observability", "itemId": "rules-versus-signals", "label": "质量规则与观测信号的能力边界", "relation": "易混对比"}, {"topicId": "rel-quality", "sectionId": "quality-gates", "itemId": "response-path", "label": "质量失败怎样影响下游", "relation": "应用"}, {"topicId": "gov-evidence", "sectionId": "metric-levels", "itemId": "denominator", "label": "验收指标的分母与结果", "relation": "应用"}]}
     },
     {
       "id": "data-freshness", "zh": "数据新鲜度", "en": "Data Freshness", "abbr": "", "aliases": ["数据时效性"],
       "definition": "衡量数据更新得是否足够及时，能够满足当前业务使用。需要明确观察的是最后更新时间、事件时间还是数据可用时间，避免同名指标口径不同。",
       "distinction": "新鲜度是质量的一个维度；刚更新的数据仍可能错误。及时性也可能指按约定截止时间可用，定义要先对齐。",
       "example": "风险判断需要近几分钟的事件，昨天生成的数据即使准确，也可能已经不够新鲜。",
-      "topicIds": ["rel-quality", "rel-sla", "asset-coverage"], "sourceIds": [], "extraSources": [{"label":"Google Cloud｜Data Quality Dimensions：Freshness","url":"https://docs.cloud.google.com/knowledge-catalog/docs/auto-data-quality-overview"},{"label":"IBM｜Data Quality Dimensions","url":"https://www.ibm.com/think/topics/data-quality"}], "origin": "extension"
+      "topicIds": ["rel-quality", "rel-sla", "asset-coverage"], "sourceIds": [], "extraSources": [{"label":"Google Cloud｜Data Quality Dimensions：Freshness","url":"https://docs.cloud.google.com/knowledge-catalog/docs/auto-data-quality-overview"},{"label":"IBM｜Data Quality Dimensions","url":"https://www.ibm.com/think/topics/data-quality"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "需辨认事件、源更新、缓存和可用时间，直接影响风控特征。", "focus": "判断数据是否在使用时足够新，而非只看任务刚运行。", "checkpoints": ["说明新鲜度起点：事件时间、源更新时间或可用时间。", "区分源陈旧、事件晚到、缓存陈旧和查询失败。", "同时定义可接受的数据年龄及超标后的处置。"], "links": [{"topicId": "asset-sql", "sectionId": "lookup-join", "itemId": "freshness-cache", "label": "维表缓存与特征年龄", "relation": "应用"}, {"topicId": "rel-sla", "sectionId": "service-levels", "itemId": "three-objects", "label": "把时效要求转为可测目标", "relation": "应用"}, {"topicId": "rel-quality", "sectionId": "dynamic-threshold", "itemId": "measured-object", "label": "明确统计对象与时间窗", "relation": "应用"}]}
     },
     {
       "id": "extract-transform-load", "zh": "抽取、转换、加载", "en": "Extract, Transform, Load", "abbr": "ETL", "aliases": ["ETL 管道"],
       "definition": "先从来源提取数据，再清洗或转换，最后加载到目标系统的一种集成顺序。治理需要跟踪这一路径中的字段变化、质量检查与使用权限。",
       "distinction": "ETL 先转换再加载，ELT 先加载再转换；先后顺序会改变处理位置，但两者都需要治理。",
       "example": "先把各地区订单金额换算成统一币种，再加载到分析仓库供报表使用。",
-      "topicIds": ["asset-metadata", "asset-coverage", "life-stages"], "sourceIds": [3, 5], "extraSources": [{"label":"IBM｜ETL","url":"https://www.ibm.com/think/topics/etl"}], "origin": "source"
+      "topicIds": ["asset-metadata", "asset-coverage", "life-stages"], "sourceIds": [3, 5], "extraSources": [{"label":"IBM｜ETL","url":"https://www.ibm.com/think/topics/etl"}], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "重点在转换位置与原始副本控制，不是记住三个英文单词。", "focus": "根据目标约束选择先转换再加载，并治理中间数据。", "checkpoints": ["明确 Load 指向哪个目标平台。", "ETL 先转换不意味着途中不存在原始落地。", "比较转换能力、时延与原始数据进入目标的约束。"], "links": [{"topicId": "life-stages", "sectionId": "etl-elt", "itemId": "processing-order", "label": "ETL 与 ELT 的架构取舍", "relation": "易混对比"}, {"topicId": "life-stages", "sectionId": "etl-elt", "itemId": "control-points", "label": "验证转换环境和中间副本", "relation": "应用"}]}
     },
     {
       "id": "extract-load-transform", "zh": "抽取、加载、转换", "en": "Extract, Load, Transform", "abbr": "ELT", "aliases": ["ELT 管道"],
       "definition": "先把来源数据加载到目标平台，再利用目标平台的计算能力进行转换。原始数据可能更早进入目标环境，因此进入时就需要适当控制。",
       "distinction": "ELT 不表示无需清洗，也不表示原始数据可无限保存；它主要改变转换发生的位置和顺序。",
       "example": "订单先进入云数仓的原始层，再通过仓内查询生成清洗层与经营指标。",
-      "topicIds": ["asset-metadata", "asset-coverage", "life-stages"], "sourceIds": [3, 5], "extraSources": [{"label":"IBM｜ELT","url":"https://www.ibm.com/think/topics/elt"}], "origin": "source"
+      "topicIds": ["asset-metadata", "asset-coverage", "life-stages"], "sourceIds": [3, 5], "extraSources": [{"label":"IBM｜ELT","url":"https://www.ibm.com/think/topics/elt"}], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "原始数据先入目标带来控制位置与灵活性的实质取舍。", "focus": "评估目标平台转换能力及原始层保护要求。", "checkpoints": ["说明 ELT 的转换发生在目标平台中。", "原始层需要访问、用途和留存控制，不能只保护最终输出。", "先加载不代表无需清洗或可无限留存。"], "links": [{"topicId": "life-stages", "sectionId": "etl-elt", "itemId": "processing-order", "label": "ELT 与 ETL 的处理顺序", "relation": "易混对比"}, {"topicId": "life-stages", "sectionId": "etl-elt", "itemId": "control-points", "label": "原始层到输出层的控制点", "relation": "应用"}]}
     },
     {
       "id": "serialization", "zh": "序列化", "en": "Serialization", "abbr": "", "aliases": ["树的序列化"],
       "definition": "把内存中的结构转换为可保存或传输的表示，例如字节流或结构化文本。AST 可以序列化，但处理树并不总要先走这个步骤。",
       "distinction": "序列化是表示转换，向量化是提取数值特征；两者不相同，也不能声称所有相似度算法都必须先序列化。",
       "example": "把 SQL 语法树保存为 JSON 便于传输，然后由具体算法选择怎样提取比较特征。",
-      "topicIds": ["asset-sql", "rel-cost"], "sourceIds": [1], "extraSources": [{"label":"Oracle｜Java Object Serialization Architecture","url":"https://docs.oracle.com/en/java/javase/25/docs/specs/serialization/serial-arch.html"}], "origin": "extension"
+      "topicIds": ["asset-sql", "rel-cost"], "sourceIds": [1], "extraSources": [{"label":"Oracle｜Java Object Serialization Architecture","url":"https://docs.oracle.com/en/java/javase/25/docs/specs/serialization/serial-arch.html"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "它与特征提取容易混淆，影响 SQL 相似性方案的解释。", "focus": "区分结构编码、数值特征和语义等价判断。", "checkpoints": ["序列化服务保存、传输或交换结构。", "可直接从 AST 提取特征，不必先序列化。", "字节相似或向量相似不能证明任务可合并。"], "links": [{"topicId": "asset-sql", "sectionId": "ast-representation", "itemId": "serialization-purpose", "label": "序列化与向量化的职责", "relation": "易混对比"}, {"topicId": "rel-cost", "sectionId": "sql-structure", "itemId": "ast-order", "label": "SQL 查重链路的处理分工", "relation": "应用"}]}
     },
     {
       "id": "data-governance", "zh": "数据治理", "en": "Data Governance", "abbr": "", "aliases": [],
       "definition": "约定数据由谁决定、遵循什么规则、出了问题谁负责，并推动规则被执行和检查。它把业务目标变成明确的责任、标准与控制。",
       "distinction": "治理属于更广的数据管理；建表、搬数据是实施活动，制定责任与验收规则是治理活动，两者需要衔接。",
       "example": "公司规定客户数据必须有负责人；工程团队把负责人登记和缺失提醒接入建表流程。",
-      "topicIds": ["gov-boundary", "gov-workflow"], "sourceIds": [3], "extraSources": [], "origin": "source"
+      "topicIds": ["gov-boundary", "gov-workflow"], "sourceIds": [3], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "决定规则、责任和验收的核心概念。", "focus": "将业务目标转成明确决策权、控制与证据。", "checkpoints": ["数据治理属于更广的数据管理体系。", "规则制定、实现与监督需要衔接。", "治理完成不能只用清洗、制度或工单数量证明。"], "links": [{"topicId": "gov-boundary", "sectionId": "management-governance", "itemId": "scope", "label": "治理与管理的职责边界", "relation": "易混对比"}, {"topicId": "gov-boundary", "sectionId": "policy-control", "itemId": "three-links", "label": "政策转为控制和证据", "relation": "应用"}]}
     },
     {
       "id": "data-management", "zh": "数据管理", "en": "Data Management", "abbr": "", "aliases": [],
       "definition": "组织让数据可获取、可保存、可使用和可维护的整体实践，包含架构、集成、存储、质量、安全与治理等工作。可以理解为整个数据运营体系。",
       "distinction": "数据管理范围更大；数据治理决定管理工作的责任和规则，不能把两者画成彼此完全独立的部门。",
       "example": "建设订单数仓、维护备份、明确访问权限和负责人，都属于数据管理体系的不同部分。",
-      "topicIds": ["gov-boundary", "life-stages"], "sourceIds": [3, 4], "extraSources": [], "origin": "source"
+      "topicIds": ["gov-boundary", "life-stages"], "sourceIds": [3, 4], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "需要理解整个实践体系及治理在其中的位置。", "focus": "区分数据管理活动与其中的治理决策。", "checkpoints": ["管理覆盖架构、集成、存储、使用、保护和退出。", "治理安排决策与责任，实施活动仍需工程和运营承接。"], "links": [{"topicId": "gov-boundary", "sectionId": "management-governance", "itemId": "scope", "label": "管理与治理的包含和协作关系", "relation": "易混对比"}, {"topicId": "life-stages", "sectionId": "stage-controls", "itemId": "stage-questions", "label": "把管理实践贯穿生命周期", "relation": "应用"}]}
     },
     {
       "id": "data-owner", "zh": "数据所有者", "en": "Data Owner", "abbr": "", "aliases": ["数据责任人", "数据负责人"],
       "definition": "对某个数据域的业务决策、使用要求与治理结果承担责任的角色。这里的所有者强调组织责任，并不等于数据库账号的技术所有权。",
       "distinction": "Owner 通常负责决策和结果，Steward 负责日常维护；具体权限要由组织约定，不能只看职位名称。",
       "example": "订单负责人决定取消订单是否计入成交额，并对这个口径被正确使用负责。",
-      "topicIds": ["gov-ownership", "asset-inventory"], "sourceIds": [3, 1], "extraSources": [], "origin": "source"
+      "topicIds": ["gov-ownership", "asset-inventory"], "sourceIds": [3, 1], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "业务决策与结果责任是治理项目定责的关键。", "focus": "为共享资产确定业务决策人及变更责任。", "checkpoints": ["Owner 不等于数据库技术账号的所有者。", "区分决策责任、日常维护与技术实施。", "跨域变更还需消费者确认与升级路径。"], "links": [{"topicId": "gov-ownership", "sectionId": "roles", "itemId": "division", "label": "Owner 与 Steward、工程、TPM 的分责", "relation": "易混对比"}, {"topicId": "gov-ownership", "sectionId": "cross-domain", "itemId": "shared-table", "label": "共享资产变更的决策权", "relation": "应用"}]}
     },
     {
       "id": "data-steward", "zh": "数据管理员", "en": "Data Steward", "abbr": "", "aliases": ["数据管家", "数据监管员"],
       "definition": "维护数据定义、质量问题和日常治理流程的角色，把业务规则转成团队可以理解和执行的工作。不同公司也会称为数据管家或数据监管员。",
       "distinction": "Steward 不自动等于数据库管理员 DBA；前者重在数据含义与治理维护，后者重在数据库技术运行。",
       "example": "发现两个报表的成交额不一致，Steward 核对定义、登记问题并协调修正。",
-      "topicIds": ["gov-ownership"], "sourceIds": [3], "extraSources": [{"label":"IBM｜Data Stewardship","url":"https://www.ibm.com/think/topics/data-stewardship"}], "origin": "source"
+      "topicIds": ["gov-ownership"], "sourceIds": [3], "extraSources": [{"label":"IBM｜Data Stewardship","url":"https://www.ibm.com/think/topics/data-stewardship"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "日常定义和质量维护不能与 DBA 或最终业务授权混同。", "focus": "说明 Steward 如何把业务规则持续落实到数据实践。", "checkpoints": ["维护定义、规则和问题台账，推动修复。", "与 Owner 的决策责任及 DBA 的技术运行职责区分。"], "links": [{"topicId": "gov-ownership", "sectionId": "roles", "itemId": "division", "label": "治理维护与决策、实施的边界", "relation": "易混对比"}, {"topicId": "asset-metadata", "sectionId": "dictionary-glossary", "itemId": "active-user", "label": "维护业务术语与字段映射", "relation": "应用"}]}
     },
     {
       "id": "data-domain", "zh": "数据域", "en": "Data Domain", "abbr": "", "aliases": ["业务数据域", "治理域"],
       "definition": "按业务含义或治理责任划出的一组相关数据，例如客户域、订单域。实际治理项目也可以按数据库、团队或资源范围圈选治理域。",
       "distinction": "数据域是责任或业务边界，不一定等于一个数据库；同一数据库可能放着多个域的数据。",
       "example": "订单域既包含订单表，也包含订单事件流和相关指标，可能跨越多个系统。",
-      "topicIds": ["gov-ownership", "gov-models", "gov-workflow"], "sourceIds": [1, 2, 3], "extraSources": [], "origin": "source"
+      "topicIds": ["gov-ownership", "gov-models", "gov-workflow"], "sourceIds": [1, 2, 3], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "业务边界与物理系统边界不同，会影响权责和跨域依赖。", "focus": "按业务含义与责任划定治理范围。", "checkpoints": ["一个域可跨多个数据库，数据库也可包含多个域。", "共享资产要明确主责及消费者责任。"], "links": [{"topicId": "gov-ownership", "sectionId": "cross-domain", "itemId": "shared-table", "label": "跨域资产的责任交界", "relation": "应用"}, {"topicId": "gov-models", "sectionId": "shared-boundaries", "itemId": "retention-example", "label": "域内自治与共同约束", "relation": "应用"}]}
     },
     {
       "id": "centralized-governance", "zh": "集中式治理", "en": "Centralized Data Governance", "abbr": "", "aliases": ["集中治理"],
       "definition": "把较多数据规则和治理决策集中在共同团队或委员会，再由各业务协同实施。它通常便于统一标准，但中心团队也可能形成处理瓶颈。",
       "distinction": "集中的是权责与决策方式，不表示所有数据必须物理集中存放；组织模式与存储架构是不同维度。",
       "example": "新增敏感数据类别需要统一治理团队确认，各业务按同一分类标准执行。",
-      "topicIds": ["gov-models"], "sourceIds": [1, 2], "extraSources": [], "origin": "source"
+      "topicIds": ["gov-models"], "sourceIds": [1, 2], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "与其他组织模式的权责和瓶颈比较有判断价值。", "focus": "评估集中决策对一致性和响应速度的影响。", "checkpoints": ["集中的是决策权，不是数据必须物理集中。", "说明统一口径的收益与中心排队的成本。"], "links": [{"topicId": "gov-models", "sectionId": "three-models", "itemId": "decision-rights", "label": "集中、分布式、联合治理的取舍", "relation": "易混对比"}]}
     },
     {
       "id": "distributed-governance", "zh": "分布式治理", "en": "Distributed Data Governance", "abbr": "", "aliases": ["分布式自治", "分布式数据治理"],
       "definition": "把治理目标、责任与执行更多放到业务单元，由平台提供工具和监督。业务围绕自己的痛点形成治理闭环，跨团队仍需协调责任交界。",
       "distinction": "责任分布不等于所有政策任意决定，也不等于一定有中央委员会；共同约束如何制定要看具体组织。",
       "example": "推荐团队负责自己的延迟和成本治理，平台提供诊断规则与结果追踪能力。",
-      "topicIds": ["gov-models", "gov-value"], "sourceIds": [1, 2, 7], "extraSources": [], "origin": "source"
+      "topicIds": ["gov-models", "gov-value"], "sourceIds": [1, 2, 7], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "JD 的跨业务治理依赖责任分布与平台协作。", "focus": "解释业务域负责结果、平台提供能力时的治理边界。", "checkpoints": ["责任分布不意味着取消共同约束。", "具体授权和争议处理需单独定义。", "DataLeap 历史案例不能改写成统一中央委员会模式。"], "links": [{"topicId": "gov-models", "sectionId": "three-models", "itemId": "decision-rights", "label": "不同组织模式的权责", "relation": "易混对比"}, {"topicId": "gov-models", "sectionId": "dataleap-autonomy", "itemId": "actual-case", "label": "DataLeap 业务域与平台的实际分工", "relation": "应用"}, {"topicId": "gov-models", "sectionId": "shared-boundaries", "itemId": "retention-example", "label": "共享政策如何限制自治", "relation": "应用"}]}
     },
     {
       "id": "federated-governance", "zh": "联合治理", "en": "Federated Data Governance", "abbr": "", "aliases": ["联邦式治理", "联邦治理"],
       "definition": "共同层维护组织标准，各数据域在这个边界内负责自己的定义、质量与实施。关键是明确哪些决定统一做、哪些决定由业务域来做。",
       "distinction": "Federated 更强调共同标准与域内自治的结合；不要把它直接当成所有分布式治理案例的同义词。",
       "example": "统一敏感数据保护要求，订单域和客服域分别决定如何在各自系统里落实。",
-      "topicIds": ["gov-models"], "sourceIds": [], "extraSources": [{"label":"IBM｜Data Mesh：Federated Governance","url":"https://www.ibm.com/think/topics/data-mesh"}], "origin": "framework"
+      "topicIds": ["gov-models"], "sourceIds": [], "extraSources": [{"label":"IBM｜Data Mesh：Federated Governance","url":"https://www.ibm.com/think/topics/data-mesh"}], "origin": "framework",
+      "learning": {"status": "core", "rationale": "域内自治与跨域共同标准的结合是可应用的治理设计。", "focus": "划分共同控制、域内决策及例外路径。", "checkpoints": ["列出哪些决定统一做，哪些由域内负责。", "共同标准与执行分布可以同时存在。", "Federated 不是所有 Distributed 案例的同义词。"], "links": [{"topicId": "gov-models", "sectionId": "three-models", "itemId": "decision-rights", "label": "联合治理与分布式治理", "relation": "易混对比"}, {"topicId": "gov-models", "sectionId": "shared-boundaries", "itemId": "retention-example", "label": "共同约束与域内参数", "relation": "应用"}, {"topicId": "tpm-global", "sectionId": "common-local", "itemId": "configuration-boundaries", "label": "全球共同控制与本地实现", "relation": "应用"}]}
     },
     {
       "id": "value-driven-governance", "zh": "价值驱动治理", "en": "Value-driven Data Governance", "abbr": "", "aliases": ["业务价值驱动", "问题驱动治理"],
       "definition": "先选一个明确业务问题，再决定需要哪些规则、工具和责任安排。治理是否有效，要看延迟、浪费或风险等问题是否得到可衡量的改善。",
       "distinction": "它是一种实施取向，不是固定产品名或认证方法；追求短期收益时也要保留长期架构与必要控制。",
       "example": "先治理每天拖慢核心报表的十条任务，用收益争取业务参与，再逐步扩大范围。",
-      "topicIds": ["gov-value", "gov-workflow"], "sourceIds": [1, 2], "extraSources": [], "origin": "source"
+      "topicIds": ["gov-value", "gov-workflow"], "sourceIds": [1, 2], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "需要从痛点、基线与价值证明推动无直接管理权的协作。", "focus": "选择治理切口并证明净收益。", "checkpoints": ["把痛点转换为可衡量的损失或体验目标。", "同时核算收益、实施成本和副作用。", "局部成功后沉淀共同能力，不能只提高健康分。"], "links": [{"topicId": "gov-value", "sectionId": "planning-value", "itemId": "starting-point", "label": "争取业务参与的治理切口", "relation": "应用"}, {"topicId": "gov-value", "sectionId": "value-guardrails", "itemId": "cost-example", "label": "衡量收益与业务影响", "relation": "应用"}, {"topicId": "tpm-metrics", "sectionId": "roi-attribution", "itemId": "roi-assumptions", "label": "区分收益类型及持续成本", "relation": "应用"}]}
     },
     {
       "id": "governance-rule-engine", "zh": "治理规则引擎", "en": "Rule Engine", "abbr": "", "aliases": ["规则引擎"],
       "definition": "把治理条件写成可重复执行的规则，再对资产或运行信息进行检查。引擎产出的通常是问题线索和处置依据，是否自动操作还需要单独设计。",
       "distinction": "Rule Engine 是通用技术名称，此卡限定治理规则的应用。规则命中不等于问题已解决；检测、派单、修改和验收仍是不同环节。",
       "example": "规则找出长期无人访问且未设置过期时间的表，先交给负责人确认是否可清理。",
-      "topicIds": ["gov-workflow", "gov-evidence"], "sourceIds": [1, 2], "extraSources": [], "origin": "source"
+      "topicIds": ["gov-workflow", "gov-evidence"], "sourceIds": [1, 2], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "规则执行与整改决策分离，比产品名本身更值得考查。", "focus": "把诊断规则接到可验证的整改流程。", "checkpoints": ["规则命中只提供候选问题。", "自动整改前核查资产责任、依赖和约束。", "记录版本、例外和结果反馈。"], "links": [{"topicId": "gov-workflow", "sectionId": "actionable-rules", "itemId": "unused-table", "label": "闲置资产规则的自动处置前提", "relation": "应用"}, {"topicId": "ai-classification", "sectionId": "rules-regex-heuristics", "itemId": "implementation-levels", "label": "规则引擎与具体匹配方法", "relation": "易混对比"}]}
     },
     {
       "id": "audit-trail", "zh": "审计轨迹", "en": "Audit Trail", "abbr": "", "aliases": ["审计记录", "审计证据"],
       "definition": "能还原某项操作由谁、在何时、依据什么规则完成以及结果如何的一组记录。它帮助检查决策与执行过程，而不只是显示一个完成状态。",
       "distinction": "仪表板是结果摘要，审计轨迹提供可追溯的细节；留有日志也不自动证明日志完整或控制有效。",
       "example": "删除工单关联审批、策略版本、各系统回执和失败重试记录，方便日后核查。",
-      "topicIds": ["gov-evidence", "gov-workflow"], "sourceIds": [3, 5], "extraSources": [], "origin": "source"
+      "topicIds": ["gov-evidence", "gov-workflow"], "sourceIds": [3, 5], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "可审计方案需要能重建决定和实际运行结果。", "focus": "定义能支持复查、覆盖判断与责任追踪的证据。", "checkpoints": ["关联资产、策略版本、批准者、执行及验证结果。", "失败、重试和例外也要留痕。", "日志存在不证明完整性或控制有效。"], "links": [{"topicId": "gov-evidence", "sectionId": "evidence-chain", "itemId": "traceable-result", "label": "治理决定的审计证据", "relation": "应用"}, {"topicId": "privacy-evidence", "sectionId": "requirement-control-evidence", "itemId": "one-requirement", "label": "要求、控制与证据的对应", "relation": "应用"}, {"topicId": "life-deletion", "sectionId": "deletion-pipeline", "itemId": "pipeline", "label": "删除阶段与回执的汇总", "relation": "应用"}]}
     },
     {
       "id": "data-asset", "zh": "数据资产", "en": "Data Asset", "abbr": "", "aliases": [],
       "definition": "组织需要识别、使用和管理的数据对象，例如表、文件、报表、事件流或模型相关数据。称为资产强调它有用途、责任与需要管理的风险。",
       "distinction": "数据资产不只是一张表；资产范围可以包括非结构化文件和派生结果，但不意味着每个对象都有同等价值。",
       "example": "一份订单明细表和基于它生成的经营报表是两个相关的数据资产。",
-      "topicIds": ["asset-inventory", "asset-metadata"], "sourceIds": [3, 7], "extraSources": [{"label":"IBM｜Data Catalog：Data Assets","url":"https://www.ibm.com/think/topics/data-catalog"}], "origin": "source"
+      "topicIds": ["asset-inventory", "asset-metadata"], "sourceIds": [3, 7], "extraSources": [{"label":"IBM｜Data Catalog：Data Assets","url":"https://www.ibm.com/think/topics/data-catalog"}], "origin": "source",
+      "learning": {"status": "reference", "rationale": "对象名称本身不构成独立考点；重点放在资产识别与范围判断中。", "focus": "确认治理对象不限于数据表。", "checkpoints": ["表、文件、事件流和派生结果都可能需要登记与定责。"], "links": [{"topicId": "asset-inventory", "sectionId": "continuous-discovery", "itemId": "asset-identity", "label": "资产身份、位置与变化维护", "relation": "应用"}]}
     },
     {
       "id": "data-inventory", "zh": "数据资产清单", "en": "Data Inventory", "abbr": "", "aliases": ["资产清单", "数据清单", "资产盘点"],
       "definition": "把已经发现的数据资产列出来，至少说清有什么、在哪里、由谁负责。它是治理范围的底账，需要随新增、迁移和下线持续更新。",
       "distinction": "Inventory 强调清点结果；Data Catalog 通常在此基础上加入可搜索的元数据、业务说明和关系。两者有关，但不是完全相同的能力。",
       "example": "先登记公司有二百张业务表及负责人，再把这些记录接入可搜索的数据目录。",
-      "topicIds": ["asset-inventory", "asset-metadata"], "sourceIds": [3], "extraSources": [{"label":"美国联邦数据治理指南｜Data Inventory 与 Data Catalog","url":"https://resources.data.gov/assets/documents/Zero-Trust-DataSecurityGuide_Oct24-Appendices.pdf"}], "origin": "source"
+      "topicIds": ["asset-inventory", "asset-metadata"], "sourceIds": [3], "extraSources": [{"label":"美国联邦数据治理指南｜Data Inventory 与 Data Catalog","url":"https://resources.data.gov/assets/documents/Zero-Trust-DataSecurityGuide_Oct24-Appendices.pdf"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "完整性和范围是所有后续控制的起点。", "focus": "建立可持续维护的资产底账。", "checkpoints": ["写清身份、位置、Owner、分类和发现时间。", "区分确认不存在、尚未接入和扫描失败。", "Inventory 盘点结果与 Catalog 发现能力有关但不同。"], "links": [{"topicId": "asset-inventory", "sectionId": "inventory-catalog", "itemId": "two-questions", "label": "清单与目录的职责", "relation": "易混对比"}, {"topicId": "asset-inventory", "sectionId": "continuous-discovery", "itemId": "asset-identity", "label": "持续资产发现与稳定身份", "relation": "应用"}, {"topicId": "asset-coverage", "sectionId": "unsupported-operators", "itemId": "impact-check", "label": "治理范围中的未知依赖", "relation": "应用"}]}
     },
     {
       "id": "data-catalog", "zh": "数据目录", "en": "Data Catalog", "abbr": "", "aliases": ["数据资产目录"],
       "definition": "利用元数据把资产组织成可搜索、可理解的目录，让人找到需要的数据，并了解含义、位置、负责人及使用条件。可以把它想成企业数据的图书馆目录。",
       "distinction": "Catalog 不是存放业务数据本身的数仓，也不只是文件夹；资产清单偏向清点，目录还帮助发现和理解。",
       "example": "搜索成交额后，目录展示对应数据表、口径说明、更新频率和申请访问入口。",
-      "topicIds": ["asset-metadata", "asset-inventory"], "sourceIds": [3, 5], "extraSources": [{"label":"IBM｜What Is a Data Catalog?","url":"https://www.ibm.com/think/topics/data-catalog"}], "origin": "source"
+      "topicIds": ["asset-metadata", "asset-inventory"], "sourceIds": [3, 5], "extraSources": [{"label":"IBM｜What Is a Data Catalog?","url":"https://www.ibm.com/think/topics/data-catalog"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "目录的发现和理解能力与资产清点、底层存储常被混用。", "focus": "说明目录如何支持可信数据发现及治理协作。", "checkpoints": ["目录组织元数据、业务说明和关系，不替代存储。", "Catalog 与 Inventory 的覆盖任务不同。", "选型要核对采集范围、维护者和更新机制。"], "links": [{"topicId": "asset-inventory", "sectionId": "inventory-catalog", "itemId": "two-questions", "label": "Catalog 与 Inventory 比较", "relation": "易混对比"}, {"topicId": "asset-metadata", "sectionId": "three-tools", "itemId": "customer-table", "label": "目录与元数据、血缘的配合", "relation": "应用"}]}
     },
     {
       "id": "metadata", "zh": "元数据", "en": "Metadata", "abbr": "", "aliases": [],
       "definition": "描述数据的信息，例如字段类型、业务含义、存储位置、负责人和最近更新时间。它让人理解一份数据是什么，也让系统据此做检索和治理。",
       "distinction": "订单金额是业务数据，金额字段的单位和定义是元数据；元数据是基础信息，目录和血缘是利用它的能力。",
       "example": "字段 price 的类型是小数、单位是人民币、含义是折扣后金额，这些都是元数据。",
-      "topicIds": ["asset-metadata", "asset-inventory"], "sourceIds": [5], "extraSources": [{"label":"IBM｜Metadata","url":"https://www.ibm.com/think/topics/metadata"}], "origin": "source"
+      "topicIds": ["asset-metadata", "asset-inventory"], "sourceIds": [5], "extraSources": [{"label":"IBM｜Metadata","url":"https://www.ibm.com/think/topics/metadata"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "技术、业务和运行元数据共同支撑发现、责任与控制。", "focus": "识别治理判断需要的元数据及维护责任。", "checkpoints": ["区分数据值与描述它的结构、含义和运行信息。", "字段类型、Owner、用途和更新记录不是同一种元数据。", "元数据陈旧会影响目录、血缘和策略执行。"], "links": [{"topicId": "asset-metadata", "sectionId": "three-tools", "itemId": "customer-table", "label": "元数据支撑的三类治理任务", "relation": "应用"}, {"topicId": "asset-inventory", "sectionId": "continuous-discovery", "itemId": "asset-identity", "label": "维护身份与更新时间", "relation": "应用"}]}
     },
     {
       "id": "business-glossary", "zh": "业务术语表", "en": "Business Glossary", "abbr": "", "aliases": ["业务词汇表"],
       "definition": "统一解释业务名词及其使用范围，例如活跃用户、成交额和有效订单。它让产品、分析与工程团队用同一种语言讨论指标和数据。",
       "distinction": "业务术语表解释业务含义，数据字典更多描述字段、类型和格式；一个业务词可能映射多个字段。",
       "example": "先约定活跃用户是否包含游客，再将定义关联到各地区报表使用的数据字段。",
-      "topicIds": ["asset-metadata", "gov-boundary"], "sourceIds": [3], "extraSources": [{"label":"IBM｜Data Catalog 与 Business Glossary","url":"https://www.ibm.com/think/topics/data-catalog"}], "origin": "source"
+      "topicIds": ["asset-metadata", "gov-boundary"], "sourceIds": [3], "extraSources": [{"label":"IBM｜Data Catalog 与 Business Glossary","url":"https://www.ibm.com/think/topics/data-catalog"}], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "跨团队同名指标需要明确业务口径与技术映射。", "focus": "把业务概念与实际字段建立可维护的联系。", "checkpoints": ["数据字典描述结构，业务术语表解释含义与使用范围。", "同名不同义先澄清用途，再决定统一或保留明确变体。"], "links": [{"topicId": "asset-metadata", "sectionId": "dictionary-glossary", "itemId": "active-user", "label": "业务术语表与数据字典", "relation": "易混对比"}]}
     },
     {
       "id": "data-lineage", "zh": "数据血缘", "en": "Data Lineage", "abbr": "", "aliases": ["数据沿袭", "血缘关系"],
       "definition": "记录数据从哪里来、经过什么处理、流向哪里，以及资产之间如何依赖。它帮助追查错误和评估变更影响，但完整程度取决于接入与采集能力。",
       "distinction": "目录帮你找数据，血缘帮你看数据之间的生成关系；画出了关系图也不等于覆盖所有真实链路。",
       "example": "订单金额经过汇率换算进入收入表，再用于日报；血缘把这条加工路线连起来。",
-      "topicIds": ["asset-metadata", "asset-coverage"], "sourceIds": [5, 8], "extraSources": [], "origin": "source"
+      "topicIds": ["asset-metadata", "asset-coverage"], "sourceIds": [5, 8], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "依赖、变换与覆盖边界直接支撑变更、追因和删除。", "focus": "用血缘回答来源、去向与影响，并声明证据范围。", "checkpoints": ["说明表级、列级和记录级分别可回答什么。", "血缘图不能单独证明所有实际副本或个人记录位置。", "把静态关系与运行事件相互核验。"], "links": [{"topicId": "asset-granularity", "sectionId": "table-column-record", "itemId": "granularity-choice", "label": "按治理任务选血缘粒度", "relation": "应用"}, {"topicId": "asset-coverage", "sectionId": "static-runtime", "itemId": "complementary", "label": "静态与运行证据", "relation": "易混对比"}, {"topicId": "asset-sql", "sectionId": "lookup-join", "itemId": "lineage-coverage", "label": "外部维表的字段与版本来源", "relation": "应用"}, {"topicId": "ai-lineage", "sectionId": "parallel-data-routes", "itemId": "cross-stack-graph", "label": "跨日志、推理和训练追踪", "relation": "应用"}]}
     },
     {
       "id": "table-level-lineage", "zh": "表级血缘", "en": "Table-Level Lineage", "abbr": "", "aliases": ["表级数据血缘"],
       "definition": "以数据表为节点，记录哪些表被哪些任务读取并生成哪些目标表。它适合先看整体上下游关系，再决定是否需要深入到字段。",
       "distinction": "知道收入表依赖订单表，不代表知道收入字段具体取自哪个字段；那需要列级血缘。",
       "example": "订单表和退款表共同生成收入汇总表，表级血缘画出两条输入关系。",
-      "topicIds": ["asset-granularity", "asset-sql"], "sourceIds": [5, 8], "extraSources": [], "origin": "source"
+      "topicIds": ["asset-granularity", "asset-sql"], "sourceIds": [5, 8], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "总览依赖有价值，但需理解其字段定位局限。", "focus": "用表依赖做初步影响分析并识别需要加细的地方。", "checkpoints": ["表级边说明资产依赖，不等于具体列的派生关系。", "重要字段变更可能需要列级血缘与消费者确认。"], "links": [{"topicId": "asset-granularity", "sectionId": "table-column-record", "itemId": "granularity-choice", "label": "表级、列级与记录级边界", "relation": "易混对比"}, {"topicId": "asset-coverage", "sectionId": "unsupported-operators", "itemId": "impact-check", "label": "变更前检查依赖和盲区", "relation": "应用"}]}
     },
     {
       "id": "column-level-lineage", "zh": "列级血缘", "en": "Column-Level Lineage", "abbr": "", "aliases": ["字段血缘", "字段级血缘", "列级数据血缘"],
       "definition": "追踪目标字段由哪些源字段及转换产生，比表级关系更细。它能帮助判断修改一个字段会影响哪些报表指标或下游字段。",
       "distinction": "列级血缘描述字段关系，不自动给出某个用户每一行记录在哪些副本中；个人删除通常还需要身份映射。",
       "example": "net_amount 来自订单金额减退款金额；修改退款口径会影响这个目标字段。",
-      "topicIds": ["asset-granularity", "asset-sql", "asset-coverage"], "sourceIds": [8, 5], "extraSources": [], "origin": "source"
+      "topicIds": ["asset-granularity", "asset-sql", "asset-coverage"], "sourceIds": [8, 5], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "字段变更及敏感信息传播需要列级来源和变换。", "focus": "判断目标字段来自哪些输入，经过哪些处理。", "checkpoints": ["一列可以依赖多个源列。", "列来源集合与转换表达式不同。", "列级血缘不能直接充当逐用户删除索引。"], "links": [{"topicId": "asset-granularity", "sectionId": "origin-transformation", "itemId": "concat-example", "label": "来源集合与变换语义", "relation": "易混对比"}, {"topicId": "asset-sql", "sectionId": "sql-lineage", "itemId": "pipeline", "label": "从 SQL 计划提取列来源", "relation": "应用"}, {"topicId": "asset-sql", "sectionId": "lookup-join", "itemId": "lineage-coverage", "label": "补全字段的外部来源", "relation": "应用"}, {"topicId": "life-deletion", "sectionId": "deletion-pipeline", "itemId": "pipeline", "label": "删除范围还需要哪些证据", "relation": "应用"}]}
     },
     {
       "id": "record-level-lineage", "zh": "记录级血缘", "en": "Record-Level Lineage", "abbr": "", "aliases": ["行级血缘"],
       "definition": "把追踪粒度细化到某条记录及其生成或使用关系。这里是用于理解血缘粒度的学习扩展，实际系统能否做到要看标识、事件记录和计算方式。",
       "distinction": "列级说明哪个字段来自哪里，记录级继续追问某一条具体结果来自哪些输入；维护成本通常更高。",
       "example": "一条退款汇总记录需要追溯到参与计算的几笔退款，而不仅是退款金额字段。",
-      "topicIds": ["asset-granularity", "asset-provenance"], "sourceIds": [], "extraSources": [{"label":"W3C｜PROV：实体与派生关系模型","url":"https://www.w3.org/TR/prov-overview/"}], "origin": "extension"
+      "topicIds": ["asset-granularity", "asset-provenance"], "sourceIds": [], "extraSources": [{"label":"W3C｜PROV：实体与派生关系模型","url":"https://www.w3.org/TR/prov-overview/"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "精细追溯与规模成本之间有实际权衡，不能混同于列关系。", "focus": "评估具体记录可追溯性需要的身份与运行证据。", "checkpoints": ["明确追踪输入记录、结果记录还是用户所有副本。", "标识、采集范围与计算方式决定实际能力。", "更细粒度需要额外采集和维护成本。"], "links": [{"topicId": "asset-granularity", "sectionId": "table-column-record", "itemId": "granularity-choice", "label": "记录级追溯的用途与限制", "relation": "易混对比"}, {"topicId": "tpm-delete-case", "sectionId": "request-policy", "itemId": "identity-scope", "label": "用户身份与记录范围的确认", "relation": "应用"}]}
     },
     {
       "id": "data-provenance", "zh": "数据溯源", "en": "Data Provenance", "abbr": "", "aliases": ["数据来源", "来源追溯"],
       "definition": "记录数据如何产生以及谁参与了生成过程。W3C PROV 用实体、活动和参与者描述这些关系，范围可以超出最初的一个来源位置。",
       "distinction": "IBM 入门文对 Provenance 使用较窄表述；W3C 定义更广。因此不要把它一律记成只看第一来源。",
       "example": "模型输出由哪个版本的输入、哪次处理和哪个服务生成，都可以进入溯源记录。",
-      "topicIds": ["asset-provenance", "asset-metadata"], "sourceIds": [5], "extraSources": [{"label":"W3C｜PROV Overview","url":"https://www.w3.org/TR/prov-overview/"}], "origin": "extension"
+      "topicIds": ["asset-provenance", "asset-metadata"], "sourceIds": [5], "extraSources": [{"label":"W3C｜PROV Overview","url":"https://www.w3.org/TR/prov-overview/"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "生成历史、参与者和版本可补足依赖图无法表达的责任信息。", "focus": "用明确模型描述数据的产生及责任关系。", "checkpoints": ["W3C PROV 包含 Entity、Activity、Agent 及其关系。", "不能永久把 Provenance 限定为最初来源地址。", "记录输入/产物版本、处理活动和责任参与者。"], "links": [{"topicId": "asset-provenance", "sectionId": "lineage-provenance", "itemId": "scope", "label": "Lineage 与 Provenance 的使用范围", "relation": "易混对比"}, {"topicId": "asset-provenance", "sectionId": "prov-model", "itemId": "report-example", "label": "建立生成历史记录", "relation": "应用"}]}
     },
     {
       "id": "impact-analysis", "zh": "影响分析", "en": "Impact Analysis", "abbr": "", "aliases": ["变更影响分析"],
       "definition": "在修改数据结构、口径或处理任务前，沿依赖关系寻找可能受影响的下游。这样可以提前协调消费者、安排验证并控制变更范围。",
       "distinction": "影响分析通常向下游看变化会波及哪里；根因分析通常从异常向上游找原因。两者可使用同一张血缘图。",
       "example": "准备删除 customer_id 字段时，先确认哪些报表、服务和训练任务仍在使用它。",
-      "topicIds": ["asset-coverage", "asset-granularity"], "sourceIds": [5], "extraSources": [], "origin": "source"
+      "topicIds": ["asset-coverage", "asset-granularity"], "sourceIds": [5], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "数据结构或口径变更必须评估消费者与未知依赖。", "focus": "沿下游关系形成可验证的变更范围。", "checkpoints": ["识别受影响资产、消费者及使用承诺。", "检查血缘更新时间、解析失败与未接入链路。", "用迁移与验证条件补足依赖图。"], "links": [{"topicId": "asset-coverage", "sectionId": "unsupported-operators", "itemId": "impact-check", "label": "字段删除前检查盲区", "relation": "应用"}, {"topicId": "gov-ownership", "sectionId": "cross-domain", "itemId": "shared-table", "label": "跨团队变更决策", "relation": "应用"}, {"topicId": "asset-sql", "sectionId": "lookup-join", "itemId": "lineage-coverage", "label": "维度变更的下游影响", "relation": "应用"}]}
     },
     {
       "id": "root-cause-analysis", "zh": "根因分析", "en": "Root Cause Analysis", "abbr": "RCA", "aliases": ["根因排查", "故障追因"],
       "definition": "从观察到的问题逐步检查上游输入、处理步骤和运行证据，寻找真正导致异常的原因。血缘提供调查路线，但还要结合日志和数据检查。",
       "distinction": "看到某表在上游，不等于已经证明它是根因；依赖关系只是线索，需要时间和执行证据支持。",
       "example": "日报金额骤降，沿血缘查到汇率任务未更新，再用运行日志确认失败原因。",
-      "topicIds": ["asset-coverage", "gov-evidence"], "sourceIds": [5, 1], "extraSources": [], "origin": "source"
+      "topicIds": ["asset-coverage", "gov-evidence"], "sourceIds": [5, 1], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "血缘仅给线索，根因需要运行和质量证据确认。", "focus": "从症状提出并验证异常原因。", "checkpoints": ["区分上游相关性与已证实的因果。", "组合任务日志、时间、输入输出和质量检查。", "修复后验证恢复与持续改进。"], "links": [{"topicId": "asset-coverage", "sectionId": "static-runtime", "itemId": "complementary", "label": "用静态依赖和实际执行共同追因", "relation": "应用"}, {"topicId": "rel-improvement", "sectionId": "incident-learning", "itemId": "beyond-human-error", "label": "形成可验收的系统改进", "relation": "应用"}]}
     },
     {
       "id": "abstract-syntax-tree", "zh": "抽象语法树", "en": "Abstract Syntax Tree", "abbr": "AST", "aliases": ["语法树", "SQL AST"],
       "definition": "把 SQL 等代码的语法结构表示成一棵树，例如查询、字段和过滤条件成为不同节点。它由解析过程生成，方便程序进一步检查或转换代码。",
       "distinction": "AST 是树而非链表，也不是已经执行的结果；结构相似不等于业务含义完全相同，更不能直接据此删除任务。",
       "example": "SELECT price FROM orders 会解析成查询节点及其字段、来源表等子节点。",
-      "topicIds": ["asset-sql", "asset-coverage"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜SqlNode","url":"https://calcite.apache.org/javadocAggregate/org/apache/calcite/sql/SqlNode.html"}], "origin": "source"
+      "topicIds": ["asset-sql", "asset-coverage"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜SqlNode","url":"https://calcite.apache.org/javadocAggregate/org/apache/calcite/sql/SqlNode.html"}], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "结构表示与语义、序列化及等价性的区别有独立理解价值。", "focus": "解释 SQL 语法树如何支撑分析而不证明业务等价。", "checkpoints": ["AST 由解析生成，节点表达父子语法关系。", "序列化保存结构，特征提取选择比较信息。", "结构相似不能直接作为任务退役依据。"], "links": [{"topicId": "asset-sql", "sectionId": "ast-representation", "itemId": "tree-example", "label": "用 SQL 示例理解语法树", "relation": "应用"}, {"topicId": "asset-sql", "sectionId": "ast-representation", "itemId": "serialization-purpose", "label": "编码与特征表示", "relation": "易混对比"}, {"topicId": "asset-sql", "sectionId": "similarity-lineage", "itemId": "two-pipelines", "label": "血缘和相似性分析的不同目标", "relation": "应用"}]}
     },
     {
       "id": "sql-parsing", "zh": "SQL 解析", "en": "SQL Parsing", "abbr": "", "aliases": ["语法解析", "SQL 语法分析"],
       "definition": "识别 SQL 文本的语法结构并形成程序可处理的表示。之后通常还要校验表、字段和函数是否存在，再转换为关系运算计划。",
       "distinction": "Parse 解决结构能否读懂，Validate 继续检查名称和类型等；通过语法解析不表示 SQL 已经正确执行。",
       "example": "解析器识别 SELECT 和 WHERE；校验阶段再发现查询使用了不存在的字段。",
-      "topicIds": ["asset-sql", "asset-coverage"], "sourceIds": [8], "extraSources": [], "origin": "source"
+      "topicIds": ["asset-sql", "asset-coverage"], "sourceIds": [8], "extraSources": [], "origin": "source",
+      "learning": {"status": "reference", "rationale": "独立名称重复 AST 和查询管线考点，归入机制说明。", "focus": "定位解析与语义校验的分工。", "checkpoints": ["解析识别结构；校验还需检查名称、作用域和类型。"], "links": [{"topicId": "asset-sql", "sectionId": "sql-lineage", "itemId": "pipeline", "label": "Parse、Validate 与计划转换", "relation": "应用"}]}
     },
     {
       "id": "logical-plan", "zh": "逻辑计划", "en": "Logical Plan", "abbr": "", "aliases": ["逻辑查询计划", "优化逻辑计划"],
       "definition": "把查询写成扫描、过滤、投影、连接或聚合等关系运算，说明要做哪些数据操作。优化器可以在保持语义的前提下改写运算顺序。",
       "distinction": "AST 贴近 SQL 语法，逻辑计划贴近关系运算；物理计划进一步选择具体执行方法与资源安排。",
       "example": "先过滤当天订单再关联客户表，逻辑计划能够清楚显示过滤与连接的关系。",
-      "topicIds": ["asset-sql"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜Relational Algebra","url":"https://calcite.apache.org/docs/algebra.html"}], "origin": "source"
+      "topicIds": ["asset-sql"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜Relational Algebra","url":"https://calcite.apache.org/docs/algebra.html"}], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "关系运算表达与语法和物理执行之间的层次值得复习。", "focus": "解释逻辑计划如何支持优化与列血缘。", "checkpoints": ["识别扫描、过滤、投影、连接与聚合。", "逻辑计划说明关系运算，物理计划选具体算法与执行方式。", "逻辑依赖不证明某次任务实际成功执行。"], "links": [{"topicId": "asset-sql", "sectionId": "plan-layers", "itemId": "plans", "label": "AST、逻辑计划与物理计划", "relation": "易混对比"}, {"topicId": "asset-sql", "sectionId": "sql-lineage", "itemId": "pipeline", "label": "沿关系计划追溯字段", "relation": "应用"}]}
     },
     {
       "id": "physical-plan", "zh": "物理执行计划", "en": "Physical Execution Plan", "abbr": "", "aliases": ["物理计划", "物理查询计划"],
       "definition": "将逻辑上的数据操作落实为可以运行的具体执行方式，例如采用哪类连接策略、怎样分发数据和调度算子。它更接近实际运行过程。",
       "distinction": "字段血缘案例在逻辑计划阶段即可提取所需关系；并不是必须把查询真的提交执行后才能得到任何血缘。",
       "example": "逻辑上同样是两表连接，物理执行可能选择广播较小的表来减少数据传输。",
-      "topicIds": ["asset-sql"], "sourceIds": [8], "extraSources": [], "origin": "source"
+      "topicIds": ["asset-sql"], "sourceIds": [8], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "查询性能与实际执行策略需要与逻辑关系区分。", "focus": "从逻辑操作转向连接算法、交换和并行执行。", "checkpoints": ["同一逻辑关系可对应不同物理策略。", "物理计划仍不同于某次运行事实。"], "links": [{"topicId": "asset-sql", "sectionId": "plan-layers", "itemId": "plans", "label": "计划各层与运行证据", "relation": "易混对比"}, {"topicId": "rel-cost", "sectionId": "scan-diagnosis", "itemId": "scan-output", "label": "查询成本诊断需要的计划信息", "relation": "应用"}]}
     },
     {
       "id": "apache-calcite", "zh": "Calcite 查询框架", "en": "Apache Calcite", "abbr": "", "aliases": ["Calcite"],
       "definition": "供数据处理系统复用的查询规划与优化框架，包含 SQL 解析、关系表达式及元数据能力。Flink 血缘案例借用其中的列来源查询来构建字段关系。",
       "distinction": "Calcite 是框架，Flink 是处理系统；前者不等于一个独立负责保存所有业务数据的数据库产品。",
       "example": "应用取得目标列对应的关系节点，再向 Calcite 查询它依赖哪些源列。",
-      "topicIds": ["asset-sql"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜Relational Algebra","url":"https://calcite.apache.org/docs/algebra.html"}], "origin": "source"
+      "topicIds": ["asset-sql"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜Relational Algebra","url":"https://calcite.apache.org/docs/algebra.html"}], "origin": "source",
+      "learning": {"status": "reference", "rationale": "产品/框架名称本身不作为独立词卡；在血缘实现中解释职责。", "focus": "认识 Calcite 提供的规划与元数据能力。", "checkpoints": ["Calcite 是查询框架，不能等同于存储系统或完整 Flink 运行时。"], "links": [{"topicId": "asset-sql", "sectionId": "sql-lineage", "itemId": "pipeline", "label": "Calcite 节点与列来源接口的作用", "relation": "应用"}]}
     },
     {
       "id": "flink-sql", "zh": "Flink SQL", "en": "Apache Flink SQL", "abbr": "", "aliases": ["FlinkSQL", "Flink SQL"],
       "definition": "使用 SQL 表达 Flink 中的数据处理任务，可用于有界和无界数据的关系查询。平台把这些查询转换成处理计划，再由运行系统执行。",
       "distinction": "Flink 不只支持一种实时查询；批或流处理取决于数据与执行设置。这里的血缘案例也受所用版本限制。",
       "example": "持续读取订单事件，按时间窗口汇总成交额，并把结果写入下游数据表。",
-      "topicIds": ["asset-sql", "asset-coverage"], "sourceIds": [8], "extraSources": [{"label":"Apache Flink｜Applications","url":"https://flink.apache.org/what-is-flink/flink-applications/"}], "origin": "source"
+      "topicIds": ["asset-sql", "asset-coverage"], "sourceIds": [8], "extraSources": [{"label":"Apache Flink｜Applications","url":"https://flink.apache.org/what-is-flink/flink-applications/"}], "origin": "source",
+      "learning": {"status": "reference", "rationale": "品牌与接口名称不单独考记忆；具体流处理与关联机制保留为卡。", "focus": "定位 Flink SQL 在任务表达与执行中的位置。", "checkpoints": ["SQL 经解析、校验与计划后由运行系统处理，支持范围依版本。"], "links": [{"topicId": "asset-sql", "sectionId": "sql-lineage", "itemId": "pipeline", "label": "从 Flink SQL 到计划和血缘", "relation": "应用"}, {"topicId": "asset-sql", "sectionId": "lookup-join", "itemId": "mechanism", "label": "Flink SQL 维表补全实例", "relation": "应用"}]}
     },
     {
       "id": "calcite-sqlnode", "zh": "SQL 语法节点", "en": "SqlNode", "abbr": "", "aliases": ["SqlNode"],
       "definition": "Calcite 中表示 SQL 语法节点的基础类型，节点组合起来形成 SQL 语法树。解析与校验阶段处理这些节点，后续再转换成关系表达式。",
       "distinction": "SqlNode 表示语法，RelNode 表示关系运算；两种树描述的层次不同，不能仅凭名称相近就混用。",
       "example": "FROM 和 SELECT 中的内容先被表示为语法节点，然后再转成扫描、投影等运算。",
-      "topicIds": ["asset-sql"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜SqlNode API","url":"https://calcite.apache.org/javadocAggregate/org/apache/calcite/sql/SqlNode.html"}], "origin": "source"
+      "topicIds": ["asset-sql"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜SqlNode API","url":"https://calcite.apache.org/javadocAggregate/org/apache/calcite/sql/SqlNode.html"}], "origin": "source",
+      "learning": {"status": "reference", "rationale": "实现类型名属于查阅项，主考点在 AST 与关系计划分层。", "focus": "识别 SqlNode 表示 SQL 语法。", "checkpoints": ["SqlNode 不是 RelNode，也不是运行结果。"], "links": [{"topicId": "asset-sql", "sectionId": "sql-lineage", "itemId": "pipeline", "label": "SqlNode 在解析和校验阶段的位置", "relation": "应用"}]}
     },
     {
       "id": "calcite-relnode", "zh": "关系运算节点", "en": "RelNode", "abbr": "", "aliases": ["RelNode", "关系表达式树"],
       "definition": "Calcite 中表示关系运算的接口，扫描、过滤、连接等节点组合成计划。字段血缘案例沿着这些运算关系查询目标列的来源。",
       "distinction": "RelNode 不只意味着某一种优化阶段；要分清拿到的是原始逻辑、优化逻辑还是具有物理执行特性的计划。",
       "example": "Join 节点连接两个输入，Project 节点选择或计算需要写入目标表的字段。",
-      "topicIds": ["asset-sql"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜Relational Algebra","url":"https://calcite.apache.org/docs/algebra.html"}], "origin": "source"
+      "topicIds": ["asset-sql"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜Relational Algebra","url":"https://calcite.apache.org/docs/algebra.html"}], "origin": "source",
+      "learning": {"status": "reference", "rationale": "具体接口名保留解释入口，不单独增加名称记忆负担。", "focus": "识别 RelNode 表示关系运算节点。", "checkpoints": ["关系节点组合成计划，具体逻辑或物理特性需看实际节点。"], "links": [{"topicId": "asset-sql", "sectionId": "sql-lineage", "itemId": "pipeline", "label": "RelNode 与 SqlNode 的层次", "relation": "应用"}, {"topicId": "asset-sql", "sectionId": "plan-layers", "itemId": "plans", "label": "逻辑与物理计划的边界", "relation": "易混对比"}]}
     },
     {
       "id": "column-origins", "zh": "列来源查询", "en": "Column Origins (Calcite)", "abbr": "", "aliases": ["原始字段查询", "getColumnOrigins"],
       "definition": "查询一个输出列能够追溯到哪些输入表字段。Calcite 的 getColumnOrigins 是案例用到的接口，结果是否完整取决于相关算子的元数据处理能力。",
       "distinction": "找出来源列不自动等于保存完整转换表达式；遇到未支持的算子，也可能返回未知或缺少关系。",
       "example": "输出 full_name 来自 first_name 与 last_name，列来源查询应能找到两个输入列。",
-      "topicIds": ["asset-sql", "asset-coverage"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜RelMetadataQuery","url":"https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/metadata/RelMetadataQuery.html"}], "origin": "source"
+      "topicIds": ["asset-sql", "asset-coverage"], "sourceIds": [8], "extraSources": [{"label":"Apache Calcite｜RelMetadataQuery","url":"https://calcite.apache.org/javadocAggregate/org/apache/calcite/rel/metadata/RelMetadataQuery.html"}], "origin": "source",
+      "learning": {"status": "reference", "rationale": "API 专用名称可查阅；来源集合与表达式的概念已独立覆盖。", "focus": "理解 getColumnOrigins 返回的列来源信息及边界。", "checkpoints": ["来源列集合不等于完整转换表达式，未支持算子可能产生未知。"], "links": [{"topicId": "asset-sql", "sectionId": "sql-lineage", "itemId": "pipeline", "label": "Calcite 列来源查询的位置", "relation": "应用"}, {"topicId": "asset-granularity", "sectionId": "origin-transformation", "itemId": "concat-example", "label": "列来源与变换信息", "relation": "易混对比"}]}
     },
     {
       "id": "user-defined-function", "zh": "用户自定义函数", "en": "User-Defined Function", "abbr": "UDF", "aliases": ["自定义函数"],
       "definition": "开发者为查询系统补充的函数，用于内置能力无法直接表达的计算。函数可能返回标量、表或聚合结果，解析器未必知道函数内部的数据处理细节。",
       "distinction": "UDF 常作为大类名称；UDTF 是返回表式结果的一类函数，不要默认所有 UDF 都是一行输入对应一个值。",
       "example": "自定义清洗函数把各种手机号写法统一；血缘能否理解其中转换需要额外支持。",
-      "topicIds": ["asset-coverage", "asset-sql"], "sourceIds": [8], "extraSources": [{"label":"Apache Flink｜User-defined Functions","url":"https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/functions/udfs/"}], "origin": "source"
+      "topicIds": ["asset-coverage", "asset-sql"], "sourceIds": [8], "extraSources": [{"label":"Apache Flink｜User-defined Functions","url":"https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/functions/udfs/"}], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "自定义处理可能成为血缘与治理的黑盒。", "focus": "识别 UDF 类别及其来源、转换验证需求。", "checkpoints": ["UDF 是统称，不能都当作一行输入一个标量。", "SQL 能执行不代表血缘能解释函数内部。", "记录支持范围、版本和未知结果。"], "links": [{"topicId": "asset-coverage", "sectionId": "unsupported-operators", "itemId": "operator-gaps", "label": "自定义函数导致的血缘缺口", "relation": "应用"}, {"topicId": "asset-granularity", "sectionId": "origin-transformation", "itemId": "concat-example", "label": "函数变换为何影响数据含义", "relation": "应用"}]}
     },
     {
       "id": "user-defined-table-function", "zh": "用户自定义表函数", "en": "User-Defined Table Function", "abbr": "UDTF", "aliases": ["表函数"],
       "definition": "把一次输入转换成零行、一行或多行表式输出的自定义函数。它适合拆词等展开任务，也让输出字段与原输入之间的血缘解析更复杂。",
       "distinction": "标量函数通常返回一个值；表函数可以产生多行多列，需要明确每个输出字段怎样依赖输入。",
       "example": "将一句话拆成多行，每行包含一个单词和长度，这是知乎案例采用的表函数形式。",
-      "topicIds": ["asset-sql", "asset-coverage"], "sourceIds": [8], "extraSources": [{"label":"Apache Flink｜Table Functions","url":"https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/functions/udfs/"}], "origin": "source"
+      "topicIds": ["asset-sql", "asset-coverage"], "sourceIds": [8], "extraSources": [{"label":"Apache Flink｜Table Functions","url":"https://nightlies.apache.org/flink/flink-docs-stable/docs/dev/table/functions/udfs/"}], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "展开多行的语义会影响输出粒度和列级追溯。", "focus": "解释表函数输出与原输入的关系。", "checkpoints": ["一次输入可产生零行、一行或多行表式输出。", "需要说明每个输出字段及行如何依赖输入。", "标量函数与表函数的返回形态不同。"], "links": [{"topicId": "asset-coverage", "sectionId": "unsupported-operators", "itemId": "operator-gaps", "label": "UDTF 与复杂计划节点的支持", "relation": "易混对比"}, {"topicId": "asset-granularity", "sectionId": "origin-transformation", "itemId": "concat-example", "label": "来源关系与转换语义", "relation": "应用"}]}
     },
     {
-      "id": "lookup-join", "zh": "查找关联", "en": "Lookup Join", "abbr": "", "aliases": ["维表关联", "Lookup Join"],
-      "definition": "处理流中记录时，按键查询外部维表并补充信息的一种关联方式。案例中的特殊计划节点需要补充处理，否则维表字段可能漏出血缘图。",
-      "distinction": "普通 Join 与 Lookup Join 都是关联，但实现和计划节点可能不同；解析器支持一种不代表覆盖全部关联类型。",
-      "example": "订单流带有公司编号，处理时查维表补上公司名称，名称也应进入字段血缘。",
-      "topicIds": ["asset-sql", "asset-coverage"], "sourceIds": [8], "extraSources": [], "origin": "source"
+      "id": "lookup-join", "zh": "查找关联", "en": "Lookup Join", "abbr": "", "aliases": ["维表关联", "Lookup Join", "查找连接"],
+      "definition": "按事件中的关联键查询外部数据源，为记录补充维度属性的关联机制。Flink 中常用于处理时间维表补全，结果受源数据更新、查询时点和缓存影响。",
+      "distinction": "它不等同于按事件时间匹配历史版本，也不等同于两个流在时间区间内配对；处理时间 Temporal Join 与 Lookup Join 的名称存在交集。",
+      "example": "评论事件查询账号风险属性；既要评估缓存是否陈旧，也要记录外部字段血缘并限制组合结果的用途。",
+      "topicIds": ["asset-sql", "asset-coverage"], "sourceIds": [8], "extraSources": [{"label": "Apache Flink 2.3｜Joins", "url": "https://nightlies.apache.org/flink/flink-docs-release-2.3/docs/sql/reference/queries/joins/"}, {"label": "Apache Flink｜JDBC Lookup Cache", "url": "https://nightlies.apache.org/flink/flink-docs-stable/docs/connectors/table/jdbc/#lookup-cache"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "同时涉及外部依赖、时间语义、特征质量、血缘和隐私关联，不能仅归为语法。", "focus": "设计可解释、时效可控且用途受约束的维表补全。", "checkpoints": ["区分处理时查询、事件时版本匹配和区间关联；这些类别并非全互斥。", "核对缓存、未命中和源更新延迟对结果与重放的影响。", "登记外部字段来源，并审查组合后的用途、权限与留存。"], "links": [{"topicId": "asset-sql", "sectionId": "lookup-join", "itemId": "mechanism", "label": "外部维表补全如何运行", "relation": "应用"}, {"topicId": "asset-sql", "sectionId": "lookup-join", "itemId": "join-semantics", "label": "Lookup 与其他 Join 的时间语义", "relation": "易混对比"}, {"topicId": "asset-sql", "sectionId": "lookup-join", "itemId": "freshness-cache", "label": "风控特征新鲜度与缓存", "relation": "应用"}, {"topicId": "asset-sql", "sectionId": "lookup-join", "itemId": "lineage-coverage", "label": "外部维度字段的血缘与版本", "relation": "应用"}, {"topicId": "asset-sql", "sectionId": "lookup-join", "itemId": "privacy-linkage", "label": "补全后的个人关联和用途控制", "relation": "应用"}, {"topicId": "privacy-threats", "sectionId": "linking-identifying", "itemId": "anonymous-profile", "label": "关联风险与身份识别的区别", "relation": "易混对比"}, {"topicId": "risk-loop", "sectionId": "score-actions", "itemId": "graduated-response", "label": "迁移应用：补全特征陈旧或未知时的分级处置", "relation": "应用"}]}
     },
     {
       "id": "data-lifecycle-management", "zh": "数据生命周期管理", "en": "Data Lifecycle Management", "abbr": "DLM", "aliases": ["生命周期管理"],
       "definition": "管理数据从创建、存储、使用、共享到归档与删除的过程。每个阶段都需要约定责任、控制和退出条件，数据也可能在阶段间循环流转。",
       "distinction": "DLM 是整个生命周期的管理方式；TTL 只是其中一种过期机制，不能用一个过期时间代替全部生命周期策略。",
       "example": "订单日志先用于分析，低频后转冷层，到达允许删除条件时再执行并确认清理。",
-      "topicIds": ["life-stages", "life-retention"], "sourceIds": [4], "extraSources": [], "origin": "source"
+      "topicIds": ["life-stages", "life-retention"], "sourceIds": [4], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "贯穿产生、使用和退出，是本岗位核心治理对象。", "focus": "为所有生命周期分支配置责任、控制与退出条件。", "checkpoints": ["共享或导出会创建新的治理对象与责任。", "每一阶段都需要用途、访问和处置条件。", "TTL 只是其中一种过期机制。"], "links": [{"topicId": "life-stages", "sectionId": "stage-controls", "itemId": "stage-questions", "label": "生命周期各阶段的控制", "relation": "应用"}, {"topicId": "life-stages", "sectionId": "etl-elt", "itemId": "control-points", "label": "集成链路的原始与派生副本", "relation": "应用"}, {"topicId": "life-retention", "sectionId": "retention-scope", "itemId": "policy-fields", "label": "把退出条件写成策略", "relation": "应用"}]}
     },
     {
       "id": "information-lifecycle-management", "zh": "信息生命周期管理", "en": "Information Lifecycle Management", "abbr": "ILM", "aliases": [],
       "definition": "根据内容及其业务价值管理信息的整个生命周期。IBM 入门文用文件内信息与文件层级进行对比，帮助理解，但不同产品对 ILM 和 DLM 的用法有重叠。",
       "distinction": "不要把 DLM 永远等于文件、ILM 永远等于单行当成通用技术定律；实际设计要写清管理对象和策略。",
       "example": "同一文件中的不同客户信息可能有不同业务用途和维护要求，需要分别判断。",
-      "topicIds": ["life-stages"], "sourceIds": [4], "extraSources": [], "origin": "source"
+      "topicIds": ["life-stages"], "sourceIds": [4], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "与 DLM 的重叠需要说明语境，不能只按文件/字段机械区分。", "focus": "从信息价值和管理对象明确 ILM 的应用范围。", "checkpoints": ["说明业务价值、用途与维护需求。", "DLM/ILM 的产品命名有重叠，应明确实际粒度。"], "links": [{"topicId": "life-stages", "sectionId": "dlm-ilm", "itemId": "scope-not-size", "label": "DLM 与 ILM 的范围差异", "relation": "易混对比"}]}
     },
     {
       "id": "block-storage", "zh": "块存储", "en": "Block Storage", "abbr": "", "aliases": [],
       "definition": "以带地址的块为单位提供读写空间，上层文件系统或数据库负责组织内容。它像提供一块可用磁盘，自己并不靠业务文件名识别数据。",
       "distinction": "块存储不等于某一种文件类型专用，也不是天然只能单机使用；多机共享写需要相应文件系统和协调机制。",
       "example": "数据库把数据页写到云盘上；云盘提供块接口，数据库负责解释页里的记录。",
-      "topicIds": ["life-storage"], "sourceIds": [], "extraSources": [{"label":"AWS｜Block、File 与 Object Storage","url":"https://aws.amazon.com/compare/the-difference-between-block-file-object-storage/"},{"label":"AWS EBS｜Multi-Attach","url":"https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes-multi.html"}], "origin": "extension"
+      "topicIds": ["life-storage"], "sourceIds": [], "extraSources": [{"label":"AWS｜Block、File 与 Object Storage","url":"https://aws.amazon.com/compare/the-difference-between-block-file-object-storage/"},{"label":"AWS EBS｜Multi-Attach","url":"https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes-multi.html"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "访问抽象、随机更新和共享写要求决定存储适配。", "focus": "按块访问语义和工作负载选择底层存储。", "checkpoints": ["块提供逻辑地址空间，上层组织文件或记录。", "设备逻辑块、文件系统块和数据库页不是同一层。", "多主机共享写需要协调，不能只看是否可挂载。"], "links": [{"topicId": "life-storage", "sectionId": "storage-layers", "itemId": "abstractions", "label": "块、文件、对象的工作负载适配", "relation": "易混对比"}, {"topicId": "life-storage", "sectionId": "block-layout", "itemId": "read-write", "label": "各层数据单位与寻址", "relation": "应用"}, {"topicId": "life-storage", "sectionId": "san-nas", "itemId": "multiwriter", "label": "共享块卷的并发一致性", "relation": "应用"}]}
     },
     {
       "id": "file-storage", "zh": "文件存储", "en": "File Storage", "abbr": "", "aliases": [],
       "definition": "通过目录、路径和文件名组织数据，应用使用文件操作来读取或修改内容。它适合需要共享文件或依赖已有文件系统接口的应用。",
       "distinction": "文件访问是一层抽象，底下仍可能用块或其他存储实现；具体一致性和随机写能力要看产品。",
       "example": "多个分析程序通过共享目录访问同一批输入文件，而不用直接处理磁盘块地址。",
-      "topicIds": ["life-storage"], "sourceIds": [], "extraSources": [{"label":"AWS｜Block、File 与 Object Storage","url":"https://aws.amazon.com/compare/the-difference-between-block-file-object-storage/"}], "origin": "extension"
+      "topicIds": ["life-storage"], "sourceIds": [], "extraSources": [{"label":"AWS｜Block、File 与 Object Storage","url":"https://aws.amazon.com/compare/the-difference-between-block-file-object-storage/"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "应用接口与共享语义的选择具有独立架构意义。", "focus": "依据路径操作、共享访问和兼容性评估文件存储。", "checkpoints": ["文件接口与底层块设备可组合。", "文件系统是否支持所需 POSIX/锁/更新语义需核对。", "HPC 共享文件需求不代表底层不能使用块。"], "links": [{"topicId": "life-storage", "sectionId": "storage-layers", "itemId": "abstractions", "label": "文件存储与块、对象比较", "relation": "易混对比"}, {"topicId": "life-storage", "sectionId": "posix-http", "itemId": "full-name", "label": "文件接口的语义和兼容性", "relation": "应用"}, {"topicId": "life-storage", "sectionId": "hpc-filesystem", "itemId": "why-parallel-fs", "label": "并行文件系统如何协调共享", "relation": "应用"}]}
     },
     {
       "id": "object-storage", "zh": "对象存储", "en": "Object Storage", "abbr": "", "aliases": [],
       "definition": "将内容连同元数据作为对象保存，通过对象键和接口访问。它常用于大规模文件、媒体和数据湖，但更新、延迟与一致性特性由具体服务决定。",
       "distinction": "对象键看起来像目录路径，不代表具备完整文件系统语义；也不能一概认定对象存储永远不能局部更新。",
       "example": "用唯一对象键保存一段视频，业务表只记录该键及视频的业务信息。",
-      "topicIds": ["life-storage", "life-tiering"], "sourceIds": [], "extraSources": [{"label":"AWS｜Block、File 与 Object Storage","url":"https://aws.amazon.com/compare/the-difference-between-block-file-object-storage/"}], "origin": "extension"
+      "topicIds": ["life-storage", "life-tiering"], "sourceIds": [], "extraSources": [{"label":"AWS｜Block、File 与 Object Storage","url":"https://aws.amazon.com/compare/the-difference-between-block-file-object-storage/"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "对象 API、工作负载与数据湖架构之间存在重要层次区别。", "focus": "按对象访问模式评估大规模数据承载。", "checkpoints": ["对象键与完整文件系统语义不同。", "HTTP 协议不能单独确定后端数据模型。", "对象存储是数据湖可能的底座，不是完整数据湖。"], "links": [{"topicId": "life-storage", "sectionId": "storage-layers", "itemId": "abstractions", "label": "对象与块、文件访问差异", "relation": "易混对比"}, {"topicId": "life-storage", "sectionId": "posix-http", "itemId": "webhdfs-counterexample", "label": "协议与存储模型的区别", "relation": "应用"}, {"topicId": "life-storage", "sectionId": "hdfs-lake", "itemId": "same-layer-choice", "label": "数据湖存储选型", "relation": "应用"}, {"topicId": "life-tiering", "sectionId": "restore-cost", "itemId": "not-transparent", "label": "对象存储类别的取回和总成本", "relation": "应用"}]}
     },
     {
       "id": "storage-area-network", "zh": "存储区域网络", "en": "Storage Area Network", "abbr": "SAN", "aliases": ["块存储网络"],
       "definition": "让服务器通过专用存储网络访问存储设备的架构，通常向主机提供块级访问。主机可以在这些空间上建立文件系统或供数据库使用。",
       "distinction": "SAN 通常提供块访问，NAS 通常提供文件访问；不能只凭缩写判断谁一定更快，要看配置和负载。",
       "example": "数据库服务器通过 SAN 访问远端存储卷，操作方式类似使用本地磁盘。",
-      "topicIds": ["life-storage"], "sourceIds": [], "extraSources": [{"label":"IBM｜Storage Area Network","url":"https://www.ibm.com/think/topics/storage-area-network"}], "origin": "extension"
+      "topicIds": ["life-storage"], "sourceIds": [], "extraSources": [{"label":"IBM｜Storage Area Network","url":"https://www.ibm.com/think/topics/storage-area-network"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "块访问架构与主机侧职责的区别可用于实际选型。", "focus": "比较 SAN 与 NAS 的管理和共享责任。", "checkpoints": ["SAN 常向主机提供块级空间，由主机管理文件或数据库结构。", "性能取决于网络、设备与负载，不能仅按类型排序。", "共享写的协调责任必须明确。"], "links": [{"topicId": "life-storage", "sectionId": "san-nas", "itemId": "client-view", "label": "SAN 与 NAS 的接口与职责", "relation": "易混对比"}, {"topicId": "life-storage", "sectionId": "san-nas", "itemId": "multiwriter", "label": "多主机写入的协调要求", "relation": "应用"}]}
     },
     {
       "id": "network-attached-storage", "zh": "网络附加存储", "en": "Network-Attached Storage", "abbr": "NAS", "aliases": ["网络连接存储"],
       "definition": "通过网络向客户端提供文件共享的存储系统，常使用 NFS 或 SMB 等协议。用户通常操作共享文件夹，而不需要自己管理远端的裸块空间。",
       "distinction": "NAS 的核心是网络文件服务，不是所有远程存储的统称；通过网络访问对象存储也不会使其变成 NAS。",
       "example": "设计和分析团队通过同一共享目录交换文件，权限由文件共享服务管理。",
-      "topicIds": ["life-storage"], "sourceIds": [], "extraSources": [{"label":"IBM｜Network-Attached Storage","url":"https://www.ibm.com/think/topics/network-attached-storage"}], "origin": "extension"
+      "topicIds": ["life-storage"], "sourceIds": [], "extraSources": [{"label":"IBM｜Network-Attached Storage","url":"https://www.ibm.com/think/topics/network-attached-storage"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "网络文件共享不是所有网络存储的泛称。", "focus": "评估共享文件接口及其语义。", "checkpoints": ["NAS 通常通过文件协议提供目录与文件操作。", "远程对象服务不是因为联网就成为 NAS。", "核对权限、锁、元数据操作和并发负载。"], "links": [{"topicId": "life-storage", "sectionId": "san-nas", "itemId": "client-view", "label": "NAS 与 SAN 的管理边界", "relation": "易混对比"}, {"topicId": "life-storage", "sectionId": "posix-http", "itemId": "full-name", "label": "应用需要的文件接口语义", "relation": "应用"}]}
     },
     {
       "id": "posix", "zh": "可移植操作系统接口", "en": "Portable Operating System Interface", "abbr": "POSIX", "aliases": ["POSIX 接口", "POSIX 标准"],
       "definition": "一组帮助应用在兼容操作系统间移植的接口与行为标准，文件操作只是其中一部分。它约定接口语义，并不指定底层硬件和实现方式。",
       "distinction": "符合 POSIX 不等于一定有微秒延迟，也不代表所有分布式文件系统都完整符合这些语义。",
       "example": "应用用标准文件接口打开和读取文件，有机会在多个兼容系统上复用相同代码。",
-      "topicIds": ["life-storage"], "sourceIds": [], "extraSources": [{"label":"The Open Group｜POSIX.1 FAQ","url":"https://www.opengroup.org/austin/papers/posix_faq.html"},{"label":"POSIX.1-2024｜Introduction","url":"https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap01.html"}], "origin": "extension"
+      "topicIds": ["life-storage"], "sourceIds": [], "extraSources": [{"label":"The Open Group｜POSIX.1 FAQ","url":"https://www.opengroup.org/austin/papers/posix_faq.html"},{"label":"POSIX.1-2024｜Introduction","url":"https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap01.html"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "接口标准与通信协议、性能承诺的区分是重要架构基础。", "focus": "根据应用所需文件语义判断可移植性与适配成本。", "checkpoints": ["全称 Portable Operating System Interface；文件只是标准的一部分。", "接口语义不是硬件实现或固定延迟承诺。", "区分 POSIX 标准、HTTP 协议与 REST 风格。"], "links": [{"topicId": "life-storage", "sectionId": "posix-http", "itemId": "full-name", "label": "POSIX 与 HTTP REST 的抽象层次", "relation": "易混对比"}, {"topicId": "life-storage", "sectionId": "posix-http", "itemId": "webhdfs-counterexample", "label": "接口与底层数据模型的独立性", "relation": "应用"}, {"topicId": "life-storage", "sectionId": "hpc-filesystem", "itemId": "why-parallel-fs", "label": "HPC 应用为何依赖共享文件语义", "relation": "应用"}]}
     },
     {
       "id": "object-rest-api", "zh": "对象存储 REST 接口", "en": "Object Storage REST API", "abbr": "", "aliases": ["HTTP REST API"],
       "definition": "通过网络请求操作对象存储资源的接口形式，例如上传、读取或删除一个对象。REST 是架构风格，HTTP 是常用通信协议，两者不是同一个概念。",
       "distinction": "HTTP 接口描述调用方式，不自动决定一致性、延迟或更新粒度；这些仍由具体服务的接口和实现保证。",
       "example": "应用向对象服务发送上传请求，并用对象键读取内容，而不是执行本地文件写入。",
-      "topicIds": ["life-storage"], "sourceIds": [], "extraSources": [{"label":"Amazon S3｜REST API Reference","url":"https://docs.aws.amazon.com/AmazonS3/latest/API/Welcome.html"}], "origin": "extension"
+      "topicIds": ["life-storage"], "sourceIds": [], "extraSources": [{"label":"Amazon S3｜REST API Reference","url":"https://docs.aws.amazon.com/AmazonS3/latest/API/Welcome.html"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "调用协议与资源操作语义容易混同，保留为接口判断考点。", "focus": "用产品 API 合同判断对象操作和应用适配。", "checkpoints": ["REST 是架构风格，HTTP 是常用协议。", "HTTP API 也可服务文件系统，例如 WebHDFS。", "对象更新、权限和一致性应按产品接口核对。"], "links": [{"topicId": "life-storage", "sectionId": "posix-http", "itemId": "full-name", "label": "文件接口与对象 API 的适配", "relation": "易混对比"}, {"topicId": "life-storage", "sectionId": "posix-http", "itemId": "webhdfs-counterexample", "label": "传输方式不决定存储模型", "relation": "应用"}]}
     },
     {
       "id": "hdfs", "zh": "Hadoop 分布式文件系统", "en": "Hadoop Distributed File System", "abbr": "HDFS", "aliases": [],
       "definition": "将大文件分布到多台机器上保存的文件系统，重视大规模顺序读写和吞吐量。它通过数据块与副本支持分布式处理，并有自己的访问和写入约束。",
       "distinction": "HDFS 提供文件系统抽象，但不完整遵循 POSIX，也不适合被理解成任意位置都能随时修改的普通本地文件。",
       "example": "大型日志被拆成多个 HDFS 数据块，计算任务并行读取各部分进行统计。",
-      "topicIds": ["life-storage", "life-backup"], "sourceIds": [1], "extraSources": [{"label":"Apache Hadoop｜HDFS Architecture","url":"https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html"}], "origin": "extension"
+      "topicIds": ["life-storage", "life-backup"], "sourceIds": [1], "extraSources": [{"label":"Apache Hadoop｜HDFS Architecture","url":"https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "分布式文件系统机制及其在数据湖中的位置值得理解。", "focus": "说明 HDFS 的组件、访问特征和架构边界。", "checkpoints": ["NameNode 管元数据，DataNode 管块数据。", "HDFS 放宽部分 POSIX 语义，面向大文件吞吐。", "HDFS 可作数据湖底座，不能与整体数据湖作同层二选一。"], "links": [{"topicId": "life-storage", "sectionId": "hdfs-lake", "itemId": "hdfs-internals", "label": "NameNode 与 DataNode 职责", "relation": "应用"}, {"topicId": "life-storage", "sectionId": "hdfs-lake", "itemId": "levels", "label": "HDFS 与数据湖的关系", "relation": "易混对比"}, {"topicId": "life-storage", "sectionId": "hdfs-lake", "itemId": "same-layer-choice", "label": "HDFS 与对象存储选型", "relation": "应用"}]}
     },
     {
       "id": "data-lake", "zh": "数据湖", "en": "Data Lake", "abbr": "", "aliases": [],
       "definition": "保存多种形式数据以支持后续处理和分析的架构，常保留较接近原始形式的数据。现代实现经常使用对象存储，但仍需要元数据、权限和生命周期管理。",
       "distinction": "数据湖是数据架构，对象存储是可能使用的存储底座；买了对象存储并不等于建好了可治理的数据湖。",
       "example": "把日志、图片和事件数据统一纳入湖中，再按需要供分析或训练任务使用。",
-      "topicIds": ["life-storage", "asset-inventory"], "sourceIds": [3, 5], "extraSources": [{"label":"IBM｜Data Lake","url":"https://www.ibm.com/think/topics/data-lake"}], "origin": "extension"
+      "topicIds": ["life-storage", "asset-inventory"], "sourceIds": [3, 5], "extraSources": [{"label":"IBM｜Data Lake","url":"https://www.ibm.com/think/topics/data-lake"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "整体架构与存储底座的边界影响治理设计和选型。", "focus": "说明可治理数据湖需要哪些组合能力。", "checkpoints": ["区分接入、存储、计算、目录和治理职责。", "数据湖可使用 HDFS 或对象存储，不是单一产品。", "存算分离是部署维度，不是全部数据湖的定义。"], "links": [{"topicId": "life-storage", "sectionId": "hdfs-lake", "itemId": "levels", "label": "数据湖与 HDFS、数仓、湖仓", "relation": "易混对比"}, {"topicId": "life-storage", "sectionId": "hdfs-lake", "itemId": "composable-lake", "label": "组合数据湖的基础能力", "relation": "应用"}, {"topicId": "life-stages", "sectionId": "etl-elt", "itemId": "control-points", "label": "原始层与派生层的治理", "relation": "应用"}]}
     },
     {
       "id": "data-warehouse", "zh": "数据仓库", "en": "Data Warehouse", "abbr": "DW", "aliases": ["数仓"],
       "definition": "为分析、报表和决策组织与整合数据的系统，通常提供稳定的数据模型和查询能力。它会把多个业务来源的数据整理成可持续使用的分析结构。",
       "distinction": "业务数据库主要服务交易操作，数据仓库主要服务分析；数据目录负责发现与解释资产，也不能替代数仓。",
       "example": "把订单、退款和广告投入整合成每日经营报表所需的数据模型。",
-      "topicIds": ["life-storage", "asset-inventory"], "sourceIds": [1, 3, 5], "extraSources": [{"label":"IBM｜Data Warehouse","url":"https://www.ibm.com/think/topics/data-warehouse"}], "origin": "source"
+      "topicIds": ["life-storage", "asset-inventory"], "sourceIds": [1, 3, 5], "extraSources": [{"label":"IBM｜Data Warehouse","url":"https://www.ibm.com/think/topics/data-warehouse"}], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "分析模型与交易存储、目录和湖的职责需要区分。", "focus": "根据分析用途解释数据仓库的角色。", "checkpoints": ["数仓组织面向分析的数据模型与查询服务。", "数据目录用于发现理解，不能替代数仓。", "不能用某一种磁盘或云产品来定义数仓。"], "links": [{"topicId": "life-storage", "sectionId": "hdfs-lake", "itemId": "levels", "label": "数据仓库与湖、湖仓的架构定位", "relation": "易混对比"}, {"topicId": "life-stages", "sectionId": "etl-elt", "itemId": "processing-order", "label": "分析目标平台的转换顺序", "relation": "应用"}]}
     },
     {
       "id": "data-lakehouse", "zh": "湖仓一体", "en": "Data Lakehouse", "abbr": "", "aliases": ["湖仓架构"],
       "definition": "在数据湖较灵活的存储基础上加入表管理、事务和分析等能力的架构。它希望让多种分析与机器学习场景共享可管理的数据基础。",
       "distinction": "Lakehouse 不是把两个名称拼起来就完成建设；需要具体表格式、计算引擎、元数据与治理机制配合。",
       "example": "对象存储承载数据文件，开放表格式管理版本，再由多个计算引擎读取。",
-      "topicIds": ["life-storage", "life-tiering"], "sourceIds": [], "extraSources": [{"label":"IBM｜Data Lakehouse","url":"https://www.ibm.com/think/topics/data-lakehouse"}], "origin": "extension"
+      "topicIds": ["life-storage", "life-tiering"], "sourceIds": [], "extraSources": [{"label":"IBM｜Data Lakehouse","url":"https://www.ibm.com/think/topics/data-lakehouse"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "表管理、可靠性与多引擎共享构成架构判断点。", "focus": "识别湖仓架构中存储、表格式、计算和治理的职责。", "checkpoints": ["湖仓在湖基础上组合表管理、事务和分析能力。", "换文件格式或名称不等于具备完整湖仓能力。", "多引擎使用时仍需一致的元数据和访问约束。"], "links": [{"topicId": "life-storage", "sectionId": "hdfs-lake", "itemId": "levels", "label": "数据湖、数仓与湖仓比较", "relation": "易混对比"}, {"topicId": "life-tiering", "sectionId": "safe-migration", "itemId": "commit-sequence", "label": "表元数据、快照与并发提交", "relation": "应用"}]}
     },
     {
       "id": "storage-tiering", "zh": "存储分层", "en": "Storage Tiering", "abbr": "", "aliases": ["冷热分层", "冷热数据分层", "温存降级"],
       "definition": "按访问频率、业务重要性和恢复需求，将数据放到合适的存储层级。决策应综合保存、请求、迁移与取回成本，而不只是比较每月容量单价。",
       "distinction": "把数据移到冷层不是删除；降低存储单价也可能增加取回费用或恢复等待时间，需要一起评估。",
       "example": "近期常查日志留在热层，低频历史日志转冷层，但关键审计数据保留可接受的恢复能力。",
-      "topicIds": ["life-tiering", "life-stages"], "sourceIds": [2], "extraSources": [{"label":"AWS S3｜Lifecycle Transitions","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html"}], "origin": "extension"
+      "topicIds": ["life-tiering", "life-stages"], "sourceIds": [2], "extraSources": [{"label":"AWS S3｜Lifecycle Transitions","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "存储成本优化必须与服务时效、业务价值和退出要求一起判断。", "focus": "设计基于需求的分层策略并证明总成本改善。", "checkpoints": ["综合年龄、频次、最近访问和业务恢复要求。", "计入迁移、请求、取回及最低计费等成本。", "验证查询/恢复，防止频繁往返迁移。"], "links": [{"topicId": "life-tiering", "sectionId": "heat-policy", "itemId": "heat-inputs", "label": "按热度与业务约束选择层级", "relation": "应用"}, {"topicId": "life-tiering", "sectionId": "tiering-architecture", "itemId": "components", "label": "自动分层的职责分工", "relation": "应用"}, {"topicId": "life-tiering", "sectionId": "restore-cost", "itemId": "not-transparent", "label": "取回时效与总成本", "relation": "应用"}]}
     },
     {
       "id": "hot-warm-cold-storage", "zh": "热温冷存储", "en": "Hot, Warm & Cold Storage", "abbr": "", "aliases": ["热数据", "温数据", "冷数据", "冷存储"],
       "definition": "用访问需求区分存储层的常见说法：热层偏向频繁访问，冷层偏向较少访问，温层位于中间。名称和具体能力会随产品而变化。",
       "distinction": "数据年龄大不一定冷，历史报表也可能天天被查询；冷层也不必然需要解冻，应看具体存储类别。",
       "example": "两年前的财务基准表仍被高频读取，就不应只因时间较久而自动归入最冷层。",
-      "topicIds": ["life-tiering"], "sourceIds": [2], "extraSources": [{"label":"AWS S3｜Storage Classes 与生命周期迁移","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html"}], "origin": "extension"
+      "topicIds": ["life-tiering"], "sourceIds": [2], "extraSources": [{"label":"AWS S3｜Storage Classes 与生命周期迁移","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html"}], "origin": "extension",
+      "learning": {"status": "reference", "rationale": "相对类别名不单独增加记忆卡；实质考点由存储分层覆盖。", "focus": "理解层级名称需要结合产品能力。", "checkpoints": ["冷不等于旧，冷层也不都需要解冻；要看实际访问与取回机制。"], "links": [{"topicId": "life-tiering", "sectionId": "heat-policy", "itemId": "heat-inputs", "label": "热度、年龄与业务价值", "relation": "应用"}, {"topicId": "life-tiering", "sectionId": "restore-cost", "itemId": "not-transparent", "label": "冷层和归档层的能力差异", "relation": "易混对比"}]}
     },
     {
       "id": "data-archiving", "zh": "数据归档", "en": "Data Archiving", "abbr": "", "aliases": ["归档存储", "深度归档"],
       "definition": "将日常较少使用但仍需保留的数据按明确策略保存，以便以后检索或恢复。归档需要考虑保留条件、检索能力及可接受的恢复等待时间。",
       "distinction": "归档重在长期保存和查阅，备份重在恢复；Archive 与 Deep Archive 也可能是具体产品类别，能力不能混为一谈。",
       "example": "已结项项目的记录进入归档，平时不参与在线查询，需要复核时按流程取回。",
-      "topicIds": ["life-tiering", "life-backup", "life-stages"], "sourceIds": [4], "extraSources": [{"label":"AWS S3｜Archive Storage Transitions","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html"}], "origin": "source"
+      "topicIds": ["life-tiering", "life-backup", "life-stages"], "sourceIds": [4], "extraSources": [{"label":"AWS S3｜Archive Storage Transitions","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-transition-general-considerations.html"}], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "长期留存与恢复备份的目标不同，取回能力有实际约束。", "focus": "说明归档的保留目的、检索和恢复要求。", "checkpoints": ["归档与备份、复制不能简单互相替代。", "确认保留依据、取回时延和长期成本。", "归档数据仍需权限和删除责任。"], "links": [{"topicId": "life-backup", "sectionId": "three-protections", "itemId": "failure-types", "label": "归档、复制与备份的保护目标", "relation": "易混对比"}, {"topicId": "life-tiering", "sectionId": "restore-cost", "itemId": "not-transparent", "label": "归档取回及查询时效", "relation": "应用"}, {"topicId": "life-retention", "sectionId": "retention-scope", "itemId": "policy-fields", "label": "归档对象的退出条件", "relation": "应用"}]}
     },
     {
       "id": "data-compaction", "zh": "数据文件合并", "en": "File Compaction", "abbr": "", "aliases": ["小文件合并", "Compaction"],
       "definition": "在本数据湖场景中，将多个小数据文件重写合并为更适合读取和维护的布局，以减少文件打开、元数据与调度开销。其他存储系统中的 compaction 可能还有合并版本、清理过期项等语义。",
       "distinction": "Compaction 不等于 Compression：前者重点是整理布局，后者重点是减少编码后的体积，两者可以同时发生。",
       "example": "将上千个很小的日志文件合并成较大文件，减少查询需要打开的文件数量。",
-      "topicIds": ["life-tiering", "life-deletion"], "sourceIds": [6], "extraSources": [{"label":"Apache Iceberg｜Maintenance：Compact Data Files","url":"https://iceberg.apache.org/docs/latest/maintenance/"}], "origin": "extension"
+      "topicIds": ["life-tiering", "life-deletion"], "sourceIds": [6], "extraSources": [{"label":"Apache Iceberg｜Maintenance：Compact Data Files","url":"https://iceberg.apache.org/docs/latest/maintenance/"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "布局优化与压缩、快照安全及重写成本之间有明确考点。", "focus": "判断文件合并是否改善查询总成本。", "checkpoints": ["File Compaction 整理布局，Compression 减少编码字节。", "小文件开销来自打开、元数据和任务调度等。", "重写需计算 I/O，并处理旧快照和并发引用。"], "links": [{"topicId": "life-tiering", "sectionId": "safe-migration", "itemId": "compaction", "label": "文件合并与压缩的不同目标", "relation": "易混对比"}, {"topicId": "life-tiering", "sectionId": "safe-migration", "itemId": "commit-sequence", "label": "重写后提交与旧文件清理", "relation": "应用"}]}
     },
     {
       "id": "data-backup", "zh": "数据备份", "en": "Data Backup", "abbr": "", "aliases": ["备份副本"],
       "definition": "为以后恢复数据或系统而保留的副本，通常对应某个时间点或变化集合。备份是否有用，需要通过恢复验证，而不仅是看到备份任务成功。",
       "distinction": "持续复制可能同步误删；备份通常帮助回到过去的状态。备份也有过期和删除责任，不是永久保留的理由。",
       "example": "今天误改了大量记录，使用经过验证的昨日备份恢复到可用状态。",
-      "topicIds": ["life-backup", "life-deletion"], "sourceIds": [4, 6], "extraSources": [], "origin": "source"
+      "topicIds": ["life-backup", "life-deletion"], "sourceIds": [4, 6], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "恢复、保留与删除之间的权衡是生命周期的核心。", "focus": "以可恢复能力和生命周期约束评价备份。", "checkpoints": ["备份提供恢复点，不等同在线复制。", "实际验证密钥、配置、数据和业务恢复。", "旧备份过期与恢复后删除控制都需纳入范围。"], "links": [{"topicId": "life-backup", "sectionId": "three-protections", "itemId": "failure-types", "label": "备份与复制、归档", "relation": "易混对比"}, {"topicId": "life-backup", "sectionId": "restore-test", "itemId": "restore-path", "label": "端到端恢复验证", "relation": "应用"}, {"topicId": "tpm-delete-case", "sectionId": "completion-restoration", "itemId": "restore-and-unlearning", "label": "恢复后防止已删除数据回流", "relation": "应用"}]}
     },
     {
       "id": "data-replication", "zh": "数据复制", "en": "Data Replication", "abbr": "", "aliases": ["活跃副本", "复制副本"],
       "definition": "在多个位置维护数据副本，以支持可用性、访问性能或故障切换。复制的及时程度与一致性方式由系统决定，删除操作也需要考虑这些副本。",
       "distinction": "Replication 侧重维持可用副本，不自动提供历史恢复点；如果删除同步到了所有副本，仍可能需要独立备份恢复。",
       "example": "数据库跨可用区保存副本，一个节点故障后由另一个副本继续服务。",
-      "topicIds": ["life-backup", "life-deletion"], "sourceIds": [6], "extraSources": [], "origin": "source"
+      "topicIds": ["life-backup", "life-deletion"], "sourceIds": [6], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "高可用副本与历史恢复点的边界决定故障和删除方案。", "focus": "评估复制如何改善服务，并识别它不能防止的故障。", "checkpoints": ["同步程度和一致性取决于系统设计。", "误写和误删可能传播到所有在线副本。", "删除与访问控制必须考虑所有相关副本。"], "links": [{"topicId": "life-backup", "sectionId": "three-protections", "itemId": "failure-types", "label": "复制和备份的故障覆盖", "relation": "易混对比"}, {"topicId": "life-deletion", "sectionId": "deletion-pipeline", "itemId": "pipeline", "label": "将活跃副本纳入删除编排", "relation": "应用"}]}
     },
     {
       "id": "data-restore", "zh": "数据恢复", "en": "Data Restore", "abbr": "", "aliases": ["备份恢复", "归档取回", "解冻"],
       "definition": "把备份或归档中的数据重新变成可使用状态的操作。恢复可能涉及数据取回、重建索引和一致性检查，需要验证完成时间与实际可用性。",
       "distinction": "备份成功不等于恢复成功；冷归档取回和系统灾难恢复也是不同范围，不能只用一个等待时间概括。",
       "example": "从备份恢复数据库后，验证记录完整性，并检查已经生效的删除要求是否仍被遵守。",
-      "topicIds": ["life-backup", "life-tiering"], "sourceIds": [4, 6], "extraSources": [], "origin": "source"
+      "topicIds": ["life-backup", "life-tiering"], "sourceIds": [4, 6], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "恢复操作的可用性验证和控制一致性比字面取回更重要。", "focus": "验证数据可用与约束仍然有效的完整恢复流程。", "checkpoints": ["备份任务成功不等于恢复成功。", "检查密钥、依赖、数据一致性与服务可用性。", "恢复后重新核对删除和访问限制。"], "links": [{"topicId": "life-backup", "sectionId": "restore-test", "itemId": "restore-path", "label": "恢复测试的验收内容", "relation": "应用"}, {"topicId": "life-tiering", "sectionId": "restore-cost", "itemId": "not-transparent", "label": "归档取回与即时可读的区别", "relation": "易混对比"}, {"topicId": "tpm-delete-case", "sectionId": "completion-restoration", "itemId": "restore-and-unlearning", "label": "防止旧数据恢复后重新被使用", "relation": "应用"}]}
     },
     {
       "id": "soft-deletion", "zh": "软删除", "en": "Soft Deletion", "abbr": "", "aliases": ["Soft Delete"],
       "definition": "把数据或资源置于已删除但在一定条件下仍可恢复的状态，用于防止误删。Google Cloud 案例中，这类恢复窗口位于后续清理步骤之前。",
       "distinction": "软删除常强调可恢复状态，逻辑删除强调系统层面的移除；不同产品叫法会重叠，要看实际行为和完成条件。",
       "example": "用户误删存储资源后，在产品规定的恢复窗口内可以申请找回。",
-      "topicIds": ["life-deletion"], "sourceIds": [6], "extraSources": [{"label":"Google Cloud Storage｜Soft Delete","url":"https://docs.cloud.google.com/storage/docs/soft-delete"}], "origin": "source"
+      "topicIds": ["life-deletion"], "sourceIds": [6], "extraSources": [{"label":"Google Cloud Storage｜Soft Delete","url":"https://docs.cloud.google.com/storage/docs/soft-delete"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "恢复窗口与最终清除之间的状态区别直接影响用户承诺。", "focus": "准确描述软删除的可访问性、可恢复性和退出条件。", "checkpoints": ["软删除通常保留受条件限制的恢复能力。", "与逻辑删除的术语范围可能重叠，需说明产品语境。", "恢复窗口、后续清理和备份阶段不能合成一个成功状态。"], "links": [{"topicId": "life-deletion", "sectionId": "deletion-states", "itemId": "delete-meaning", "label": "软删除、逻辑删除与底层清理", "relation": "易混对比"}, {"topicId": "life-deletion", "sectionId": "deletion-pipeline", "itemId": "pipeline", "label": "删除多阶段验收", "relation": "应用"}]}
     },
     {
       "id": "logical-deletion", "zh": "逻辑删除", "en": "Logical Deletion", "abbr": "", "aliases": [],
       "definition": "在系统可见性、索引或有效记录层面移除数据，而底层存储块可能随后才被回收或覆盖。具体含义需要结合数据库或存储产品的删除机制。",
       "distinction": "逻辑上读不到，不等于所有介质字节已清除；也不能把逻辑删除一概理解成仅添加一个业务标记。",
       "example": "记录已从活跃查询结果消失，但后台还需要完成存储空间回收和备份过期。",
-      "topicIds": ["life-deletion"], "sourceIds": [6], "extraSources": [], "origin": "source"
+      "topicIds": ["life-deletion"], "sourceIds": [6], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "系统语义移除与底层残留处理常被混淆。", "focus": "解释逻辑删除已经实现什么、尚未证明什么。", "checkpoints": ["移除引用或可见记录不等于覆盖所有字节。", "不能一概把逻辑删除理解为只加业务标志位。", "活跃系统、历史副本和最终清理各需完成证据。"], "links": [{"topicId": "life-deletion", "sectionId": "deletion-states", "itemId": "delete-meaning", "label": "区分删除状态和机制", "relation": "易混对比"}, {"topicId": "life-deletion", "sectionId": "deletion-pipeline", "itemId": "pipeline", "label": "跨系统完成条件", "relation": "应用"}]}
     },
     {
       "id": "cryptographic-erasure", "zh": "加密清除", "en": "Cryptographic Erasure", "abbr": "", "aliases": ["加密擦除", "密钥销毁"],
       "definition": "通过使解密所需密钥不可用，让已加密数据无法再被解读。是否有效取决于密钥覆盖范围、密钥副本及明文副本是否都得到妥善处理。",
       "distinction": "加密清除不是逐块覆盖磁盘；删除某把密钥也不保证所有相关数据都不可恢复，必须核对真实依赖与残留。",
       "example": "某批数据由专用密钥加密，安全清除这把密钥及必要副本后，密文无法解开。",
-      "topicIds": ["life-deletion"], "sourceIds": [6], "extraSources": [], "origin": "source"
+      "topicIds": ["life-deletion"], "sourceIds": [6], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "密钥作用域和残留决定安全删除是否有效。", "focus": "判断加密清除是否适合目标数据范围。", "checkpoints": ["目标数据确实由可清除密钥保护。", "核查密钥副本、恢复路径及明文残留。", "共享密钥可能扩大删除影响，需匹配目标粒度。"], "links": [{"topicId": "life-deletion", "sectionId": "crypto-erase", "itemId": "key-scope", "label": "加密清除的前置条件与残留", "relation": "应用"}, {"topicId": "life-deletion", "sectionId": "deletion-states", "itemId": "delete-meaning", "label": "加密清除与其他删除机制", "relation": "易混对比"}]}
     },
     {
       "id": "backup-expiration", "zh": "备份过期", "en": "Backup Expiration", "abbr": "", "aliases": ["备份系统过期"],
       "definition": "备份达到其保留规则后被淘汰，并按系统机制进入覆盖或其他清理流程。活跃数据已删除时，删除前生成的备份可能仍需等待这个过程。",
       "distinction": "备份过期周期是具体系统设计，不是所有公司的统一删除期限；应用库删完也不能代替备份状态确认。",
       "example": "旧备份按轮换策略退役，后续恢复时还要防止已经要求删除的数据重新进入服务。",
-      "topicIds": ["life-deletion", "life-backup"], "sourceIds": [6], "extraSources": [], "origin": "source"
+      "topicIds": ["life-deletion", "life-backup"], "sourceIds": [6], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "历史副本的退出与恢复控制影响删除完成边界，保留应用考点。", "focus": "将备份生命周期纳入删除验收。", "checkpoints": ["到期、标记可回收和实际清理可能是不同状态。", "各产品的周期不能被当作通用法律期限。", "恢复旧备份时要重施已生效的删除约束。"], "links": [{"topicId": "life-deletion", "sectionId": "deletion-pipeline", "itemId": "pipeline", "label": "跟踪备份和归档的退出状态", "relation": "应用"}, {"topicId": "life-backup", "sectionId": "restore-test", "itemId": "restore-path", "label": "恢复路径中的删除控制", "relation": "应用"}]}
     },
     {
       "id": "time-to-live", "zh": "生存时间", "en": "Time to Live", "abbr": "TTL", "aliases": ["过期时间", "到期清理"],
       "definition": "为对象或记录指定有效时长或过期时点的机制。用于存储时，它可以让系统在到期后安排清理，但触发条件和实际执行延迟取决于产品。",
       "distinction": "TTL 到期不等于这一秒已物理擦除，更不能自动解决备份、派生数据或依法需要暂停删除的例外。",
       "example": "临时会话记录到期后等待后台清理；应用仍需正确处理已过期但尚未移除的记录。",
-      "topicIds": ["life-retention", "life-stages"], "sourceIds": [1, 2], "extraSources": [{"label":"AWS DynamoDB｜Time to Live","url":"https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html"}], "origin": "source"
+      "topicIds": ["life-retention", "life-stages"], "sourceIds": [1, 2], "extraSources": [{"label":"AWS DynamoDB｜Time to Live","url":"https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "到期触发与异步清理、不同副本范围之间有重要边界。", "focus": "把 TTL 放回完整留存与删除策略。", "checkpoints": ["说明 TTL 的对象、起算时间和产品执行语义。", "到期不证明即时物理清除。", "备份、派生数据和保留例外需单独处理。"], "links": [{"topicId": "life-retention", "sectionId": "ttl-lock-hold", "itemId": "three-controls", "label": "TTL、留存与暂停删除", "relation": "易混对比"}, {"topicId": "asset-sql", "sectionId": "lookup-join", "itemId": "freshness-cache", "label": "查询缓存过期与数据新鲜度", "relation": "应用"}, {"topicId": "life-deletion", "sectionId": "deletion-states", "itemId": "delete-meaning", "label": "到期与删除完成的区别", "relation": "应用"}]}
     },
     {
       "id": "data-retention", "zh": "数据保留策略", "en": "Data Retention Policy", "abbr": "", "aliases": ["数据留存", "保留期", "留存期限"],
       "definition": "规定哪些数据基于什么用途保留、从何时起算、保留多久以及何时可以或必须删除。策略还应明确例外、责任人和复核条件。",
       "distinction": "一般保留策略可能涉及最短或最长时限；Object Lock 的保护期主要限制删除，不能代表全部留存政策。",
       "example": "临时诊断日志按既定用途保留，到期前检查有效例外，再执行对应清理流程。",
-      "topicIds": ["life-retention", "life-stages"], "sourceIds": [4], "extraSources": [{"label":"AWS S3｜Retention Period 与 Object Lock","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"}], "origin": "source"
+      "topicIds": ["life-retention", "life-stages"], "sourceIds": [4], "extraSources": [{"label":"AWS S3｜Retention Period 与 Object Lock","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "可执行留存必须明确目的、范围、时间及例外。", "focus": "制定能落到系统并验收的数据保留策略。", "checkpoints": ["明确对象、所有版本、派生与备份范围。", "明确起算事件、可/必须删除条件和时区。", "设定例外责任、复核与清理证据。"], "links": [{"topicId": "life-retention", "sectionId": "retention-scope", "itemId": "policy-fields", "label": "留存策略的完整字段", "relation": "应用"}, {"topicId": "life-retention", "sectionId": "ttl-lock-hold", "itemId": "three-controls", "label": "留存与 TTL、Object Lock 的边界", "relation": "易混对比"}, {"topicId": "gov-models", "sectionId": "shared-boundaries", "itemId": "retention-example", "label": "域内留存参数与共同要求", "relation": "应用"}]}
     },
     {
       "id": "legal-hold", "zh": "法律保留", "en": "Legal Hold", "abbr": "", "aliases": ["诉讼保留", "暂停删除"],
       "definition": "因调查、诉讼或相关要求暂停删除指定数据的一种保留状态。以 S3 产品为例，它可以持续到有权限的人明确解除，不依赖固定到期日。",
       "distinction": "Legal Hold 与普通保留期独立；期限届满不自动解除 Hold。这里解释机制，具体适用范围由负责团队确定。",
       "example": "一批记录正在调查范围内，正常清理任务遇到有效 Hold 时保留记录并登记原因。",
-      "topicIds": ["life-retention"], "sourceIds": [], "extraSources": [{"label":"AWS S3｜Legal Holds","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"}], "origin": "framework"
+      "topicIds": ["life-retention"], "sourceIds": [], "extraSources": [{"label":"AWS S3｜Legal Holds","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"}], "origin": "framework",
+      "learning": {"status": "core", "rationale": "删除暂停与普通留存到期需要分别处理和审批。", "focus": "管理有依据、有责任、有复核的暂停删除状态。", "checkpoints": ["明确冻结对象、权限、原因和解除责任。", "普通期限届满不自动解除 Hold。", "不把某一产品机制泛化为统一法律要求。"], "links": [{"topicId": "life-retention", "sectionId": "ttl-lock-hold", "itemId": "three-controls", "label": "Legal Hold 与固定保护期", "relation": "易混对比"}, {"topicId": "tpm-delete-case", "sectionId": "request-policy", "itemId": "policy-branches", "label": "删除请求中的保留例外", "relation": "应用"}, {"topicId": "tpm-global", "sectionId": "exception-lifecycle", "itemId": "exception-record", "label": "例外审批与到期复核", "relation": "应用"}]}
     },
     {
       "id": "object-lock", "zh": "对象锁", "en": "Object Lock", "abbr": "", "aliases": ["对象锁定", "Object Lock 保护期"],
       "definition": "用于防止对象被删除或覆盖的保护机制。S3 Object Lock 针对对象版本，可配置保留期或 Legal Hold，其行为还与保护模式和权限有关。",
       "distinction": "锁保护的是特定对象版本；增加删除标记不等于该版本已被清除，保护期结束也不会自动删除它。",
       "example": "某个审计文件版本在保护期内不能按普通流程删除，到期后再由清理策略处理。",
-      "topicIds": ["life-retention", "life-deletion"], "sourceIds": [], "extraSources": [{"label":"AWS S3｜Object Lock","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"}], "origin": "framework"
+      "topicIds": ["life-retention", "life-deletion"], "sourceIds": [], "extraSources": [{"label":"AWS S3｜Object Lock","url":"https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html"}], "origin": "framework",
+      "learning": {"status": "supporting", "rationale": "对象版本保护与删除标记、留存政策之间有产品级考点。", "focus": "解释 Object Lock 的对象粒度和解除条件。", "checkpoints": ["S3 Object Lock 保护具体版本，行为受模式和权限影响。", "删除标记不等于旧版本已清除。", "保护期到期通常只是允许后续删除，不自动完成清理。"], "links": [{"topicId": "life-retention", "sectionId": "ttl-lock-hold", "itemId": "three-controls", "label": "Object Lock、TTL 与 Hold", "relation": "易混对比"}, {"topicId": "life-retention", "sectionId": "retention-scope", "itemId": "versions", "label": "对象版本控制影响删除验收", "relation": "应用"}]}
     },
     {
       "id": "deletion-acknowledgment", "zh": "删除确认回执", "en": "Deletion Acknowledgment", "abbr": "ACK", "aliases": ["删除回执", "确认信号"],
       "definition": "系统对删除请求或某个删除阶段返回的确认信号。它能帮助协调跨系统流程，但要先约定确认的是接收、逻辑移除还是整个目标范围的完成。",
       "distinction": "ACK 是 Acknowledgment 的缩写，不天然代表全链路物理删除；不同接口的确认语义必须明确。",
       "example": "服务 A 已确认逻辑删除，备份服务仍在等待过期，项目不能仅凭 A 的回执宣布全部完成。",
-      "topicIds": ["life-deletion", "gov-evidence"], "sourceIds": [6], "extraSources": [], "origin": "source"
+      "topicIds": ["life-deletion", "gov-evidence"], "sourceIds": [6], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "跨系统确认的语义决定能否可靠宣布完成。", "focus": "区分请求接收、阶段完成和全范围完成的确认。", "checkpoints": ["ACK 缩写是 Acknowledgment，并非物理清除证明。", "每个回执对应明确的对象、阶段和请求标识。", "超时或结果未知需要查询、重试和幂等处理。"], "links": [{"topicId": "life-deletion", "sectionId": "deletion-pipeline", "itemId": "pipeline", "label": "删除阶段和确认的汇总", "relation": "应用"}, {"topicId": "tpm-delete-case", "sectionId": "orchestration-architecture", "itemId": "durable-retry", "label": "未知结果下的重试与恢复", "relation": "应用"}, {"topicId": "risk-library-rescan", "sectionId": "reliability-boundaries", "itemId": "ack-crash", "label": "迁移比较：消息确认也有语义边界", "relation": "易混对比"}]}
     }
   ]
 }

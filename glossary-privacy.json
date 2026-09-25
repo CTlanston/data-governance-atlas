@@ -22,455 +22,520 @@
       "definition": "在产品需求、数据流和默认设置阶段就安排隐私保护，并在开发、上线和维护过程中持续落实，让保护成为系统本身的一部分。",
       "distinction": "上线前做一次隐私审批只是一个检查点；设计理念还要变成实际的采集限制、权限和用户控制。",
       "example": "教学例子：设计位置功能时，先判断是否只需要城市，而无需默认收集精确坐标。",
-      "topicIds": ["privacy-controls", "privacy-user-control"], "sourceIds": [10], "extraSources": [{"label": "Privacy and Data Protection by Design：从政策到工程", "url": "https://arxiv.org/abs/1501.03726"}], "origin": "extension"
+      "topicIds": ["privacy-controls", "privacy-user-control"], "sourceIds": [10], "extraSources": [{"label": "Privacy and Data Protection by Design：从政策到工程", "url": "https://arxiv.org/abs/1501.03726"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "考察需求到设计和持续运行的转换，直接对应隐私项目交付。", "focus": "把隐私要求提前变成产品默认行为、执行点和验收条件。", "checkpoints": ["能从一个功能需求推出必要数据、默认设置和访问条件。", "能说明上线审批以外还要验证什么，以及变更后谁持续负责。"], "links": [{"topicId": "privacy-controls", "sectionId": "policy-to-control", "itemId": "control-contract", "label": "把设计要求写成可执行条件", "relation": "应用"}, {"topicId": "privacy-user-control", "sectionId": "interface-to-enforcement", "itemId": "preference-flow", "label": "把产品选择连接到后台执行", "relation": "应用"}, {"topicId": "privacy-controls", "sectionId": "shared-responsibility", "itemId": "ownership-table", "label": "确定产品、工程和隐私责任", "relation": "应用"}]}
     },
     {
       "id": "pdpo", "zh": "隐私与数据保护办公室", "en": "Privacy and Data Protection Office", "abbr": "PDPO", "aliases": ["隐私办公室"],
       "definition": "TikTok 官方文章中负责推动隐私与数据保护工作的团队名称；它与法务、产品、工程、安全及信任与安全团队共同落实保护措施。",
       "distinction": "这是具体组织的名称，不是所有企业通用的技术组件，也不表示全部隐私责任只由这个团队承担。",
       "example": "教学例子：隐私团队提出保护要求，产品设计用户入口，工程实施，相关团队共同验收。",
-      "topicIds": ["privacy-controls"], "sourceIds": [10], "extraSources": [], "origin": "source"
+      "topicIds": ["privacy-controls"], "sourceIds": [10], "extraSources": [], "origin": "source",
+      "learning": {"status": "reference", "rationale": "组织名称本身无独立设计考点；责任判断已由隐私设计与控制卡覆盖。", "focus": "了解组织名称，查阅跨职能责任分配。", "checkpoints": ["能识别 PDPO 是 TikTok 文中团队名称，不是通用控制组件。"], "links": [{"topicId": "privacy-controls", "sectionId": "shared-responsibility", "itemId": "ownership-table", "label": "了解隐私团队与实施团队如何分责", "relation": "应用"}]}
     },
     {
       "id": "personally-identifiable-information", "zh": "个人可识别信息", "en": "Personally Identifiable Information", "abbr": "PII", "aliases": ["可识别个人信息"],
       "definition": "能够直接识别一个人，或与其他信息结合后识别、关联到一个人的信息。判断时要看组合后的识别能力，而不能只找姓名和手机号。",
       "distinction": "PII 的适用口径依语境而定；删去姓名不自动消除可识别性，也不要把它与各地法律中的个人信息定义机械等同。",
       "example": "教学例子：单独的账户编号看不出姓名，但结合客户表后，交易记录就能关联到具体客户。",
-      "topicIds": ["privacy-threats", "ai-agent", "ai-classification"], "sourceIds": [18], "extraSources": [{"label": "NIST：PII 术语定义", "url": "https://csrc.nist.gov/glossary/term/personally_identifiable_information"}], "origin": "extension"
+      "topicIds": ["privacy-threats", "ai-agent", "ai-classification"], "sourceIds": [18], "extraSources": [{"label": "NIST：PII 术语定义", "url": "https://csrc.nist.gov/glossary/term/personally_identifiable_information"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "可识别性直接影响资产范围、风险评估与保护选型。", "focus": "结合辅助信息判断个人可识别性，不能只查姓名字段。", "checkpoints": ["能解释直接标识符和属性组合如何识别人。", "能区分 PII 的技术语境与具体适用规则，避免把编号天然当匿名。"], "links": [{"topicId": "privacy-threats", "sectionId": "linking-identifying", "itemId": "anonymous-profile", "label": "判断化名与属性组合的识别风险", "relation": "应用"}, {"topicId": "privacy-dataworks", "sectionId": "anonymity-boundary", "itemId": "four-outcomes", "label": "对比处理手段和匿名化效果", "relation": "易混对比"}, {"topicId": "ai-agent", "sectionId": "cross-server-composition", "itemId": "account-to-person", "label": "判断跨工具关联是否重建身份", "relation": "应用"}]}
     },
     {
       "id": "preventive-control", "zh": "预防性控制", "en": "Preventive Control", "abbr": "", "aliases": ["预防控制"],
       "definition": "在不符合要求的行为发生前设置限制，减少它发生的机会。可以放在数据采集、访问、共享或任务启动等关键执行点。",
       "distinction": "预防侧重事前阻止；检测侧重发现偏离；纠正侧重处理已发生的问题。三类控制通常需要配合。",
       "example": "教学例子：训练任务启动前检查数据用途，不满足训练许可的数据不能进入任务。",
-      "topicIds": ["privacy-controls", "ai-lineage"], "sourceIds": [10, 12], "extraSources": [], "origin": "source"
+      "topicIds": ["privacy-controls", "ai-lineage"], "sourceIds": [10, 12], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "考察控制落点和纵深保护，不能用已部署功能代替保护结果。", "focus": "为受限行为选择事前检查点，并设计检查失败时的行为。", "checkpoints": ["能指出控制应放在实际采集、读取或处理入口。", "能说明预防检查失效时还需要哪些监测和纠正手段。"], "links": [{"topicId": "privacy-controls", "sectionId": "policy-to-control", "itemId": "control-contract", "label": "确定控制条件与失败策略", "relation": "应用"}, {"topicId": "privacy-controls", "sectionId": "three-controls", "itemId": "one-access-incident", "label": "区分预防、检测和纠正", "relation": "易混对比"}, {"topicId": "ai-lineage", "sectionId": "lineage-enforcement-proof", "itemId": "three-distinct-capabilities", "label": "在数据使用边界实施用途检查", "relation": "应用"}]}
     },
     {
       "id": "detective-control", "zh": "检测性控制", "en": "Detective Control", "abbr": "", "aliases": ["检测控制"],
       "definition": "通过日志、监测或审计发现系统行为偏离要求，让相关人员能够及时调查处理。它提供发现问题的能力，但未必会自动阻断行为。",
       "distinction": "Detective Control 是保护手段；LINDDUN 的 Detecting 是察觉用户参与情况的隐私威胁，两者方向不同。",
       "example": "教学例子：发现某账号短时间大量导出敏感字段，系统生成告警并记录操作证据。",
-      "topicIds": ["privacy-controls", "privacy-dataworks"], "sourceIds": [9, 10], "extraSources": [], "origin": "source"
+      "topicIds": ["privacy-controls", "privacy-dataworks"], "sourceIds": [9, 10], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "检测和处置边界是控制验收的高价值判断。", "focus": "把异常观察转成可调查信号，并明确覆盖与响应责任。", "checkpoints": ["能区分告警、已确认事件和已完成处置。", "能说明日志缺失、误报和无人响应怎样削弱控制效果。"], "links": [{"topicId": "privacy-controls", "sectionId": "three-controls", "itemId": "one-access-incident", "label": "将监测衔接调查与纠正", "relation": "应用"}, {"topicId": "privacy-evidence", "sectionId": "requirement-control-evidence", "itemId": "one-requirement", "label": "为检测结果提供可复核证据", "relation": "应用"}, {"topicId": "privacy-threats", "sectionId": "detecting-identifying-disclosure", "itemId": "record-boundaries", "label": "区分 Detective Control 与 Detecting 威胁", "relation": "易混对比"}]}
     },
     {
       "id": "corrective-control", "zh": "纠正性控制", "en": "Corrective Control", "abbr": "", "aliases": ["纠正控制"],
       "definition": "发现偏离要求后，采取动作控制影响、修复问题并确认恢复。一次修复还应留下责任人和复验结果，便于判断问题是否真正解决。",
       "distinction": "发送告警属于发现问题，不能直接算纠正完成；纠正需要有实际处置及结果验证。",
       "example": "教学例子：发现越权共享后撤回访问，修正规则，再验证相关下游是否停止使用数据。",
-      "topicIds": ["privacy-controls", "privacy-evidence"], "sourceIds": [10], "extraSources": [], "origin": "source"
+      "topicIds": ["privacy-controls", "privacy-evidence"], "sourceIds": [10], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "考察事件闭环和结果责任，具有独立交付价值。", "focus": "确认问题后控制影响、修复原因并证明修复有效。", "checkpoints": ["能区分收回权限、修复规则和处理既有影响。", "能给出责任人、复验和关闭证据，而非只说已发工单。"], "links": [{"topicId": "privacy-controls", "sectionId": "three-controls", "itemId": "one-access-incident", "label": "从异常调查走到修复复验", "relation": "应用"}, {"topicId": "privacy-evidence", "sectionId": "effectiveness-coverage-exceptions", "itemId": "coverage-denominator", "label": "跟踪未关闭缺口与例外", "relation": "应用"}]}
     },
     {
       "id": "linddun", "zh": "LINDDUN 隐私威胁建模", "en": "LINDDUN Privacy Threat Modeling", "abbr": "LINDDUN", "aliases": ["隐私威胁模型"],
       "definition": "沿系统的数据流，从七类威胁检查用户可能受到的隐私伤害。它帮助团队把抽象的隐私担忧转成具体场景、风险与设计问题。",
       "distinction": "威胁建模用于发现风险，不能单独证明产品合规；一个场景也可能同时涉及多个威胁类别。",
       "example": "教学例子：评审匿名论坛时，既问能否识别发帖者，也问能否察觉某人注册过账号。",
-      "topicIds": ["privacy-threats"], "sourceIds": [11], "extraSources": [{"label": "LINDDUN 官方威胁树", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "source"
+      "topicIds": ["privacy-threats"], "sourceIds": [11], "extraSources": [{"label": "LINDDUN 官方威胁树", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "保留方法卡，考察建模方式而非单纯背缩写。", "focus": "沿数据流描述隐私伤害，再用七类威胁检查遗漏。", "checkpoints": ["能用参与者、数据、边界和影响描述一个威胁。", "能允许同一场景命中多类，并将威胁检查与合规结论分开。"], "links": [{"topicId": "privacy-threats", "sectionId": "seven-questions", "itemId": "questions-not-labels", "label": "用七类检查问题系统评审", "relation": "应用"}, {"topicId": "privacy-threats", "sectionId": "attributable-evidence-and-flow", "itemId": "evidence-tradeoff", "label": "把威胁落到具体数据流", "relation": "应用"}, {"topicId": "ai-agent", "sectionId": "cross-server-composition", "itemId": "account-to-person", "label": "将威胁建模扩展到多轮工具组合", "relation": "应用"}]}
     },
     {
       "id": "linddun-linking", "zh": "关联威胁", "en": "Linking", "abbr": "L", "aliases": ["数据关联威胁"],
       "definition": "把原本分开的数据或行为联系起来，从而多知道某个人或群体的事情。即使暂时不知道真实姓名，也可能形成不希望出现的画像。",
       "distinction": "Linking 关注数据能否连起来；Identifying 关注能否确定具体是谁。关联可以先发生，再导致身份识别。",
       "example": "教学例子：把同一设备的购物与浏览记录拼接起来，推测其兴趣或敏感健康偏好。",
-      "topicIds": ["privacy-threats", "ai-agent"], "sourceIds": [11, 18], "extraSources": [{"label": "LINDDUN 官方威胁树", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "source"
+      "topicIds": ["privacy-threats", "ai-agent"], "sourceIds": [11, 18], "extraSources": [{"label": "LINDDUN 官方威胁树", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "无直接身份字段的风险容易被漏判，且能迁移到多种数据产品。", "focus": "判断数据关联新增了什么画像或推断，以及是否必要。", "checkpoints": ["能举出不知道真名仍能形成敏感画像的场景。", "能区分关联、身份识别和合法业务关联，并提出数据边界控制。"], "links": [{"topicId": "privacy-threats", "sectionId": "linking-identifying", "itemId": "anonymous-profile", "label": "对比画像关联与身份识别", "relation": "易混对比"}, {"topicId": "ai-agent", "sectionId": "cross-server-composition", "itemId": "account-to-person", "label": "识别跨工具组合的新增含义", "relation": "应用"}, {"topicId": "privacy-dataworks", "sectionId": "three-maskings", "itemId": "masking-object", "label": "检验实体替换是否仍保留关联线索", "relation": "易混对比"}]}
     },
     {
       "id": "linddun-identifying", "zh": "身份识别威胁", "en": "Identifying", "abbr": "I", "aliases": ["身份识别"],
       "definition": "在本来不应暴露身份的场景中，通过直接信息或组合线索确定一个人是谁。风险既来自姓名，也可能来自足够独特的属性组合。",
       "distinction": "识别身份比仅知道某类记录存在更进一步；年龄、地区等信息是否足以识别，要结合人数和其他可用线索判断。",
       "example": "教学例子：匿名反馈附带唯一的部门、职级和班次组合，同事便可能认出作者。",
-      "topicIds": ["privacy-threats"], "sourceIds": [11], "extraSources": [{"label": "LINDDUN 官方威胁树", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "source"
+      "topicIds": ["privacy-threats"], "sourceIds": [11], "extraSources": [{"label": "LINDDUN 官方威胁树", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "身份识别边界决定匿名化验证和数据共享风险。", "focus": "评估化名、准标识符与辅助数据组合后的身份识别风险。", "checkpoints": ["能解释去掉姓名后怎样仍可能定位个人。", "能区分确定身份与仅知道记录存在，并考虑接收方掌握的信息。"], "links": [{"topicId": "privacy-threats", "sectionId": "linking-identifying", "itemId": "anonymous-profile", "label": "区分 Linking 与 Identifying", "relation": "易混对比"}, {"topicId": "privacy-threats", "sectionId": "detecting-identifying-disclosure", "itemId": "record-boundaries", "label": "区分存在、身份和内容暴露", "relation": "易混对比"}, {"topicId": "privacy-dataworks", "sectionId": "anonymity-boundary", "itemId": "four-outcomes", "label": "评估匿名化结果", "relation": "应用"}, {"topicId": "ai-agent", "sectionId": "cross-server-composition", "itemId": "account-to-person", "label": "审查跨服务重识别", "relation": "应用"}]}
     },
     {
       "id": "linddun-non-repudiation", "zh": "不可否认性威胁", "en": "Non-repudiation", "abbr": "N", "aliases": ["不可否认性", "合理否认空间"],
       "definition": "系统留下可归属于个人的证据，使其无法合理否认某次行为或参与。隐私分析关注这种可归属证据会不会对相关人员造成伤害。",
       "distinction": "安全审计可能需要不可否认性，匿名反馈可能需要保护否认空间；它是否有益取决于具体目的和使用边界。",
       "example": "教学例子：匿名举报附件仍保留作者元数据，形成可指向举报人的证据。",
-      "topicIds": ["privacy-threats"], "sourceIds": [11], "extraSources": [{"label": "LINDDUN 官方威胁树", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "source"
+      "topicIds": ["privacy-threats"], "sourceIds": [11], "extraSources": [{"label": "LINDDUN 官方威胁树", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "概念反直觉且需要情境权衡，适合作为威胁建模的补充卡。", "focus": "权衡可归属行为证据的业务价值与隐私影响。", "checkpoints": ["能指出是什么记录让行为可归属于个人。", "能同时讨论审计必要性与访问、保留、目的边界，不主张全部不留日志。"], "links": [{"topicId": "privacy-threats", "sectionId": "attributable-evidence-and-flow", "itemId": "evidence-tradeoff", "label": "权衡审计留痕与合理否认空间", "relation": "应用"}, {"topicId": "privacy-evidence", "sectionId": "requirement-control-evidence", "itemId": "one-requirement", "label": "设计证明控制所需的最小记录", "relation": "应用"}]}
     },
     {
       "id": "linddun-detecting", "zh": "参与或存在性察觉威胁", "en": "Detecting", "abbr": "D", "aliases": ["察觉威胁", "存在性检测"],
       "definition": "通过响应差异、通信迹象等，察觉某人参与某项服务或某份记录存在。无需看到记录内容，存在这一事实本身就可能暴露隐私。",
       "distinction": "知道某人有记录与读到记录内容不同；前者看 Detecting，后者还要检查 Data Disclosure。",
       "example": "教学例子：敏感咨询平台返回“账号存在但无权限”，间接暴露某人曾注册。",
-      "topicIds": ["privacy-threats", "ai-unlearning"], "sourceIds": [11], "extraSources": [{"label": "LINDDUN 官方威胁树", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "source"
+      "topicIds": ["privacy-threats", "ai-unlearning"], "sourceIds": [11], "extraSources": [{"label": "LINDDUN 官方威胁树", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "存在性风险有明确攻击面和防护决策，不是名称记忆。", "focus": "识别响应差异、元数据和侧信道暴露的参与或存在事实。", "checkpoints": ["能说明没有读到内容也会泄露注册或参与事实。", "能将响应行为与物理观察共同纳入分析，并区别检测性控制。"], "links": [{"topicId": "privacy-threats", "sectionId": "detecting-identifying-disclosure", "itemId": "record-boundaries", "label": "比较存在性察觉、身份和内容", "relation": "易混对比"}, {"topicId": "privacy-controls", "sectionId": "three-controls", "itemId": "one-access-incident", "label": "与 Detective Control 区分", "relation": "易混对比"}]}
     },
     {
-      "id": "linddun-data-disclosure", "zh": "不当数据披露威胁", "en": "Data Disclosure", "abbr": "D", "aliases": ["数据披露", "过度收集"],
+      "id": "linddun-data-disclosure", "zh": "不当数据披露威胁", "en": "Data Disclosure", "abbr": "D", "aliases": ["数据披露"],
       "definition": "个人数据被不必要地收集、处理、保留或暴露，越过了合理的数据边界。LINDDUN 在此关注过量和不必要的数据使用，不只关注黑客泄露。",
       "distinction": "系统没有被入侵，也可能因为收集过多或分享过广而产生这种威胁；加密不能自动解决不必要的采集。",
       "example": "教学例子：只需城市级位置的天气功能持续保存精确轨迹，增加了不必要的数据暴露。",
-      "topicIds": ["privacy-threats", "privacy-dataworks"], "sourceIds": [11], "extraSources": [{"label": "LINDDUN 官方威胁树", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "source"
+      "topicIds": ["privacy-threats", "privacy-dataworks"], "sourceIds": [11], "extraSources": [{"label": "LINDDUN 官方威胁树", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "直接服务于最小化与数据流控制设计。", "focus": "检查个人数据跨边界及过量处理是否必要、合适。", "checkpoints": ["能把不必要采集、粒度、保留和共享都纳入风险范围。", "能解释即使加密或没有入侵，仍可能过度处理。"], "links": [{"topicId": "privacy-threats", "sectionId": "seven-questions", "itemId": "questions-not-labels", "label": "确定 Data Disclosure 的威胁范围", "relation": "应用"}, {"topicId": "privacy-threats", "sectionId": "detecting-identifying-disclosure", "itemId": "record-boundaries", "label": "比较存在暴露与内容披露", "relation": "易混对比"}, {"topicId": "privacy-user-control", "sectionId": "purpose-access-consent", "itemId": "three-questions", "label": "检查允许用途", "relation": "应用"}, {"topicId": "ai-agent", "sectionId": "context-persistence", "itemId": "four-turns", "label": "限制中间产物和后续转交", "relation": "应用"}]}
     },
     {
       "id": "linddun-unawareness-unintervenability", "zh": "不知情与不可干预", "en": "Unawareness and Unintervenability", "abbr": "U", "aliases": ["无知觉与不可干预", "用户不知情"],
       "definition": "用户不了解自己的数据如何被处理，或缺少有效查看、纠正和管理数据的能力。既要检查告知是否清楚，也要检查控制能否真正执行。",
       "distinction": "提供隐私说明解决的是知情的一部分；只有说明却没有可用的管理入口，仍可能存在不可干预问题。",
       "example": "教学例子：界面显示已关闭个性化，但相关下游仍继续按旧偏好处理数据。",
-      "topicIds": ["privacy-threats", "privacy-user-control"], "sourceIds": [11], "extraSources": [{"label": "LINDDUN 官方威胁树", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "source"
+      "topicIds": ["privacy-threats", "privacy-user-control"], "sourceIds": [11], "extraSources": [{"label": "LINDDUN 官方威胁树", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "用户产品与后台工程的连接点，直接对应 JD 用户控制领域。", "focus": "同时检查用户能否理解处理和能否有效影响处理。", "checkpoints": ["能区别告知信息是否清楚与控制入口是否有效。", "能把用户操作连到下游实际生效及状态反馈。"], "links": [{"topicId": "privacy-threats", "sectionId": "seven-questions", "itemId": "questions-not-labels", "label": "理解知情与干预两个检查维度", "relation": "应用"}, {"topicId": "privacy-user-control", "sectionId": "interface-to-enforcement", "itemId": "preference-flow", "label": "验证用户选择实际生效", "relation": "应用"}, {"topicId": "privacy-user-control", "sectionId": "partial-completion", "itemId": "completion-levels", "label": "准确反馈部分完成与例外", "relation": "应用"}]}
     },
     {
       "id": "linddun-non-compliance", "zh": "不合规威胁", "en": "Non-compliance", "abbr": "N", "aliases": ["合规缺口"],
       "definition": "系统对适用要求、数据管理或安全风险的处理存在缺口。LINDDUN 用这一类提醒团队把隐私问题放回组织管理和相关要求中检查。",
       "distinction": "它不是仅在前六类威胁已经发生后才出现的后果；缺少责任、保留机制或必要管理也值得直接检查。",
       "example": "教学例子：公司规定数据到期处理，却既未指定负责人，也没有检查超期数据的机制。",
-      "topicIds": ["privacy-threats", "privacy-evidence"], "sourceIds": [11], "extraSources": [{"label": "LINDDUN 官方威胁树", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "source"
+      "topicIds": ["privacy-threats", "privacy-evidence"], "sourceIds": [11], "extraSources": [{"label": "LINDDUN 官方威胁树", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "保留与其他威胁的范围差异，不作为法规条文记忆卡。", "focus": "检查适用要求、组织责任和风险管理是否落实。", "checkpoints": ["能指出制度、责任或执行缺口，不把它仅当违规后果。", "能识别需要专业团队确认的要求，避免由技术机制直接推导合规。"], "links": [{"topicId": "privacy-threats", "sectionId": "seven-questions", "itemId": "questions-not-labels", "label": "理解 Non-compliance 的广义范围", "relation": "应用"}, {"topicId": "privacy-controls", "sectionId": "shared-responsibility", "itemId": "ownership-table", "label": "明确要求判断和执行责任", "relation": "应用"}, {"topicId": "privacy-evidence", "sectionId": "requirement-control-evidence", "itemId": "one-requirement", "label": "将要求连接到可复核证据", "relation": "应用"}]}
     },
     {
       "id": "dynamic-data-masking", "zh": "动态数据脱敏", "en": "Dynamic Data Masking", "abbr": "DDM", "aliases": ["动态脱敏", "查询脱敏"],
       "definition": "在查询或展示时，按规则改变用户看到的敏感值，例如把号码中间几位变成星号。底层原始数据通常仍然保留，权限边界必须另行控制。",
       "distinction": "动态脱敏改变返回或显示结果，不能据此声称原值已被删除；具有其他访问路径的人仍可能读取原值。",
       "example": "教学例子：客服页面只显示手机号尾号，获授权的通知服务仍能使用完整号码。",
-      "topicIds": ["privacy-dataworks"], "sourceIds": [9], "extraSources": [{"label": "Microsoft：Dynamic Data Masking", "url": "https://learn.microsoft.com/en-us/sql/relational-databases/security/dynamic-data-masking"}], "origin": "source"
+      "topicIds": ["privacy-dataworks"], "sourceIds": [9], "extraSources": [{"label": "Microsoft：Dynamic Data Masking", "url": "https://learn.microsoft.com/en-us/sql/relational-databases/security/dynamic-data-masking"}], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "具有明确运行机制和覆盖验收考点。", "focus": "检查查询时脱敏的执行入口、角色与旁路。", "checkpoints": ["能解释返回值被处理而源值通常仍在。", "能指出导出、API 或高权限访问为何需独立验证。"], "links": [{"topicId": "privacy-dataworks", "sectionId": "anonymity-boundary", "itemId": "four-outcomes", "label": "比较动态、静态与匿名化", "relation": "易混对比"}, {"topicId": "privacy-dataworks", "sectionId": "classification-to-enforcement", "itemId": "four-jobs", "label": "验证规则是否接入实际入口", "relation": "应用"}]}
     },
     {
       "id": "static-data-masking", "zh": "静态数据脱敏", "en": "Static Data Masking", "abbr": "SDM", "aliases": ["静态脱敏"],
       "definition": "在生成供其他场景使用的数据时，预先替换或变换敏感值，把处理后的结果保存下来。常用于准备开发、测试或分析所需的数据副本。",
       "distinction": "静态与动态的区别主要是处理结果是否预先落地；处理后的副本安全，不代表源数据和其他副本也已受同样保护。",
       "example": "教学例子：生成测试库时用模拟号码替换真实手机号，开发人员使用处理后的副本。",
-      "topicIds": ["privacy-dataworks"], "sourceIds": [9], "extraSources": [{"label": "DataWorks：数据脱敏规则", "url": "https://help.aliyun.com/zh/dataworks/user-guide/create-a-data-masking-rule"}], "origin": "source"
+      "topicIds": ["privacy-dataworks"], "sourceIds": [9], "extraSources": [{"label": "DataWorks：数据脱敏规则", "url": "https://help.aliyun.com/zh/dataworks/user-guide/create-a-data-masking-rule"}], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "支持测试和分析数据交付，考察副本范围与处理效果。", "focus": "评估落地脱敏副本的用途与残余识别风险。", "checkpoints": ["能指出处理后的副本与原始数据需要分别管理。", "能检查跨字段关系、测试可用性和其他副本，而非只看被替换的一列。"], "links": [{"topicId": "privacy-dataworks", "sectionId": "anonymity-boundary", "itemId": "four-outcomes", "label": "比较静态副本与动态返回值", "relation": "易混对比"}, {"topicId": "privacy-dataworks", "sectionId": "three-maskings", "itemId": "masking-object", "label": "区分隐私处理与模型评估遮蔽", "relation": "易混对比"}]}
     },
     {
       "id": "anonymisation", "zh": "匿名化", "en": "Anonymisation / Anonymization", "abbr": "", "aliases": ["数据匿名化"],
       "definition": "通过处理使数据无法在相关使用情境下合理地识别到个人。判断效果还要考虑其他可获得的信息和重新识别的可能，而不只看姓名是否被隐藏。",
       "distinction": "打星号、替换编号或去掉姓名只是处理手段；仍可通过映射表或组合线索认出个人时，不能直接宣称已匿名。",
       "example": "教学例子：只删姓名却保留唯一的岗位、年龄和班次，熟悉团队的人仍可能认出本人。",
-      "topicIds": ["privacy-dataworks", "privacy-threats"], "sourceIds": [], "extraSources": [{"label": "ICO：如何评估匿名化是否有效", "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/anonymisation/how-do-we-ensure-anonymisation-is-effective/"}], "origin": "extension"
+      "topicIds": ["privacy-dataworks", "privacy-threats"], "sourceIds": [], "extraSources": [{"label": "ICO：如何评估匿名化是否有效", "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/anonymisation/how-do-we-ensure-anonymisation-is-effective/"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "数据共享中重要且常被误用的结果判断。", "focus": "用接收方和辅助信息评估不可识别性，而不是凭处理动作宣布匿名。", "checkpoints": ["能解释删除姓名、打星号和编号替换为何未必匿名。", "能列出准标识符、独特组合、粒度和辅助数据等重识别因素。"], "links": [{"topicId": "privacy-dataworks", "sectionId": "anonymity-boundary", "itemId": "four-outcomes", "label": "对比匿名化与脱敏、假名化", "relation": "易混对比"}, {"topicId": "privacy-threats", "sectionId": "linking-identifying", "itemId": "anonymous-profile", "label": "检查组合识别风险", "relation": "应用"}, {"topicId": "privacy-dataworks", "sectionId": "anonymity-boundary", "itemId": "differential-privacy", "label": "区分记录处理与差分隐私输出保证", "relation": "易混对比"}]}
     },
     {
       "id": "purpose-limitation", "zh": "用途限制", "en": "Purpose Limitation", "abbr": "", "aliases": ["目的限制", "用途边界"],
       "definition": "明确一份数据允许用于什么目的，并在使用或流转时检查是否仍在允许范围内。拥有读取权限，不会自动获得把数据用于任何新目的的许可。",
       "distinction": "访问控制回答谁能读，用途限制回答为什么可以用；两个问题要同时满足，不能用其中一个代替另一个。",
       "example": "教学例子：为了处理客服工单取得的信息，不能只因技术上可访问就直接转给训练任务。",
-      "topicIds": ["privacy-user-control", "ai-lineage", "ai-agent"], "sourceIds": [11, 12, 18], "extraSources": [], "origin": "source"
+      "topicIds": ["privacy-user-control", "ai-lineage", "ai-agent"], "sourceIds": [11, 12, 18], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "贯穿隐私工程与 AI 治理的核心控制目标。", "focus": "在读取、关联、训练和转交边界分别验证允许用途。", "checkpoints": ["能说明访问权限、用途许可和用户选择各自解决什么。", "能指出一个允许的用途不能自动授权后续训练或身份关联。"], "links": [{"topicId": "privacy-user-control", "sectionId": "purpose-access-consent", "itemId": "three-questions", "label": "区分访问、目的与选择", "relation": "易混对比"}, {"topicId": "ai-lineage", "sectionId": "lineage-enforcement-proof", "itemId": "three-distinct-capabilities", "label": "把用途策略放到实际数据边界", "relation": "应用"}, {"topicId": "ai-agent", "sectionId": "cross-server-composition", "itemId": "account-to-person", "label": "限制跨工具关联用途", "relation": "应用"}, {"topicId": "privacy-user-control", "sectionId": "interface-to-enforcement", "itemId": "preference-flow", "label": "传播用户选择影响的用途变化", "relation": "应用"}]}
     },
     {
       "id": "consent-management", "zh": "同意管理", "en": "Consent Management", "abbr": "", "aliases": ["同意撤回", "用户同意"],
       "definition": "当处理活动依赖用户同意时，记录用户针对什么目的和范围作出了什么选择，并支持后续变更或撤回，让相关执行系统能获知变化。",
       "distinction": "同意不是所有处理活动唯一的依据；一次点击也不证明全部下游已更新，需要核对范围和执行状态。",
       "example": "教学例子：用户撤回某项可选用途后，偏好版本更新，相关任务停止新增处理并返回状态。",
-      "topicIds": ["privacy-user-control"], "sourceIds": [11], "extraSources": [{"label": "LINDDUN：同意管理与用户控制", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "extension"
+      "topicIds": ["privacy-user-control"], "sourceIds": [11], "extraSources": [{"label": "LINDDUN：同意管理与用户控制", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}, {"label": "ICO：英国处理依据指南（同意并非唯一依据）", "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/a-guide-to-lawful-basis/"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "考察用户控制从产品承诺到分布式执行的完整路径。", "focus": "管理同意的目的、范围、版本和撤回后的下游行为。", "checkpoints": ["能区分记录选择成功、消息送达与实际执行完成。", "能处理乱序、重复通知和部分失败，并说明同意并非所有处理的唯一依据。"], "links": [{"topicId": "privacy-user-control", "sectionId": "purpose-access-consent", "itemId": "three-questions", "label": "区分同意、偏好与访问权限", "relation": "易混对比"}, {"topicId": "privacy-user-control", "sectionId": "interface-to-enforcement", "itemId": "preference-flow", "label": "设计可靠的选择传播", "relation": "应用"}, {"topicId": "privacy-user-control", "sectionId": "partial-completion", "itemId": "completion-levels", "label": "定义完成与例外状态", "relation": "应用"}]}
     },
     {
       "id": "control-effectiveness", "zh": "控制有效性", "en": "Control Effectiveness", "abbr": "", "aliases": ["隐私控制有效性"],
       "definition": "判断一项保护措施在规定范围内是否真正达到目标。需要看实际执行、正常与失败路径以及结果证据，而不只是看规则是否已经配置。",
       "distinction": "部署完成、测试通过和持续有效是不同状态；覆盖哪些系统、遗漏哪些路径，也属于判断有效性的前提。",
       "example": "教学例子：除了确认脱敏开关已开，还用不同角色查询，并核对导出和接口是否同样受控。",
-      "topicIds": ["privacy-evidence", "privacy-dataworks"], "sourceIds": [9, 10], "extraSources": [{"label": "NIST：隐私工程", "url": "https://www.nist.gov/privacy-engineering"}], "origin": "framework"
+      "topicIds": ["privacy-evidence", "privacy-dataworks"], "sourceIds": [9, 10], "extraSources": [{"label": "NIST：隐私工程", "url": "https://www.nist.gov/privacy-engineering"}], "origin": "framework",
+      "learning": {"status": "core", "rationale": "核心验收标准，避免把过程数量当保护结果。", "focus": "证明控制在声明范围和运行条件下真正达到保护目标。", "checkpoints": ["能建立要求、执行点、行为测试和持续监测的对应关系。", "能报告覆盖分母、旁路、未知范围和例外关闭情况。"], "links": [{"topicId": "privacy-evidence", "sectionId": "requirement-control-evidence", "itemId": "one-requirement", "label": "组织验收证据", "relation": "应用"}, {"topicId": "privacy-evidence", "sectionId": "effectiveness-coverage-exceptions", "itemId": "coverage-denominator", "label": "检验覆盖分母与持续有效性", "relation": "应用"}, {"topicId": "privacy-dataworks", "sectionId": "classification-to-enforcement", "itemId": "four-jobs", "label": "将配置完成与执行生效区分", "relation": "易混对比"}]}
     },
     {
       "id": "privacy-aware-infrastructure", "zh": "隐私感知基础设施", "en": "Privacy-Aware Infrastructure", "abbr": "PAI", "aliases": ["隐私基础设施"],
-      "definition": "把理解数据、发现流向、执行保护和提供证据做成可复用的基础能力，使不同产品团队能在共同设施上落实隐私要求。",
+      "definition": "Meta 案例中的一组可复用隐私基础设施能力，连接数据理解、流向发现、保护执行与行为证据。学习重点是这些能力怎样协作，而非把 PAI 当作所有企业统一的架构标准。",
       "distinction": "PAI 是一组基础设施能力，不是单个分类模型；分类和血缘帮助理解数据，执行控制和证明结果还需要其他机制。",
       "example": "教学例子：多个产品复用同一套数据标签、血缘查询与用途检查能力。",
-      "topicIds": ["ai-classification", "ai-lineage"], "sourceIds": [12, 13], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-classification", "ai-lineage"], "sourceIds": [12, 13], "extraSources": [], "origin": "source",
+      "learning": {"status": "reference", "rationale": "案例框架名不单独考记忆；独立能力已各有实质词卡。", "focus": "了解 Meta 案例如何把隐私能力组织为可复用基础设施。", "checkpoints": ["能从案例中定位数据理解、发现、执行与证明四类能力。"], "links": [{"topicId": "ai-classification", "sectionId": "online-offline-loop", "itemId": "two-time-scales", "label": "查看 PAI 能力之间的关系", "relation": "应用"}, {"topicId": "ai-lineage", "sectionId": "lineage-enforcement-proof", "itemId": "three-distinct-capabilities", "label": "查看血缘如何连接控制和证明", "relation": "应用"}]}
     },
     {
       "id": "asset-classification", "zh": "数据资产分类", "en": "Data Asset Classification", "abbr": "", "aliases": ["资产分类"],
       "definition": "根据数据的含义、来源和使用上下文，给表、字段、日志或其他资产确定所属类别，以便后续选择正确的保护规则和处理方式。",
       "distinction": "分类不是仅看字段名猜含义；同名字段在不同系统中可能指不同概念，分类结果还要与敏感级别区分。",
       "example": "教学例子：字段 age 可能表示人的年龄，也可能表示缓存存在的时长，要结合代码用途判断。",
-      "topicIds": ["ai-classification", "privacy-dataworks"], "sourceIds": [9, 13], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-classification", "privacy-dataworks"], "sourceIds": [9, 13], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "决定保护作用于哪些对象，是自动治理基础。", "focus": "按语义和上下文分类资产，并检查错误如何影响下游保护。", "checkpoints": ["能分开类别、敏感级别、发现范围和保护执行。", "能用来源、代码用途和冲突证据处理同名字段，不只按名称猜。"], "links": [{"topicId": "privacy-dataworks", "sectionId": "classification-to-enforcement", "itemId": "four-jobs", "label": "区分分类、分级与执行", "relation": "易混对比"}, {"topicId": "ai-classification", "sectionId": "context-prompt-evidence", "itemId": "age-evidence-brief", "label": "评估语义歧义与证据", "relation": "应用"}, {"topicId": "ai-classification", "sectionId": "online-offline-loop", "itemId": "three-components", "label": "设计规则优先与模型后备", "relation": "应用"}]}
     },
     {
       "id": "evidence-brief", "zh": "证据简报", "en": "Evidence Brief", "abbr": "", "aliases": ["结构化证据简报"],
       "definition": "Meta 资产分类案例把筛选后的判断材料称为 Evidence Brief：列出支持与反对分类的线索、来源及不确定性，供模型和审核者使用。这是案例中的组件用语。",
       "distinction": "它是经过筛选的判断材料，不是先把正确答案标好；堆进更多原始上下文也不一定让证据更清楚。",
       "example": "教学例子：判断 email 字段时，简报同时列出字段语义、调用代码及是否属于测试数据。",
-      "topicIds": ["ai-classification", "ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-classification", "ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "虽然名称来自 Meta，证据选择与可靠性判断有独立设计价值。", "focus": "从分散上下文中组织有来源的正反证据，避免弱线索或答案主导判断。", "checkpoints": ["能说明为什么更多上下文不等于更好的证据。", "能展示来源、矛盾、可靠性与被排除的循环目标标签。"], "links": [{"topicId": "ai-classification", "sectionId": "context-prompt-evidence", "itemId": "age-evidence-brief", "label": "组织资产分类的正反证据", "relation": "应用"}, {"topicId": "ai-classification", "sectionId": "context-prompt-evidence", "itemId": "instruction-versus-facts", "label": "区分任务指令、事实与参考标签", "relation": "易混对比"}, {"topicId": "ai-evaluation", "sectionId": "masking-across-paths", "itemId": "shortcut-rule", "label": "防止旧标签进入判断依据", "relation": "应用"}]}
     },
     {
       "id": "deterministic-rule", "zh": "确定性规则", "en": "Deterministic Rule", "abbr": "", "aliases": ["确定性规则引擎", "规则匹配"],
       "definition": "按明确的条件和已固定的逻辑产生结果；在相同输入、版本和运行条件下应能重现同样判断，便于解释、测试和审计。",
       "distinction": "正则表达式和部分启发式逻辑都可以实现规则；确定性描述执行方式，不保证这条规则本身一定正确。",
       "example": "教学例子：经验证的规则要求“字段语义为账号标识且来自用户域”，同时满足才分类为账号数据。",
-      "topicIds": ["ai-classification"], "sourceIds": [13], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-classification"], "sourceIds": [13], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "生产控制需要可追踪执行，但不能由确定性推导正确性。", "focus": "在固定输入和版本下复现判断，同时独立验证语义正确性。", "checkpoints": ["能区别可重复执行与判断正确。", "能说明规则适用范围、测试边界、版本和退役条件。"], "links": [{"topicId": "ai-classification", "sectionId": "rules-regex-heuristics", "itemId": "implementation-levels", "label": "区分确定性、正则与启发式", "relation": "易混对比"}, {"topicId": "ai-classification", "sectionId": "candidate-to-version", "itemId": "rule-lifecycle", "label": "管理规则验证与退役", "relation": "应用"}, {"topicId": "ai-classification", "sectionId": "improve-versus-replace", "itemId": "two-improvements", "label": "兼顾成本收益和分类质量", "relation": "应用"}]}
     },
     {
       "id": "rule-distillation", "zh": "规则蒸馏", "en": "Rule Distillation", "abbr": "", "aliases": ["离线蒸馏", "规则提炼", "蒸馏引擎"],
       "definition": "从经过检查的分类经验中提炼可重复执行的规则，让后续相似案例走规则路径。候选规则要经过验证，才能影响正式判断。",
       "distinction": "这里把稳定行为转为规则，不必训练一个小模型；生成候选规则可以用 LLM，正式规则执行可以不依赖 LLM。",
       "example": "教学例子：反复确认某组元数据组合对应同类资产，再提出规则，在保留样本和影子流量上验证。",
-      "topicIds": ["ai-classification", "ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-classification", "ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "把概率推理转为可审计控制的核心架构考点。", "focus": "把经验证的分类经验转成可审核规则，服务后续请求。", "checkpoints": ["能区分当前分类输出与可复用条件。", "能解释候选生成、留出验证、影子运行、保护变化审批和退役。", "能区别规则蒸馏与把知识迁移到另一个模型。"], "links": [{"topicId": "ai-classification", "sectionId": "online-offline-loop", "itemId": "three-components", "label": "区分分类结果和规则产物", "relation": "易混对比"}, {"topicId": "ai-classification", "sectionId": "candidate-to-version", "itemId": "generation-versus-execution", "label": "区分候选生成与执行", "relation": "应用"}, {"topicId": "ai-evaluation", "sectionId": "promotion-evidence", "itemId": "evaluation-release-flow", "label": "设置晋升质量门槛", "relation": "应用"}, {"topicId": "ai-classification", "sectionId": "improve-versus-replace", "itemId": "two-improvements", "label": "衡量调用成本与质量收益", "relation": "应用"}]}
     },
     {
       "id": "large-language-model", "zh": "大语言模型", "en": "Large Language Model", "abbr": "LLM", "aliases": ["大模型"],
       "definition": "从大量语言等训练数据中学习模式、按输入生成文本或结构化结果的模型。在本图的分类案例中，它用于推理当前规则尚未覆盖的资产。",
       "distinction": "能给出流畅解释不代表结论已验证；LLM 的建议、正式控制规则和人工确认的参考标签应分清。",
       "example": "教学例子：规则无法判断一个新字段时，模型阅读代码与血缘，提出候选类别和依据。",
-      "topicIds": ["ai-classification", "ai-agent"], "sourceIds": [13], "extraSources": [{"label": "Google：机器学习术语表", "url": "https://developers.google.com/machine-learning/glossary#large-language-model"}], "origin": "extension"
+      "topicIds": ["ai-classification", "ai-agent"], "sourceIds": [13], "extraSources": [{"label": "Google：机器学习术语表", "url": "https://developers.google.com/machine-learning/glossary#large-language-model"}], "origin": "extension",
+      "learning": {"status": "reference", "rationale": "基础名词定义过宽；可考边界已由分类、校准与规则卡承担。", "focus": "在架构中识别模型承担的辅助判断角色。", "checkpoints": ["能找到模型后备路径，并理解它的预测仍需验证。"], "links": [{"topicId": "ai-classification", "sectionId": "online-offline-loop", "itemId": "three-components", "label": "定位 LLM 分类器与规则引擎职责", "relation": "应用"}, {"topicId": "ai-classification", "sectionId": "context-prompt-evidence", "itemId": "instruction-versus-facts", "label": "查看模型需要的证据", "relation": "应用"}]}
     },
     {
       "id": "target-leakage", "zh": "目标泄漏", "en": "Target Leakage", "abbr": "", "aliases": ["标签泄漏", "答案泄漏"],
       "definition": "预测目标本身，或在真实预测时不应可用、却能透露目标的信息，进入输入特征或规则条件，使离线结果虚高。需要按任务时点和可用信息边界判断。",
       "distinction": "目标泄漏是数据泄漏的一种；测试集被反复用于调参、用自身预测充当参考标签属于相关评估问题，不能全部混称为 Target Leakage。它也不同于个人数据被披露。",
       "example": "教学例子：让模型判断字段是否为邮箱，却在输入里保留旧的“邮箱”分类标签。",
-      "topicIds": ["ai-evaluation", "ai-classification"], "sourceIds": [13], "extraSources": [{"label": "scikit-learn：数据泄漏", "url": "https://scikit-learn.org/stable/common_pitfalls.html#data-leakage"}], "origin": "extension"
+      "topicIds": ["ai-evaluation", "ai-classification"], "sourceIds": [13], "extraSources": [{"label": "scikit-learn：数据泄漏", "url": "https://scikit-learn.org/stable/common_pitfalls.html#data-leakage"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "评估有效性与隐私保护结果高度相关，具有明确机制辨析价值。", "focus": "阻止答案或真实预测时不可用的信息进入特征和规则条件。", "checkpoints": ["能沿不同读取路径找到重新引入旧标签的入口。", "能区分目标泄漏、留出集污染、自我评分与隐私披露。"], "links": [{"topicId": "ai-evaluation", "sectionId": "masking-across-paths", "itemId": "shortcut-rule", "label": "检查分类与蒸馏的输入路径", "relation": "应用"}, {"topicId": "ai-evaluation", "sectionId": "masking-across-paths", "itemId": "shared-invariant", "label": "在多个组件实施同一约束", "relation": "应用"}, {"topicId": "ai-evaluation", "sectionId": "disagreement-adjudication", "itemId": "judge-and-leakage", "label": "区分不同评估污染", "relation": "易混对比"}, {"topicId": "privacy-dataworks", "sectionId": "three-maskings", "itemId": "masking-object", "label": "区别标签遮蔽和数据脱敏", "relation": "易混对比"}]}
     },
     {
       "id": "masking-invariant", "zh": "标签遮蔽不变量", "en": "Masking Invariant", "abbr": "", "aliases": ["标签遮蔽约束", "系统级遮蔽", "Target Label Masking"],
       "definition": "Meta 案例将跨组件持续遵守的目标标签遮蔽约束称为 Masking Invariant：从分类器屏蔽的循环答案字段，也不能通过规则蒸馏重新成为判断依据。",
       "distinction": "这里遮蔽的是循环目标标签，不等于所有个人信息都已匿名化；只对 LLM 遮蔽而允许规则学习偷看答案仍有问题。",
       "example": "教学例子：旧隐私标签不进入模型输入，也不能被蒸馏器拿来生成“旧标签等于邮箱”的规则。",
-      "topicIds": ["ai-evaluation", "ai-classification"], "sourceIds": [13], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-evaluation", "ai-classification"], "sourceIds": [13], "extraSources": [], "origin": "source",
+      "learning": {"status": "reference", "rationale": "局部机制名与 Target Leakage 考点高度重复，作为架构参考保留。", "focus": "识别 Meta 案例中的跨组件标签遮蔽约束。", "checkpoints": ["能指出该约束针对循环目标字段，不等同个人数据脱敏。"], "links": [{"topicId": "ai-evaluation", "sectionId": "masking-across-paths", "itemId": "shared-invariant", "label": "查看共享输入约束的执行位置", "relation": "应用"}, {"topicId": "ai-evaluation", "sectionId": "masking-across-paths", "itemId": "shortcut-rule", "label": "查看答案从另一条路径重新进入的例子", "relation": "应用"}, {"topicId": "privacy-dataworks", "sectionId": "three-maskings", "itemId": "masking-object", "label": "区分三种遮蔽目的", "relation": "易混对比"}]}
     },
     {
       "id": "confidence-calibration", "zh": "置信度校准", "en": "Confidence Calibration", "abbr": "", "aliases": ["置信度", "概率校准"],
       "definition": "对照实际判断结果，检查模型给出的可信分数是否与正确率相称。校准后才更适合用分数设置自动处理或转人工的门槛。",
       "distinction": "模型说有九成把握，并不自动意味着这批高分判断真的九成正确；分数与真实正确率需要独立数据检验。",
       "example": "教学例子：抽查一批都报 0.9 的判断；若只有七成正确，就不能把原始分数直接当成功概率。",
-      "topicIds": ["ai-evaluation"], "sourceIds": [13], "extraSources": [{"label": "scikit-learn：概率校准", "url": "https://scikit-learn.org/stable/modules/calibration.html"}], "origin": "source"
+      "topicIds": ["ai-evaluation"], "sourceIds": [13], "extraSources": [{"label": "scikit-learn：概率校准", "url": "https://scikit-learn.org/stable/modules/calibration.html"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "自动化决策门槛所需的实质评估能力。", "focus": "用可靠参考数据检验分数与正确率，再决定自动处理或人工复核。", "checkpoints": ["能解释自报 0.9 分数与实际九成正确的区别。", "能检查按类、分数区间和新分布的校准变化，不把高分当单次保证。"], "links": [{"topicId": "ai-evaluation", "sectionId": "confidence-agreement-truth", "itemId": "black-box-confidence", "label": "从分数组观察校准", "relation": "应用"}, {"topicId": "ai-evaluation", "sectionId": "promotion-evidence", "itemId": "judge-reference-loop", "label": "分开预测、裁判与参考答案", "relation": "应用"}, {"topicId": "ai-evaluation", "sectionId": "promotion-evidence", "itemId": "evaluation-release-flow", "label": "决定何时升级人工审查", "relation": "应用"}]}
     },
     {
-      "id": "ground-truth", "zh": "参考真值", "en": "Ground Truth / Reference Labels", "abbr": "", "aliases": ["人工审核标签", "参考标签", "真实标签"],
-      "definition": "评估时用来判断预测是否正确的参照答案。在资产分类中，需要明确标注依据、审核方式和版本，遇到争议也可以修订。",
+      "id": "ground-truth", "zh": "参考真值", "en": "Ground Truth", "abbr": "", "aliases": ["人工审核标签", "参考标签", "真实标签"],
+      "definition": "评估时作为实际结果的参照。在资产分类中，通常用按明确标准审核的参考标签近似它，因此要保留标注依据、版本和争议处理；参考标签不是永不出错的事实。",
       "distinction": "被当作参照不代表绝对不会错；待评估模型自己生成的标签，不能未经审核就充当证明它正确的答案。",
       "example": "教学例子：审核者按统一分类标准确认一批资产，再用这批标签比较模型的新旧版本。",
-      "topicIds": ["ai-evaluation"], "sourceIds": [13], "extraSources": [{"label": "Google：Ground truth", "url": "https://developers.google.com/machine-learning/glossary#ground-truth"}], "origin": "source"
+      "topicIds": ["ai-evaluation"], "sourceIds": [13], "extraSources": [{"label": "Google：Ground truth", "url": "https://developers.google.com/machine-learning/glossary#ground-truth"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "决定评估可信度，比记住真值一词更重要。", "focus": "维护有标注标准、审核依据、版本与争议处理的参考标签。", "checkpoints": ["能说明参考标签为何也可能有误及如何裁决。", "能防止被测模型未经审核的预测成为它自己的评分答案。"], "links": [{"topicId": "ai-evaluation", "sectionId": "disagreement-adjudication", "itemId": "independent-reference", "label": "调查分类器、规则与标签分歧", "relation": "应用"}, {"topicId": "ai-evaluation", "sectionId": "promotion-evidence", "itemId": "judge-reference-loop", "label": "区分裁判信号和独立参照", "relation": "易混对比"}, {"topicId": "ai-evaluation", "sectionId": "disagreement-adjudication", "itemId": "judge-and-leakage", "label": "防止评估自我强化", "relation": "应用"}]}
     },
     {
       "id": "holdout-set", "zh": "留出集", "en": "Holdout Set", "abbr": "", "aliases": ["保留评估集", "留出验证集"],
       "definition": "预先留出一批不参与当前学习或调优的数据，用来检查新模型或规则在未直接适配的样本上表现如何，减少自我验证的偏差。",
       "distinction": "Holdout 描述数据如何分开；Shadow 描述如何旁路运行。留出数据被反复用来调参后，也可能失去独立检验作用。",
       "example": "教学例子：用一批资产提炼规则，另一批已审核资产检验规则是否只记住了前一批的模式。",
-      "topicIds": ["ai-evaluation", "ai-rollout"], "sourceIds": [13], "extraSources": [{"label": "Google：划分训练与测试集", "url": "https://developers.google.com/machine-learning/crash-course/overfitting/dividing-datasets"}], "origin": "source"
+      "topicIds": ["ai-evaluation", "ai-rollout"], "sourceIds": [13], "extraSources": [{"label": "Google：划分训练与测试集", "url": "https://developers.google.com/machine-learning/crash-course/overfitting/dividing-datasets"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "跨规则评估和机器遗忘的高频概念边界。", "focus": "保持评估样本与当前学习或调优的独立性，并说明代表性局限。", "checkpoints": ["能指出反复据留出集改方案会削弱独立检验。", "能区别留出样本、影子运行和遗忘任务的保留集。"], "links": [{"topicId": "ai-evaluation", "sectionId": "disagreement-adjudication", "itemId": "independent-reference", "label": "检查留出数据是否有可靠标签", "relation": "应用"}, {"topicId": "ai-rollout", "sectionId": "holdout-to-rollout", "itemId": "complementary-evidence", "label": "与影子及金丝雀验证比较", "relation": "易混对比"}, {"topicId": "ai-unlearning", "sectionId": "sets-and-methods", "itemId": "three-sets", "label": "与 Retain Set 比较", "relation": "易混对比"}]}
     },
     {
       "id": "llm-as-judge", "zh": "模型裁判", "en": "LLM-as-a-Judge", "abbr": "", "aliases": ["代理裁判", "Proxy Judge", "裁判模型"],
       "definition": "用语言模型按给定标准检查另一个结果，提供可扩展的评估信号。裁判需要自己的检验与约束，尤其要避免共同偏差。",
       "distinction": "代理裁判不自动等于真值；Meta 案例中三种提示共用一个较大的裁判模型，不是三个独立模型家族。",
       "example": "教学例子：裁判分别直接看证据、先质疑理由、只看元数据，再把分歧交给人工核查。",
-      "topicIds": ["ai-evaluation"], "sourceIds": [13], "extraSources": [{"label": "Anthropic：Agent 评估与模型评分", "url": "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents"}], "origin": "source"
+      "topicIds": ["ai-evaluation"], "sourceIds": [13], "extraSources": [{"label": "Anthropic：Agent 评估与模型评分", "url": "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "AI 辅助审核的实质质量与责任边界。", "focus": "把模型裁判作为需验证的评估信号，控制共同偏差和参考污染。", "checkpoints": ["能说明多提示、多次调用和不同模型家族的独立性差别。", "能给出高风险分歧交人工、参考集独立且有版本的设计。"], "links": [{"topicId": "ai-evaluation", "sectionId": "disagreement-adjudication", "itemId": "judge-and-leakage", "label": "分析裁判独立性与评估污染", "relation": "应用"}, {"topicId": "ai-evaluation", "sectionId": "promotion-evidence", "itemId": "judge-reference-loop", "label": "定位预测、裁判与参考角色", "relation": "应用"}, {"topicId": "ai-evaluation", "sectionId": "confidence-agreement-truth", "itemId": "kappa-numeric", "label": "区别一致性与正确性", "relation": "易混对比"}]}
     },
     {
       "id": "cohens-kappa", "zh": "科恩卡帕系数", "en": "Cohen’s Kappa", "abbr": "κ", "aliases": ["卡帕系数", "Kappa", "一致性指标"],
       "definition": "衡量两组分类判断的一致程度，并扣除按类别分布偶然一致的部分。它帮助检查判断是否稳定，但要同时看两组判断各自代表什么。",
       "distinction": "κ 不是准确率，也不局限于零到一；它可以为负。两位裁判互相同意，不代表他们符合独立参考答案。",
       "example": "教学例子：比较裁判共识与人工标签的 κ；若只比较两个模型，则只能直接说明它们的一致性。",
-      "topicIds": ["ai-evaluation"], "sourceIds": [13], "extraSources": [{"label": "scikit-learn：Cohen’s kappa", "url": "https://scikit-learn.org/stable/modules/generated/sklearn.metrics.cohen_kappa_score.html"}], "origin": "source"
+      "topicIds": ["ai-evaluation"], "sourceIds": [13], "extraSources": [{"label": "scikit-learn：Cohen’s kappa", "url": "https://scikit-learn.org/stable/modules/generated/sklearn.metrics.cohen_kappa_score.html"}], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "重要补充统计指标；不把单个指标当自动发布标准。", "focus": "解释机会校正后的一致性，以及类别比例和参照选择的影响。", "checkpoints": ["能说明两组标签、观察一致率与偶然一致期望的作用。", "能解释 κ 可为负、并非准确率，高一致也可能共同出错。"], "links": [{"topicId": "ai-evaluation", "sectionId": "confidence-agreement-truth", "itemId": "kappa-numeric", "label": "用数值例子解释 Cohen’s κ", "relation": "应用"}, {"topicId": "ai-evaluation", "sectionId": "disagreement-adjudication", "itemId": "independent-reference", "label": "选择适当的比较对象", "relation": "应用"}]}
     },
     {
       "id": "rule-coverage", "zh": "规则覆盖率", "en": "Rule Coverage", "abbr": "", "aliases": ["自动化覆盖率"],
       "definition": "在明确的一批待处理资产中，有多少能由规则路径直接处理。计算时需要说明分母、时间范围和是否把不支持的资产纳入统计。",
       "distinction": "覆盖率看处理了多少，准确率和召回率看处理得怎样；一条过宽规则可能覆盖很多，却漏掉重要的敏感类别。",
       "example": "教学例子：一百项资产中八十项命中规则，覆盖率是八成；还要另查这八十项的判断质量。",
-      "topicIds": ["ai-classification", "ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-classification", "ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "直接连接工程效率 ROI 与隐私保护，不是单纯数量卡。", "focus": "定义规则直接处理比例的分母，并与分类质量一起衡量自动化收益。", "checkpoints": ["能区分规则覆盖率、准确率与稀有敏感类召回。", "能解释覆盖增加但保护下降时为何不能继续发布。"], "links": [{"topicId": "ai-evaluation", "sectionId": "promotion-evidence", "itemId": "metric-meaning", "label": "区分覆盖、支持量和分类指标", "relation": "易混对比"}, {"topicId": "ai-classification", "sectionId": "improve-versus-replace", "itemId": "two-improvements", "label": "衡量质量不降时的成本收益", "relation": "应用"}, {"topicId": "ai-evaluation", "sectionId": "promotion-evidence", "itemId": "evaluation-release-flow", "label": "用质量门槛约束覆盖扩张", "relation": "应用"}]}
     },
     {
       "id": "prompt-oscillation", "zh": "提示词优化震荡", "en": "Oscillation in Prompt Optimization", "abbr": "", "aliases": ["Prompt 震荡", "优化震荡"],
       "definition": "描述提示词优化在版本间反复切换、没有稳定改善的现象，不是一个统一标准的算法或产品名。可用回归评估、错误分布和独立参考集分析原因。",
       "distinction": "震荡不必然就是过拟合；噪声、矛盾标签、薄弱上下文或修复一类案例却损害另一类，都可能造成停滞。",
       "example": "教学例子：版本 A 解决一组错误却制造另一组，版本 B 又改回来，总体效果始终未提升。",
-      "topicIds": ["ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "extension"
+      "topicIds": ["ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "extension",
+      "learning": {"status": "reference", "rationale": "现象性描述而非独立标准方法；具体诊断保留在问题分支。", "focus": "查阅分类优化停滞与反复退化的诊断路径。", "checkpoints": ["能区分标签噪声、证据不足、回归和评估集过度适配。"], "links": [{"topicId": "ai-evaluation", "sectionId": "optimization-brakes", "itemId": "oscillation-diagnosis", "label": "诊断优化停滞并设置停止条件", "relation": "应用"}]}
     },
     {
       "id": "shadow-mode", "zh": "影子模式", "en": "Shadow Mode", "abbr": "", "aliases": ["影子测试", "阴影模式", "旁路验证"],
       "definition": "让新逻辑接收真实或贴近真实的输入并记录结果，但不让它决定主链路返回。这样可以观察差异，同时限制对用户的直接影响。",
       "distinction": "Shadow 不要求复制全部流量，也不等于 Canary；还需防止旁路写库、发消息等副作用影响正式系统。",
       "example": "教学例子：新分类规则只记录它会怎样判断，线上仍使用旧结果，团队比较两者分歧。",
-      "topicIds": ["ai-rollout", "ai-classification"], "sourceIds": [13], "extraSources": [{"label": "Istio：流量镜像与采样比例", "url": "https://istio.io/latest/docs/tasks/traffic-management/mirroring/"}], "origin": "extension"
+      "topicIds": ["ai-rollout", "ai-classification"], "sourceIds": [13], "extraSources": [{"label": "Istio：流量镜像与采样比例", "url": "https://istio.io/latest/docs/tasks/traffic-management/mirroring/"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "明确的发布验证机制，具有数据流和用户影响判断。", "focus": "用不参与正式决策的旁路验证新逻辑，并隔离副作用。", "checkpoints": ["能依据结果是否生效区分 Shadow 与 Canary，而非只看流量比例。", "能设计共享样本、独立差异裁决以及写库、通知等副作用限制。"], "links": [{"topicId": "ai-rollout", "sectionId": "request-split", "itemId": "side-by-side-routing", "label": "设计并行路径与差异复核", "relation": "应用"}, {"topicId": "ai-rollout", "sectionId": "three-axes", "itemId": "three-questions", "label": "比较运行方式和隔离环境", "relation": "易混对比"}, {"topicId": "ai-rollout", "sectionId": "holdout-to-rollout", "itemId": "complementary-evidence", "label": "组合离线与生产环境证据", "relation": "应用"}]}
     },
     {
       "id": "canary-release", "zh": "金丝雀发布", "en": "Canary Release", "abbr": "", "aliases": ["灰度发布", "金丝雀部署"],
       "definition": "先把新版本交给有限的一部分真实流量或用户，观察关键指标和异常，再决定扩大、暂停或回滚；这部分用户确实会受到新版本影响。",
-      "distinction": "Canary 会参与真实结果；Shadow 通常只旁路观察。灰度的具体范围由风险设计，不存在通用固定百分比。",
+      "distinction": "Canary 是受控的渐进发布方式，会让选定请求采用新版；Shadow 只观察候选结果。中文“灰度”含义较宽，不能仅凭流量小就判断是金丝雀验证。",
       "example": "教学例子：先让一个低风险业务域使用新规则，确认漏判和用户影响可接受后再扩大范围。",
-      "topicIds": ["ai-rollout"], "sourceIds": [], "extraSources": [{"label": "Google SRE：Canarying Releases", "url": "https://sre.google/workbook/canarying-releases/"}], "origin": "extension"
+      "topicIds": ["ai-rollout"], "sourceIds": [], "extraSources": [{"label": "Google SRE：Canarying Releases", "url": "https://sre.google/workbook/canarying-releases/"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "直接关系发布风险，保留独立卡。", "focus": "控制真实生效范围，用风险与质量指标决定继续、暂停或回退。", "checkpoints": ["能指出金丝雀阶段真实影响了哪些用户与用途。", "能定义监测窗口、稀有类指标和停止条件，且回退不撤销既有影响。"], "links": [{"topicId": "ai-rollout", "sectionId": "three-axes", "itemId": "three-questions", "label": "区分金丝雀、影子与沙箱", "relation": "易混对比"}, {"topicId": "ai-rollout", "sectionId": "holdout-to-rollout", "itemId": "complementary-evidence", "label": "安排发布证据与停止条件", "relation": "应用"}]}
     },
     {
       "id": "sandbox", "zh": "沙箱环境", "en": "Sandbox", "abbr": "", "aliases": ["隔离环境", "沙箱"],
       "definition": "通过隔离限制程序可以接触的文件、网络、权限或状态，使测试的影响被控制在指定边界内。具体隔离强度由实现和配置决定。",
       "distinction": "Sandbox 描述环境隔离；Shadow 与 Canary 描述运行和放量方式。用了沙箱，也不能自动证明没有敏感数据或外部连接。",
       "example": "教学例子：在仅含模拟数据、禁止外发的环境中验证一段新规则，再安排真实场景评估。",
-      "topicIds": ["ai-rollout"], "sourceIds": [], "extraSources": [{"label": "Microsoft：Windows Sandbox 隔离示例", "url": "https://learn.microsoft.com/en-us/windows/security/application-security/application-isolation/windows-sandbox/"}], "origin": "extension"
+      "topicIds": ["ai-rollout"], "sourceIds": [], "extraSources": [{"label": "Microsoft：Windows Sandbox 隔离示例", "url": "https://learn.microsoft.com/en-us/windows/security/application-security/application-isolation/windows-sandbox/"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "环境边界有具体设计价值，补充发布方式卡。", "focus": "按文件、网络、身份和写入权限定义隔离边界。", "checkpoints": ["能说明测试隔离不等于数据已经匿名或输入代表生产。", "能区分环境隔离与新逻辑是否实际影响用户，并合理组合影子运行。"], "links": [{"topicId": "ai-rollout", "sectionId": "three-axes", "itemId": "three-questions", "label": "区分隔离与流量生效范围", "relation": "易混对比"}, {"topicId": "ai-rollout", "sectionId": "request-split", "itemId": "side-by-side-routing", "label": "约束测试路径的外部副作用", "relation": "应用"}]}
     },
     {
       "id": "cross-stack-lineage", "zh": "跨技术栈血缘", "en": "Cross-Stack Lineage", "abbr": "", "aliases": ["跨栈血缘", "跨系统血缘"],
       "definition": "把网页或服务中的数据流、日志、数仓、推理调用与训练产物连接起来，追踪同一类数据如何跨技术系统流动和被使用。",
       "distinction": "只解析 SQL 依赖不足以覆盖服务调用和训练路径；跨栈追踪还需要在不同系统中建立可关联的标识和观察点。",
       "example": "教学例子：一条用户交互分别流向日志分析和模型推理，血缘应表示两条路径，而非强行串成一条线。",
-      "topicIds": ["ai-lineage"], "sourceIds": [12], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-lineage"], "sourceIds": [12], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "端到端 AI 数据治理的核心工程能力。", "focus": "连接服务、日志、调用、训练与模型产物，并报告观察盲区。", "checkpoints": ["能画出推理、日志和训练的不同分支，而非强制串行。", "能说明资产版本、调用关联和训练清单怎样连接。", "能区别发现路径、授权用途与证明控制执行。"], "links": [{"topicId": "ai-lineage", "sectionId": "parallel-data-routes", "itemId": "cross-stack-graph", "label": "追踪在线与离线不同数据分支", "relation": "应用"}, {"topicId": "ai-lineage", "sectionId": "identifiers-and-artifacts", "itemId": "what-to-connect", "label": "连接输入、任务与产物", "relation": "应用"}, {"topicId": "ai-lineage", "sectionId": "lineage-enforcement-proof", "itemId": "three-distinct-capabilities", "label": "区分血缘发现和策略执行", "relation": "易混对比"}, {"topicId": "ai-unlearning", "sectionId": "locate-the-copy", "itemId": "deletion-scope", "label": "据流向确定删除和模型处理范围", "relation": "应用"}]}
     },
     {
       "id": "remote-procedure-call", "zh": "远程过程调用", "en": "Remote Procedure Call", "abbr": "RPC", "aliases": ["远程调用", "服务调用边界"],
       "definition": "一个程序请求另一进程或机器中的服务执行操作，并取得结果。数据可能随请求和响应跨越服务边界，因此也是追踪数据流的重要位置。",
       "distinction": "RPC 是调用机制；记录发生过调用，不等于已经知道每个字段的来源、用途与所有下游流向。",
       "example": "教学例子：应用把文本发给推理服务并收到回答，在调用边界记录模型版本和输入输出的关联。",
-      "topicIds": ["ai-lineage"], "sourceIds": [12], "extraSources": [{"label": "gRPC：核心概念", "url": "https://grpc.io/docs/what-is-grpc/core-concepts/"}], "origin": "extension"
+      "topicIds": ["ai-lineage"], "sourceIds": [12], "extraSources": [{"label": "gRPC：核心概念", "url": "https://grpc.io/docs/what-is-grpc/core-concepts/"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "远程调用有独立的接口、失败与追踪语义，直接影响跨服务治理和工程判断，保留为支撑考点。", "focus": "解释跨服务调用如何形成数据流边界，并区分调用状态、业务结果和字段血缘。", "checkpoints": ["能说明调用参数、返回值和服务接口的关系，RPC 不只等于某个框架。", "能解释超时不证明服务未执行，重试需检查业务副作用。", "能指出关联标识和调用记录如何支持追踪，以及它们缺少哪些数据使用证据。"], "links": [{"topicId": "ai-lineage", "sectionId": "identifiers-and-artifacts", "itemId": "what-to-connect", "label": "RPC、任务与数据对象应如何关联", "relation": "应用"}, {"topicId": "ai-lineage", "sectionId": "parallel-data-routes", "itemId": "cross-stack-graph", "label": "推理调用如何跨越服务边界", "relation": "应用"}, {"topicId": "ai-lineage", "sectionId": "lineage-enforcement-proof", "itemId": "three-distinct-capabilities", "label": "调用记录与字段血缘、控制证据的区别", "relation": "易混对比"}]}
     },
     {
       "id": "training-manifest", "zh": "训练数据清单", "en": "Training Data Manifest", "abbr": "", "aliases": ["训练清单"],
       "definition": "记录某次训练实际选用了哪些数据资产及其版本等信息的清单，帮助把训练任务和上游数据连接起来，支持复现与用途核查。",
       "distinction": "有数据集名称还不一定足以复现；具体清单字段依系统而定，也不能只凭清单存在就认定所有数据都获准训练。",
       "example": "教学例子：训练任务记录表版本、筛选条件和输入快照，让审核者追查某批数据是否进入了训练。",
-      "topicIds": ["ai-lineage"], "sourceIds": [12], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-lineage"], "sourceIds": [12], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "训练溯源和删除范围调查需要的具体证据产物。", "focus": "用训练输入清单回答某版本实际使用的数据范围。", "checkpoints": ["能列出输入资产、快照或版本、筛选条件和任务关联。", "能说明输入可追踪不等于用途被许可，并追到模型产物。"], "links": [{"topicId": "ai-lineage", "sectionId": "identifiers-and-artifacts", "itemId": "what-to-connect", "label": "关联训练输入与模型产物", "relation": "应用"}, {"topicId": "ai-lineage", "sectionId": "lineage-enforcement-proof", "itemId": "three-distinct-capabilities", "label": "核查训练允许用途", "relation": "应用"}, {"topicId": "ai-unlearning", "sectionId": "locate-the-copy", "itemId": "deletion-scope", "label": "定位受删除请求影响的训练范围", "relation": "应用"}]}
     },
     {
       "id": "model-checkpoint", "zh": "模型检查点", "en": "Model Checkpoint", "abbr": "", "aliases": ["模型快照", "检查点"],
       "definition": "在某个时刻保存的模型状态，通常包含权重，也可能包含恢复训练所需的其他状态。它让训练产物和实际使用的模型版本可以被识别。",
       "distinction": "Checkpoint 保存模型状态，Training Manifest 记录训练输入；两者关联起来，才方便追查某版本来自哪些数据。",
       "example": "教学例子：记录服务本次调用的是哪个检查点，再沿训练任务回查它使用的数据快照。",
-      "topicIds": ["ai-lineage", "ai-unlearning"], "sourceIds": [12], "extraSources": [{"label": "TensorFlow：Training checkpoints", "url": "https://www.tensorflow.org/guide/checkpoint"}], "origin": "extension"
+      "topicIds": ["ai-lineage", "ai-unlearning"], "sourceIds": [12], "extraSources": [{"label": "TensorFlow：Training checkpoints", "url": "https://www.tensorflow.org/guide/checkpoint"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "保留因其涉及模型处置范围与验收，而非只问词义。", "focus": "识别模型状态产物及其来源和使用去向，避免只替换一个文件。", "checkpoints": ["能区分保存模型状态的检查点和记录输入的训练清单。", "能说明旧检查点、派生模型与部署版本为何影响遗忘完成范围。"], "links": [{"topicId": "ai-lineage", "sectionId": "identifiers-and-artifacts", "itemId": "what-to-connect", "label": "与 Training Manifest 的职责对比", "relation": "易混对比"}, {"topicId": "ai-unlearning", "sectionId": "locate-the-copy", "itemId": "deletion-scope", "label": "定位需要处理的模型产物", "relation": "应用"}, {"topicId": "ai-unlearning", "sectionId": "forgetting-utility-cost", "itemId": "evaluation-contract", "label": "检查旧产物和服务是否退出使用", "relation": "应用"}]}
     },
     {
       "id": "policy-zones", "zh": "策略区域", "en": "Policy Zones", "abbr": "", "aliases": ["政策区域", "策略边界"],
       "definition": "Meta 用来表达并执行数据使用边界的隐私基础设施机制。结合数据流信息，检查数据能否进入某个处理场景或用于某种目的。",
       "distinction": "这是原文的机制名称，不能简单等同于网络分区或存储文件夹；关键在于跨边界的数据处理受到策略检查。",
       "example": "教学例子：训练入口核对所有输入资产的允许用途，有一项不满足，就不能按当前方案启动。",
-      "topicIds": ["ai-lineage", "privacy-user-control"], "sourceIds": [12], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-lineage", "privacy-user-control"], "sourceIds": [12], "extraSources": [], "origin": "source",
+      "learning": {"status": "reference", "rationale": "厂商机制名不单独考背诵；核心判断已由 Purpose Limitation 覆盖。", "focus": "了解 Meta 案例中按数据用途控制边界的机制。", "checkpoints": ["能说明它是案例机制名称，不应等同于网络区域或存储目录。"], "links": [{"topicId": "ai-lineage", "sectionId": "lineage-enforcement-proof", "itemId": "three-distinct-capabilities", "label": "查看用途边界检查与持续证明", "relation": "应用"}]}
     },
     {
       "id": "embedding", "zh": "嵌入向量", "en": "Embedding", "abbr": "", "aliases": ["嵌入", "向量嵌入", "Embedding Vector"],
       "definition": "将对象映射为数值向量，使表示中的关系可以支持模型处理或相似检索。机器学习中常通过训练获得这种表示；它是特征表示的一种，并非所有手工特征向量都应称为 Embedding。",
       "distinction": "Embedding 不等于一般特征向量，也不等于加密或匿名化。相近向量仅表示在该表示下接近，不保证对象相同或风险标签相同。",
       "example": "教学例子：两段意思相近的文字被编码为相近向量，便于检索，但仍需管理这些向量的来源与用途。",
-      "topicIds": ["ai-classification", "ai-lineage", "ai-unlearning", "risk-match", "risk-patterns"], "sourceIds": [13], "extraSources": [{"label": "Google：Embeddings", "url": "https://developers.google.com/machine-learning/crash-course/embeddings"}], "origin": "extension"
+      "topicIds": ["ai-classification", "ai-lineage", "ai-unlearning", "risk-match", "risk-patterns"], "sourceIds": [13], "extraSources": [{"label": "Google：Embeddings", "url": "https://developers.google.com/machine-learning/crash-course/embeddings"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "保留跨风控检索与隐私治理的不同考点，链接不截断。", "focus": "按表示、相似性和来源治理向量，不能把数值化当隐私保护。", "checkpoints": ["能解释向量相近不等于相同内容或相同风险标签。", "能区分 Embedding、离散项集、加密和匿名化。", "能将向量索引作为派生资产纳入更新、删除和用途范围。"], "links": [{"topicId": "risk-match", "sectionId": "lexical-semantic", "itemId": "representations", "label": "比较字面检索与语义向量", "relation": "应用"}, {"topicId": "risk-patterns", "sectionId": "discrete-vectors", "itemId": "io-boundary", "label": "区分 Embedding 与频繁项集", "relation": "易混对比"}, {"topicId": "ai-unlearning", "sectionId": "locate-the-copy", "itemId": "deletion-scope", "label": "处理检索向量和来源对应", "relation": "应用"}, {"topicId": "privacy-dataworks", "sectionId": "anonymity-boundary", "itemId": "four-outcomes", "label": "检验向量表示是否仍能关联个人", "relation": "易混对比"}]}
     },
     {
       "id": "model-training", "zh": "模型训练", "en": "Model Training", "abbr": "", "aliases": ["训练阶段"],
       "definition": "通过训练数据和学习方法调整模型参数，使其形成完成任务的能力。治理训练数据时，还需要追踪它产生了哪些模型版本和后续产物。",
       "distinction": "训练通常更新参数，普通推理通常使用已有参数；某次推理输入是否又被用于后续训练，要检查另一个数据处理流程。",
       "example": "教学例子：用历史样本更新分类器权重，这批样本的允许用途和版本需要纳入训练记录。",
-      "topicIds": ["ai-lineage", "ai-unlearning"], "sourceIds": [12, 19], "extraSources": [{"label": "Google：训练与推理", "url": "https://developers.google.com/machine-learning/glossary#training"}], "origin": "extension"
+      "topicIds": ["ai-lineage", "ai-unlearning"], "sourceIds": [12, 19], "extraSources": [{"label": "Google：训练与推理", "url": "https://developers.google.com/machine-learning/glossary#training"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "基础概念因影响用途和删除范围而保留应用考点。", "focus": "从参数更新和产物生成判断训练路径的治理责任。", "checkpoints": ["能指出参与训练的数据与产生的模型版本如何关联。", "能把推理后另行留存或训练看成独立用途流程。"], "links": [{"topicId": "ai-lineage", "sectionId": "parallel-data-routes", "itemId": "cross-stack-graph", "label": "区分训练和当前推理路径", "relation": "易混对比"}, {"topicId": "ai-lineage", "sectionId": "identifiers-and-artifacts", "itemId": "what-to-connect", "label": "记录输入任务与产物", "relation": "应用"}, {"topicId": "ai-unlearning", "sectionId": "sets-and-methods", "itemId": "methods-not-equivalent", "label": "区分重训、遗忘与继续微调", "relation": "易混对比"}]}
     },
     {
-      "id": "model-inference", "zh": "模型推理", "en": "Model Inference", "abbr": "", "aliases": ["推理调用", "在线推理"],
+      "id": "model-inference", "zh": "模型推理", "en": "Model Inference", "abbr": "", "aliases": ["推理调用"],
       "definition": "把新的输入交给已有模型，取得预测、分类或生成结果的过程。隐私治理需要同时关注请求内容、模型版本、输出和相关日志。",
       "distinction": "推理不是默认再次训练；但输入仍可能存在上下文、日志或缓存中，不更新模型参数也不代表无需数据治理。",
       "example": "教学例子：模型根据当前字段证据给出类别，这是推理；离线更新模型参数则属于训练。",
-      "topicIds": ["ai-classification", "ai-lineage", "ai-agent"], "sourceIds": [12, 18], "extraSources": [{"label": "Google：Inference", "url": "https://developers.google.com/machine-learning/glossary#inference"}], "origin": "extension"
+      "topicIds": ["ai-classification", "ai-lineage", "ai-agent"], "sourceIds": [12, 18], "extraSources": [{"label": "Google：Inference", "url": "https://developers.google.com/machine-learning/glossary#inference"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "考察实际数据流，避免用不训练来排除全部隐私风险。", "focus": "区分用已有模型处理输入与更新参数，并继续治理输入和日志。", "checkpoints": ["能解释普通推理不自动训练，但仍可能留存或传播敏感内容。", "能据实际检索、上下文与训练路径定位披露来源。"], "links": [{"topicId": "ai-lineage", "sectionId": "parallel-data-routes", "itemId": "cross-stack-graph", "label": "区分推理、持久化与训练", "relation": "易混对比"}, {"topicId": "ai-agent", "sectionId": "context-persistence", "itemId": "four-turns", "label": "检查推理上下文与转发", "relation": "应用"}, {"topicId": "ai-agent", "sectionId": "context-versus-training", "itemId": "different-failures", "label": "调查模型回答的信息来源", "relation": "应用"}]}
     },
     {
       "id": "ai-agent", "zh": "人工智能智能体", "en": "AI Agent", "abbr": "", "aliases": ["智能体", "代理系统"],
       "definition": "由模型根据目标、当前信息和中间结果决定下一步，并通过工具执行多步任务的系统。风险分析要覆盖完整行动过程和累积上下文。",
       "distinction": "固定步骤的工作流与由模型动态决定行动的 Agent 自主程度不同；能调用工具，不代表每个后续动作都自动获得授权。",
       "example": "教学例子：智能体先查数据目录，再读取表结构，并根据结果决定是否继续查询血缘。",
-      "topicIds": ["ai-agent"], "sourceIds": [18], "extraSources": [{"label": "Anthropic：Building Effective Agents", "url": "https://www.anthropic.com/engineering/building-effective-agents"}], "origin": "extension"
+      "topicIds": ["ai-agent"], "sourceIds": [18], "extraSources": [{"label": "Anthropic：Building Effective Agents", "url": "https://www.anthropic.com/engineering/building-effective-agents"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "比词义更有价值的是自主行动下的端到端控制。", "focus": "把权限和数据最小化的评估单位扩展到完整多步任务。", "checkpoints": ["能描述模型决定下一步时如何使用累计上下文。", "能说明一次工具授权不会自动授权后续关联和转交。"], "links": [{"topicId": "ai-agent", "sectionId": "cross-server-composition", "itemId": "account-to-person", "label": "审查完整任务的关联与用途", "relation": "应用"}, {"topicId": "ai-agent", "sectionId": "context-persistence", "itemId": "four-turns", "label": "控制跨轮内容留存", "relation": "应用"}, {"topicId": "ai-agent", "sectionId": "context-versus-training", "itemId": "different-failures", "label": "区分正常流程缺口与提示注入", "relation": "易混对比"}]}
     },
     {
       "id": "model-context-protocol", "zh": "模型上下文协议", "en": "Model Context Protocol", "abbr": "MCP", "aliases": ["MCP 协议"],
       "definition": "连接 AI 应用与外部工具、资源等能力的开放协议，让不同服务能够用约定方式提供能力。它帮助接通系统，但不包办整个业务流程的授权判断。",
       "distinction": "MCP 是接口协议，Agent 是执行任务的系统；单个服务检查权限，并不自动解决跨服务组合数据产生的隐私风险。",
       "example": "教学例子：智能体通过 MCP 分别访问数据库和客户系统，仍需判断两边信息是否允许合并使用。",
-      "topicIds": ["ai-agent"], "sourceIds": [18], "extraSources": [{"label": "MCP 官方：协议介绍", "url": "https://modelcontextprotocol.io/docs/getting-started/intro"}], "origin": "source"
+      "topicIds": ["ai-agent"], "sourceIds": [18], "extraSources": [{"label": "MCP 官方：协议介绍", "url": "https://modelcontextprotocol.io/docs/getting-started/intro"}, {"label": "MCP 官方：架构与协议角色", "url": "https://modelcontextprotocol.io/docs/learn/architecture"}], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "MCP 是实质协议和系统角色概念；与 Agent 编排、逐次授权及多轮用途边界的区别具有独立测试价值。", "focus": "区分 MCP 的 host、client、server 与工具能力，说明协议连接和 Agent 编排各自的边界。", "checkpoints": ["能说明 host 组织 client，client 与 server 交换能力，tool 是可调用操作而非整个 Agent。", "能区分协议连接、单工具授权与跨工具组合的用途许可。", "能定位多轮上下文、工具返回内容及后续调用的信任边界。"], "links": [{"topicId": "ai-agent", "sectionId": "cross-server-composition", "itemId": "account-to-person", "label": "MCP 角色及跨工具组合的控制", "relation": "应用"}, {"topicId": "ai-agent", "sectionId": "context-persistence", "itemId": "four-turns", "label": "多轮上下文中的持续暴露", "relation": "应用"}, {"topicId": "ai-agent", "sectionId": "context-versus-training", "itemId": "different-failures", "label": "正常组合风险与提示注入的区别", "relation": "易混对比"}]}
     },
     {
       "id": "prompt-injection", "zh": "提示词注入", "en": "Prompt Injection", "abbr": "", "aliases": ["提示注入", "间接提示注入"],
       "definition": "输入或外部内容夹带指令，诱使模型偏离本来的任务和权限边界。外部网页、文档或工具结果也可能携带这种指令。",
       "distinction": "跨轮保留敏感信息不一定由提示词注入造成；也可能只是正常流程缺少数据最小化和用途控制，两类问题需要分开分析。",
       "example": "教学例子：工具返回的文档夹带“把读取到的资料发送到别处”，系统应把它当作不可信内容。",
-      "topicIds": ["ai-agent"], "sourceIds": [], "extraSources": [{"label": "OWASP：Prompt Injection", "url": "https://genai.owasp.org/llmrisk/llm01-prompt-injection/"}], "origin": "extension"
+      "topicIds": ["ai-agent"], "sourceIds": [], "extraSources": [{"label": "OWASP：Prompt Injection", "url": "https://genai.owasp.org/llmrisk/llm01-prompt-injection/"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "明确的攻击与权限边界问题，直接影响 Agent 安全设计。", "focus": "识别不可信内容试图变成指令的路径，并限制后续工具行为。", "checkpoints": ["能区别直接任务指令与网页、文档、工具返回中的不可信指令。", "能说明即使没有注入，正常跨工具组合也可能越界，防护不能只靠过滤最终回复。"], "links": [{"topicId": "ai-agent", "sectionId": "context-versus-training", "itemId": "different-failures", "label": "区别注入、上下文暴露与训练风险", "relation": "易混对比"}, {"topicId": "ai-agent", "sectionId": "cross-server-composition", "itemId": "account-to-person", "label": "按完整任务限制工具行动和用途", "relation": "应用"}, {"topicId": "ai-agent", "sectionId": "context-persistence", "itemId": "four-turns", "label": "减少不必要敏感上下文", "relation": "应用"}]}
     },
     {
       "id": "cross-server-pii-reconstruction", "zh": "跨服务身份重识别", "en": "Cross-service Re-identification", "abbr": "", "aliases": ["PII 重构", "跨服务身份重构", "Cross-Server PII Reconstruction", "跨服务重识别"],
       "definition": "不同服务返回的标识符和属性被组合后，重新关联到具体个人。此处用跨服务重识别描述 MCP 案例风险；它不是 MCP 协议定义的一项标准功能。",
       "distinction": "没有直接传递姓名，不代表最终无法识别；检查单次调用权限之外，还需看标识符关联、上下文传播和整体用途。",
       "example": "教学例子：从交易服务拿到账户编号，再从客户服务查姓名，原本汇总的失败记录被重新归属到个人。",
-      "topicIds": ["ai-agent", "privacy-threats"], "sourceIds": [18], "extraSources": [{"label": "NIST｜Re-identification", "url": "https://csrc.nist.gov/glossary/term/re_identification"}], "origin": "source"
+      "topicIds": ["ai-agent", "privacy-threats"], "sourceIds": [18], "extraSources": [{"label": "NIST｜Re-identification", "url": "https://csrc.nist.gov/glossary/term/re_identification"}], "origin": "source",
+      "learning": {"status": "reference", "rationale": "场景描述与通用威胁卡重复；保留说明但不再单独记忆术语。", "focus": "将跨服务身份重识别作为关联与识别威胁的案例阅读。", "checkpoints": ["能找到使不同服务结果重新关联到个人的连接键与用途变化。"], "links": [{"topicId": "ai-agent", "sectionId": "cross-server-composition", "itemId": "account-to-person", "label": "分析账户记录与身份映射的组合", "relation": "应用"}, {"topicId": "privacy-threats", "sectionId": "linking-identifying", "itemId": "anonymous-profile", "label": "回到 Linking 与 Identifying 的通用边界", "relation": "易混对比"}]}
     },
     {
       "id": "machine-unlearning", "zh": "机器遗忘", "en": "Machine Unlearning", "abbr": "", "aliases": ["模型遗忘"],
       "definition": "针对已经训练好的模型，尝试移除指定训练样本的影响，同时尽量保留模型在其他数据上的能力，并控制重新计算的成本。",
       "distinction": "删除数据库记录或检索向量，不等于已经消除模型参数中的影响；遗忘效果还需要专门评估。",
       "example": "教学例子：某批样本从训练集移除后，还需处理已由它们训练出的模型，而不只是清理数据表。",
-      "topicIds": ["ai-unlearning"], "sourceIds": [19], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-unlearning"], "sourceIds": [19], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "AI 删除需求的核心范围与验收判断。", "focus": "将去除训练影响与删除可读副本分开，并定义可验证的模型目标。", "checkpoints": ["能先确认数据是否参与训练及影响哪些产物。", "能比较遗忘效果、保留能力与成本，并说明重训基准及评估局限。"], "links": [{"topicId": "ai-unlearning", "sectionId": "locate-the-copy", "itemId": "deletion-scope", "label": "区分数据、索引、上下文和参数对象", "relation": "易混对比"}, {"topicId": "ai-unlearning", "sectionId": "sets-and-methods", "itemId": "methods-not-equivalent", "label": "比较遗忘、重训和输出过滤", "relation": "易混对比"}, {"topicId": "ai-unlearning", "sectionId": "forgetting-utility-cost", "itemId": "evaluation-contract", "label": "制定遗忘验收", "relation": "应用"}, {"topicId": "tpm-delete-case", "sectionId": "completion-restoration", "itemId": "restore-and-unlearning", "label": "连接恢复防回流与模型产物处理", "relation": "应用"}]}
     },
     {
       "id": "forget-set", "zh": "遗忘集", "en": "Forget Set", "abbr": "", "aliases": ["待遗忘样本集"],
       "definition": "从原训练数据中明确指定、要求移除其模型影响的样本集合。先把范围定位准确，才知道遗忘算法和验证工作应处理哪些对象。",
       "distinction": "遗忘集描述目标样本，不是一个删除命令；删掉集合中的文件，并不能直接证明模型已达到遗忘目标。",
       "example": "教学例子：把同一用户贡献且属于本次处理范围的训练样本整理成集合，再开展模型层处理。",
-      "topicIds": ["ai-unlearning"], "sourceIds": [19], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-unlearning"], "sourceIds": [19], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "遗忘方法选择前必须明确的工程输入。", "focus": "完整界定本次需移除训练影响的样本集合。", "checkpoints": ["能把用户、原始样本、重复和派生样本的对应关系纳入范围。", "能区分目标集合已定位与模型影响已被移除。"], "links": [{"topicId": "ai-unlearning", "sectionId": "sets-and-methods", "itemId": "three-sets", "label": "界定 Forget、Retain 与 Holdout", "relation": "易混对比"}, {"topicId": "ai-unlearning", "sectionId": "locate-the-copy", "itemId": "deletion-scope", "label": "定位原始、派生与模型对象", "relation": "应用"}]}
     },
     {
       "id": "retain-set", "zh": "保留集", "en": "Retain Set", "abbr": "", "aliases": ["保留训练样本集"],
       "definition": "原训练集中不在本次遗忘范围内、希望继续保留其学习价值的数据。评估遗忘时也要检查模型在这些数据上的能力是否受到过大损害。",
       "distinction": "Retain Set 按是否需要遗忘划分；Holdout Set 按是否参与学习或调优划分，两个概念解决不同问题。",
       "example": "教学例子：删除某批训练样本的影响后，检查模型对剩余类别的识别能力是否仍然可用。",
-      "topicIds": ["ai-unlearning", "ai-evaluation"], "sourceIds": [19], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-unlearning", "ai-evaluation"], "sourceIds": [19], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "与留出集的混淆会直接污染遗忘验收。", "focus": "用遗忘范围之外的训练数据检查保留能力，避免把模型损坏当成功。", "checkpoints": ["能说明 Retain Set 通常参与过原始训练，和 Holdout 的划分依据不同。", "能同时观察保留集与独立样本表现，解释各自局限。"], "links": [{"topicId": "ai-unlearning", "sectionId": "sets-and-methods", "itemId": "three-sets", "label": "区分保留集与留出集", "relation": "易混对比"}, {"topicId": "ai-unlearning", "sectionId": "forgetting-utility-cost", "itemId": "evaluation-contract", "label": "评估遗忘后的保留能力", "relation": "应用"}]}
     },
     {
       "id": "full-retraining", "zh": "完整重新训练", "en": "Full Retraining", "abbr": "", "aliases": ["从头重训", "完全重训"],
       "definition": "排除指定样本后，从头用调整后的数据重新训练模型。它可作为遗忘方法的重要比较基准，但大模型和频繁请求下成本可能很高。",
       "distinction": "在旧模型上继续微调，不等同于完全排除样本后从头训练；已有影响是否消除仍要验证。",
       "example": "教学例子：用去掉遗忘集后的训练数据从头训练一个基准模型，再比较快速遗忘方法的效果。",
-      "topicIds": ["ai-unlearning"], "sourceIds": [19], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-unlearning"], "sourceIds": [19], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "是评估模型删除方案的重要基准，而非一个重跑命令。", "focus": "评估排除样本后从头重训作为遗忘比较基准的价值和成本。", "checkpoints": ["能区别从头重训和在旧权重上继续微调。", "能说明新模型验证之外，还要替换受影响的旧产物与服务。"], "links": [{"topicId": "ai-unlearning", "sectionId": "sets-and-methods", "itemId": "methods-not-equivalent", "label": "比较重训、遗忘与微调", "relation": "易混对比"}, {"topicId": "ai-unlearning", "sectionId": "forgetting-utility-cost", "itemId": "evaluation-contract", "label": "权衡计算成本和完整交付范围", "relation": "应用"}]}
     },
     {
       "id": "membership-inference-attack", "zh": "成员推断攻击", "en": "Membership Inference Attack", "abbr": "MIA", "aliases": ["训练成员推断", "成员推断"],
       "definition": "尝试判断某个样本是否曾用于训练某个模型。即使无法恢复样本内容，确认某人或记录参与过训练也可能带来隐私风险。",
       "distinction": "成员推断判断是否参与训练；模型反演或数据重构试图恢复信息，目标不同。一次攻击失败也不证明所有影响已消除。",
       "example": "教学例子：比较模型对某条记录的反应，判断它更像见过该样本还是未见过。",
-      "topicIds": ["ai-unlearning", "privacy-threats"], "sourceIds": [19], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-unlearning", "privacy-threats"], "sourceIds": [19], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "保留作为遗忘评估和存在性风险的补充能力。", "focus": "把判断样本是否参与训练与恢复样本内容区分，并解释测试局限。", "checkpoints": ["能说明成员推断暴露的是参与事实，不要求恢复完整记录。", "能解释某次攻击失败为何不足以证明所有训练影响消失。"], "links": [{"topicId": "ai-unlearning", "sectionId": "forgetting-utility-cost", "itemId": "evaluation-contract", "label": "解释攻击测试的证据边界", "relation": "应用"}, {"topicId": "ai-agent", "sectionId": "context-versus-training", "itemId": "different-failures", "label": "与提示注入和上下文暴露区分", "relation": "易混对比"}, {"topicId": "privacy-threats", "sectionId": "detecting-identifying-disclosure", "itemId": "record-boundaries", "label": "理解参与或存在事实的隐私意义", "relation": "应用"}]}
     },
     {
       "id": "context-versus-prompt", "zh": "上下文与提示词", "en": "Context vs. Prompt", "abbr": "", "aliases": ["上下文证据", "提示词"],
-      "definition": "在这个案例里，提示词告诉模型要做什么、按什么要求判断；上下文提供字段来源、代码用途和血缘等事实，帮助它判断当前对象。",
-      "distinction": "两者常一起进入模型输入，但改写指令不能凭空补齐缺失事实；也不应把所有原始信息无筛选地堆给模型。",
+      "definition": "Prompt 是提交给模型的输入，常同时包含任务指令和上下文材料。此处对照的是两种作用：指令说明判断任务，事实材料提供来源、代码用途和血缘等证据；它们并非互斥输入类型。",
+      "distinction": "修改指令不能凭空补齐缺失事实；上下文也需要筛选可靠来源，不能把全部原始信息或待预测的答案无筛选地放入输入。",
       "example": "教学例子：重复要求“认真识别年龄”帮助有限，提供 age 被用于缓存计时的代码更能解决歧义。",
-      "topicIds": ["ai-classification", "ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "extension"
+      "topicIds": ["ai-classification", "ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "extension",
+      "learning": {"status": "reference", "rationale": "这是概念对照标题而非独立方法；应用价值由证据与目标泄漏卡覆盖。", "focus": "查看模型输入中任务指令、事实材料与参考标签的分工。", "checkpoints": ["能说明 Prompt 可包含上下文，不能把两者当互斥输入类型。"], "links": [{"topicId": "ai-classification", "sectionId": "context-prompt-evidence", "itemId": "instruction-versus-facts", "label": "区分输入内的指令与事实作用", "relation": "应用"}, {"topicId": "ai-classification", "sectionId": "context-prompt-evidence", "itemId": "age-evidence-brief", "label": "查看证据组织的实际例子", "relation": "应用"}]}
     },
     {
       "id": "counterfactual-masking", "zh": "反事实遮蔽检查", "en": "Counterfactual Masking", "abbr": "", "aliases": ["移除单项证据测试"],
       "definition": "Meta 案例用 Counterfactual Masking 指逐项移除上下文线索、观察分类是否改变的稳健性检查。名称来自该案例；这种检查本身不是对因果关系的完整证明。",
       "distinction": "移除关键证据后改变判断可能合理；需要结合该信号可靠性分析，不能把任何变化都直接当成错误。",
       "example": "教学例子：只删除一个不可靠的字段描述就让类别翻转，应进一步审核模型的判断依据。",
-      "topicIds": ["ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "source",
+      "learning": {"status": "supporting", "rationale": "案例名已限定；保留其可独立检验的稳健性判断。", "focus": "通过逐项移除线索检查判断脆弱性，并区分合理变化与不可靠依赖。", "checkpoints": ["能说明去掉弱信号后结论翻转为何值得审核。", "能解释去掉关键证据后变化可能合理，且检查不证明因果关系。"], "links": [{"topicId": "ai-evaluation", "sectionId": "disagreement-adjudication", "itemId": "judge-and-leakage", "label": "检查单项证据依赖与评估稳健性", "relation": "应用"}, {"topicId": "ai-classification", "sectionId": "context-prompt-evidence", "itemId": "age-evidence-brief", "label": "判断线索可靠性", "relation": "应用"}, {"topicId": "ai-evaluation", "sectionId": "optimization-brakes", "itemId": "oscillation-diagnosis", "label": "把脆弱证据纳入退化诊断", "relation": "应用"}]}
     },
     {
       "id": "data-minimization", "zh": "数据最小化", "en": "Data Minimization", "abbr": "", "aliases": ["最小必要数据"],
       "definition": "围绕明确的用途，只处理真正需要的数据类型、数量和精细程度，并检查保留和传播是否仍有必要，从源头减少不必要的数据接触。",
       "distinction": "最小化回答需要多少数据；最小权限回答谁需要访问。即使只有少数人能读，收集过多的数据仍然可能不必要。",
       "example": "教学例子：统计城市分布时只上传城市级汇总，不持续保留每个人的精确位置轨迹。",
-      "topicIds": ["privacy-threats", "privacy-user-control", "ai-agent"], "sourceIds": [11], "extraSources": [{"label": "LINDDUN：最小化与过量数据", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "source"
+      "topicIds": ["privacy-threats", "privacy-user-control", "ai-agent"], "sourceIds": [11], "extraSources": [{"label": "LINDDUN：最小化与过量数据", "url": "https://downloads.linddun.org/linddun-trees/report/v241203/tree.pdf"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "跨产品与 AI 流程的核心设计原则，具有多个具体执行点。", "focus": "按具体用途减少数据类型、精度、数量和传播范围。", "checkpoints": ["能区别最小化处理范围与限制访问人数。", "能在采集、上下文、关联和对外结果上给出不同最小化措施。"], "links": [{"topicId": "privacy-controls", "sectionId": "policy-to-control", "itemId": "control-contract", "label": "从用途确定必要数据", "relation": "应用"}, {"topicId": "ai-agent", "sectionId": "context-persistence", "itemId": "four-turns", "label": "减少跨轮携带的信息", "relation": "应用"}, {"topicId": "ai-agent", "sectionId": "cross-server-composition", "itemId": "account-to-person", "label": "避免不必要身份关联", "relation": "应用"}, {"topicId": "privacy-dataworks", "sectionId": "anonymity-boundary", "itemId": "four-outcomes", "label": "区别最小化与匿名化结果", "relation": "易混对比"}]}
     },
     {
       "id": "data-masking", "zh": "数据脱敏", "en": "Data Masking", "abbr": "", "aliases": ["脱敏", "敏感值掩盖"],
       "definition": "通过掩盖、替换或其他变换减少敏感原值的直接暴露，并按场景选择何时处理、谁可以看到什么。具体保护效果取决于方法与访问边界。",
       "distinction": "隐私脱敏改变敏感值的暴露；实体掩码可用于概括文本模式；Meta 的标签遮蔽用于防答案泄漏，三者目的不同。",
       "example": "教学例子：页面把号码中间几位打星号，但仍需限制下载、接口和底层数据库的访问。",
-      "topicIds": ["privacy-dataworks", "ai-evaluation"], "sourceIds": [9], "extraSources": [{"label": "DataWorks：创建数据脱敏规则", "url": "https://help.aliyun.com/zh/dataworks/user-guide/create-a-data-masking-rule"}], "origin": "source"
+      "topicIds": ["privacy-dataworks", "ai-evaluation"], "sourceIds": [9], "extraSources": [{"label": "DataWorks：创建数据脱敏规则", "url": "https://help.aliyun.com/zh/dataworks/user-guide/create-a-data-masking-rule"}], "origin": "source",
+      "learning": {"status": "core", "rationale": "术语易被过度承诺，必须考作用范围和验证。", "focus": "说明遮蔽了什么、在哪个路径生效，以及仍有哪些原值和识别风险。", "checkpoints": ["能区分处理动作和匿名化结果。", "能比较查询时处理、落地副本处理及模型标签遮蔽。"], "links": [{"topicId": "privacy-dataworks", "sectionId": "anonymity-boundary", "itemId": "four-outcomes", "label": "比较脱敏、假名化与匿名化", "relation": "易混对比"}, {"topicId": "privacy-dataworks", "sectionId": "classification-to-enforcement", "itemId": "four-jobs", "label": "验证查询和导出入口", "relation": "应用"}, {"topicId": "privacy-dataworks", "sectionId": "three-maskings", "itemId": "masking-object", "label": "区别隐私脱敏、实体预处理和标签遮蔽", "relation": "易混对比"}]}
     },
     {
       "id": "entity-masking", "zh": "实体掩码", "en": "Entity Masking", "abbr": "", "aliases": ["实体屏蔽", "实体占位替换"],
       "definition": "把文本中的特定实体替换为类型占位符，让后续处理更关注共同结构。在风控学习例子中，可将具体号码替换为统一标记再观察文本模式。",
-      "distinction": "这是聊天中的预处理延伸，不应当成抖音原文确认的必需步骤；实体替换不自动证明匿名，也不等于 Meta 的答案标签遮蔽。",
+      "distinction": "此处是文本预处理的延伸案例，不应当成抖音原文确认的必需步骤；实体占位替换不自动证明匿名，也不同于 Meta 的目标标签遮蔽。",
       "example": "教学例子：两句包含不同号码的“请联系某号码”，都替换为“请联系 <NUMBER>”以便比较句式。",
-      "topicIds": ["risk-patterns", "risk-features", "ai-evaluation", "privacy-dataworks"], "sourceIds": [14], "extraSources": [{"label": "Presidio：实体替换与掩盖操作", "url": "https://presidio.dataprivacystack.org/anonymizer/"}], "origin": "extension"
+      "topicIds": ["risk-patterns", "risk-features", "ai-evaluation", "privacy-dataworks"], "sourceIds": [14], "extraSources": [{"label": "Presidio：实体替换与掩盖操作", "url": "https://presidio.dataprivacystack.org/anonymizer/"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "保留跨文本风控与隐私处理的真实边界判断。", "focus": "通过实体占位替换概括文本结构，同时检查丢失语义和剩余隐私风险。", "checkpoints": ["能说明号码占位符用于模式抽象，不直接证明匿名。", "能区分实体替换、隐私脱敏与目标标签遮蔽的目的。"], "links": [{"topicId": "risk-patterns", "sectionId": "transaction-input", "itemId": "normalization-masking", "label": "评估文本归一化和实体替换", "relation": "应用"}, {"topicId": "privacy-dataworks", "sectionId": "three-maskings", "itemId": "masking-object", "label": "对比三种 masking 目的", "relation": "易混对比"}, {"topicId": "privacy-dataworks", "sectionId": "anonymity-boundary", "itemId": "four-outcomes", "label": "检查替换后的可识别性", "relation": "应用"}]}
     },
     {
       "id": "pseudonymisation", "zh": "假名化", "en": "Pseudonymisation / Pseudonymization", "abbr": "", "aliases": ["假名处理", "假名化处理"],
       "definition": "用代号等方式处理身份信息，并将重新对应到个人所需的额外信息分开保护，从而降低日常数据使用时直接识别个人的风险。",
       "distinction": "如果掌握映射等额外信息仍可对应回个人，就不能简单等同匿名化；不同系统采用的具体技术还需分别评估。",
       "example": "教学例子：分析表只保留客户代号，代号与姓名的映射表单独保存并限制访问。",
-      "topicIds": ["privacy-dataworks", "privacy-threats"], "sourceIds": [], "extraSources": [{"label": "ICO：Pseudonymisation", "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/anonymisation/pseudonymisation/"}], "origin": "extension"
+      "topicIds": ["privacy-dataworks", "privacy-threats"], "sourceIds": [], "extraSources": [{"label": "ICO：Pseudonymisation", "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/anonymisation/pseudonymisation/"}], "origin": "extension",
+      "learning": {"status": "core", "rationale": "数据共享设计与重识别评估中的关键概念。", "focus": "把身份映射额外信息分开保护，并评估仍可关联的风险。", "checkpoints": ["能说明谁掌握映射、如何隔离、何时可重新关联。", "能区别假名化、匿名化和一般掩盖显示。"], "links": [{"topicId": "privacy-dataworks", "sectionId": "anonymity-boundary", "itemId": "four-outcomes", "label": "比较假名化与匿名化", "relation": "易混对比"}, {"topicId": "ai-agent", "sectionId": "cross-server-composition", "itemId": "account-to-person", "label": "检查跨服务重新关联的能力", "relation": "应用"}, {"topicId": "privacy-threats", "sectionId": "linking-identifying", "itemId": "anonymous-profile", "label": "检查无姓名情况下的画像风险", "relation": "应用"}]}
     },
     {
       "id": "differential-privacy", "zh": "差分隐私", "en": "Differential Privacy", "abbr": "DP", "aliases": ["差分隐私保护"],
       "definition": "用数学条件限制单个参与者的数据变化对输出造成的可辨别影响。常通过受控随机化实现，并需要明确保护单位、参数和多次使用的预算。",
       "distinction": "随便加一点噪声不等于差分隐私；它约束信息暴露，不能自动替代用途许可、访问控制或针对某批样本的机器遗忘。",
       "example": "教学例子：发布带有合适隐私保护的群体统计，使单个人是否参与不容易从结果变化中判断。",
-      "topicIds": ["privacy-threats", "ai-unlearning"], "sourceIds": [19], "extraSources": [{"label": "Google：Differential Privacy 官方项目", "url": "https://github.com/google/differential-privacy"}], "origin": "extension"
+      "topicIds": ["privacy-threats", "ai-unlearning"], "sourceIds": [19], "extraSources": [{"label": "Google：Differential Privacy 官方项目", "url": "https://github.com/google/differential-privacy"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "有独立机制和权衡，补充隐私增强技术，而非只记数学名词。", "focus": "明确统计输出的保护单位、贡献界限与预算，并解释效用权衡。", "checkpoints": ["能说明用户级与记录级保护单位不同，重复贡献和多次查询需要约束。", "能区分差分隐私保证、随意加噪、假名化和用途许可。"], "links": [{"topicId": "privacy-dataworks", "sectionId": "anonymity-boundary", "itemId": "differential-privacy", "label": "设计统计发布的保护单位与预算", "relation": "应用"}, {"topicId": "privacy-dataworks", "sectionId": "anonymity-boundary", "itemId": "four-outcomes", "label": "与记录级脱敏或匿名化比较", "relation": "易混对比"}]}
     },
     {
       "id": "regular-expression", "zh": "正则表达式", "en": "Regular Expression", "abbr": "Regex", "aliases": ["正则匹配", "正则"],
       "definition": "用一套语法描述字符串模式，并据此查找、匹配或替换文本。它适合表达字符结构条件，但本身不会理解文本的业务含义。",
       "distinction": "正则是实现某些规则的工具，规则还可以组合范围、来源与语义条件；字符串长得像邮箱，不代表它一定是真实用户邮箱。",
       "example": "教学例子：用正则找出疑似号码后，还要结合上下文确认它是联系方式还是普通编号。",
-      "topicIds": ["ai-classification", "risk-features", "risk-patterns"], "sourceIds": [], "extraSources": [{"label": "MDN：Regular Expressions", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions"}], "origin": "extension"
+      "topicIds": ["ai-classification", "risk-features", "risk-patterns"], "sourceIds": [], "extraSources": [{"label": "MDN：Regular Expressions", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions"}], "origin": "extension",
+      "learning": {"status": "supporting", "rationale": "保留实现工具的适用性判断，不要求背语法。", "focus": "识别字符串模式的适用边界，避免将形式命中直接当业务或隐私语义。", "checkpoints": ["能说明名称或号码形状匹配为何会误报或漏报。", "能将正则输出与来源、上下文及进一步验证组合使用。"], "links": [{"topicId": "ai-classification", "sectionId": "rules-regex-heuristics", "itemId": "implementation-levels", "label": "比较正则工具与规则、启发式", "relation": "易混对比"}, {"topicId": "ai-classification", "sectionId": "context-prompt-evidence", "itemId": "age-evidence-brief", "label": "用额外证据澄清相似字段含义", "relation": "应用"}]}
     },
     {
       "id": "heuristic", "zh": "启发式方法", "en": "Heuristic", "abbr": "", "aliases": ["启发式逻辑", "经验规则"],
       "definition": "利用经验线索或近似方法快速形成判断，适合在信息不完整时缩小搜索范围。它可以写成确定规则，也可以给模型提供候选信号。",
       "distinction": "启发式描述判断思路，正则描述字符匹配工具，确定性描述执行特征；三者可能组合，不能当成互斥算法。",
       "example": "教学例子：字段名含 email 可作为候选线索，但仍需检查其实际含义和来源，避免误判。",
-      "topicIds": ["ai-classification", "ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "extension"
+      "topicIds": ["ai-classification", "ai-evaluation"], "sourceIds": [13], "extraSources": [], "origin": "extension",
+      "learning": {"status": "reference", "rationale": "单独词义宽泛，独立考点已由确定性规则与正则卡覆盖。", "focus": "在规则设计中识别经验近似和可验证条件。", "checkpoints": ["能说明启发式描述判断思路，不等于正则工具或确定性保证。"], "links": [{"topicId": "ai-classification", "sectionId": "rules-regex-heuristics", "itemId": "implementation-levels", "label": "查看规则、正则、启发式的层次对比", "relation": "易混对比"}]}
     },
     {
       "id": "decision-trace", "zh": "决策追踪记录", "en": "Decision Trace", "abbr": "", "aliases": ["决策轨迹", "判断依据记录"],
       "definition": "保存一次判断使用的证据、输入或上下文版本、规则或提示词版本与结果，让之后的调查者能够重建当时为什么得出这个判断。",
       "distinction": "只有结果标签不足以解释过程；可回放的记录也不要求每次重新调用 LLM 并得到完全一样的自由文本。",
       "example": "教学例子：追查误分类时，定位当时命中的规则版本与证据，确认是数据变化还是规则本身有误。",
-      "topicIds": ["ai-classification", "ai-evaluation", "privacy-evidence"], "sourceIds": [13], "extraSources": [], "origin": "source"
+      "topicIds": ["ai-classification", "ai-evaluation", "privacy-evidence"], "sourceIds": [13], "extraSources": [], "origin": "source",
+      "learning": {"status": "core", "rationale": "面向审计、调试和问题归因的核心证据设计。", "focus": "保存足以重建一次判断的输入、版本、命中规则与结果，并限制证据敏感度。", "checkpoints": ["能说明为什么只有结果标签或一段模型解释不足以调查。", "能区别重放确定性决策与强求 LLM 重生成相同文本。", "能让留痕支持审核，同时管理记录中的个人数据和保留。"], "links": [{"topicId": "ai-classification", "sectionId": "online-offline-loop", "itemId": "two-time-scales", "label": "定位决策记录在在线与离线循环的位置", "relation": "应用"}, {"topicId": "privacy-evidence", "sectionId": "requirement-control-evidence", "itemId": "one-requirement", "label": "以最小充分记录证明具体命题", "relation": "应用"}, {"topicId": "ai-classification", "sectionId": "candidate-to-version", "itemId": "rule-lifecycle", "label": "追查某规则版本及其适用范围", "relation": "应用"}]}
     }
   ]
 }

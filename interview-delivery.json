@@ -1,0 +1,1031 @@
+{
+  "questions": [
+    {
+      "id": "risk-metrics-denominators",
+      "domain": "risk",
+      "type": "technical",
+      "title": "如何用同一混淆矩阵解释精确率、召回率与误报率？",
+      "prompt": "一批 10,000 条评论有 100 条真实违规。模型标记 150 条，其中 80 条真实违规。请计算主要指标，并说明为什么仅报告总体准确率会误导发布决策。",
+      "priority": "核心",
+      "minutes": 6,
+      "assumptions": [
+        "教学数字；违规为正类，每条评论是一个统计单位。",
+        "假设这批样本均已有可靠参考标签，未发生抽样权重变化。"
+      ],
+      "answer": [
+        {
+          "title": "先列矩阵再计算",
+          "text": "TP=80、FP=70、FN=20、TN=9,830。精确率=80/150≈53.3%，召回率=80/100=80%，总体准确率=9,910/10,000=99.1%，FPR=70/9,900≈0.707%。"
+        },
+        {
+          "title": "解释业务含义",
+          "text": "高准确率主要受大量正常评论影响；被标记的评论中仍有约46.7%为误报，即这批样本的FDP=1−Precision。FPR和FDP分母不同，不能都含糊称作误伤率。最终错误处罚还取决于审核、等待和恢复流程。"
+        },
+        {
+          "title": "给出发布判断需要的证据",
+          "text": "补充错误类别和语言分群、参考标签质量、样本量及时间窗口，再对照漏检损失、错误动作代价和审核容量。一个批次的比例也不能代表未来分布或统计意义上的FDR期望。"
+        }
+      ],
+      "checkpoints": [
+        "公式分母正确，能完整还原四格矩阵。",
+        "区分预测误报、最终错误处罚和总体准确率。",
+        "说明样本与分群局限，不凭单个数字宣布可上线。"
+      ],
+      "pitfalls": [
+        "把精确率写成TP/(TP+FN)。",
+        "把1−Precision称为FPR。",
+        "以99.1%准确率掩盖20条漏检和70条误报。"
+      ],
+      "followups": [
+        "如果只审核了这150条，哪些指标仍能估计，哪些不能？",
+        "若真实违规比例下降但分类能力不变，精确率可能怎样变化？"
+      ],
+      "links": [
+        {
+          "topicId": "risk-metrics",
+          "sectionId": "confusion-matrix",
+          "itemId": "four-cells",
+          "label": "从统计单位建立混淆矩阵"
+        },
+        {
+          "topicId": "risk-metrics",
+          "sectionId": "metric-denominators",
+          "itemId": "calculate-all",
+          "label": "核对各指标分母"
+        },
+        {
+          "topicId": "risk-metrics",
+          "sectionId": "feedback-bias",
+          "itemId": "sampling-bias",
+          "label": "检查选择性审核偏差"
+        }
+      ],
+      "termIds": [
+        "precision",
+        "recall",
+        "accuracy",
+        "false-positive-rate",
+        "false-discovery-rate"
+      ],
+      "sourceIds": [],
+      "extraSources": [
+        {
+          "label": "Google ML：精确率、召回率与准确率",
+          "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall?hl=zh-cn"
+        }
+      ]
+    },
+    {
+      "id": "risk-threshold-capacity",
+      "domain": "risk",
+      "type": "technical",
+      "title": "怎样在召回目标、误伤和审核容量之间选择阈值？",
+      "prompt": "某模型分数越高越可疑。降低审核阈值可带来更多候选，但审核团队每天只能处理固定数量。你会怎样评估阈值、分级动作和后续反馈？",
+      "priority": "核心",
+      "minutes": 6,
+      "assumptions": [
+        "模型及评分方向固定；本题不预设最佳阈值。",
+        "审核容量、时延和错误代价需按实际业务澄清。"
+      ],
+      "answer": [
+        {
+          "title": "建立比较口径",
+          "text": "固定代表性评估集及独立标签，对多个阈值计算精确率、召回率、FPR和每日预计候选量，并按严重程度、语言和流量来源拆分。审核完成样本不能替代总体样本。"
+        },
+        {
+          "title": "设计动作而不只做二分类",
+          "text": "可将低风险放行、中间区间复核、高风险且证据充分的请求交给更强处置。阈值和动作一起评估：扩大召回若造成积压，可能反而推迟高危案件处理。可先排序、调整容量或缩小灰度范围。"
+        },
+        {
+          "title": "运行与反馈",
+          "text": "明确积压年龄、审核时延、正常用户影响和已确认风险的护栏及责任人；监测分数分布变化，保留随机抽样和申诉复核。调阈值是策略调整，不能当作模型已重新训练或分数已校准。"
+        }
+      ],
+      "checkpoints": [
+        "将候选量转换为审核能力和时延约束。",
+        "给出分级响应及主指标、护栏。",
+        "区分阈值、模型训练和标签反馈。"
+      ],
+      "pitfalls": [
+        "只最大化召回，不看队列等待与误伤。",
+        "假设阈值越高在任何评分产品中都越严格。",
+        "把审核通过率直接当总体精确率。"
+      ],
+      "followups": [
+        "审核容量骤降一半时，你会先改哪些策略？",
+        "什么证据会让你选择重新训练而不是继续调阈值？"
+      ],
+      "links": [
+        {
+          "topicId": "risk-metrics",
+          "sectionId": "threshold-action-cost",
+          "itemId": "direction-and-tradeoff",
+          "label": "分析阈值与业务代价"
+        },
+        {
+          "topicId": "risk-match",
+          "sectionId": "retrieval-tradeoffs",
+          "itemId": "candidate-budget",
+          "label": "核算候选预算"
+        },
+        {
+          "topicId": "risk-loop",
+          "sectionId": "score-actions",
+          "itemId": "graduated-response",
+          "label": "设计分级动作"
+        }
+      ],
+      "termIds": [
+        "decision-threshold",
+        "precision",
+        "recall",
+        "guardrail-metric"
+      ],
+      "sourceIds": [
+        15
+      ],
+      "extraSources": [
+        {
+          "label": "Google ML：分类阈值",
+          "url": "https://developers.google.com/machine-learning/crash-course/classification/thresholding"
+        },
+        {
+          "label": "Google ML：精确率、召回率与准确率",
+          "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall?hl=zh-cn"
+        }
+      ]
+    },
+    {
+      "id": "risk-assessment-contract",
+      "domain": "risk",
+      "type": "technical",
+      "title": "如何把 reCAPTCHA Assessment 安全接入业务决策？",
+      "prompt": "登录服务收到一个 reCAPTCHA Assessment，包含 tokenProperties 和 riskAnalysis。请描述服务端验证、风险处置和后续标注流程，并说明错误或超时结果如何处理。",
+      "priority": "核心",
+      "minutes": 5,
+      "assumptions": [
+        "练习采用公开 reCAPTCHA 接口，并不表示 TikTok 使用该产品。",
+        "操作包含 action；具体密钥类型与接口版本须核对文档。"
+      ],
+      "answer": [
+        {
+          "title": "先验证请求绑定",
+          "text": "在后端创建评估并检查token有效性、适用站点或应用配置以及返回action是否与当前预期操作一致。无效或操作不匹配不能被正常分数路径掩盖；Assessment是结构化对象，score只是一个字段。"
+        },
+        {
+          "title": "解释分数再决策",
+          "text": "先确认使用的评分类型与方向，普通网站风险评分的高分偏向正常交互；不同防护评分不可直接混用。按登录风险和正常用户摩擦设置放行、追加验证、限制或阻断，并为超时和依赖故障定义单独策略与监测。"
+        },
+        {
+          "title": "保存可核验反馈",
+          "text": "记录评估标识、策略版本和必要结果，通过支持的标注接口提交确认的业务标签；区分已核实、推测和未知。不应把一次拦截或没有申诉直接当作真实欺诈或正常结果。"
+        }
+      ],
+      "checkpoints": [
+        "明确token与action检查在读取分数前的独立地位。",
+        "说明评分类型、异常路径和用户影响。",
+        "将反馈关联原评估并保留标签来源。"
+      ],
+      "pitfalls": [
+        "分数存在就默认token有效。",
+        "操作不匹配时沿用其他操作的正常阈值。",
+        "把所有业务处置描述成reCAPTCHA内置功能。"
+      ],
+      "followups": [
+        "评估服务不可用时，哪些操作可以有限降级，哪些需要更强验证？",
+        "怎样检查评估标注是否产生选择偏差？"
+      ],
+      "links": [
+        {
+          "topicId": "risk-loop",
+          "sectionId": "assessment-validation",
+          "itemId": "token-action",
+          "label": "验证评估对象与操作绑定"
+        },
+        {
+          "topicId": "risk-loop",
+          "sectionId": "score-actions",
+          "itemId": "score-direction",
+          "label": "识别评分方向"
+        },
+        {
+          "topicId": "risk-loop",
+          "sectionId": "feedback-governance",
+          "itemId": "two-loops",
+          "label": "组织标注和数据治理"
+        }
+      ],
+      "termIds": [
+        "risk-assessment",
+        "action-verification",
+        "risk-score",
+        "assessment-annotation"
+      ],
+      "sourceIds": [
+        15
+      ],
+      "extraSources": [
+        {
+          "label": "Google：创建 reCAPTCHA Assessment",
+          "url": "https://docs.cloud.google.com/recaptcha/docs/create-assessment-website"
+        },
+        {
+          "label": "Google：标注 Assessment",
+          "url": "https://docs.cloud.google.com/recaptcha/docs/annotate-assessment"
+        }
+      ]
+    },
+    {
+      "id": "risk-online-historical",
+      "domain": "risk",
+      "type": "technical",
+      "title": "在线黑库与历史回扫应如何共享风险线索并分别验收？",
+      "prompt": "一条新型诈骗话术已经人工确认。请比较在线黑库和历史回扫的索引、检索方向、触发和完成条件，解释字面与语义方法如何选择。",
+      "priority": "核心",
+      "minutes": 6,
+      "assumptions": [
+        "“黑库”采用公开历史案例中的风险样本索引含义。",
+        "不预设命中即处罚，也不把历史案例视为当前平台架构。"
+      ],
+      "answer": [
+        {
+          "title": "分开索引和查询对象",
+          "text": "在线路径用新内容查询可维护的风险样本索引；历史回扫用新样本、规则或查询条件寻找已发布内容。在线版本生效解决后续检测，历史覆盖须由独立任务、范围和状态记录支持。"
+        },
+        {
+          "title": "组合方法与上下文",
+          "text": "字面匹配通常易于解释，语义检索可找到改写；两者都可用于在线或离线，选择受时延、召回、成本和误伤约束。需纳入正常引用、新闻与反诈骗语境，不能把相似标签无条件传播给命中内容。"
+        },
+        {
+          "title": "分别定义完成证据",
+          "text": "记录样本及规则版本、线上流量覆盖；回扫记录数据源、时间范围、扫描进度、候选复核、处置结果和失败。索引更新成功、扫描完毕与业务处置完成是三个不同检查点。"
+        }
+      ],
+      "checkpoints": [
+        "说清谁查谁、索引保存什么。",
+        "能组合运行方式和检索方式，不作固定绑定。",
+        "独立验证检测更新、历史覆盖和实际动作。"
+      ],
+      "pitfalls": [
+        "更新黑库后默认所有历史违规已处置。",
+        "将语义相似分数当违规概率。",
+        "只统计发出的处置请求数。"
+      ],
+      "followups": [
+        "如果历史索引晚到两小时，你怎样定义完成和补扫？",
+        "错入库的样本撤销后，如何处理已产生的候选和处罚？"
+      ],
+      "links": [
+        {
+          "topicId": "risk-library-rescan",
+          "sectionId": "lookup-direction",
+          "itemId": "two-indexes",
+          "label": "比较两个检索方向"
+        },
+        {
+          "topicId": "risk-match",
+          "sectionId": "timing-axis",
+          "itemId": "four-combinations",
+          "label": "组合字面、语义与运行方式"
+        },
+        {
+          "topicId": "risk-library-rescan",
+          "sectionId": "completion-evidence",
+          "itemId": "separate-states",
+          "label": "拆开验收证据"
+        }
+      ],
+      "termIds": [
+        "online-sample-library",
+        "historical-rescan",
+        "lexical-similarity",
+        "semantic-similarity"
+      ],
+      "sourceIds": [
+        14
+      ],
+      "extraSources": []
+    },
+    {
+      "id": "risk-retries-business-effects",
+      "domain": "risk",
+      "type": "technical",
+      "title": "如何在至少一次投递下避免漏扫和重复处罚？",
+      "prompt": "回扫服务先更新任务状态，再发送消息；消费者可能在调用处罚接口后崩溃。请识别两处故障窗口，设计可恢复流程和业务幂等边界。",
+      "priority": "核心",
+      "minutes": 7,
+      "assumptions": [
+        "不假设消息队列提供端到端Exactly-once保证。",
+        "处罚调用可能超时，超时后的业务结果可能未知。"
+      ],
+      "answer": [
+        {
+          "title": "解决持久化与发布之间的窗口",
+          "text": "任务已写入但消息未发出会漏派；可将业务状态和待发布事件写入同一事务，再由派发器重试发布，或使用具备等价保障的机制。生产端发布确认也只覆盖相应消息链路，不能证明消费者或处罚完成。"
+        },
+        {
+          "title": "解决执行后确认前的重复",
+          "text": "消费者在副作用完成后、确认消息前崩溃会造成重投。为同一内容、处置类型及相应策略语义建立稳定幂等标识，将去重与状态变更可靠关联；外部接口要支持幂等或能查询结果并对账。"
+        },
+        {
+          "title": "明确各阶段状态和恢复",
+          "text": "持久化扫描进度、候选、动作结果及重试次数，定义退避、终止条件和人工处理入口。若消费者只负责生成候选，其确认只表示该阶段完成；最终验收仍需核对动作与未知结果，不能静默丢弃毒消息。"
+        }
+      ],
+      "checkpoints": [
+        "识别漏派和重复执行两个窗口。",
+        "说明幂等键的业务范围及并发原子性。",
+        "区分消息确认、阶段完成和端到端完成。"
+      ],
+      "pitfalls": [
+        "先查是否已执行再写入，却不处理并发竞争。",
+        "外部接口超时就认定没有处罚成功。",
+        "靠队列名称宣称端到端只执行一次。"
+      ],
+      "followups": [
+        "规则升级后，同一内容是否应使用相同幂等键？",
+        "死信中有高危案件时，谁决定恢复与重新处理？"
+      ],
+      "links": [
+        {
+          "topicId": "risk-library-rescan",
+          "sectionId": "reliability-boundaries",
+          "itemId": "durable-dispatch",
+          "label": "保证状态和消息可靠关联"
+        },
+        {
+          "topicId": "risk-library-rescan",
+          "sectionId": "reliability-boundaries",
+          "itemId": "ack-crash",
+          "label": "分析确认与崩溃窗口"
+        },
+        {
+          "topicId": "risk-library-rescan",
+          "sectionId": "reliability-boundaries",
+          "itemId": "idempotent-action",
+          "label": "设计业务幂等"
+        },
+        {
+          "topicId": "tpm-delete-case",
+          "sectionId": "orchestration-architecture",
+          "itemId": "durable-retry",
+          "label": "迁移到删除任务重试"
+        }
+      ],
+      "termIds": [
+        "message-queue",
+        "asynchronous-processing",
+        "idempotency",
+        "eventual-consistency"
+      ],
+      "sourceIds": [],
+      "extraSources": [
+        {
+          "label": "RabbitMQ：消息确认与发布确认",
+          "url": "https://www.rabbitmq.com/docs/confirms"
+        },
+        {
+          "label": "AWS Builders’ Library：安全重试与幂等 API",
+          "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/"
+        },
+        {
+          "label": "AWS：Transactional Outbox Pattern",
+          "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/transactional-outbox.html"
+        }
+      ]
+    },
+    {
+      "id": "risk-text-signals",
+      "domain": "risk",
+      "type": "technical",
+      "title": "多通道分类、变体归一化与语义检索怎样协作？",
+      "prompt": "攻击者使用同音字、形近字和话术改写规避评论检测。请设计一条文本处理链，并解释为什么身份或联系方式关联只能作为风险信号。",
+      "priority": "进阶",
+      "minutes": 6,
+      "assumptions": [
+        "教学内容；仅讨论公开文本风控机制。",
+        "变体映射和标签体系均需要独立版本及评估。"
+      ],
+      "answer": [
+        {
+          "title": "区分输入、表示与输出",
+          "text": "多通道模型可结合文字、读音、字形表示输出类别或分数；归一化把已确认等价的变体转为标准表示；语义检索从索引召回含义相近的候选。三者目标不同，可组合但不应相互代替。"
+        },
+        {
+          "title": "保留语义与证据",
+          "text": "保留原文、变换版本和候选依据，验证否定、引用、俚语及不同语言中的误替换。联系方式提取说明实体在哪里，不能仅凭有联系方式就判风险；用户—联系方式图中的正常共享关系也可能造成错误传播。"
+        },
+        {
+          "title": "验证组合链路",
+          "text": "分开测量归一化质量、检索召回和最终决策质量，使用代表性正常样本与新变体回归集。上线后观察新增候选量、误报、时延和审核容量，支持撤回坏映射并追踪受影响下游。"
+        }
+      ],
+      "checkpoints": [
+        "明确三种能力的输入输出与边界。",
+        "说明原始证据、版本和跨语言回归。",
+        "区分图关联、模型推断与确认事实。"
+      ],
+      "pitfalls": [
+        "模型融合多通道就等于归一化映射。",
+        "将共享联系方式的全部账号直接处罚。",
+        "映射更新后默认所有下游模型效果同时变好。"
+      ],
+      "followups": [
+        "怎样发现新映射导致的正常词误替换？",
+        "若同一线索同时进入多通道和图模型，如何避免把相关证据重复当独立证据？"
+      ],
+      "links": [
+        {
+          "topicId": "risk-features",
+          "sectionId": "taxonomy-channels",
+          "itemId": "channel-model-options",
+          "label": "多通道输入与分类"
+        },
+        {
+          "topicId": "risk-features",
+          "sectionId": "variant-normalization",
+          "itemId": "channels-versus-pipeline",
+          "label": "比较建模与归一化"
+        },
+        {
+          "topicId": "risk-features",
+          "sectionId": "contact-extraction",
+          "itemId": "graph-boundary",
+          "label": "理解关联推断边界"
+        }
+      ],
+      "termIds": [
+        "multi-channel-model",
+        "variant-normalization",
+        "semantic-similarity",
+        "bipartite-graph",
+        "label-propagation"
+      ],
+      "sourceIds": [
+        14
+      ],
+      "extraSources": []
+    },
+    {
+      "id": "risk-pattern-rule-promotion",
+      "domain": "risk",
+      "type": "technical",
+      "title": "FP-Growth 产出的频繁模式，怎样才能成为生产规则？",
+      "prompt": "你从一批确认的风险文本中挖掘出高支持度特征组合。请说明事务定义、FP-Tree和规则验证的职责，并比较它与Embedding近邻检索。",
+      "priority": "进阶",
+      "minutes": 6,
+      "assumptions": [
+        "特征已经离散化；一条事务的范围由设计决定。",
+        "挖掘用风险样本不代表评估可以只包含风险样本。"
+      ],
+      "answer": [
+        {
+          "title": "先定义挖掘对象",
+          "text": "明确事务是单条文本、用户窗口还是其他记录；说明项如何提取与去重，并固定时间范围。支持度是含该组合的事务比例，支持计数是事务数；FP-Tree用共享前缀和计数支持挖掘，不表达原文连续词序。"
+        },
+        {
+          "title": "区分输出能力",
+          "text": "FP-Growth发现离散项共现，Embedding方法以向量表示支持相似比较。高频模式可能只是常见表达，向量相近也不等于相同风险；二者都只能提供需要业务验证的候选。"
+        },
+        {
+          "title": "建立晋升门槛",
+          "text": "将候选转成明确AND/OR/NOT条件，使用独立正常样本、风险样本和边界案例评估精确率、召回与覆盖；检查历史选择偏差。通过审查、影子比较和受控发布后再执行，保留规则版本、监测和退役条件。"
+        }
+      ],
+      "checkpoints": [
+        "说明事务粒度、支持分母和词序边界。",
+        "能比较共现挖掘与向量表示。",
+        "把候选发现与生产规则晋升分开。"
+      ],
+      "pitfalls": [
+        "高支持度等同高风险或高精确率。",
+        "将FP-Tree路径直接当必须连续出现的短语。",
+        "使用同一批挖掘样本宣称泛化已验证。"
+      ],
+      "followups": [
+        "把事务从单条评论改成单个账号一天的内容，结果会怎样变化？",
+        "支持度下降但错误代价极高的模式，应如何处理？"
+      ],
+      "links": [
+        {
+          "topicId": "risk-patterns",
+          "sectionId": "transaction-input",
+          "itemId": "transaction-definition",
+          "label": "确定事务粒度"
+        },
+        {
+          "topicId": "risk-patterns",
+          "sectionId": "support-tree",
+          "itemId": "prefix-compression",
+          "label": "解释压缩与挖掘"
+        },
+        {
+          "topicId": "risk-patterns",
+          "sectionId": "discrete-vectors",
+          "itemId": "io-boundary",
+          "label": "比较离散项与向量"
+        },
+        {
+          "topicId": "risk-patterns",
+          "sectionId": "patterns-to-rules",
+          "itemId": "boolean-rule",
+          "label": "验证规则语义"
+        }
+      ],
+      "termIds": [
+        "fp-growth",
+        "frequent-itemset",
+        "support",
+        "fp-tree",
+        "boolean-rule"
+      ],
+      "sourceIds": [
+        14
+      ],
+      "extraSources": [
+        {
+          "label": "Apache Spark：频繁模式挖掘",
+          "url": "https://spark.apache.org/docs/latest/ml-frequent-pattern-mining.html"
+        },
+        {
+          "label": "Google ML：Embeddings",
+          "url": "https://developers.google.com/machine-learning/crash-course/embeddings"
+        }
+      ]
+    },
+    {
+      "id": "risk-release-evidence",
+      "domain": "risk",
+      "type": "technical",
+      "title": "一个风控变更需要哪些证据才能从离线评估进入全量？",
+      "prompt": "规则或模型在离线数据上表现改善。请提出从验证、影子比较、灰度到运营的发布路径，并说明SLI、SLO、护栏和回滚各承担什么作用。",
+      "priority": "核心",
+      "minutes": 6,
+      "assumptions": [
+        "不预设固定灰度百分比或统一阈值。",
+        "模型、策略、索引和变体映射可能独立发布。"
+      ],
+      "answer": [
+        {
+          "title": "确认离线证据可用",
+          "text": "核对标签来源、数据窗口、独立留出、分群和新旧版本差异，排除目标泄漏与选择偏差。预先写清主效果指标及误报、漏检、时延、费用、审核积压等适用护栏。"
+        },
+        {
+          "title": "以不同阶段回答不同问题",
+          "text": "影子比较在隔离副作用的条件下比较新旧决策；灰度让限定真实流量承受新决策并检验实际影响。SLI明确合格事件和窗口，SLO给出目标，阶段扩展根据代表性观察和护栏决定。"
+        },
+        {
+          "title": "让停止与恢复可以执行",
+          "text": "明确谁能停止、如何切回已知版本以及下游状态的兼容性。代码或规则回退不会自动撤销已发生的处罚；需要错误动作补偿、申诉和通知责任。运营交接应验证告警、权限、手册及故障处理能力。"
+        }
+      ],
+      "checkpoints": [
+        "区分离线、影子和灰度证据。",
+        "每个关键指标都有分母、窗口与责任人。",
+        "覆盖不可逆副作用和运营接手。"
+      ],
+      "pitfalls": [
+        "把影子测试说成已验证真实用户影响。",
+        "只设置效果指标，不设置误伤与容量护栏。",
+        "发布后才商量回滚和处罚恢复。"
+      ],
+      "followups": [
+        "哪些高危动作不适合直接进入首次灰度？",
+        "如果总体效果改善但一个语言群体明显退化，怎样做发布决定？"
+      ],
+      "links": [
+        {
+          "topicId": "ai-rollout",
+          "sectionId": "holdout-to-rollout",
+          "itemId": "complementary-evidence",
+          "label": "比较三类发布证据"
+        },
+        {
+          "topicId": "tpm-metrics",
+          "sectionId": "baseline-guardrails",
+          "itemId": "comparable-metrics",
+          "label": "明确主指标和护栏"
+        },
+        {
+          "topicId": "tpm-delivery",
+          "sectionId": "rollout-handoff",
+          "itemId": "different-safeguards",
+          "label": "设计回滚与交接"
+        }
+      ],
+      "termIds": [
+        "service-level-indicator",
+        "service-level-objective",
+        "guardrail-metric",
+        "rollback",
+        "measurement-baseline"
+      ],
+      "sourceIds": [],
+      "extraSources": [
+        {
+          "label": "Google SRE：Canarying Releases",
+          "url": "https://sre.google/workbook/canarying-releases/"
+        },
+        {
+          "label": "Google SRE：Service Level Objectives",
+          "url": "https://sre.google/sre-book/service-level-objectives/"
+        }
+      ]
+    },
+    {
+      "id": "risk-scenario-fraud-burst",
+      "domain": "risk",
+      "type": "scenario",
+      "title": "TikTok 类评论诈骗扩散：如何同时控制新增与历史风险？",
+      "prompt": "教学情景：某短视频平台发现新型诈骗评论，内容已持续传播两天。业务希望当天保护新增评论并处理历史内容；线上链路只能增加有限延迟，审核团队容量也有限。作为TPM，你如何组织可执行的方案与验收？",
+      "priority": "核心",
+      "minutes": 12,
+      "assumptions": [
+        "TikTok 类业务的教学假设，不是内部真题，也不描述真实平台架构。",
+        "“当天”是本题业务期望，具体可行性需根据量级、风险与资源确认。"
+      ],
+      "answer": [
+        {
+          "title": "需求澄清与边界",
+          "text": "确认诈骗类型、证据置信度、语言地区、受影响入口、存量时间范围及最小可用动作。把“保护新增”“完成历史扫描”“已确认案件完成处置”分别定义，明确线上时延预算和审核容量由谁接受。"
+        },
+        {
+          "title": "数据流与控制",
+          "text": "审核确认样本后形成版本化索引或候选规则，先通过正常语境回归；新增评论进入在线检索与分级策略。历史任务按数据源、时间和索引版本分片，通过持久任务与队列召回候选，再复核和处置；对高危候选可优先排队。"
+        },
+        {
+          "title": "故障与恢复",
+          "text": "处理索引版本未传播、历史索引晚到、队列积压、消费者崩溃和处置结果未知。用业务幂等防重复处罚，记录失败分片并补扫；撤销坏样本时需追踪已生成的候选和错误动作，不能只删索引。"
+        },
+        {
+          "title": "跨团队取舍",
+          "text": "算法负责检测证据，策略与审核确定动作，工程提供版本和恢复能力，运营负责申诉与监测。若全量回扫当天不可完成，提出按严重程度与时间分层的范围、临时控制及剩余风险，由明确责任人决定。"
+        },
+        {
+          "title": "指标与验收",
+          "text": "新增路径看检测覆盖、抽样精确率/召回、时延和错误动作；历史路径看扫描分母、完成分片、未决候选、处置成功率和最长等待时间。独立抽查放行流量，并记录排除范围和异常，不以队列清空作为全部完成。"
+        }
+      ],
+      "checkpoints": [
+        "先把业务期望拆成不同完成状态和责任。",
+        "给出在线检测、历史检索、复核、处置的数据流。",
+        "覆盖重试、撤销和错罚恢复。",
+        "同时设置风险效果、用户影响、容量和覆盖验收。"
+      ],
+      "pitfalls": [
+        "未经正常样本验证就把话术中的常用词直接封禁。",
+        "用新增命中率证明历史已清理。",
+        "向团队承诺固定截止时间却不核对扫描量和依赖。"
+      ],
+      "followups": [
+        "只允许优先处理10%的历史内容，你怎样选择并解释剩余风险？",
+        "新话术大量出现在反诈骗视频评论中，如何调整控制？"
+      ],
+      "links": [
+        {
+          "topicId": "risk-library-rescan",
+          "sectionId": "lookup-direction",
+          "itemId": "two-indexes",
+          "label": "拆分新增与存量控制"
+        },
+        {
+          "topicId": "risk-library-rescan",
+          "sectionId": "completion-evidence",
+          "itemId": "bounded-rescan",
+          "label": "确定历史范围"
+        },
+        {
+          "topicId": "risk-library-rescan",
+          "sectionId": "reliability-boundaries",
+          "itemId": "idempotent-action",
+          "label": "避免重复处罚"
+        },
+        {
+          "topicId": "tpm-dependencies",
+          "sectionId": "ownership-raci",
+          "itemId": "raci-output",
+          "label": "明确跨团队责任"
+        }
+      ],
+      "termIds": [
+        "online-sample-library",
+        "historical-rescan",
+        "message-queue",
+        "idempotency",
+        "guardrail-metric",
+        "raci"
+      ],
+      "sourceIds": [
+        14
+      ],
+      "extraSources": [
+        {
+          "label": "RabbitMQ：消息确认与发布确认",
+          "url": "https://www.rabbitmq.com/docs/confirms"
+        },
+        {
+          "label": "AWS Builders’ Library：安全重试与幂等 API",
+          "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/"
+        }
+      ]
+    },
+    {
+      "id": "risk-scenario-regional-regression",
+      "domain": "risk",
+      "type": "scenario",
+      "title": "TikTok 类多语言发布：总体效果改善但一类用户被误伤，怎么办？",
+      "prompt": "教学情景：短视频平台更新文本变体映射后，总体审核命中质量上升，但某语言地区的申诉和创作者投诉增加。模型团队认为总体指标支持继续扩大流量，运营希望立即停止。你如何调查、做决策并恢复？",
+      "priority": "核心",
+      "minutes": 12,
+      "assumptions": [
+        "TikTok 类内容平台的教学假设；不声称任何公司发生过此事件。",
+        "申诉数据具有自选择偏差，既不能忽略，也不能单独代表全体错误率。"
+      ],
+      "answer": [
+        {
+          "title": "先澄清影响和决策权",
+          "text": "确认变更版本、流量比例、语言及受影响动作，区分检测误报、审核等待和最终处罚。明确谁能暂停映射、接受风险或批准恢复；先限制高代价动作的扩大，并保留调查所需证据。"
+        },
+        {
+          "title": "沿数据流定位退化",
+          "text": "追踪原文→归一化结果→模型或检索候选→策略→审核/处罚。比较新旧映射在同一代表性样本上的结果，检查俚语、否定、引用与本地语境，确认是否同一错误映射被多个下游共同放大。"
+        },
+        {
+          "title": "建立可靠评估",
+          "text": "汇合申诉、审核和独立随机抽查，分层标注并记录抽样概率；比较分群精确率、召回和错误动作率，控制时间、流量及标签标准。必要时用权重恢复总体估计，不能用投诉少的地区掩盖受损群体。"
+        },
+        {
+          "title": "决策与恢复",
+          "text": "若已越过预定护栏或影响严重，暂停相关映射或退回已知版本；明确恢复错罚、重新审核和用户支持责任。全量回退与局部关闭应比较隔离能力及遗漏风险，局部配置还需防止版本漂移。"
+        },
+        {
+          "title": "重新上线的证据",
+          "text": "补充语言回归集和错误映射测试，先影子比较再有限灰度。扩展前要求分群护栏恢复、下游版本一致、受影响案件有处理记录，并指定持续监测和到期复核。"
+        }
+      ],
+      "checkpoints": [
+        "区分投诉信号、评估样本与真实总体效果。",
+        "检查归一化到最终动作的完整路径。",
+        "以明确责任与护栏做停止、补偿和重发决策。",
+        "解释总体收益与局部风险不能简单相抵。"
+      ],
+      "pitfalls": [
+        "总体精确率提高就忽略少数语言退化。",
+        "把申诉率直接等同假正例率。",
+        "只回滚映射，不处理已经产生的错误处罚。"
+      ],
+      "followups": [
+        "若没有旧版本影子数据，怎样建立可比较基线？",
+        "局部关闭会增加该地区漏检，你如何提出补偿控制？"
+      ],
+      "links": [
+        {
+          "topicId": "risk-features",
+          "sectionId": "variant-normalization",
+          "itemId": "discovery-application",
+          "label": "检查映射发现与发布"
+        },
+        {
+          "topicId": "risk-features",
+          "sectionId": "system-intersection",
+          "itemId": "full-text-system",
+          "label": "追踪下游版本影响"
+        },
+        {
+          "topicId": "risk-metrics",
+          "sectionId": "feedback-bias",
+          "itemId": "sampling-bias",
+          "label": "处理选择性反馈"
+        },
+        {
+          "topicId": "tpm-global",
+          "sectionId": "exception-lifecycle",
+          "itemId": "exception-record",
+          "label": "管理临时例外与复核"
+        }
+      ],
+      "termIds": [
+        "variant-normalization",
+        "measurement-baseline",
+        "label-noise-cleaning",
+        "guardrail-metric",
+        "rollback",
+        "exception-management"
+      ],
+      "sourceIds": [
+        14
+      ],
+      "extraSources": [
+        {
+          "label": "Google ML：精确率、召回率与准确率",
+          "url": "https://developers.google.com/machine-learning/crash-course/classification/accuracy-precision-recall?hl=zh-cn"
+        },
+        {
+          "label": "Google SRE：Canarying Releases",
+          "url": "https://sre.google/workbook/canarying-releases/"
+        }
+      ]
+    },
+    {
+      "id": "risk-scenario-login-friction",
+      "domain": "risk",
+      "type": "scenario",
+      "title": "TikTok 类账号防护：如何降低接管风险并控制登录摩擦？",
+      "prompt": "教学情景：某内容平台可疑登录增多，安全团队希望扩大追加验证，增长团队担心正常创作者无法登录。评分服务偶尔超时，一些用户没有当前认证设备。你如何设计和交付分级防护？",
+      "priority": "核心",
+      "minutes": 12,
+      "assumptions": [
+        "TikTok 类账号业务的教学假设，不描述实际认证产品。",
+        "风险评分不被预设为校准概率，认证器和恢复能力需要先盘点。"
+      ],
+      "answer": [
+        {
+          "title": "确认风险与业务目标",
+          "text": "区分账号接管、自动化尝试和正常设备迁移，确认高价值操作、攻击损失、验证可用性及允许延迟。共同约定正常用户成功率、接管损失和恢复等待的衡量方式，不把一次登录受阻直接当攻击被阻止。"
+        },
+        {
+          "title": "设计请求与控制路径",
+          "text": "服务端验证评分请求与会话、操作的对应关系；结合必要且允许使用的信号分层，按风险放行、追加认证、限流或拒绝。选择不同类别的认证因素并评估抗钓鱼能力，认证成功须绑定当前会话与操作。"
+        },
+        {
+          "title": "异常与恢复",
+          "text": "评分或认证依赖超时走明确分支，依据操作损失设计有限降级、短期限制或人工处理。设备丢失的账号恢复不能成为绕过强认证的弱路径；保护恢复接口并限制重复尝试，监测不同失败原因。"
+        },
+        {
+          "title": "跨团队交付",
+          "text": "安全、身份工程、增长、客服和隐私团队共同确认信号必要性、认证体验和恢复责任。通过版本化配置、小范围发布和明确停用开关验证方案；冲突用可比较的损失与用户影响选项升级，而非只选单方目标。"
+        },
+        {
+          "title": "效果与验收",
+          "text": "跟踪确认接管事件及标签延迟、正常用户验证完成率、登录成功率、恢复等待、评分超时和分群差异。以独立核验与对照窗口评估收益，不能只因拦截更多或申诉更少就宣布有效。"
+        }
+      ],
+      "checkpoints": [
+        "先澄清攻击目标与用户体验口径。",
+        "说明评分验证、分级动作和独立认证因素。",
+        "覆盖超时、设备不可用及恢复绕过。",
+        "给出跨团队责任、发布门槛和分群指标。"
+      ],
+      "pitfalls": [
+        "多问一个知识问题就称作MFA。",
+        "所有评分超时请求统一放行或统一封禁而不分析业务风险。",
+        "认证通过就认为所有后续内容或交易都安全。"
+      ],
+      "followups": [
+        "评分失效发生在普通浏览与提现时，降级策略会怎样不同？",
+        "接管标签要一周后才能确认，灰度期间用哪些领先信号又如何防止误判？"
+      ],
+      "links": [
+        {
+          "topicId": "risk-loop",
+          "sectionId": "score-actions",
+          "itemId": "step-up-mfa",
+          "label": "设计认证与恢复"
+        },
+        {
+          "topicId": "risk-loop",
+          "sectionId": "assessment-validation",
+          "itemId": "token-action",
+          "label": "验证请求与操作绑定"
+        },
+        {
+          "topicId": "risk-loop",
+          "sectionId": "score-actions",
+          "itemId": "graduated-response",
+          "label": "权衡分级动作"
+        },
+        {
+          "topicId": "tpm-metrics",
+          "sectionId": "baseline-guardrails",
+          "itemId": "comparable-metrics",
+          "label": "定义效果与用户护栏"
+        }
+      ],
+      "termIds": [
+        "risk-score",
+        "decision-threshold",
+        "multi-factor-authentication",
+        "guardrail-metric",
+        "service-level-objective",
+        "rollback"
+      ],
+      "sourceIds": [],
+      "extraSources": [
+        {
+          "label": "NIST SP 800-63B：认证与认证器管理",
+          "url": "https://pages.nist.gov/800-63-4/sp800-63b.html"
+        },
+        {
+          "label": "Google：创建 reCAPTCHA Assessment",
+          "url": "https://docs.cloud.google.com/recaptcha/docs/create-assessment-website"
+        },
+        {
+          "label": "Google SRE：Service Level Objectives",
+          "url": "https://sre.google/sre-book/service-level-objectives/"
+        }
+      ]
+    },
+    {
+      "id": "risk-scenario-launch-dependencies",
+      "domain": "risk",
+      "type": "scenario",
+      "title": "TikTok 类风控上线：标签、回扫和全球运营未齐备，如何决定发布范围？",
+      "prompt": "教学情景：平台计划两周后发布新的反作弊规则体系。算法已完成，但审核参考标签延迟、历史回扫存在长尾任务，两个地区尚未演练异常处理。领导要求如期交付，你如何重排依赖并提出可审查的发布决定？",
+      "priority": "进阶",
+      "minutes": 15,
+      "assumptions": [
+        "TikTok 类全球项目的教学假设；两周期限仅为本题约束。",
+        "不预设必须延期或必须全量，需用证据选择可控范围。"
+      ],
+      "answer": [
+        {
+          "title": "定义交付与关键依赖",
+          "text": "确认本期范围、风险等级、控制目标和不可缺少的验收条件。把标签可用、规则验证、索引部署、回扫、运营演练列为有输入、负责人和时点的依赖；计算并行路径与共享审核资源对最早完成时间的影响。"
+        },
+        {
+          "title": "定位技术阻塞",
+          "text": "回扫长尾先检查分区记录数、字节量、计算成本和重试，区分数据倾斜与整体容量不足。可评估分片调整、加盐或运行时优化，但任何加速都要验证结果与扫描覆盖；新索引生效不代表历史处置完成。"
+        },
+        {
+          "title": "比较可执行选项",
+          "text": "提出延后全量、限定地区或风险类型发布、先影子运行等方案，列明收益、风险、成本和剩余工作。参考标签不足的能力不进入未经验证的高代价自动处罚；运营未具备响应能力的范围需要补齐或受控排除。"
+        },
+        {
+          "title": "故障与协作安排",
+          "text": "建立发布门槛、停用权限和版本回退，演练队列积压、规则误伤与处置结果未知。由算法、平台工程、审核运营及地区负责人确认接口和接手条件；例外有批准人、补偿措施和到期复核。"
+        },
+        {
+          "title": "验收与向上沟通",
+          "text": "报告真实覆盖分母、独立质量证据、分群护栏、积压年龄、未完成历史范围和运营演练结果。将已完成、受限上线、延期事项和待决风险清楚分开；任务完成百分比或DORA部署频率不能替代风控效果与用户保护。"
+        }
+      ],
+      "checkpoints": [
+        "能根据依赖与资源重算关键路径。",
+        "技术优化同时验证语义、覆盖和资源收益。",
+        "提出至少两个具体选项并给出决策依据。",
+        "发布报告同时覆盖效果、故障、例外和运营能力。"
+      ],
+      "pitfalls": [
+        "算法完成就把项目标为完成。",
+        "靠增加机器或机械压缩每个任务保证截止时间。",
+        "把未验证地区直接计入全量覆盖。"
+      ],
+      "followups": [
+        "领导只能接受同一天对外发布，你怎样重新界定可承诺的交付物？",
+        "如果回扫只剩1%未完成，但集中于最高风险分区，是否可以关闭项目？"
+      ],
+      "links": [
+        {
+          "topicId": "rel-sla",
+          "sectionId": "critical-path",
+          "itemId": "path-calculation",
+          "label": "计算依赖链与并行工作"
+        },
+        {
+          "topicId": "rel-skew",
+          "sectionId": "skew-remedies",
+          "itemId": "shuffle-aqe",
+          "label": "诊断长尾和运行时优化"
+        },
+        {
+          "topicId": "tpm-dependencies",
+          "sectionId": "dependency-contract",
+          "itemId": "handoff-definition",
+          "label": "定义可验收依赖"
+        },
+        {
+          "topicId": "tpm-delivery",
+          "sectionId": "rollout-handoff",
+          "itemId": "different-safeguards",
+          "label": "制定发布及运营门槛"
+        },
+        {
+          "topicId": "tpm-global",
+          "sectionId": "exception-lifecycle",
+          "itemId": "exception-record",
+          "label": "管理受限上线的例外"
+        }
+      ],
+      "termIds": [
+        "critical-path",
+        "data-skew",
+        "adaptive-query-execution",
+        "raci",
+        "guardrail-metric",
+        "exception-management",
+        "dora-metrics"
+      ],
+      "sourceIds": [],
+      "extraSources": [
+        {
+          "label": "Apache Spark：查询性能与 AQE",
+          "url": "https://spark.apache.org/docs/latest/sql-performance-tuning.html"
+        },
+        {
+          "label": "Google SRE：Canarying Releases",
+          "url": "https://sre.google/workbook/canarying-releases/"
+        }
+      ]
+    }
+  ]
+}

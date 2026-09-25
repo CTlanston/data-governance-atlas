@@ -81,11 +81,53 @@
         },
         {
           "id": "anonymity-boundary", "title": "动态脱敏、静态脱敏、假名化与匿名化", "en": "Masking & Identifiability", "kind": "comparison",
-          "summary": "处理方法、原值保存位置和最终能否识别个人，需要分开判断。", "sourceIds": [9, 11], "extraSources": [{"label": "ICO：匿名化有效性", "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/anonymisation/how-do-we-ensure-anonymisation-is-effective/"}, {"label": "ICO：假名化", "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/anonymisation/pseudonymisation/"}],
+          "summary": "处理方法、原值保存位置和最终能否识别个人，需要分开判断。", "sourceIds": [9, 11], "extraSources": [{"label": "ICO：匿名化有效性", "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/anonymisation/how-do-we-ensure-anonymisation-is-effective/"}, {"label": "ICO：假名化", "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-sharing/anonymisation/pseudonymisation/"}, {"label": "Google：Differential Privacy 与贡献界限", "url": "https://github.com/google/differential-privacy"}],
           "items": [{"id": "four-outcomes", "title": "动态脱敏、静态脱敏、假名化与匿名化的保护目标有何不同？", "blocks": [
             {"type": "table", "title": "保护结果不由名称自动保证", "headers": ["概念", "主要变化", "仍要检查"], "rows": [["动态脱敏 Dynamic Masking", "查询或展示时改变返回值", "原值与其他读取路径是否受控"], ["静态脱敏 Static Masking", "生成并保存处理后的副本", "源数据、复制数据和残留字段"], ["假名化 Pseudonymisation", "身份与代号的对应信息分开保护", "持有额外信息时仍可能关联回个人"], ["匿名化 Anonymisation", "目标是在相关情境下无法合理识别个人", "额外资料、组合线索和重识别风险"]]},
-            {"type": "example", "title": "删除姓名后仍能认出人的例子", "text": "教学例子：科研表去掉姓名和身份证，却保留精确就诊时间、罕见病、年龄和科室。接收方若掌握额外资料，仍可能把记录对应到个人。可以讨论降低粒度、减少不必要字段、分组或其他隐私技术，但每种方法都有适用条件；“已经脱敏”不是风险分析结束的理由。"}
-          ]}]
+            {"type": "example", "title": "删除姓名后仍能认出人的例子", "text": "教学例子：科研表去掉姓名和身份证，却保留精确就诊时间、罕见病、年龄和科室。接收方若掌握额外资料，仍可能把记录对应到个人。可以讨论降低粒度、减少不必要字段、分组或其他隐私技术，但每种方法都有适用条件；“已经脱敏”不是风险分析结束的理由。把记录改成 Embedding 等数值表示也不自动消除可关联性，应同样评估用途、辅助资料和重识别风险。"}
+          ]},
+          {
+            "id": "differential-privacy",
+            "title": "发布群体统计时，差分隐私保护什么，需要哪些边界？",
+            "blocks": [
+              {
+                "type": "explain",
+                "title": "保护单位、贡献界限与隐私预算",
+                "text": "差分隐私限制单个保护单位的数据变化对输出分布的影响。设计时先说明单位是一条记录还是一个用户，并约束每个单位可贡献的数量与数值范围；同一用户的大量记录不能在承诺用户级保护时被当作互不相关。机制参数和多次发布的预算也要管理。它通常通过受控随机化实现，输出越精细、发布越频繁，对隐私与统计效用的权衡越紧。"
+              },
+              {
+                "type": "table",
+                "title": "统计输出保证与其他保护的边界",
+                "headers": [
+                  "做法",
+                  "主要解决",
+                  "不能据此声称"
+                ],
+                "rows": [
+                  [
+                    "差分隐私 Differential Privacy",
+                    "在明确假设和参数下约束输出对个体贡献的敏感性",
+                    "随意加噪就有保证，或所有使用目的都获授权"
+                  ],
+                  [
+                    "假名化 Pseudonymisation",
+                    "分开保护重新对应到身份的额外信息",
+                    "可独特关联的数据已匿名"
+                  ],
+                  [
+                    "动态脱敏 Dynamic Data Masking",
+                    "按角色或查询规则改变可见原值",
+                    "重复统计查询不会推断个体"
+                  ],
+                  [
+                    "教学例子：城市活跃人数",
+                    "限制每人贡献，采用适当机制并累计发布预算",
+                    "换掉用户编号就足以保护重复发布的结果"
+                  ]
+                ]
+              }
+            ]
+          }]
         },
         {
           "id": "three-maskings", "title": "三个 Masking：隐藏的对象不同", "en": "Three Meanings of Masking", "kind": "comparison",
@@ -102,7 +144,7 @@
       "sections": [
         {
           "id": "purpose-access-consent", "title": "访问授权、用途限制与用户同意", "en": "Access · Purpose · Consent", "kind": "comparison",
-          "summary": "三个条件有关联，但任何一个都不能单独代表其他两个。", "sourceIds": [11, 12, 18], "extraSources": [],
+          "summary": "三个条件有关联，但任何一个都不能单独代表其他两个。", "sourceIds": [11, 12, 18], "extraSources": [{"label": "ICO：英国处理依据指南（同意并非唯一依据）", "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/a-guide-to-lawful-basis/"}],
           "items": [{"id": "three-questions", "title": "访问授权、用途限制和用户同意分别约束哪些行为？", "blocks": [
             {"type": "table", "title": "三个判断维度", "headers": ["问题", "含义", "不能自动推出"], "rows": [["谁能读 Access", "这个身份是否能取得数据", "取得后任何用途都允许"], ["为何使用 Purpose", "处理是否符合允许的目的", "所有身份都可以访问"], ["作了何种选择 Consent / Preference", "用户针对具体范围表达了什么", "一次选择适用所有用途与未来处理"]]},
             {"type": "example", "title": "客服数据用于训练的情景", "text": "教学例子：客服服务有权限读取一条工单，以解决当前问题。这只说明它能为该场景取得数据。若另一个团队希望把工单用于训练，需要另行检查允许用途、适用要求和用户选择；不能把原来的读取权限当作新的用途许可。是否依赖同意，也要按具体场景确定，不能假设所有处理都只有同意这一种依据。"}
@@ -169,8 +211,8 @@
           "summary": "指令告诉模型怎样做，证据让模型有材料判断当前资产。", "sourceIds": [13], "extraSources": [],
           "items": [
             {"id": "instruction-versus-facts", "title": "资产分类中，提示词、上下文证据与参考标签分别承担什么职责？", "blocks": [
-              {"type": "explain", "title": "任务说明与事实材料各有作用", "text": "Prompt 可以要求“按既定类别判断，并说明依据”，但它不能凭空知道字段在哪里使用。Context 提供代码、来源、所有者、语义注释和血缘等当前事实。Evidence Brief 再从中挑出最相关的正反证据。给模型补上它原本看不到的事实，可能改变可作出的判断；单纯重复“认真分类”则不一定有用。"},
-              {"type": "table", "title": "四种信息不要混在一起", "headers": ["信息", "角色", "示例"], "rows": [["Prompt", "规定任务与判断标准", "判断是否属于人的年龄并给依据"], ["Context", "当前对象的事实材料", "代码把此字段用于缓存到期计算"], ["Candidate Label", "待检查的预测结果", "模型建议归为系统运行数据"], ["Reviewed Reference", "独立评估的参照", "审核者按分类标准确认后的标签"]]}
+              {"type": "explain", "title": "任务说明与事实材料各有作用", "text": "提交给模型的 Prompt 往往同时包含任务指令与上下文；这里按作用区分它们。指令规定分类任务和输出要求，上下文提供代码、来源、所有者、语义注释和血缘等事实。Meta 案例再把关键正反线索整理为 Evidence Brief。证据不足时，反复改写指令未必有效；但新增材料也要检查可靠性和目标泄漏，不能越多越好。"},
+              {"type": "table", "title": "四种信息不要混在一起", "headers": ["信息", "角色", "示例"], "rows": [["任务指令 Task Instructions", "规定任务与判断标准；通常是 Prompt 的一部分", "判断是否属于人的年龄并给依据"], ["上下文 Context", "提供当前对象的事实；也可放入 Prompt", "代码把此字段用于缓存到期计算"], ["Candidate Label", "待检查的预测结果", "模型建议归为系统运行数据"], ["Reviewed Reference", "独立评估的参照", "审核者按分类标准确认后的标签"]]}
             ]},
             {"id": "age-evidence-brief", "title": "资产语义存在歧义时，应如何组织和评估支持、反对与来源证据？", "blocks": [
               {"type": "table", "title": "教学证据简报：判断是否为个人年龄", "headers": ["线索", "支持哪种解释", "应如何使用"], "rows": [["字段名是 age", "可能是人的年龄", "弱线索，词义存在歧义"], ["血缘来自用户资料表", "支持个人年龄解释", "核查来源是否真的对应当前字段"], ["代码参与缓存到期计算", "支持缓存时长解释", "直接使用上下文，比孤立字段名更有力"], ["由基础设施团队维护", "可能是系统数据", "团队归属不能单独排除个人信息"], ["历史标签 is_pii=false", "看似直接给出答案", "检查循环标签泄漏，不能据此自我证明"]]},
@@ -248,10 +290,7 @@
               {"type": "explain", "title": "分歧是调查入口，不是裁决结果", "text": "分歧首先需要按类别、敏感程度和错误代价拆分，再核对输入、证据版本、规则适用范围和参考标签。旧规则、LLM 和人工标签都可能有误。对高风险或政策含义模糊的样本进行有依据的复核，保留裁决理由与版本；差异比例本身不决定谁正确，也不构成通用的上线或拒绝门槛。"},
               {"type": "table", "title": "每个评估参与者负责什么", "headers": ["参与者或材料", "作用", "关键限制"], "rows": [["Holdout 留出样本", "用未参加当前提炼的数据检查泛化", "不是所有留出样本都自动有正确标签"], ["自动评估程序", "按定义计算质量与分歧", "计算正确不代表评估标准正确"], ["模型裁判 Judge", "按多个视角批量提供复核信号", "多数意见仍可能共同出错"], ["人工审核参考", "澄清高风险或模糊案例并确认依据", "人也可能有误，需要标准、版本和复核"]]}
             ]},
-            {"id": "judge-and-leakage", "title": "多视角 LLM 裁判有哪些独立性限制，如何防止评估污染？", "blocks": [
-              {"type": "explain", "title": "多视角增加检查，不自动消除共同偏差", "text": "Meta 案例使用同一个较大的裁判模型，以直接分类、先批判再分类、只看元数据三种提示进行评估。它与被评估分类器不同，但三个视角不是三个独立模型家族。它们共享模型能力和部分偏差。模型生成标签只有经过适当审核，才能进入参考集；不能让优化器用自己的预测作为评分答案，再宣布自己越来越准确。"},
-              {"type": "table", "title": "两种常见评估污染", "headers": ["问题", "污染位置", "教学例子"], "rows": [["目标标签泄漏", "答案进入预测输入或规则特征", "输入已经包含待预测的隐私标签"], ["留出集被反复调参", "测试数据逐渐参与优化选择", "每次根据同一考试集改提示词"], ["自生成标签自我评估", "被测模型同时提供参考答案", "与自己的旧预测更一致就算进步"]]}
-            ]}
+            {"id": "judge-and-leakage", "title": "多视角 LLM 裁判有哪些独立性限制，如何防止评估污染？", "blocks": [{"type": "explain", "title": "多视角增加检查，不自动消除共同偏差", "text": "Meta 案例使用同一个较大的裁判模型，以直接分类、先批判再分类、只看元数据三种提示进行评估。它与被评估分类器不同，但三个视角不是三个独立模型家族。它们共享模型能力和部分偏差。模型生成标签只有经过适当审核，才能进入参考集；不能让优化器用自己的预测作为评分答案，再宣布自己越来越准确。"}, {"type": "table", "title": "两种常见评估污染", "headers": ["问题", "污染位置", "教学例子"], "rows": [["目标标签泄漏", "答案进入预测输入或规则特征", "输入已经包含待预测的隐私标签"], ["留出集被反复调参", "测试数据逐渐参与优化选择", "每次根据同一考试集改提示词"], ["自生成标签自我评估", "被测模型同时提供参考答案", "与自己的旧预测更一致就算进步"]]}, {"type": "explain", "title": "逐项遮蔽检查：识别对弱证据的过度依赖", "text": "Meta 案例把逐项移除上下文线索、重新分类的检查称为 Counterfactual Masking。若删掉一条不可靠描述就导致类别翻转，应审查判断是否脆弱；若移除的是关键来源证据，变化也可能合理。因此要结合线索可靠性、其余证据及参考标签判断。它是一种输入扰动与稳健性检查，不单独证明因果关系，也不能替代独立样本上的质量评估。"}]}
           ]
         },
         {
@@ -323,11 +362,8 @@
         },
         {
           "id": "identifiers-and-artifacts", "title": "资产标识、RPC、训练清单与检查点", "en": "Identifiers, Manifests & Checkpoints", "kind": "concept",
-          "summary": "不同技术系统需要用可关联的记录，把输入、处理和产物连接起来。", "sourceIds": [12], "extraSources": [{"label": "TensorFlow：训练检查点", "url": "https://www.tensorflow.org/guide/checkpoint"}],
-          "items": [{"id": "what-to-connect", "title": "训练数据清单、资产版本、任务与模型产物应如何关联？", "blocks": [
-            {"type": "table", "title": "几种记录各负责一段关系", "headers": ["记录", "解决什么问题", "缺失后的困难"], "rows": [["资产标识与版本", "具体是哪份表、字段或快照", "同名数据不同版本被混为一谈"], ["RPC / 调用关联", "哪个请求跨服务发送了哪些输入", "服务间的处理关系断开"], ["Training Manifest 训练清单", "某次任务实际选了哪些输入", "只知道大数据集名，不知道实际样本范围"], ["Job / Checkpoint 任务与产物", "哪个训练任务产生哪个模型版本", "无法定位受某批数据影响的产物"]]},
-            {"type": "example", "title": "从一个检查点反查输入", "text": "教学例子：审查一个线上模型版本时，先找到对应检查点及训练任务，再查看该任务的输入快照和筛选条件，沿上游血缘定位来源。清单的字段设计随平台不同，但必须足以回答实际使用范围。仅展示“模型来自用户数据集”这种粗粒度关系，不足以回答某个受限制字段是否进入过训练。"}
-          ]}]
+          "summary": "不同技术系统需要用可关联的记录，把输入、处理和产物连接起来。", "sourceIds": [12], "extraSources": [{"label": "TensorFlow：训练检查点", "url": "https://www.tensorflow.org/guide/checkpoint"}, {"label": "gRPC：核心概念、超时与调用终止", "url": "https://grpc.io/docs/what-is-grpc/core-concepts/"}],
+          "items": [{"id": "what-to-connect", "title": "训练数据清单、资产版本、任务与模型产物应如何关联？", "blocks": [{"type": "table", "title": "几种记录各负责一段关系", "headers": ["记录", "解决什么问题", "缺失后的困难"], "rows": [["资产标识与版本", "具体是哪份表、字段或快照", "同名数据不同版本被混为一谈"], ["RPC / 调用关联", "哪个请求跨服务发送了哪些输入", "服务间的处理关系断开"], ["Training Manifest 训练清单", "某次任务实际选了哪些输入", "只知道大数据集名，不知道实际样本范围"], ["Job / Checkpoint 任务与产物", "哪个训练任务产生哪个模型版本", "无法定位受某批数据影响的产物"]]}, {"type": "example", "title": "从一个检查点反查输入", "text": "教学例子：审查一个线上模型版本时，先找到对应检查点及训练任务，再查看该任务的输入快照和筛选条件，沿上游血缘定位来源。清单的字段设计随平台不同，但必须足以回答实际使用范围。仅展示“模型来自用户数据集”这种粗粒度关系，不足以回答某个受限制字段是否进入过训练。"}, {"type": "explain", "title": "RPC：接口调用、执行结果与追踪不是一回事", "text": "RPC 让调用方按服务接口发送参数，请另一进程执行操作并返回结果；gRPC 是一种实现。网络超时可能发生在服务已经执行之后，因此失败重试需考虑重复写入等副作用。关联请求与响应时，可记录调用标识、接口、版本和结果，再连接到实际数据对象；调用日志不会自动给出字段来源、允许用途或全部下游处理。追踪信息本身也应避免复制不必要的敏感载荷。"}]}]
         },
         {
           "id": "lineage-enforcement-proof", "title": "从血缘可见到用途控制与证明", "en": "Lineage to Enforcement & Proof", "kind": "reasoning",
@@ -352,11 +388,8 @@
         },
         {
           "id": "cross-server-composition", "title": "跨工具数据组合与重识别风险", "en": "Cross-Server Composition Boundaries", "kind": "architecture",
-          "summary": "标识符把分散数据接起来，最终任务的含义可能超出单次读取。", "sourceIds": [18], "extraSources": [],
-          "items": [{"id": "account-to-person", "title": "跨工具数据组合如何产生重识别风险，控制应设置在哪些边界？", "blocks": [
-            {"type": "diagram", "title": "教学重构：单次权限之外的组合检查", "diagram": {"columns": [{"title": "任务与第一来源", "nodes": [{"id": "task", "title": "统计故障的目的", "en": "Task Purpose", "text": "确认是否真的需要识别具体客户"}, {"id": "tool-a", "title": "交易工具 A", "en": "Transaction Tool", "text": "按权限返回账户编号、失败次数和时间"}]}, {"title": "累计上下文", "nodes": [{"id": "context", "title": "账户级汇总", "en": "Accumulated Context", "text": "编号及行为模式被保留供下一轮使用"}]}, {"title": "第二来源与关联", "nodes": [{"id": "tool-b", "title": "客户工具 B", "en": "Customer Tool", "text": "按权限把编号对应到姓名或联系方式"}, {"id": "join", "title": "组合重构", "en": "PII Reconstruction", "text": "失败行为与现实身份被连接到一起"}]}, {"title": "用途与去向", "nodes": [{"id": "check", "title": "端到端用途检查", "en": "Purpose Check", "text": "判断关联和转交是否必要且获允许"}, {"id": "output", "title": "最小必要结果", "en": "Minimal Output", "text": "只向允许的接收方提供适当范围的信息"}]}], "edges": [{"from": "task", "to": "tool-a", "label": "限定取数", "kind": "control"}, {"from": "tool-a", "to": "context", "label": "形成上下文", "kind": "flow"}, {"from": "context", "to": "tool-b", "label": "请求编号映射", "kind": "flow"}, {"from": "context", "to": "join", "label": "行为模式", "kind": "flow"}, {"from": "tool-b", "to": "join", "label": "身份映射", "kind": "flow"}, {"from": "join", "to": "check", "label": "新增敏感含义", "kind": "flow"}, {"from": "task", "to": "check", "label": "始终对照目的", "kind": "control"}, {"from": "check", "to": "output", "label": "符合范围才转交", "kind": "flow"}], "note": "演示风险形成与控制位置；实际系统宜在发起不必要关联前检查，不能只在最终输出补救。来自受控实验的启发，不表示所有 MCP 系统必然如此。"}},
-            {"type": "takeaway", "title": "MCP 连接能力，Agent 决定行动", "text": "MCP 是工具和资源的接口协议，Agent 是根据任务进行多步行动的系统。服务各自验证访问权限仍然必要，但单个服务可能不知道另一个服务返回了什么，也不知道最终用途已经改变。因此要在整体任务层检查字段组合、后续接收方和授权范围，不能把一次成功调用当作未来所有操作的许可。"}
-          ]}]
+          "summary": "标识符把分散数据接起来，最终任务的含义可能超出单次读取。", "sourceIds": [18], "extraSources": [{"label": "MCP 官方：架构与协议角色", "url": "https://modelcontextprotocol.io/docs/learn/architecture"}],
+          "items": [{"id": "account-to-person", "title": "跨工具数据组合如何产生重识别风险，控制应设置在哪些边界？", "blocks": [{"type": "diagram", "title": "教学重构：单次权限之外的组合检查", "diagram": {"columns": [{"title": "任务与第一来源", "nodes": [{"id": "task", "title": "统计故障的目的", "en": "Task Purpose", "text": "确认是否真的需要识别具体客户"}, {"id": "tool-a", "title": "交易工具 A", "en": "Transaction Tool", "text": "按权限返回账户编号、失败次数和时间"}]}, {"title": "累计上下文", "nodes": [{"id": "context", "title": "账户级汇总", "en": "Accumulated Context", "text": "编号及行为模式被保留供下一轮使用"}]}, {"title": "第二来源与关联", "nodes": [{"id": "tool-b", "title": "客户工具 B", "en": "Customer Tool", "text": "按权限把编号对应到姓名或联系方式"}, {"id": "join", "title": "组合重构", "en": "PII Reconstruction", "text": "失败行为与现实身份被连接到一起"}]}, {"title": "用途与去向", "nodes": [{"id": "check", "title": "端到端用途检查", "en": "Purpose Check", "text": "判断关联和转交是否必要且获允许"}, {"id": "output", "title": "最小必要结果", "en": "Minimal Output", "text": "只向允许的接收方提供适当范围的信息"}]}], "edges": [{"from": "task", "to": "tool-a", "label": "限定取数", "kind": "control"}, {"from": "tool-a", "to": "context", "label": "形成上下文", "kind": "flow"}, {"from": "context", "to": "tool-b", "label": "请求编号映射", "kind": "flow"}, {"from": "context", "to": "join", "label": "行为模式", "kind": "flow"}, {"from": "tool-b", "to": "join", "label": "身份映射", "kind": "flow"}, {"from": "join", "to": "check", "label": "新增敏感含义", "kind": "flow"}, {"from": "task", "to": "check", "label": "始终对照目的", "kind": "control"}, {"from": "check", "to": "output", "label": "符合范围才转交", "kind": "flow"}], "note": "演示风险形成与控制位置；实际系统宜在发起不必要关联前检查，不能只在最终输出补救。来自受控实验的启发，不表示所有 MCP 系统必然如此。"}}, {"type": "takeaway", "title": "MCP 连接能力，Agent 决定行动", "text": "MCP 是工具和资源的接口协议，Agent 是根据任务进行多步行动的系统。服务各自验证访问权限仍然必要，但单个服务可能不知道另一个服务返回了什么，也不知道最终用途已经改变。因此要在整体任务层检查字段组合、后续接收方和授权范围，不能把一次成功调用当作未来所有操作的许可。"}, {"type": "table", "title": "MCP 协议角色与 Agent 编排边界", "headers": ["角色 / 概念", "负责什么", "不能据此推导"], "rows": [["Host 宿主应用", "组织 MCP clients，并使用获取的能力与上下文", "接入多个 server 就允许组合所有数据"], ["Client 客户端", "与对应 server 进行协议交互", "客户端连接成功等于某项业务用途获准"], ["Server 服务端", "暴露 tools、resources、prompts 等能力", "服务端知道其他服务已返回的全部上下文"], ["Tool 工具", "执行定义好的可调用操作", "一个工具就是完整 Agent 或任务策略"], ["Agent 编排", "围绕任务选择操作、处理结果并推进多步流程", "协议自动保证每轮行动和累计上下文都符合目的"]]}]}]
         },
         {
           "id": "context-versus-training", "title": "上下文泄露、训练记忆与提示注入分开看", "en": "Context, Training & Injection", "kind": "comparison",

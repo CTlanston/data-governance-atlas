@@ -1163,9 +1163,9 @@
                         "nodes": [
                           {
                             "id": "origins",
-                            "title": "来源与表达式",
+                            "title": "来源列集合",
                             "en": "Column Origins",
-                            "text": "从输出列追到输入字段及已支持的变换"
+                            "text": "查询已支持算子的输入源列，转换表达式需另行保留"
                           }
                         ]
                       }
@@ -1201,7 +1201,7 @@
                 },
                 {
                   "type": "explain",
-                  "text": "例如两个表都有 id，只有语法树还不够确认 id 属于谁。语义校验结合目录与作用域解析引用；关系计划再表达 Join 和 Project 的输入输出。案例使用列来源元数据沿计划回溯，但复杂函数、窗口和自定义算子可能需要专门规则，并不会因为 SQL 可执行就自动全部支持。"
+                  "text": "例如两个表都有 id，只有语法结构还不足以确认引用。Calcite 的 SqlNode 表示语法节点，校验结合目录与作用域；转换后的 RelNode 表示关系运算。案例通过 getColumnOrigins 查询输出列的源字段集合，但它不自动返回完整转换表达式。复杂函数与算子需要相应处理，SQL 可执行不代表血缘已全部覆盖。"
                 }
               ]
             }
@@ -1316,6 +1316,207 @@
                 {
                   "type": "explain",
                   "text": "余弦相似度（Cosine Similarity）比较向量方向，结果取决于选了哪些特征。若向量只统计 JOIN 和聚合数量，两段筛选条件相反的 SQL 也可能分数很高。结构相似不是语义等价；即使结果一样，不同刷新时间、权限隔离或下游承诺仍可能让两项任务有独立存在价值。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "lookup-join",
+          "title": "Lookup Join：维表补全、时效与治理",
+          "en": "Lookup Join & Governed Enrichment",
+          "kind": "architecture",
+          "summary": "Lookup Join 是数据补全机制；选型要同时考虑时间语义、外部依赖、血缘与关联后的使用约束。",
+          "sourceIds": [
+            8,
+            11
+          ],
+          "extraSources": [
+            {
+              "label": "Apache Flink 2.3｜Joins",
+              "url": "https://nightlies.apache.org/flink/flink-docs-release-2.3/docs/sql/reference/queries/joins/"
+            },
+            {
+              "label": "Apache Flink｜JDBC Lookup Cache",
+              "url": "https://nightlies.apache.org/flink/flink-docs-stable/docs/connectors/table/jdbc/#lookup-cache"
+            }
+          ],
+          "items": [
+            {
+              "id": "mechanism",
+              "title": "Lookup Join 如何使用外部维表补全事件？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "Lookup Join（查找关联，常用于维表关联）用事件中的关联键查询外部数据源，把匹配属性补到结果中。例如订单带有 merchant_id，查询商户表补入行业。Flink 所述机制要求 lookup source，并使用处理时间属性。它不要求把维表作为另一条完整更新流持续维护；是否缓存及缓存范围由连接器决定。维表后来变更不会自动修正所有已输出结果。"
+                },
+                {
+                  "type": "diagram",
+                  "title": "启用查询缓存的补全示意",
+                  "diagram": {
+                    "columns": [
+                      {
+                        "title": "事件输入",
+                        "nodes": [
+                          {
+                            "id": "event",
+                            "title": "事件及关联键",
+                            "en": "Event",
+                            "text": "提供事件字段、关联键及处理上下文"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "查询入口",
+                        "nodes": [
+                          {
+                            "id": "cache",
+                            "title": "查询缓存",
+                            "en": "Lookup Cache",
+                            "text": "命中时复用结果，未命中时查询外部源"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "外部依赖",
+                        "nodes": [
+                          {
+                            "id": "dimension",
+                            "title": "维度数据源",
+                            "en": "Lookup Source",
+                            "text": "按条件返回属性，受自身时效与可用性影响"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "输出",
+                        "nodes": [
+                          {
+                            "id": "enriched",
+                            "title": "补全后的记录",
+                            "en": "Enriched Record",
+                            "text": "合并事件与匹配属性，应用结果使用约束"
+                          }
+                        ]
+                      }
+                    ],
+                    "edges": [
+                      {
+                        "from": "event",
+                        "to": "cache",
+                        "label": "按键查询",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "cache",
+                        "to": "dimension",
+                        "label": "缓存未命中",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "dimension",
+                        "to": "cache",
+                        "label": "返回并缓存",
+                        "kind": "feedback"
+                      },
+                      {
+                        "from": "cache",
+                        "to": "enriched",
+                        "label": "提供匹配属性",
+                        "kind": "flow"
+                      },
+                      {
+                        "from": "event",
+                        "to": "enriched",
+                        "label": "提供原事件字段",
+                        "kind": "flow"
+                      }
+                    ],
+                    "note": "启用缓存时的教学图；缓存是可选的，具体查找模式由连接器决定；不表示读取到全局一致快照。"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "join-semantics",
+              "title": "Lookup、Regular、Interval 与事件时间 Temporal Join 如何选用？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "按需要匹配的关系与时间选择",
+                  "headers": [
+                    "机制",
+                    "适合回答的问题",
+                    "主要边界"
+                  ],
+                  "rows": [
+                    [
+                      "Regular Join 普通关联",
+                      "两张动态表中，哪些行满足关联条件？",
+                      "流式场景需维护状态，输入更新可影响结果"
+                    ],
+                    [
+                      "Interval Join 区间关联",
+                      "两个流中，同键事件是否落在指定时间区间？",
+                      "需要有界的两侧时间条件，不能代替维度版本查询"
+                    ],
+                    [
+                      "事件时间 Temporal Join",
+                      "事件发生时，对应维度键的版本是什么？",
+                      "需版本化数据、主键与水位线等条件"
+                    ],
+                    [
+                      "Lookup Join 查找关联",
+                      "处理事件时，从外部源查询到哪些匹配属性？",
+                      "结果受查询时点、连接器及缓存影响，不自动重算历史输出"
+                    ]
+                  ]
+                },
+                {
+                  "type": "takeaway",
+                  "text": "这些名字并非完全互斥：Flink 的 Lookup Join 使用处理时间 Temporal Join 语法。若要求重放历史事件仍使用当时的维度版本，就需要历史版本能力，不能仅靠当前值查询或增大缓存实现。"
+                }
+              ]
+            },
+            {
+              "id": "freshness-cache",
+              "title": "维表缓存如何影响风控特征的新鲜度与可复现性？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "以 JDBC lookup cache 为例，缓存能降低外部查询量，却可能保留旧属性；未命中结果也可能被缓存。应先约定可接受的数据年龄、源更新延迟和失败处置，再选缓存失效策略。关闭缓存并不保证源库无延迟；重放同一事件时，外部状态改变也可能产生不同结果。连接器版本与兼容性需要单独核对。"
+                },
+                {
+                  "type": "example",
+                  "text": "教学假设：商户风险级别在源表变更，但查询缓存尚未失效，后续事件仍拿到旧级别。检查应区分“事件晚到”“源更新未到”“缓存陈旧”和“查找失败”。可监测匹配率、超时率、源更新时间及特征年龄，并明确陈旧或未知特征走降级、复核还是延迟处理，不能直接当成低风险。"
+                }
+              ]
+            },
+            {
+              "id": "lineage-coverage",
+              "title": "Lookup Join 的血缘应覆盖哪些输入、字段与时间信息？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "补全结果同时依赖事件流和外部维度数据。血缘应记录关联键、维表字段、输出字段及变换；为重建一次判断，还需尽可能记录数据版本或更新时间、查询时点和缓存相关证据。列血缘说明结构来源，不能单独证明那次查到了哪条、哪个版本的数据。历史 Flink 案例中的 Snapshot 支持缺口说明，算子覆盖需要专门验证。"
+                },
+                {
+                  "type": "example",
+                  "text": "输出 risk_category 来自商户维表，而事件只带 merchant_id。若图上只记录事件流，变更维表规则时就找不到受影响的风控任务。验收可选取已知事件与维表样本，核对字段来源、未匹配路径和版本说明；不支持的关系应标为未知。"
+                }
+              ]
+            },
+            {
+              "id": "privacy-linkage",
+              "title": "维表补全如何改变数据关联风险与用途控制？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "事件键与维表匹配可能把原本分散的信息组合成更完整的个人画像。查询权限分别合法，并不自动说明组合用途已获授权。设计时应检查是否需要直接标识、最小返回字段、允许用途、结果访问权限、缓存和派生结果的留存；还要处理偏好变更或删除对缓存和下游的影响。"
+                },
+                {
+                  "type": "example",
+                  "text": "教学假设：行为事件只含假名账号，另一表能映射联系方式。若仅需地区统计，就不应默认把联系方式一起补进结果。可返回必要地区粒度、限制映射表使用，并将组合结果纳入分类、血缘和生命周期。这里讨论的是关联造成的隐私风险，不预设所有关联都会识别个人。"
                 }
               ]
             }
@@ -1592,6 +1793,70 @@
                 {
                   "type": "example",
                   "text": "例如日志系统的 DLM 方案可以按分区迁移和到期清理；敏感字段也可能在同一个项目中被识别、限制使用和删除。不能仅因项目叫 DLM，就认为字段级保护必然不在范围内。"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "etl-elt",
+          "title": "ETL 与 ELT：转换位置与原始数据控制",
+          "en": "ETL / ELT & Control Placement",
+          "kind": "comparison",
+          "summary": "转换前后都可能存在副本；选择处理顺序时要明确目标环境和控制点。",
+          "sourceIds": [
+            3,
+            4
+          ],
+          "extraSources": [
+            {
+              "label": "IBM｜ETL",
+              "url": "https://www.ibm.com/think/topics/etl"
+            },
+            {
+              "label": "IBM｜ELT",
+              "url": "https://www.ibm.com/think/topics/elt"
+            }
+          ],
+          "items": [
+            {
+              "id": "processing-order",
+              "title": "ETL 与 ELT 的转换顺序如何影响架构和治理？",
+              "blocks": [
+                {
+                  "type": "table",
+                  "title": "这里的 Load 指加载到所讨论的目标平台",
+                  "headers": [
+                    "方式",
+                    "处理顺序与常见作用",
+                    "治理关注"
+                  ],
+                  "rows": [
+                    [
+                      "ETL",
+                      "Extract → Transform → Load；先按目标规则整理",
+                      "转换环境里的原始副本同样需要保护"
+                    ],
+                    [
+                      "ELT",
+                      "Extract → Load → Transform；使用目标平台的计算能力转换",
+                      "原始数据更早进入目标，须先限制访问、用途和留存"
+                    ]
+                  ]
+                },
+                {
+                  "type": "explain",
+                  "text": "选择时看源/目标能力、数据量、转换灵活性、时延和原始数据进入目标的约束。两种方式都可能有中间落地；“先转换再加载”不是说 ETL 途中从不保存原始数据，也不代表 ELT 可以无限保存原始层。"
+                }
+              ]
+            },
+            {
+              "id": "control-points",
+              "title": "原始层、转换层与输出层应分别验证哪些控制？",
+              "blocks": [
+                {
+                  "type": "explain",
+                  "text": "为每个落地位置登记责任、敏感类别、允许用途与留存条件；对转换后的数据再验证质量和保护效果。若原始字段已被输出层脱敏，也要检查原始层、临时文件、失败样本及日志的访问。链路验收应能回答一项字段从哪来、在哪转换、哪些副本还保留原值，以及谁能修改规则。"
                 }
               ]
             }
