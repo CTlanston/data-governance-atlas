@@ -22,13 +22,13 @@ window.AtlasTerms = (() => {
     'query-execution-plan':['查询计划'],'risk-score':['风险得分'],
     'multi-factor-authentication':['多因子认证'],'online-sample-library':['在线黑样本库','文本黑库','黑库'],
     'historical-rescan':['离线回扫','存量回扫'],'idempotency':['幂等'],
-    'bipartite-graph':['二分图'],'precision':['精确率','精准率'],'recall':['查全率'],
+    'bipartite-graph':['二分图'],'precision':['精确率','查准率','精准率'],'recall':['查全率'],
     'true-positive':['真正阳性'],'true-negative':['真正阴性'],'false-positive':['假阳性'],'false-negative':['假阴性'],
     'false-positive-rate':['假阳性率'],'return-on-investment':['投入回报率']
   };
   async function load(base){
     const files=['glossary-governance.json','glossary-privacy.json','glossary-delivery.json'];
-    const parts=await Promise.all(files.map(async f=>{const r=await fetch(`./${f}?v=professional-1`);if(!r.ok)throw new Error(`术语读取失败：${f}`);return r.json();}));
+    const parts=await Promise.all(files.map(async f=>{const r=await fetch(`./${f}?v=study-2`);if(!r.ok)throw new Error(`术语读取失败：${f}`);return r.json();}));
     const topicModules=new Map(base.modules.flatMap(m=>m.topics.map(t=>[t.id,m.id])));
     for(const part of parts){
       Object.assign(data.moduleEnglish,part.moduleEnglish);Object.assign(data.topicEnglish,part.topicEnglish);
@@ -43,9 +43,10 @@ window.AtlasTerms = (() => {
     }
     data.terms=[...byId.values()];
     for(const term of data.terms){
+      term.topicIds=[...new Set([...term.topicIds,...(term.learning?.links||[]).map(l=>l.topicId)])];
       term.moduleIds=[...new Set(term.topicIds.map(id=>topicModules.get(id)).filter(Boolean))];
       if(!term.moduleIds.length)throw new Error(`术语没有对应主题：${term.id}`);
-      for(const alias of [term.zh,...(annotationAliases[term.id]||[])])if(/[\u3400-\u9fff]/.test(alias)&&alias.length>1)matchers.push({alias,term});
+      if(term.learning?.status!=='reference')for(const alias of [term.zh,...(annotationAliases[term.id]||[])])if(/[\u3400-\u9fff]/.test(alias)&&alias.length>1)matchers.push({alias,term});
     }
     matchers.sort((a,b)=>b.alias.length-a.alias.length);
     const unique=new Map();for(const m of matchers)if(!unique.has(m.alias))unique.set(m.alias,m.term);
@@ -69,6 +70,6 @@ window.AtlasTerms = (() => {
     return result;
   }
   function forTopic(id){return data.terms.filter(t=>t.topicIds.includes(id));}
-  function topicPanel(id){const terms=forTopic(id);return `<details class="topic-terminology"><summary>本主题专业词汇 <span>${terms.length} TERMS</span></summary><div>${terms.map(t=>`<button data-term-card="${esc(t.id)}"><strong>${esc(t.zh)}</strong><span>${esc(t.en)}${t.abbr?` · ${esc(t.abbr)}`:''}</span><small>用记忆卡测试 ↗</small></button>`).join('')}</div></details>`;}
+  function topicPanel(id){const terms=forTopic(id).filter(t=>t.learning?.status!=='reference');return `<details class="topic-terminology"><summary>本主题专业词汇 <span>${terms.length} TERMS</span></summary><div>${terms.map(t=>`<button data-term-card="${esc(t.id)}"><strong>${esc(t.zh)}</strong><span>${esc(t.en)}${t.abbr?` · ${esc(t.abbr)}`:''}</span><small>${esc(t.learning?.focus||'用记忆卡测试')} ↗</small></button>`).join('')}</div></details>`;}
   return {load,annotate,forTopic,topicPanel,get:id=>byId.get(id),get data(){return data;}};
 })();

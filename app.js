@@ -91,7 +91,7 @@ function search(query){
 }
 async function init(){
   try{
-    const response=await fetch('./knowledge.json?v=professional-1');if(!response.ok)throw new Error('内容读取失败');
+    const response=await fetch('./knowledge.json?v=study-2');if(!response.ok)throw new Error('内容读取失败');
     state.data=await response.json();state.topics=state.data.modules.flatMap(m=>m.topics.map(t=>({...t,moduleId:m.id})));
     buildTree();render();
     $('.skip').addEventListener('click',e=>{e.preventDefault();$('#main').focus({preventScroll:true});window.scrollTo({top:0,behavior:'instant'});});

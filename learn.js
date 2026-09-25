@@ -59,13 +59,15 @@ function renderIndex() {
   $('#index').innerHTML = S.base.modules.map((m,i) => `<details data-module="${m.id}" ${open.has(m.id)?'open':''}><summary><span class="index-number">${pad(i+1)}</span><span>${escapeHTML(m.shortTitle)}<span class="index-english" lang="en">${escapeHTML(moduleEnglish(m.id))}</span></span></summary><div class="topic-links">${m.topics.map(t => `<button data-topic="${t.id}" class="${S.mode==='topic'&&t.id===S.topic?'active':''}" ${S.mode==='topic'&&t.id===S.topic?'aria-current="page"':''}>${escapeHTML(t.shortTitle)}<span class="index-english" lang="en">${escapeHTML(topicEnglish(t.id))}</span></button>`).join('')}</div></details>`).join('');
 }
 function writeHash() {
-  const hash = S.mode==='topic'?`${S.topic}/${S.part}`:S.mode==='module'?`module/${S.module}`:'overview';
+  const anchor=nodeFor(S.selected)?.anchor;
+  const hash = S.mode==='topic'?`${S.topic}/${S.part}${anchor?`/${anchor}`:''}`:S.mode==='module'?`module/${S.module}`:'overview';
   history.replaceState(null,'',`#${hash}`);
 }
 function overview() {
   S.mode='overview';S.selected='root';S.expanded=new Set(['root']);writeHash();renderAll({fit:true});
 }
 function showCards(id){
+  const term=AtlasTerms.get(id);if(term?.learning?.status==='reference'){const link=term.learning.links[0];if(link)return showTopic(link.topicId,link.sectionId,link.itemId);}
   S.mode='cards';$('.workspace').classList.add('memory-active');$('.workspace').classList.remove('mobile-reader');
   AtlasMemory.show(id);renderIndex();closeIndex();setSectionNav(true);
   history.replaceState(null,'','#cards');document.title='专业词汇记忆卡 · Data Atlas';
@@ -77,14 +79,16 @@ function setSectionNav(cards){
 function showModule(id = S.module) {
   S.module=id;S.mode='module';S.selected=`m:${id}`;S.expanded.add(S.selected);writeHash();renderAll({fit:true});
 }
-function showTopic(id = S.topic, part = '') {
+function showTopic(id = S.topic, part = '', anchor = '') {
   const t=topicFor(id);if(!t)return;
   const sections=sectionsFor(id),legacy=part==='compare'?sections.find(s=>s.kind==='comparison'):part==='check'?sections.find(s=>s.kind==='reasoning'):null;
   S.mode='topic';S.topic=id;S.module=t.moduleId;S.part=(sections.find(s=>s.id===part)||legacy||sections[0]).id;
   const tn=`t:${id}`,pn=`${tn}/${S.part}`;
   S.selected=pn;S.expanded=new Set([tn]);
   if(part){S.expanded.add(pn);const first=nodeFor(pn).children[0];if(first)S.expanded.add(first.id);}
-  writeHash();renderAll(part?{focus:pn}:{fit:true});closeIndex();if(isPhone())setReader(true);
+  const item=sectionFor().items.find(i=>i.id===anchor||i.blocks.some((_,j)=>`${i.id}-${j}`===anchor));
+  if(item){S.expanded.add(pn);S.expanded.add(`${pn}/${item.id}`);S.selected=anchor===item.id?`${pn}/${item.id}`:`${pn}/${item.id}/${Number(anchor.slice(item.id.length+1))}`;}
+  writeHash();renderAll(part?{focus:S.selected,readerAnchor:item?anchor:''}:{fit:true});closeIndex();if(isPhone()||item)setReader(true);
 }
 function selectPart(part) {
   if(!sectionsFor(S.topic).some(s=>s.id===part))return;
@@ -187,7 +191,7 @@ function renderReader(anchor){
 }
 function renderAll(options={}) {
   $('.workspace').classList.remove('memory-active');AtlasMemory.hide();setSectionNav(false);
-  renderIndex();renderReader();renderGraph(options);
+  renderIndex();renderReader(options.readerAnchor);renderGraph(options);
   $('#trail').innerHTML=`<button data-overview>企业数据管理</button>${S.mode!=='overview'?`<span>›</span><button data-module="${S.module}">${escapeHTML(moduleFor(S.module).shortTitle)}</button>`:''}${S.mode==='topic'?`<span>›</span><button data-topic="${S.topic}">${escapeHTML(topicFor(S.topic).shortTitle)}</button>`:''}`;
   $('#show-overview').classList.toggle('active',S.mode==='overview');$('#show-module').classList.toggle('active',S.mode==='module');$('#show-topic').classList.toggle('active',S.mode==='topic');
   document.title=`${S.mode==='topic'?topicFor(S.topic).shortTitle:S.mode==='module'?moduleFor(S.module).shortTitle:'六层学习思维导图'} · Data Atlas`;
@@ -196,7 +200,7 @@ function renderAll(options={}) {
 function setReader(open){$('.workspace').classList.toggle('reader-hidden',!open);$('.workspace').classList.toggle('mobile-reader',open&&isPhone());$('.map-panel').inert=open&&isPhone();$('#reader-toggle').setAttribute('aria-expanded',String(open));$('#reader-toggle').textContent=open&&!isPhone()?'收起讲解 →':'打开讲解';if(open){AtlasDiagrams.layoutAll($('#reader'));if(isPhone()){$('#reader').tabIndex=-1;$('#reader').focus({preventScroll:true});}}if(S.ready&&!isPhone())requestAnimationFrame(()=>open?focusNode():fitGraph());}
 function closeIndex(){const panel=$('#index-panel');panel.classList.remove('open');panel.inert=isDrawer();$('#reader').inert=false;$('#memory-section').inert=false;$('.map-panel').inert=isPhone()&&$('.workspace').classList.contains('mobile-reader');$('#drawer-backdrop').hidden=true;$('#mobile-index-open').setAttribute('aria-expanded','false');}
 function openIndex(){$('#index-panel').inert=false;$('#index-panel').classList.add('open');$('#reader').inert=true;$('#memory-section').inert=true;$('.map-panel').inert=true;$('#drawer-backdrop').hidden=false;$('#mobile-index-open').setAttribute('aria-expanded','true');$('#search').focus();}
-function loadRoute(){let value;try{value=decodeURIComponent(location.hash.slice(1));}catch{value='overview';}const [id,part]=value.split('/');if(id==='cards')showCards(part);else if(id==='module'&&moduleFor(part))showModule(part);else if(topicFor(id))showTopic(id,part);else overview();}
+function loadRoute(){let value;try{value=decodeURIComponent(location.hash.slice(1));}catch{value='overview';}const [id,part,anchor]=value.split('/');if(id==='cards')showCards(part);else if(id==='module'&&moduleFor(part))showModule(part);else if(topicFor(id))showTopic(id,part,anchor);else overview();}
 function bindUI(){
   document.addEventListener('click',e=>{
     const target=e.target.closest('[data-topic],button[data-module],[data-part],[data-overview],[data-reader-close],[data-original],[data-term-card]');if(!target)return;
@@ -234,7 +238,7 @@ function bindCanvas(){
 async function init(){
   try{
     const files=['knowledge.json','conceptmap-governance.json','conceptmap-privacy.json','conceptmap-delivery.json'];
-    const data=await Promise.all(files.map(async file=>{const r=await fetch(`./${file}?v=professional-1`);if(!r.ok)throw new Error(`无法读取 ${file}`);return r.json();}));
+    const data=await Promise.all(files.map(async file=>{const r=await fetch(`./${file}?v=study-2`);if(!r.ok)throw new Error(`无法读取 ${file}`);return r.json();}));
     S.base=data[0];data.slice(1).flatMap(d=>d.topics).forEach(t=>S.lessons.set(t.id,t));
     await AtlasTerms.load(S.base);AtlasDiagrams.init();buildKnowledgeTree();
     AtlasMemory.init({terms:AtlasTerms.data.terms,base:S.base,onTopic:id=>showTopic(id)});

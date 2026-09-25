@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#215f50">
+  <meta name="description" content="数据治理、隐私工程与业务风控的技术简答和场景设计练习。先组织回答，再核对关键判断、常见误区和追问。">
+  <title>面试练习 · Data Atlas</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./interview.css?v=study-2">
+  <script src="./interview.js?v=study-2" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#question-panel">跳到当前题目</a>
+  <header class="practice-header">
+    <a class="practice-brand" href="./learn.html"><img src="./favicon.svg" width="30" height="30" alt=""><span>数据治理知识图谱<small>DATA ATLAS</small></span></a>
+    <nav aria-label="学习方式"><a href="./learn.html">学习导图</a><a href="./learn.html#cards">词汇记忆卡</a><a href="./interview.html" aria-current="page">面试练习</a></nav>
+  </header>
+  <main class="practice-shell">
+    <div class="practice-intro"><div><p class="eyebrow">FROM KNOWLEDGE TO JUDGMENT</p><h1>把知识，组织成回答。</h1><p>技术简答练清概念，场景设计练习取舍。先自己回答，再展开参考思路。</p></div><p class="practice-scope">依据公开资料与岗位能力设计的练习。<br>TikTok 场景为教学假设，不代表内部真题或实际架构。</p></div>
+    <form class="practice-filters" role="search" onsubmit="return false">
+      <label class="search-label">查找题目<input type="search" id="practice-search" placeholder="例如：删除、Lookup Join、误伤" autocomplete="off"></label>
+      <label>专业领域<select id="practice-domain"><option value="all">全部领域</option><option value="governance">数据治理</option><option value="privacy">隐私工程</option><option value="risk">业务风控</option></select></label>
+      <label>练习类型<select id="practice-type"><option value="all">全部类型</option><option value="technical">技术简答</option><option value="scenario">场景设计</option></select></label>
+      <button type="button" class="random-button" data-random>↻ 随机抽一道</button>
+    </form>
+    <div id="term-filter" hidden></div>
+    <div class="practice-workspace"><aside class="question-index" aria-label="题目目录"><div class="index-head"><h2>练习目录</h2><span id="result-count" role="status">正在加载…</span></div><nav id="question-list" aria-label="选择题目"></nav></aside><article id="question-panel" tabindex="-1" aria-label="当前题目"><div class="practice-loading" role="status">正在准备题目与参考思路…</div></article></div>
+    <footer>先说清目标与边界，再解释机制、取舍和验证方式。<a href="./index.html#sources">查看学习来源 ↗</a></footer>
+  </main>
+  <noscript>请启用 JavaScript 以筛选题目和展开参考思路。</noscript>
+</body>
+</html>
